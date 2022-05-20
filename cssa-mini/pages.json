@@ -1,5 +1,10 @@
 {
 	"pages": [{
+		"path": "pages/detail/detail",
+		"style": {
+			"navigationBarTitleText": "详情"
+		}
+	}, {
 		"path": "pages/index/index",
 		"style": {
 			"navigationBarTitleText": "uni-app"
@@ -13,7 +18,7 @@
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
-		"navigationBarBackgroundColor": "#F8F8F8",
+		"navigationBarBackgroundColor": "#B0171F",
 		"backgroundColor": "#F8F8F8",
 		"app-plus": {
 			"background": "#efeff4"
