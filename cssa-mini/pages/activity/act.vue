@@ -18,7 +18,8 @@
 					price:15,
 					capacity:150,
 					userJoined:120,
-					title:"元宵节活动"
+					title:"元宵节活动",
+					imgs:["../../static/yuanxiao.jpg"]
 				}
 			}
 		},
@@ -39,9 +40,6 @@
 						}
 					});
 				}
-			},
-			toDetail:function(){
-				
 			}
 		}
 	}
@@ -56,10 +54,5 @@ import actBoxVue from '@/components/act-box/act-box.vue'
 		flex-direction: row;
 		align-items: center;
 		justify-content: center;
-	}
-	.avatar{
-		width:50px;
-		height: 50px;
-		border-radius: 100%;
 	}
 </style>

@@ -1,10 +1,11 @@
 <template>
-	<view class="container">
+	<view class="container" @click="toDetail">
 		<div class="box">
 			<div class="title">
+				<img class="avatar" src="@/static/cssalogo-red-sm.png" />
 				<span>{{this.actDetail.title}}</span>
 			</div>
-			<div class="image" style="background-image: url('../../static/yuanxiao.jpg')" />
+			<div class="image" :style="{'background-image': 'url(' + this.actDetail.imgs[0] +')' }" />
 			<div class="row">
 				<span class="iconfont icon">&#xe65e;</span>
 				<span class="font-small">{{this.actDetail.location}}</span>
@@ -29,6 +30,13 @@
 		computed: {
 			actDateFormat() {
 				return moment(this.actDetail.date).format("YYYY-MM-DD h:mm a");
+			}
+		},
+		methods:{
+			toDetail:function(){
+				uni.navigateTo({
+					url: '/pages/detail/detail?actDetail=' + encodeURIComponent(JSON.stringify(this.actDetail)),
+				});
 			}
 		}
 	}
@@ -91,12 +99,18 @@
 
 	.title {
 		height: 30px;
-		margin-bottom: 10px;
+		padding-bottom: 5px;
 		padding-left: 10px;
 		display: flex;
 		flex-direction: row;
 		align-items: center;
-		font-size: 15px;
+		font-size: 18px;
 		font-weight: 600;
+	}
+	.avatar{
+		width:20px;
+		height: 20px;
+		border-radius: 100%;
+		margin-right:5px;
 	}
 </style>

@@ -1,20 +1,23 @@
 {
 	"pages": [{
-		"path": "pages/detail/detail",
-		"style": {
-			"navigationBarTitleText": "详情"
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "uni-app"
+			}
+		},
+		{
+			"path": "pages/detail/detail",
+			"style": {
+				"navigationBarTitleText": "详情"
+			}
+		},
+		{
+			"path": "pages/activity/act",
+			"style": {
+				"navigationBarTitleText": "活动列表"
+			}
 		}
-	}, {
-		"path": "pages/index/index",
-		"style": {
-			"navigationBarTitleText": "uni-app"
-		}
-	}, {
-		"path": "pages/activity/act",
-		"style": {
-			"navigationBarTitleText": "活动列表"
-		}
-	}],
+	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
@@ -32,16 +35,15 @@
 		"fontSize": "14px",
 		"spacing": "3px",
 		"list": [{
-				"pagePath": "pages/activity/act",
-				"text": "活动",
-				"iconPath": "./static/act.png",
-				"selectedIconPath": "./static/act-selected.png"
-			}, {
-				"pagePath": "pages/index/index",
-				"text": "用户",
-				"iconPath": "./static/user.png",
-				"selectedIconPath": "./static/user-selected.png"
-			}
-		]
+			"pagePath": "pages/activity/act",
+			"text": "活动",
+			"iconPath": "./static/act.png",
+			"selectedIconPath": "./static/act-selected.png"
+		}, {
+			"pagePath": "pages/index/index",
+			"text": "用户",
+			"iconPath": "./static/user.png",
+			"selectedIconPath": "./static/user-selected.png"
+		}]
 	}
 }
