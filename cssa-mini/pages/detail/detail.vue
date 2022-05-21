@@ -16,6 +16,8 @@
 		<view class="blank_line"></view>
 		<view class="act_count">
 			<view class="number">已参加的人数：{{count}}</view>
+			<view class="number">可参与人数：{{total}}</view>
+			<view class="number">剩余人数：{{remain}}</view>
 		</view>
 		<view class="blank_line"></view>
 		<view class="description">
@@ -25,7 +27,8 @@
 			</scroll-view>
 		</view>
 		<view class="act_buy">
-			<uni-goods-nav class="buy" :buttonGroup="buttonGroup" :options="options" fill="true"></uni-goods-nav>
+			<uni-goods-nav v-if="enable" class="buy" :buttonGroup="buttonGroup" :options="options" fill="true" @buttonClick="toPay"></uni-goods-nav>
+			<uni-goods-nav v-else class="buy" :buttonGroup="buttonGroup" :options="options" fill="true"></uni-goods-nav>
 		</view>
 	</view>
 </template>
@@ -34,7 +37,10 @@
 	export default {
 		data() {
 			return {
-				count: 10,
+				enable: true,
+				count: 50,
+				total: 50,
+				remain: 0,
 				activity: "五彩缤纷赏花节",
 				show_price: true,
 				original_price: 1000,
@@ -53,7 +59,7 @@
 				],
 				buttonGroup: [{
 					text: '立即参加',
-					backgroundColor: '#1684FC',
+					backgroundColor: "#1684FC",
 					color: '#fff'
 				}],
 				options: [],
@@ -71,10 +77,26 @@
 				} else {
 					this.new_price = this.original_price * this.discount;
 				}
+			},
+			update_number(){
+				this.remain = this.total - this.count
+			},
+			update_button(){
+				if(this.remain == 0){
+					this.buttonGroup[0].text = "人数已满";
+					this.buttonGroup[0].backgroundColor = "#A8A8A8";
+					this.buttonGroup[0].color = "#101010";
+					this.enable = false;
+				}
+			},
+			toPay(){
+				console.log("点击成功");
 			}
 		},
 		mounted() {
 			this.update_price();
+			this.update_number();
+			this.update_button();
 			console.log(this.new_price);
 			const query = uni.createSelectorQuery().in(this);
 			let a = 0;
@@ -129,6 +151,7 @@
 			.act_name {
 				font-size: 32rpx;
 				line-height: 60rpx;
+				font-family: serif;
 			}
 		}
 
@@ -141,7 +164,7 @@
 		.number {
 			padding: 0 10px;
 			font-size: 32rpx;
-			line-height: 100rpx;
+			line-height: 50rpx;
 		}
 
 		.description {
