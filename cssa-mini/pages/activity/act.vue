@@ -1,18 +1,25 @@
 <template>
 	<view>
-		<button @click="getUserProfile">授权登陆</button>
-		<div class="avatar-box"><img class="avatar" :src="userInfo.avatarUrl"></div>
-		
-		<div>a</div>
-		
+		<act-box-vue @click="toDetail" class="act-box" :actDetail="actDetail"></act-box-vue>	
 	</view>
 </template>
 
 <script>
 	export default {
+		components:{
+			actBoxVue,
+		},
 		data(){
 			return{
 				userInfo:{},
+				actDetail:{
+					date:new Date(),
+					location:"Humanities 1102",
+					price:15,
+					capacity:150,
+					userJoined:120,
+					title:"元宵节活动"
+				}
 			}
 		},
 		mounted() {
@@ -32,9 +39,13 @@
 						}
 					});
 				}
+			},
+			toDetail:function(){
+				
 			}
 		}
 	}
+import actBoxVue from '@/components/act-box/act-box.vue'
 </script>
 
 <style>
