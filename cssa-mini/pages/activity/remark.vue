@@ -1,15 +1,8 @@
 <template>
 	<view>
-		<button @click="jumpToHomePage">Go To Home</button>
-
-		<div> hello remark</div>
-		<p> {{ userInfo.nickName }}</p>
-		<p> {{ userInfo.avatarUrl }}</p>
-
 
 		<!-- description of activity here -->
 		<!-- note section and store the string in this.text -->
-
 		<p>输入你的备注</p>
 		<view class="content">
 			<view class="input">
