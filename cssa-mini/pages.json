@@ -16,6 +16,18 @@
 			"style": {
 				"navigationBarTitleText": "活动列表"
 			}
+		},
+		{
+			"path": "pages/activity/remark",
+			"style": {
+				"navigationBarTitleText": "备注"
+			}
+		},
+		{
+			"path": "pages/activity/finished",
+			"style": {
+				"navigationBarTitleText": "活动注册完成"
+			}
 		}
 	],
 	"globalStyle": {
