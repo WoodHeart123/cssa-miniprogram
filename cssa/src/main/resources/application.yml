@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://rm-uf6uo1wu9sj9337k60o.mysql.rds.aliyuncs.com/cssa?characterEncoding=utf-8&useUnicode=true&serverTimezone=Asia/Shanghai
+    username: petersun2002
+    password: "Sunny418"
+
+
+jwt:
+  header: Authorization
+  secret: finance
+  expiration: 31536000
