@@ -1,8 +1,8 @@
 <template>
 	<view class="act_detail">
 		<swiper indicator-dots>
-			<swiper-item v-for="(item, index) in actDetail.imgs" :key="index">
-				<image :src="item"></image>
+			<swiper-item>
+				<image :src="actDetail.imgs"></image>
 			</swiper-item>
 		</swiper>
 		<view class="basic">

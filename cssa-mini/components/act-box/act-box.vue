@@ -5,7 +5,7 @@
 				<img class="avatar" src="@/static/cssalogo-red-sm.png" />
 				<span>{{this.actDetail.title}}</span>
 			</div>
-			<div class="image" :style="{'background-image': 'url(' + this.actDetail.imgs[0] +')' }" />
+			<div class="image" :style="{'background-image': 'url(' + this.actDetail.imgs +')' }" />
 			<div class="row">
 				<span class="iconfont icon">&#xe65e;</span>
 				<span class="font-small">{{this.actDetail.location}}</span>

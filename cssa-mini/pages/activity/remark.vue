@@ -2,9 +2,9 @@
 	<view id="remark">
 		<view class="line" v-for="(info,index) in actDetail.additionalInfo" :key="index">
 			<view class="name"><text>{{info.name}}</text></view>
-			<input class="input" v-if="info.type=='input'" type="text" maxlength="10" placeholder="请输入内容" @focus="changeIndex(index)" @input="bindChange"/>
-			<picker class="picker" v-if="info.type=='select'" mode="selector" :range="info.options" :value="info.value" @focus="changeIndex(index)" @change="bindChange">
-				<view class="input-text">{{info.options[info.value]}}</view>
+			<input class="input" v-if="info.type=='input'" type="text" maxlength="10" placeholder="请输入内容" @focus="changeIndex(index)" @input="bindInputChange"/>
+			<picker class="picker" v-if="info.type=='select'" mode="selector" :range="info.options" :value="info.index" @focus="changeIndex(index)" @change="bindPickerChange">
+				<view class="input-text">{{info.options[info.index]}}</view>
 			</picker>
 		</view>
 		<view >
@@ -40,14 +40,21 @@
 			changeIndex:function(i){
 				this.index = i;
 			},
-			bindChange: function(e) {
+			bindInputChange: function(e) {
 				this.actDetail.additionalInfo[this.index].value = e.detail.value;
+			},
+			bindPickerChange:function(e){
+				console.log(this.actDetail.additionalInfo[this.index].options[e.detail.value]);
+				this.actDetail.additionalInfo[this.index].index = e.detail.value;
+				this.actDetail.additionalInfo[this.index].value = this.actDetail.additionalInfo[this.index].options[e.detail.value];
 			},
 			submit:function() {
 				console.log(this.actDetail);
-				// wx.navigateTo({
-				// 	url: '/pages/activity/finished'
-				// });
+				let valueArr = [];
+				for(let info of this.actDetail.additionalInfo){
+					valueArr.push(info.value);
+				}
+				console.log(valueArr);
 
 			},
 
