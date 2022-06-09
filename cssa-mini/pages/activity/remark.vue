@@ -49,7 +49,6 @@
 				this.actDetail.additionalInfo[this.index].value = this.actDetail.additionalInfo[this.index].options[e.detail.value];
 			},
 			submit:function() {
-				console.log(this.actDetail);
 				let valueArr = [];
 				for(let info of this.actDetail.additionalInfo){
 					valueArr.push(info.value);
