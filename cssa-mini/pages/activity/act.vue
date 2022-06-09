@@ -16,27 +16,7 @@
 		data() {
 			return {
 				userInfo: {},
-				actDetailList: [{
-					actID: 1,
-					date: (new Date()).valueOf(),
-					location: "Humanities 1102",
-					price: 15,
-					capacity: 150,
-					userJoined: 120,
-					title: "元宵节活动",
-					imgs: "https://cssa-mini.oss-cn-shanghai.aliyuncs.com/detail_sample/hua1.jpeg",
-					description: "赏花节，有时人们又称为看花节，是四川省阿坝州马尔康地区藏族人民的传统节日。每年农历六月举行，为期三、五天或十来天不等。 农历六月，雪山草地百花盛开，牧草如茵，自然风光十分迷人。各村寨根据自己的实际情况，或在月初，或在月中，或在月末过节。届时藏族人民带着食品、帐篷，骑着披红挂彩的骏马，成群结队地在野外游走对歌，欣赏大自然的美景。然后选择山花烂漫的山岗，或绿草如茵的草坪，搭起帐篷，熬上茶，盛满青稞酒。人们聚集一起赏花品酒，交流放牧经验。 晚上，草坪上燃起一堆堆篝火，人们且饮且舞，或放声歌唱。近年来，赏花节更为热闹，除赏花，品酒，唱歌，跳舞，欣赏大自然外，还增添了摔跤，赛马，文艺演出等文体内容。传统赏花节中的祈祷人口增殖、生殖繁盛已淹没在历史的波涛巨浪之中。",
-					additionalInfo: [{
-							type: "select",
-							name: "学院",
-							options: ['赫奇帕奇', '格兰芬多', '拉文克劳', '斯莱特林'],
-						},
-						{
-							type: "input",
-							name: "姓名",
-						},
-					],
-				}]
+				actDetailList: [],
 			}
 		},
 		mounted() {
@@ -49,9 +29,24 @@
 					this.$refs.popup.open();
 				},
 			});
-
+			wx.cloud.init();
+			this.getActivityList();
 		},
 		methods: {
+			async getActivityList(){
+				const res = await wx.cloud.callContainer({
+				  config: {
+				    env: 'prod-9go38k3y9fee3b2e', // 微信云托管的环境ID
+				  },
+				  path: "/activity/activityList?current=" + Date.now(),
+				  method: 'GET', // 按照自己的业务开发，选择对应的方法
+				  header: {
+				    'X-WX-SERVICE': 'springboot-f8i8',
+				  }
+				});
+				this.actDetailList = res.data.data;
+				
+			},
 			getUserProfile: function() {
 				uni.getUserProfile({
 					desc: "获取用户头像",
@@ -68,6 +63,7 @@
 		}
 	}
 	import actBoxVue from '@/components/act-box/act-box.vue'
+	import moment from 'moment';
 </script>
 
 <style>

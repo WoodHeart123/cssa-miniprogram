@@ -63,7 +63,7 @@ export default {
 				actId: this.actDetail.id,
 				values: valueArr
 			};
-			
+
 			wx.cloud.init(); // TODO : do I need to do this?
 			const res = await wx.cloud.callContainer({
 				config: {
