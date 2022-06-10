@@ -15,7 +15,7 @@
 		</view>
 		<view class="blank_line"></view>
 		<view class="act_count">
-			<view class="number">人数/上限：{{actDetail.userJoined}}/{{actDetail.capacity}}</view>
+			<view class="number">人数/上限：{{actDetail.userJoinedNum}}/{{actDetail.capacity}}</view>
 		</view>
 		<view class="blank_line"></view>
 		<view class="act_count">
@@ -87,6 +87,7 @@
 				}
 			},
 			toPay(){
+				if(this.new)
 				uni.navigateTo({
 					url: '/pages/activity/remark?actDetail=' + encodeURIComponent(JSON.stringify(this.actDetail)),
 				});
