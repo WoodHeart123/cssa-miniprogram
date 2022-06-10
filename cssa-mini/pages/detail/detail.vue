@@ -41,6 +41,7 @@
 			return {
 				enable: true,
 				show_price: true,
+				remain: 0,
 				discount: 0.85,
 				new_price: 0,
 				distance_1: 0,
@@ -53,7 +54,7 @@
 					color: '#fff'
 				}],
 				actDetail:{},
-				options: [],
+				options: []
 			}
 		},
 		onLoad(options) {
@@ -61,7 +62,7 @@
 		},
 		methods: {
 			update_price() {
-				if (this.discount == 0) {
+				if (this.discount == 1) {
 					this.new_price = this.original_price;
 					this.show_price = false;
 				} else {
@@ -69,9 +70,15 @@
 				}
 			},
 			update_number(){
-				this.remain = this.total - this.count
+				this.remain = this.actDetail.capacity - this.actDetail.userJoinedNum;
 			},
 			update_button(){
+				/*if (this.userInfo.ifJoined) {
+					this.buttonGroup[0].text = "已参加";
+					this.buttonGroup[0].backgroundColor = "#A8A8A8";
+					this.buttonGroup[0].color = "#101010";
+					this.enable = false;
+					*/
 				if(this.remain == 0){
 					this.buttonGroup[0].text = "人数已满";
 					this.buttonGroup[0].backgroundColor = "#A8A8A8";
@@ -83,13 +90,47 @@
 				uni.navigateTo({
 					url: '/pages/activity/remark?actDetail=' + encodeURIComponent(JSON.stringify(this.actDetail)),
 				});
+			},
+			checkSignUp(){
+				/*
+				const res = await wx.cloud.callContainer({
+				  config: {
+				    env: 'prod-9go38k3y9fee3b2e', // 微信云托管的环境ID
+				  },
+				  path: '/activity/checksignup?actID=' + this.actDetail.actID +'&date=' + this.actDetail.date, // 填入业务自定义路径和参数，根目录，就是 / 
+				  method: 'GET', // 按照自己的业务开发，选择对应的方法
+				  header: {
+				    'X-WX-SERVICE': 'springboot-f8i8-004', // xxx中填入服务名称（微信云托管 - 服务管理 - 服务列表 - 服务名称）
+				    // 其他 header 参数
+				  }
+				  // dataType:'text', // 默认不填是以 JSON 形式解析返回结果，若不想让 SDK 自己解析，可以填text
+				  // 其余参数同 wx.request
+				});
+				*/
+			   var that = this;
+			   const res = wx.request({
+				   url: 'http://localhost:80/activity/checksignup', //仅为示例，并非真实的接口地址
+				     data: {
+				       'actID': '1',
+				       'date': 1
+				     },
+				     header: {
+					   'x-wx-openid': 'w123'
+				     },
+				     success (res) {
+						 that.setData({
+						   enable : res.data.data.ifJoined
+						})
+				     }
+			   })
 			}
 		},
 		mounted() {
+			this.checkSignUp();
 			this.update_price();
 			this.update_number();
 			this.update_button();
-			console.log(this.new_price);
+			console.log(this.enable);
 			const query = uni.createSelectorQuery().in(this);
 			let a = 0;
 			query.select('.tit').boundingClientRect();
