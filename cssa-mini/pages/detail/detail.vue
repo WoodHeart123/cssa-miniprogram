@@ -39,9 +39,9 @@
 	export default {
 		data() {
 			return {
-				show_price: true,
+				show_price: false,
 				remain: 0,
-				discount: 1,
+				discount: 0,
 				distance_1: 0,
 				distance_2: 0,
 				height: "",
@@ -62,9 +62,10 @@
 		methods: {
 			update_price() {
 				if (this.userInfo.discount == 1) {
-					this.show_price = false;
+					this.discount = 1;
 				} else {
 					this.discount = this.userInfo.discount;
+					this.show_price = true;
 				}
 			},
 			update_number(){
@@ -93,23 +94,20 @@
 				  config: {
 				    env: 'prod-9go38k3y9fee3b2e', // 微信云托管的环境ID
 				  },
-				  path: '/activity/checksignup?actID=' + this.actDetail.actID +'&date=' + this.actDetail.date, // 填入业务自定义路径和参数，根目录，就是 / 
+				  //path: '/activity/checksignup?actID=' + this.actDetail.actID +'&date=' + this.actDetail.date,
+				  path: '/activity/checksignup?actID=8&date=100',
 				  method: 'GET', // 按照自己的业务开发，选择对应的方法
 				  header: {
-				    'X-WX-SERVICE': 'springboot-f8i8-004', // xxx中填入服务名称（微信云托管 - 服务管理 - 服务列表 - 服务名称）
-				    // 其他 header 参数
+				    'X-WX-SERVICE': 'springboot-f8i8',
 				  }
 				});
-				consol.log(res);
-			   	this.userInfo = res.data.data;
+			   this.userInfo = res.data.data;
+			   this.update_number();
+			   this.update_price();
+			   this.update_button();
 			}
 		},
 		mounted() {
-			wx.cloud.init();
-			this.checkSignUp();
-			this.update_price();
-			this.update_number();
-			this.update_button();
 			const query = uni.createSelectorQuery().in(this);
 			let a = 0;
 			query.select('.tit').boundingClientRect();
@@ -121,6 +119,8 @@
 				this.height = "height: " + (this.distance_2 - this.distance_1) + "px;";
 				console.log(this.height);
 			});
+			wx.cloud.init();
+			this.checkSignUp();
 		},
 		computed: {
 			actDateFormat() {
