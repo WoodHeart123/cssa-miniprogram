@@ -94,8 +94,8 @@
 				  config: {
 				    env: 'prod-9go38k3y9fee3b2e', // 微信云托管的环境ID
 				  },
-				  //path: '/activity/checksignup?actID=' + this.actDetail.actID +'&date=' + this.actDetail.date,
-				  path: '/activity/checksignup?actID=8&date=100',
+				  path: '/activity/checksignup?actID=' + this.actDetail.actID +'&date=' + this.actDetail.date,
+				  //path: '/activity/checksignup?actID=8&date=100',
 				  method: 'GET', // 按照自己的业务开发，选择对应的方法
 				  header: {
 				    'X-WX-SERVICE': 'springboot-f8i8',
