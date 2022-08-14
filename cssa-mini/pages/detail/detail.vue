@@ -8,7 +8,7 @@
 		<view class="basic">
 			<view class="price">
 				<text class="iconfont icon">&#xe70b;</text>
-				<text class="new_price">{{actDetail.price * discount}}</text>
+				<text class="new_price">{{this.userInfo.ifJoined?actDetail.payment:actDetail.price * discount}}</text>
 				<text v-if="show_price" class="original_price">{{actDetail.price}}</text>
 			</view>
 			<view class="act_name"><span>{{actDetail.title}}</span></view>
@@ -29,8 +29,7 @@
 			</scroll-view>
 		</view>
 		<view class="act_buy">
-			<uni-goods-nav v-if="enable" class="buy" :buttonGroup="buttonGroup" :options="options" fill="true" @buttonClick="toPay"></uni-goods-nav>
-			<uni-goods-nav v-else class="buy" :buttonGroup="buttonGroup" :options="options" fill=true></uni-goods-nav>
+			<uni-goods-nav class="buy" :buttonGroup="buttonGroup" :options="options" fill="true" @buttonClick="toPay"></uni-goods-nav>
 		</view>
 	</view>
 </template>
@@ -53,11 +52,21 @@
 				}],
 				actDetail:{},
 				userInfo:{},
-				options: []
+				options: [],
+				enable:false,
+				show:false,
 			}
 		},
 		onLoad(options) {
 			this.actDetail = JSON.parse(decodeURIComponent(options.actDetail));
+			console.log(this.actDetail);
+			this.update_number();
+			for(let i = 0;i < this.actDetail.additionalInfo.length;i++){
+				if(this.actDetail.additionalInfo[i].type == "select"){
+					this.actDetail.additionalInfo[i].index = 0;
+					this.actDetail.additionalInfo[i].value = this.actDetail.additionalInfo[i].options[0];
+				}
+			}
 		},
 		methods: {
 			update_price() {
@@ -73,7 +82,7 @@
 			},
 			update_button(){
 				if (this.userInfo.ifJoined) {
-					this.buttonGroup[0].text = "已参加";
+					this.buttonGroup[0].text = "已参加/查看付款方式";
 					this.buttonGroup[0].backgroundColor = "#A8A8A8";
 					this.buttonGroup[0].color = "#101010";
 					this.enable = false;
@@ -85,17 +94,31 @@
 				}
 			},
 			toPay(){
-				uni.navigateTo({
-					url: '/pages/activity/remark?actDetail=' + encodeURIComponent(JSON.stringify(this.actDetail)),
-				});
+				if(this.userInfo.ifJoined){
+					uni.navigateTo({
+						url: '/pages/activity/finished',
+					});
+				}
+				else if(this.remain != 0 && this.actDetail.additionalInfo.length == 0){
+					this.register();
+				}
+				else if(this.remain != 0){
+					this.actDetail.payment = this.actDetail.price * this.discount;
+					uni.navigateTo({
+						url: '/pages/activity/remark?actDetail=' + encodeURIComponent(JSON.stringify(this.actDetail)),
+					});
+				}else{
+					uni.showToast({
+						title:"人数已满"
+					})
+				}
 			},
 			async checkSignUp(){
 				const res = await wx.cloud.callContainer({
 				  config: {
 				    env: 'prod-9go38k3y9fee3b2e', // 微信云托管的环境ID
 				  },
-				  //path: '/activity/checksignup?actID=' + this.actDetail.actID +'&date=' + this.actDetail.date,
-				  path: '/activity/checksignup?actID=8&date=100',
+				  path: '/activity/checksignup?actID=' + this.actDetail.actID +'&date=0',
 				  method: 'GET', // 按照自己的业务开发，选择对应的方法
 				  header: {
 				    'X-WX-SERVICE': 'springboot-f8i8',
@@ -105,6 +128,31 @@
 			   this.update_number();
 			   this.update_price();
 			   this.update_button();
+			},
+			async register(){
+				let bodyData = {
+					actId: this.actDetail.actID,
+					response: [],
+					payment: 0,
+				};
+				const res = await wx.cloud.callContainer({
+					config: {
+						env: 'prod-9go38k3y9fee3b2e', // 微信云托管的环境ID
+					},
+					path: '/activity/register',
+					method: 'POST', 
+					header: {
+						'X-WX-SERVICE': 'springboot-f8i8',
+					},
+					data: bodyData
+				});
+				if(res.data.status == 100){
+					uni.reLaunch({
+						url: '/pages/activity/finished',
+					});
+				}else{
+					uni.showToast({title:res.data.message});
+				}
 			}
 		},
 		mounted() {

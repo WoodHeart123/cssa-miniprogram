@@ -6,7 +6,7 @@
 				@focus="changeIndex(index)" @input="bindInputChange" />
 			<picker class="picker" v-if="info.type == 'select'" mode="selector" :range="info.options" :value="info.index"
 				@focus="changeIndex(index)" @change="bindPickerChange">
-				<view class="input-text">{{ info.options[info.index] }}</view>
+				<view class="input-text">{{ info.options[info.index]?info.options[info.index]:a}}</view>
 			</picker>
 		</view>
 		<view>
@@ -33,6 +33,8 @@ export default {
 	},
 	onLoad(options) {
 		this.actDetail = JSON.parse(decodeURIComponent(options.actDetail));
+		console.log(this.actDetail);
+		wx.cloud.init();
 	},
 	methods: {
 		jumpToHomePage() {
@@ -47,45 +49,41 @@ export default {
 			this.actDetail.additionalInfo[this.index].value = e.detail.value;
 		},
 		bindPickerChange: function (e) {
-			console.log(this.actDetail.additionalInfo[this.index].options[e.detail.value]);
+			console.log(e.detail.value);
 			this.actDetail.additionalInfo[this.index].index = e.detail.value;
 			this.actDetail.additionalInfo[this.index].value = this.actDetail.additionalInfo[this.index].options[e.detail.value];
 		},
-		submit: function () {
+		async submit() {
 			// console.log(this.actDetail);
 			let valueArr = [];
 			for (let info of this.actDetail.additionalInfo) {
 				valueArr.push(info.value);
 			}
-			// console.log(valueArr);
+			console.log(valueArr);
 
 			let bodyData = {
-				actId: this.actDetail.id,
-				values: valueArr
+				actId: this.actDetail.actID,
+				response: valueArr,
+				payment: this.actDetail.payment
 			};
-
-			wx.cloud.init(); // TODO : do I need to do this?
 			const res = await wx.cloud.callContainer({
 				config: {
 					env: 'prod-9go38k3y9fee3b2e', // 微信云托管的环境ID
 				},
-				path: '/activity/register', // 填入业务自定义路径和参数，根目录，就是 / 
-				method: 'POST', // 按照自己的业务开发，选择对应的方法
+				path: '/activity/register',
+				method: 'POST', 
 				header: {
-					'X-WX-SERVICE': 'springboot-f8i8', // xxx中填入服务名称（微信云托管 - 服务管理 - 服务列表 - 服务名称）
-					// 其他 header 参数
-
+					'X-WX-SERVICE': 'springboot-f8i8',
 				},
-				// dataType:'text', // 默认不填是以 JSON 形式解析返回结果，若不想让 SDK 自己解析，可以填text
-				// 其余参数同 wx.request
-
 				data: bodyData
 			});
-
-			console.log(res);
-
-
-
+			if(res.data.status == 100){
+				uni.reLaunch({
+					url: '/pages/activity/finished',
+				});
+			}else{
+				uni.showToast({title:res.data.message});
+			}
 		},
 
 
