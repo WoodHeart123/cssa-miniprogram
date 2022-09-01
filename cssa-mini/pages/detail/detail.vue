@@ -1,5 +1,5 @@
 <template>
-	<view class="act_detail">
+	<view class="act_detail"> 
 		<swiper indicator-dots>
 			<swiper-item>
 				<image :src="actDetail.imgs"></image>
@@ -8,13 +8,14 @@
 		<view class="basic">
 			<view class="price">
 				<text class="iconfont icon">&#xe70b;</text>
-				<text class="new_price">{{this.userInfo.ifJoined?actDetail.payment:actDetail.price * discount}}</text>
-				<text v-if="show_price" class="original_price">{{actDetail.price}}</text>
+				<text v-if="this.actDetail.price != 0" class="new_price">{{this.userInfo.ifJoined?actDetail.price:Math.round(actDetail.price * discount)}}</text>
+				<text v-if="this.actDetail.price == 0" class="new_price">免费</text>
+				<text v-if="show_price&&!userInfo.ifJoined" class="original_price">{{actDetail.price}}</text>
 			</view>
 			<view class="act_name"><span>{{actDetail.title}}</span></view>
 		</view>
 		<view class="blank_line"></view>
-		<view class="act_count">
+		<view class="act_count" v-if="!this.userInfo.ifJoined">
 			<view class="number">人数/上限：{{actDetail.userJoinedNum}}/{{actDetail.capacity}}</view>
 		</view>
 		<view class="blank_line"></view>
@@ -22,20 +23,34 @@
 			<view class="number">活动开始时间：{{actDateFormat}}</view>
 		</view>
 		<view class="blank_line"></view>
+		<view class="act_count">
+			<view class="number">报名截止时间：{{endDateFormat}}</view>
+		</view>
+		<view class="blank_line"></view>
 		<view class="description">
 			<view class="tit">详情介绍</view>
 			<scroll-view class="scroll_page" scroll-y="true" :style="height">
-				<view class="content">{{actDetail.description}}</view>
+				<rich-text :nodes="actDetail.description" class="content">{{actDetail.description}}</rich-text>
 			</scroll-view>
 		</view>
 		<view class="act_buy">
 			<uni-goods-nav class="buy" :buttonGroup="buttonGroup" :options="options" fill="true" @buttonClick="toPay"></uni-goods-nav>
 		</view>
+		<loading :show="loadShow"></loading>
 	</view>
 </template>
 
 <script>
 	export default {
+		 onShareAppMessage(res) {
+		    if (res.from === 'button') {// 来自页面内分享按钮
+		      console.log(res.target)
+		    }
+		    return {
+		      title: this.actDetail.title,
+		      path: '/pages/detail/detail?actDetail=' + encodeURIComponent(JSON.stringify(this.actDetail)),
+		    }
+		  },
 		data() {
 			return {
 				show_price: false,
@@ -55,6 +70,8 @@
 				options: [],
 				enable:false,
 				show:false,
+				loadShow:false,
+				
 			}
 		},
 		onLoad(options) {
@@ -70,7 +87,7 @@
 		},
 		methods: {
 			update_price() {
-				if (this.userInfo.discount == 1) {
+				if (this.userInfo.discount == 1 || this.actDetail.price == 0) {
 					this.discount = 1;
 				} else {
 					this.discount = this.userInfo.discount;
@@ -103,7 +120,7 @@
 					this.register();
 				}
 				else if(this.remain != 0){
-					this.actDetail.payment = this.actDetail.price * this.discount;
+					this.actDetail.payment = Math.floor(this.actDetail.price * this.discount);
 					uni.navigateTo({
 						url: '/pages/activity/remark?actDetail=' + encodeURIComponent(JSON.stringify(this.actDetail)),
 					});
@@ -130,6 +147,7 @@
 			   this.update_button();
 			},
 			async register(){
+				this.loadShow = true;
 				let bodyData = {
 					actId: this.actDetail.actID,
 					response: [],
@@ -146,6 +164,7 @@
 					},
 					data: bodyData
 				});
+				this.loadShow = true;
 				if(res.data.status == 100){
 					uni.reLaunch({
 						url: '/pages/activity/finished',
@@ -164,7 +183,7 @@
 				this.distance_1 = res[0].bottom;
 				this.distance_2 = res[1].top;
 				console.log(this.distance_2 - this.distance_1);
-				this.height = "height: " + (this.distance_2 - this.distance_1) + "px;";
+				this.height = "height: " + (this.distance_2 - this.distance_1 - 20) + "px;";
 				console.log(this.height);
 			});
 			wx.cloud.init();
@@ -172,7 +191,10 @@
 		},
 		computed: {
 			actDateFormat() {
-				return moment(this.actDetail.date).format("YYYY-MM-DD h:mm a");
+				return moment(this.actDetail.startDate).format("YYYY-MM-DD h:mm a");
+			},
+			endDateFormat(){
+				return moment(this.actDetail.endDate).format("YYYY-MM-DD h:mm a");
 			}
 		},
 	}
@@ -212,6 +234,11 @@
 					text-decoration: line-through;
 					margin-left: 20rpx;
 				}
+				
+				.new_price{
+					line-height: 30rpx;
+					font-size:30rpx;
+				}
 			}
 
 			.act_name {
@@ -240,11 +267,10 @@
 				border-bottom: 2px solid #eee;
 				line-height: 70rpx;
 			}
-
-			.content {
+			
+			.scroll_page{
 				padding: 10px;
-				font-size: 28rpx;
-				color: #333;
+				width:calc(100% - 20px);
 			}
 		}
 

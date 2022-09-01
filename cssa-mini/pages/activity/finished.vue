@@ -5,6 +5,7 @@
         <!-- a BIG title indicating YOU FINISHED -->
         <view class="finished-title">
             <text>您已完成活动注册</text>
+			<text>请查看邮箱获取付款信息</text>
         </view>
 
         <!-- A BUTTON REDIRECT TO HOME PAGE -->

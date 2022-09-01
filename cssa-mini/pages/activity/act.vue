@@ -15,12 +15,18 @@
 		<uni-popup ref="popup" type="bottom" background-color="#fff"><button class="button"
 				@click="getUserProfile">授权信息</button></uni-popup>
 		<uni-popup ref="welcome" background-color="fff"><welcome></welcome></uni-popup>
-		<loading></loading>
+		<loading :show="loadShow"></loading>
 	</view>
 </template>
 
 <script>
 	export default {
+		onShareAppMessage(res) {
+		   return {
+		     title: "麦屯小助手",
+		     path: '/pages/activity/act'
+		   }
+		 },
 		components: {
 			actBoxVue,
 			welcome,
@@ -34,6 +40,7 @@
 				items: ['待报名', '已报名/已参加'],
 				current:0,
 				count:0,
+				loadShow:false,
 			}
 		},
 		onLoad(){
@@ -61,6 +68,7 @@
 				}
 			},
 			async getActivityList(){
+				this.loadShow = true;
 				const res = await wx.cloud.callContainer({
 				  config: {
 				    env: 'prod-9go38k3y9fee3b2e', // 微信云托管的环境ID
@@ -72,6 +80,7 @@
 				  }
 				});
 				this.actDetailList = res.data.data;
+				this.loadShow = false;
 				
 			},
 			async getRegisterList(){
@@ -102,7 +111,7 @@
 					config: {
 					  env: 'prod-9go38k3y9fee3b2e', 
 					},
-					path: "/activity/login?",
+					path: "/activity/login?nickname=" + encodeURI(this.userInfo.nickName),
 					method: 'GET',
 					header: {
 					  'X-WX-SERVICE': 'springboot-f8i8',
@@ -165,5 +174,9 @@
 		align-items: center;
 		min-width: 100%;
 		min-height: 50px;
+	}
+	.central-text{
+		font-size: 30px;
+		color:#AAA;
 	}
 </style>

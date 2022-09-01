@@ -1,10 +1,11 @@
 <template>
-	<view class="lds-dual-ring"></view>
+	<view v-if="show" class="lds-dual-ring"></view>
 </template>
 
 <script>
 	export default{
-		name:"loading"
+		name:"loading",
+		props:["show"],
 	}
 </script>
 

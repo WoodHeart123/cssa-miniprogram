@@ -13,6 +13,7 @@
 			<uni-goods-nav :buttonGroup="buttonGroup" :options="options" fill="true" @buttonClick="submit">
 			</uni-goods-nav>
 		</view>
+		<loading :show="loadShow"></loading>
 	</view>
 </template>
 
@@ -29,6 +30,7 @@ export default {
 			actDetail: {},
 			options: [],
 			index: 0,
+			loadShow:false,
 		}
 	},
 	onLoad(options) {
@@ -55,6 +57,7 @@ export default {
 		},
 		async submit() {
 			// console.log(this.actDetail);
+			this.loadShow = true;
 			let valueArr = [];
 			for (let info of this.actDetail.additionalInfo) {
 				valueArr.push(info.value);
@@ -77,6 +80,7 @@ export default {
 				},
 				data: bodyData
 			});
+			this.loadShow = false;
 			if(res.data.status == 100){
 				uni.reLaunch({
 					url: '/pages/activity/finished',

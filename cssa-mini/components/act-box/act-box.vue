@@ -38,11 +38,9 @@
 		},
 		methods:{
 			toDetail:function(){
-				if(!ifJoined){
-					uni.navigateTo({
-						url: '/pages/detail/detail?actDetail=' + encodeURIComponent(JSON.stringify(this.actDetail)),
-					});
-				}
+				uni.navigateTo({
+					url: '/pages/detail/detail?actDetail=' + encodeURIComponent(JSON.stringify(this.actDetail)),
+				});
 			}
 		}
 	}
