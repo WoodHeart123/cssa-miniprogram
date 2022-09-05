@@ -22,12 +22,6 @@
 				success: (res) => {
 					this.userInfo = res.data;
 				},
-				fail: () => {
-					uni.showToast("获取用户信息失败");
-					uni.switchTab({
-						url:"../activity/act"
-					});
-				}
 			});
 		},
 		methods:{

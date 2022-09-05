@@ -2,7 +2,7 @@
 	<view id="remark">
 		<view class="line" v-for="(info, index) in actDetail.additionalInfo" :key="index">
 			<view class="name"><text>{{ info.name }}</text></view>
-			<input class="input" v-if="info.type == 'input'" type="text" maxlength="10" placeholder="请输入内容"
+			<input class="input" v-if="info.type == 'input'" type="text" maxlength="100" placeholder="请输入内容"
 				@focus="changeIndex(index)" @input="bindInputChange" />
 			<picker class="picker" v-if="info.type == 'select'" mode="selector" :range="info.options" :value="info.index"
 				@focus="changeIndex(index)" @change="bindPickerChange">

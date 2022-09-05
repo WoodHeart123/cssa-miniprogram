@@ -1,15 +1,14 @@
 <template>
 	<view class="container">
-		<uni-popup ref="popup" type="bottom" background-color="#fff">
-			<view>新用户第一次登陆将自动注册</view>
-			<button class="button" @click="getUserProfile">授权信息</button>
-		</uni-popup>
+		<uni-popup ref="popup" type="bottom" background-color="#fff"><button class="button"
+				@click="getUserProfile">授权信息</button></uni-popup>
+		<uni-popup ref="welcome" background-color="fff"><welcome></welcome></uni-popup>
 		<view class="avatar-box">
 			<img class="avatar" :src="userInfo.avatarUrl">	
 			<view class="nickname">{{userInfo.nickName}}</view>
 		</view>
 		
-		<view class="function-box" @click="toUserInfo">
+		<view class="function-box" v-show="isLogin" @click="toUserInfo">
 			<view class="function">
 				<view class="icon-box">
 					<span class="iconfont icon">&#xe623;</span>
@@ -31,6 +30,7 @@
 		data() {
 			return {
 				userInfo:{},
+				isLogin:true,
 			}
 		},
 		mounted(){
@@ -40,6 +40,7 @@
 					this.userInfo = res.data;
 				},
 				fail: () => {
+					this.isLogin = false;
 					this.$refs.popup.open();
 				},
 			});
@@ -125,5 +126,12 @@
 	.icon-small{
 		color:#1684FC;
 		font-size:18px !important;
+	}
+	.button {
+		margin: 20px 10px 0px 10px;
+		border-radius: 10px;
+		border: 1px solid #AAAAAA;
+		background-color: #1684FC;
+		color: white;
 	}
 </style>
