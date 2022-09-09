@@ -149,7 +149,7 @@
 	}
 
 	.button {
-		margin: 20px 10px 0px 10px;
+		margin: 20px 10px 20px 10px;
 		border-radius: 10px;
 		border: 1px solid #AAAAAA;
 		background-color: #1684FC;
