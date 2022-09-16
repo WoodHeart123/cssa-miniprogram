@@ -1,0 +1,86 @@
+{
+  "id": "3406119",
+  "name": "小程序",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "31831571",
+      "name": "菜单-copy",
+      "font_class": "menu-copy",
+      "unicode": "ed55",
+      "unicode_decimal": 60757
+    },
+    {
+      "icon_id": "31831572",
+      "name": "菜单-copy-copy",
+      "font_class": "menu-down-copy",
+      "unicode": "ed56",
+      "unicode_decimal": 60758
+    },
+    {
+      "icon_id": "2674928",
+      "name": "箭头 右",
+      "font_class": "jiantouyou",
+      "unicode": "e62d",
+      "unicode_decimal": 58925
+    },
+    {
+      "icon_id": "1186353",
+      "name": "人数",
+      "font_class": "renshu",
+      "unicode": "e6b6",
+      "unicode_decimal": 59062
+    },
+    {
+      "icon_id": "5651351",
+      "name": "标点、地点",
+      "font_class": "biaodiandidian",
+      "unicode": "e65e",
+      "unicode_decimal": 58974
+    },
+    {
+      "icon_id": "11372771",
+      "name": "时间",
+      "font_class": "shijian",
+      "unicode": "e8c5",
+      "unicode_decimal": 59589
+    },
+    {
+      "icon_id": "12579004",
+      "name": "usd",
+      "font_class": "usd",
+      "unicode": "e70b",
+      "unicode_decimal": 59147
+    },
+    {
+      "icon_id": "1304895",
+      "name": "用户-圆",
+      "font_class": "user",
+      "unicode": "e623",
+      "unicode_decimal": 58915
+    },
+    {
+      "icon_id": "29649842",
+      "name": "date",
+      "font_class": "date",
+      "unicode": "ed4f",
+      "unicode_decimal": 60751
+    },
+    {
+      "icon_id": "29751423",
+      "name": "date",
+      "font_class": "date-gray-copy",
+      "unicode": "ed54",
+      "unicode_decimal": 60756
+    },
+    {
+      "icon_id": "29751420",
+      "name": "用户-圆",
+      "font_class": "user-blue",
+      "unicode": "ed53",
+      "unicode_decimal": 60755
+    }
+  ]
+}
