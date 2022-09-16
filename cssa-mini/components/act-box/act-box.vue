@@ -1,10 +1,11 @@
 <template>
-	<view class="container">
+	<view class="container" @click="toDetail">
 		<div class="box">
 			<div class="title">
+				<img class="avatar" src="@/static/cssalogo-red-sm.png" />
 				<span>{{this.actDetail.title}}</span>
 			</div>
-			<div class="image" style="background-image: url('../../static/yuanxiao.jpg')" />
+			<div v-if="!ifJoined" class="image" :style="{'background-image': 'url(' + this.actDetail.imgs +')' }" />
 			<div class="row">
 				<span class="iconfont icon">&#xe65e;</span>
 				<span class="font-small">{{this.actDetail.location}}</span>
@@ -13,13 +14,17 @@
 				<span class="iconfont icon" style="margin-left: 12px;font-size: 13px;">&#xe8c5;</span>
 				<span class="font-small">{{actDateFormat}}</span>
 			</div>
+			<div class="row" v-if="ifJoined">
+				<span class="iconfont icon" style="margin-left: 10px;font-size: 15px;">&#xe70b;</span>
+				<span class="font-small">{{this.actDetail.price}}</span>
+			</div>
 		</div>
 	</view>
 </template>
 
 <script>
 	export default {
-		props: ['actDetail'],
+		props: ['actDetail',"ifJoined"],
 		name: "act-box",
 		data() {
 			return {
@@ -28,7 +33,14 @@
 		},
 		computed: {
 			actDateFormat() {
-				return moment(this.actDetail.date).format("YYYY-MM-DD h:mm a");
+				return moment(this.actDetail.startDate).format("YYYY-MM-DD h:mm a");
+			}
+		},
+		methods:{
+			toDetail:function(){
+				uni.navigateTo({
+					url: '/pages/detail/detail?actDetail=' + encodeURIComponent(JSON.stringify(this.actDetail)),
+				});
 			}
 		}
 	}
@@ -91,12 +103,18 @@
 
 	.title {
 		height: 30px;
-		margin-bottom: 10px;
+		padding-bottom: 5px;
 		padding-left: 10px;
 		display: flex;
 		flex-direction: row;
 		align-items: center;
-		font-size: 15px;
+		font-size: 18px;
 		font-weight: 600;
+	}
+	.avatar{
+		width:20px;
+		height: 20px;
+		border-radius: 100%;
+		margin-right:5px;
 	}
 </style>
