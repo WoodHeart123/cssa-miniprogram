@@ -96,7 +96,7 @@
 			},
 			toCourse: function(){
 				uni.navigateTo({
-					url:"/pages/course/course"
+					url:"/pages/courseMain/courseMain"
 				})
 			}
 		}

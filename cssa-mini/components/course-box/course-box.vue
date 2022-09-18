@@ -1,27 +1,28 @@
 <template>
-	<view class="course">
+	<view class="course" @click="toCoursePage">
 		<view class="column-container">
 			<view class="course-name">
-				<text>AFRICAN 337</text>
+				<text>{{ course.departmentAbrev + " " + String(course.courseNum)}}</text>
 			</view>
-			<view class="course-sub-text"><text>THIRD SEMESTER-A LANGUAGE OF SOUTHERN AFRICA</text></view>
+			<view class="course-sub-text"><text>{{course.courseName}}</text></view>
 			<view class="row-container rate-box">
 				<view><text>难度：</text></view>
-				<uni-rate readonly="true" :value="4.5" allowHalf="true" size="15"></uni-rate>
-				<view><text>(4.5)</text></view>
+				<uni-rate readonly="true" :value="course.avgDifficulty" allowHalf="true" size="15"></uni-rate>
+				<view><text>{{course.avgDifficulty}}</text></view>
 			</view>
 			<view class="row-container rate-box">
 				<view><text>喜爱： </text></view>
-				<uni-rate readonly="true" :value="4.5" allowHalf="true" size="15"></uni-rate>
-				<view><text>(4.5)</text></view>
+				<uni-rate readonly="true" :value="course.avgLike" allowHalf="true" size="15"></uni-rate>
+				<view><text>{{course.avgLike}}</text></view>
 			</view>
-			<view class="footnote"><text>1234人参与此评论</text></view>
+			<view  class="footnote"><text>{{course.commentCount}}人参与此评论</text></view>
 		</view>
 	</view>
 </template>
 
 <script>
 	export default {
+		props:["course"],
 		name: "course-box",
 		data() {
 			return {
@@ -29,7 +30,11 @@
 			}
 		},
 		methods: {
-
+			toCoursePage:function(){
+				uni.navigateTo({
+					url: '/pages/coursePage/coursePage?course=' + encodeURIComponent(JSON.stringify(this.course)),
+				});
+			}
 		}
 	}
 </script>

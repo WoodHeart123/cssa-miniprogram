@@ -58,11 +58,18 @@
 				"backgroundColor": "#ffffff"
 			}
 		}, {
-			"path": "pages/course/course",
+			"path": "pages/courseMain/courseMain",
 			"style": {
 				"navigationBarTitleText": "课程评价",
 				"disableScroll": true
 			}
+		}, {
+			"path": "pages/coursePage/coursePage",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+
 		}
 	],
 	"condition": {
