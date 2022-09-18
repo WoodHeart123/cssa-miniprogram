@@ -63,7 +63,7 @@
 				"navigationBarTitleText": "课程评价",
 				"disableScroll": true
 			}
-		},
+		}
 	],
 	"condition": {
 		"current": 0,

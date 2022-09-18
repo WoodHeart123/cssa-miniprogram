@@ -2,7 +2,7 @@
 	<view  id="main" class="column-container">
 		<uni-swiper-dot class="uni-swiper-dot-box" @clickItem="clickItem" :info="actDetailList" :current="current" mode="dot"
 			:dots-styles="dotStyle" field="content">
-			<swiper class="swiper-box" @change="change" :current="swiperDotIndex">
+			<swiper class="swiper-box" @change="change">
 				<swiper-item v-for="(actDetail, index) in actDetailList" :key="index">
 					<img class='swiper-image' :src="actDetail.imgs" @click="toAct"/>
 				</swiper-item>
