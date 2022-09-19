@@ -48,12 +48,12 @@
 				</view>
 			</view>
 		</view>
-		<view class="leader_list">
+		<view class="leader-list">
 			<text class="stu">CSSA介绍</text>
-			<scroll-view class="leader_intro" scroll-x="true">
-				<view class="scroll-view-item_X" v-for="(leader,key) in leader_info" :key="key" @click="open(leader)">
-					<view class="scroll-view-item_M" />
-					<view class="scroll-view-item_H">
+			<scroll-view class="leader-intro" scroll-x="true">
+				<view class="scroll-view-item-X" v-for="(leader,key) in leaderInfo" :key="key" @click="open(leader)">
+					<image class="scroll-view-item-M" :src="leader.image" />
+					<view class="scroll-view-item-H">
 						<view class="intro-box">
 							<view class="name">
 								{{leader.name}}
@@ -69,9 +69,11 @@
 				</view>
 			</scroll-view>
 			<uni-popup ref="popup" type="bottom" backgroundColor="#ffffff">
-				{{popup_leader.name}}
-				{{popup_leader.postion}}
-				{{popup_leader.intro}}
+				<image v-if="popupLeader.image != ''" class="pop-img" :src="popupLeader.image" />
+				<view class="pop-name">{{popupLeader.name}}</view>
+				<view class="pop-div" />
+				<view class="pop-intro">{{popupLeader.intro}}</view>
+				<view style="height: 4vh;" />
 			</uni-popup>
 		</view>
 	</view>
@@ -94,31 +96,36 @@
 				},
 				current: 0,
 				actDetailList: [],
-				leader_info: [{
-						'name': '张三一',
+				leaderInfo: [{
+						'name': '张三一 ',
 						'postion': '主席',
-						'intro': '你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁'
+						'intro': '你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是好我是谁你好我是谁',
+						'image': '../../static/renwu.jpeg'
 					},
 					{
 						'name': 'XXX',
 						'postion': 'PPP',
-						'intro': '你好我是谁'
+						'intro': '你好我是谁',
+						'image': "../../static/renwu.jpeg"
 					},
 					{
 						'name': 'XXX',
 						'postion': 'PPP',
-						'intro': '你好我是谁'
+						'intro': '你好我是谁',
+						'image': "../../static/renwu.jpeg"
 					},
 					{
 						'name': 'XXX',
 						'postion': 'PPP',
-						'intro': '你好我是谁'
+						'intro': '你好我是谁',
+						'image': "../../static/renwu.jpeg"
 					}
 				],
-				popup_leader: {
+				popupLeader: {
 					'name': '',
 					'postion': '',
-					'intro': ''
+					'intro': '',
+					'image': ''
 				}
 
 			}
@@ -143,13 +150,14 @@
 		methods: {
 			open(leader) {
 				console.log(leader);
-				this.popup_leader.name = leader.name;
-				this.popup_leader.postion = leader.postion;
-				this.popup_leader.intro = leader.intro;
-				this.$refs.popup.open('bottom')
+				this.popupLeader.name = leader.name;
+				this.popupLeader.postion = leader.postion;
+				this.popupLeader.intro = leader.intro;
+				this.popupLeader.image = leader.image;
+				this.$refs.popup.open('bottom');
 			},
 			change(e) {
-				this.current = e.detail.current
+				this.current = e.detail.current;
 			},
 			clickItem(e) {
 				console.log(e);
@@ -205,18 +213,18 @@
 		margin-left: 10px;
 		margin-right: 10px;
 		margin-top: 30px;
-		width: 110px;
+		width: 130px;
 	}
 
 	.introduction {
 		height: 100rpx;
 	}
 
-	.leader_list {
+	.leader-list {
 		margin-top: 10vh;
 	}
 
-	.leader_intro {
+	.leader-intro {
 		white-space: nowrap;
 		width: 100%;
 	}
@@ -229,17 +237,15 @@
 		align-items: center;
 	}
 
-	.scroll-view-item_M {
+	.scroll-view-item-M {
 		position: absolute;
 		height: 90rpx;
 		width: 90rpx;
 		border-radius: 50%;
-		background-color: bisque;
-		background-image: url("../../static/renwu.jpeg");
 		background-size: 100% 100%;
 	}
 
-	.scroll-view-item_X {
+	.scroll-view-item-X {
 		display: inline-block;
 		border-radius: 10px;
 		margin: 10px;
@@ -247,20 +253,48 @@
 		width: 180px;
 	}
 
-	.scroll-view-item_H {
+	.scroll-view-item-H {
 		margin-left: 20px;
 		margin-top: 20px;
 		height: 150px;
-		width: 130px;
+		width: 150px;
 		border-radius: 5px;
 		background-color: white;
 		box-shadow: 0 0px 6px 1px rgba(165, 165, 165, 0.2)
 	}
 
+	.pop-img {
+		margin-left: 35vw;
+		margin-top: 5vh;
+		border-radius: 50%;
+		height: 30vw;
+		width: 30vw;
+	}
+
+	.pop-name {
+		margin-top: 2vh;
+		text-align: center;
+		font-weight: 700;
+	}
+
+	.pop-div {
+		background-color: lightgray;
+		height: 0.2vh;
+		width: 94vw;
+		margin-top: 4vh;
+		margin-left: 3vw;
+	}
+
+	.pop-intro {
+		margin-top: 4vh;
+		width: 92vw;
+		margin-left: 4vw;
+		font-weight: 200;
+		font-size: 30rpx;
+	}
+
 	.name {
-		height: 20px;
-		line-height: 20px;
-		font-size: 14px;
+		font-size: 28rpx;
 		font-weight: 700;
 	}
 
@@ -271,7 +305,7 @@
 	}
 
 	.intro {
-		flex:1;
+		flex: 1;
 		max-height: 70px;
 		overflow: hidden;
 		white-space: pre-wrap;
