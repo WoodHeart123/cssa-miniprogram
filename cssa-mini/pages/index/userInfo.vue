@@ -1,5 +1,11 @@
 <template>
 	<view>
+		<view class="section-title">认证</view>
+		<view class="box" @click="toStudentAuth">
+			<view class="key">学生认证</view>
+			<view class="value">{{this.userInfo.isStudent?"已认证":"暂无认证"}}</view>
+			<view class="arrow" v-if="!this.userInfo.isStudent"><span class="iconfont">&#xe62d;</span></view>
+		</view>
 		<view class="section-title">联系方式</view>
 		<view class="box" @click="toEmail">
 			<view class="key">邮箱</view>
@@ -29,7 +35,13 @@
 				uni.navigateTo({
 					url:"./updateEmail"
 				})
+			},
+			toStudentAuth:function(){
+				uni.navigateTo({
+					url: "/pages/studentAuth/studentAuth"
+				})
 			}
+			
 		}
 	}
 </script>

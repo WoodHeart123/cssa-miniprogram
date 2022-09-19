@@ -1,10 +1,16 @@
 <template>
-	<view  id="main" class="column-container">
-		<uni-swiper-dot class="uni-swiper-dot-box" @clickItem="clickItem" :info="actDetailList" :current="current" mode="dot"
-			:dots-styles="dotStyle" field="content">
+	<view id="main" class="column-container">
+		<uni-popup ref="popup" type="bottom" background-color="#fff">
+			<button class="button" @click="getUserProfile">授权信息</button>
+		</uni-popup>
+		<uni-popup ref="welcome" background-color="fff">
+			<welcome></welcome>
+		</uni-popup>
+		<uni-swiper-dot class="uni-swiper-dot-box" @clickItem="clickItem" :info="actDetailList" :current="current"
+			mode="dot" :dots-styles="dotStyle" field="content">
 			<swiper class="swiper-box" @change="change">
 				<swiper-item v-for="(actDetail, index) in actDetailList" :key="index">
-					<img class='swiper-image' :src="actDetail.imgs" @click="toAct"/>
+					<img class='swiper-image' :src="actDetail.imgs" @click="toAct" />
 				</swiper-item>
 			</swiper>
 		</uni-swiper-dot>
@@ -47,7 +53,7 @@
 
 <script>
 	export default {
-		components:{
+		components: {
 			actBoxVue
 		},
 		data() {
@@ -61,43 +67,68 @@
 					selectedBorder: '1px rgba(83, 200, 249,0.9) solid'
 				},
 				current: 0,
-				actDetailList:[]
+				actDetailList: []
 
 			}
 		},
-		onLoad(){
+		onLoad() {
 			wx.cloud.init();
-			this.getActivityList();
+			uni.$on('close-welcome', (data) => {
+				this.$refs.welcome.close();
+				console.log(data);
+			})
+			uni.getStorage({
+				key: 'userInfo',
+				success: (res) => {
+					this.userInfo = res.data;
+					this.login();
+				},
+				fail: () => {
+					this.$refs.popup.open();
+				},
+			});
 		},
 		methods: {
 			change(e) {
 				this.current = e.detail.current
 			},
-			clickItem(e){
+			clickItem(e) {
 				console.log(e);
 			},
-			async getActivityList() {
+			toAct: function() {
+				uni.switchTab({
+					url: '/pages/activity/act'
+				});
+			},
+			toCourse: function() {
+				uni.navigateTo({
+					url: "/pages/courseMain/courseMain"
+				})
+			},
+			async login() {
 				const res = await wx.cloud.callContainer({
 					config: {
-						env: 'prod-9go38k3y9fee3b2e', // 微信云托管的环境ID
+						env: 'prod-9go38k3y9fee3b2e',
 					},
-					path: "/activity/activityList?current=" + Date.now(),
-					method: 'GET', // 按照自己的业务开发，选择对应的方法
+					path: "/activity/login?nickname=" + encodeURI(this.userInfo.nickName),
+					method: 'GET',
 					header: {
 						'X-WX-SERVICE': 'springboot-f8i8',
 					}
 				});
-				this.actDetailList = res.data.data;
-			},
-			toAct:function(){
-				uni.switchTab({
-					url:'/pages/activity/act'
+				if (res.data.status == 103) {
+					this.$refs.popup.close();
+					this.$refs.welcome.open();
+					return;
+				}
+				this.userInfo.email = res.data.data.email;
+				this.userInfo.isStudent = res.data.data.isStudent;
+				console.log(this.userInfo);
+				uni.setStorage({
+					key: "userInfo",
+					data: this.userInfo
 				});
-			},
-			toCourse: function(){
-				uni.navigateTo({
-					url:"/pages/courseMain/courseMain"
-				})
+			
 			}
 		}
 	}
@@ -105,10 +136,11 @@
 </script>
 
 <style>
-	#main{
+	#main {
 		width: 100vw;
 		height: 100vh;
 	}
+
 	.column-container {
 		display: flex;
 		flex-direction: column;
@@ -118,12 +150,14 @@
 		display: flex;
 		flex-direction: row;
 	}
-	.uni-swiper-dot-box{
-		margin-top:2vh;
+
+	.uni-swiper-dot-box {
+		margin-top: 2vh;
 		height: 25vh;
-		
+
 		margin-bottom: 2vh;
 	}
+
 	.swiper-box {
 		width: 90vw;
 		margin-left: 5vw;
@@ -131,33 +165,39 @@
 		background-color: #e5e5e5;
 		border-radius: 10px;
 	}
-	.function-box{
+
+	.function-box {
 		height: 10vh;
-		margin-top:2vh;
+		margin-top: 2vh;
 		justify-content: space-around;
 	}
-	.function-button{
+
+	.function-button {
 		width: 45vw;
-		border-radius: 5px;	
+		border-radius: 5px;
 		background-color: white;
-		box-shadow:0 0px 6px 1px rgba(165,165,165,0.2)
+		box-shadow: 0 0px 6px 1px rgba(165, 165, 165, 0.2)
 	}
-	.image{
+
+	.image {
 		width: 40%;
 		height: 100%;
 		margin-right: 10%;
 	}
-	.function-text{
+
+	.function-text {
 		width: 50%;
 		justify-content: center;
 		font-weight: 700;
 		align-items: center;
 	}
-	.act-box{
+
+	.act-box {
 		width: 94vw;
 		height: 25vh;
 	}
-	.swiper-image{
+
+	.swiper-image {
 		width: 100%;
 		height: 100%;
 	}

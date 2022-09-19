@@ -12,11 +12,6 @@
 			<view class="footnote"></view>
 		</scroll-view>
 		<view v-if="current == 1" v-for="(actDetail,index) in registerList" :key="index"></view>
-		<uni-popup ref="popup" type="bottom" background-color="#fff"><button class="button"
-				@click="getUserProfile">授权信息</button></uni-popup>
-		<uni-popup ref="welcome" background-color="fff">
-			<welcome></welcome>
-		</uni-popup>
 	</view>
 </template>
 
@@ -41,24 +36,16 @@
 				items: ['待报名', '已报名/已参加'],
 				current: 0,
 				count: 0,
-				mode:"",
+				mode: "",
 			}
 		},
 		onLoad() {
 			wx.cloud.init();
-			uni.$on('close-welcome', (data) => {
-				this.$refs.welcome.close();
-				console.log(data);
-			})
 			uni.getStorage({
 				key: 'userInfo',
 				success: (res) => {
 					this.userInfo = res.data;
-					this.login();
-				},
-				fail: () => {
-					this.$refs.popup.open();
-				},
+				}
 			});
 			this.mode = "first";
 			uni.startPullDownRefresh();
@@ -67,6 +54,7 @@
 			if (this.mode == "first") {
 				this.getActivityList();
 				this.getRegisterList();
+				this.mode = "more";
 			} else {
 				if (current == 0) {
 					this.getActivityList();
@@ -74,7 +62,7 @@
 					this.getRegisterList();
 				}
 			}
-			setTimeout(function () {
+			setTimeout(function() {
 				uni.stopPullDownRefresh();
 			}, 2000);
 
@@ -123,31 +111,8 @@
 						this.login();
 					},
 				});
-			},
-			async login() {
-				const res = await wx.cloud.callContainer({
-					config: {
-						env: 'prod-9go38k3y9fee3b2e',
-					},
-					path: "/activity/login?nickname=" + encodeURI(this.userInfo.nickName),
-					method: 'GET',
-					header: {
-						'X-WX-SERVICE': 'springboot-f8i8',
-					}
-				});
-				if (res.data.status == 103) {
-					this.$refs.popup.close();
-					this.$refs.welcome.open();
-					return;
-				}
-				this.userInfo.email = res.data.data.email;
-				console.log(this.userInfo);
-				uni.setStorage({
-					key: "userInfo",
-					data: this.userInfo
-				});
-
 			}
+
 		}
 	}
 	import actBoxVue from '@/components/act-box/act-box.vue';

@@ -55,7 +55,8 @@
 			"path": "pages/index/updateEmail",
 			"style": {
 				"navigationBarTitleText": "更新邮箱",
-				"backgroundColor": "#ffffff"
+				"backgroundColor": "#ffffff",
+				"disableScroll": true
 			}
 		}, {
 			"path": "pages/courseMain/courseMain",
@@ -70,13 +71,21 @@
 				"enablePullDownRefresh": false
 			}
 
+		}, {
+			"path": "pages/studentAuth/studentAuth",
+			"style": {
+				"navigationBarTitleText": "UW-Madison学生认证",
+				"enablePullDownRefresh": false,
+				"backgroundColor": "#ffffff",
+				"disableScroll": true
+			}
 		}
 	],
 	"condition": {
 		"current": 0,
 		"list": [{
 			"name": "test",
-			"path": "pages/course/course"
+			"path": "pages/studentAuth/studentAuth"
 		}]
 	},
 	"globalStyle": {

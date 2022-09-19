@@ -13,7 +13,7 @@
 				regex:new RegExp('^([-a-zA-Z0-9_.]+)@([-a-zA-Z0-9_.]+).([a-zA-Z]{2,5})$'),
 			}
 		},
-		mounted(){
+		onLoad(){
 			wx.cloud.init();
 			uni.getStorage({
 				key: 'userInfo',
