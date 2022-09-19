@@ -72,11 +72,9 @@
 </template>
 
 <script>
-	import wybPopup from '@/components/wyb-popup/wyb-popup.vue'
 	export default {
 		components:{
-			actBoxVue,
-			wybPopup
+			actBoxVue
 		},
 		data() {
 			return {
@@ -164,7 +162,6 @@
 		}
 	}
 	import actBoxVue from '@/components/act-box/act-box.vue';
-import xuiXsheetVue from '../../uni_modules/xui-xsheet/components/xui-xsheet/xui-xsheet.vue';
 </script>
 
 <style>
@@ -198,8 +195,8 @@ import xuiXsheetVue from '../../uni_modules/xui-xsheet/components/xui-xsheet/xui
 	}
 	.scroll-view-item_M {
 		position: absolute;
-		height: 100rpx;
-		width: 100rpx;
+		height: 90rpx;
+		width: 90rpx;
 		border-radius: 50%;
 		background-color: bisque;
 		background-image: url("../../static/renwu.jpeg");
@@ -209,7 +206,7 @@ import xuiXsheetVue from '../../uni_modules/xui-xsheet/components/xui-xsheet/xui
 	.scroll-view-item_X {
 		display: inline-block;
 		border-radius: 10px;
-		margin: 5%;
+		margin: 2%;
 		height: 300rpx;
 		width: 300rpx;
 	}
@@ -218,7 +215,7 @@ import xuiXsheetVue from '../../uni_modules/xui-xsheet/components/xui-xsheet/xui
 		margin-left: 50rpx;
 		margin-top: 50rpx;
 		height: 240rpx;
-		width: 230rpx;
+		width: 240rpx;
 		border-radius: 5px;	
 		background-color: white;
 		box-shadow:0 0px 6px 1px rgba(165,165,165,0.2)
