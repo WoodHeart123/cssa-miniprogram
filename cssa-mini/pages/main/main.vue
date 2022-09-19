@@ -51,8 +51,8 @@
 		<view class="leader_list">
 			<text class="stu">CSSA介绍</text>
 			<scroll-view class="leader_intro" scroll-x="true">
-				<view class="scroll-view-item_X" v-for="leader in leader_info" @click="open(leader)">
-					<view class="scroll-view-item_M"/>
+				<view class="scroll-view-item_X" v-for="(leader,key) in leader_info" :key="key" @click="open(leader)">
+					<view class="scroll-view-item_M" />
 					<view class="scroll-view-item_H">
 						<view class="intro-box">
 							<view class="name">
@@ -93,33 +93,32 @@
 					selectedBorder: '1px rgba(83, 200, 249,0.9) solid'
 				},
 				current: 0,
-				actDetailList:[],
-				leader_info:[
-					{
-						'name':'张三一 George',
-						'postion':'主席',
-						'intro':'你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁'
-					}, 
-					{
-						'name':'XXX',
-						'postion':'PPP',
-						'intro':'你好我是谁'
-					}, 
-					{
-						'name':'XXX',
-						'postion':'PPP',
-						'intro':'你好我是谁'
+				actDetailList: [],
+				leader_info: [{
+						'name': '张三一',
+						'postion': '主席',
+						'intro': '你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁'
 					},
 					{
-						'name':'XXX',
-						'postion':'PPP',
-						'intro':'你好我是谁'
+						'name': 'XXX',
+						'postion': 'PPP',
+						'intro': '你好我是谁'
+					},
+					{
+						'name': 'XXX',
+						'postion': 'PPP',
+						'intro': '你好我是谁'
+					},
+					{
+						'name': 'XXX',
+						'postion': 'PPP',
+						'intro': '你好我是谁'
 					}
 				],
-				popup_leader:{
-					'name':'',
-					'postion':'',
-					'intro':''
+				popup_leader: {
+					'name': '',
+					'postion': '',
+					'intro': ''
 				}
 
 			}
@@ -142,7 +141,7 @@
 			});
 		},
 		methods: {
-			open(leader){
+			open(leader) {
 				console.log(leader);
 				this.popup_leader.name = leader.name;
 				this.popup_leader.postion = leader.postion;
@@ -188,7 +187,7 @@
 					key: "userInfo",
 					data: this.userInfo
 				});
-			
+
 			}
 		}
 	}
@@ -200,30 +199,36 @@
 		width: 100vw;
 		height: 100vh;
 	}
-	
-	.intro-box{
-		position:absolute;
-		margin-left: 2%;
-		margin-top: 8%;
+
+	.intro-box {
+		position: absolute;
+		margin-left: 10px;
+		margin-right: 10px;
+		margin-top: 30px;
+		width: 110px;
 	}
-	.introduction{
+
+	.introduction {
 		height: 100rpx;
 	}
-	.leader_list{
-		margin-top:10vh;
+
+	.leader_list {
+		margin-top: 10vh;
 	}
-	
+
 	.leader_intro {
 		white-space: nowrap;
 		width: 100%;
 	}
-	.stu{
+
+	.stu {
 		margin-left: 20rpx;
 		width: 50%;
 		justify-content: center;
 		font-weight: 700;
 		align-items: center;
 	}
+
 	.scroll-view-item_M {
 		position: absolute;
 		height: 90rpx;
@@ -233,42 +238,53 @@
 		background-image: url("../../static/renwu.jpeg");
 		background-size: 100% 100%;
 	}
-	
+
 	.scroll-view-item_X {
 		display: inline-block;
 		border-radius: 10px;
-		margin: 2%;
-		height: 300rpx;
-		width: 300rpx;
+		margin: 10px;
+		height: 180px;
+		width: 180px;
 	}
-	
+
 	.scroll-view-item_H {
-		margin-left: 50rpx;
-		margin-top: 50rpx;
-		height: 240rpx;
-		width: 240rpx;
-		border-radius: 5px;	
+		margin-left: 20px;
+		margin-top: 20px;
+		height: 150px;
+		width: 130px;
+		border-radius: 5px;
 		background-color: white;
-		box-shadow:0 0px 6px 1px rgba(165,165,165,0.2)
+		box-shadow: 0 0px 6px 1px rgba(165, 165, 165, 0.2)
 	}
-	.name{
-		font-size: 28rpx;
+
+	.name {
+		height: 20px;
+		line-height: 20px;
+		font-size: 14px;
 		font-weight: 700;
 	}
-	.position{
-		font-size: 25rpx;
+
+	.position {
+		height: 15px;
+		line-height: 15px;
+		font-size: 12px;
 	}
-	.intro{
-		word-break: break-all;
+
+	.intro {
+		flex:1;
+		max-height: 70px;
 		overflow: hidden;
-		text-overflow:ellipsis;
-		margin-top: 20rpx;
-		line-clamp: 2;
-		width: 200rpx;
-		height: 200rpx;
-		font-size: 20rpx;
+		white-space: pre-wrap;
+		text-overflow: ellipsis;
+		display: -webkit-box;
+		-webkit-line-clamp: 3;
+		-webkit-box-orient: vertical;
+		margin-top: 10px;
+		font-size: 10px;
 		font-weight: 200;
+		line-height: 16px;
 	}
+
 	.column-container {
 		display: flex;
 		flex-direction: column;
