@@ -443,7 +443,7 @@
 			/* #endif */
 			position: relative;
 			border-radius: 10ch;
-			height: 80vh;
+			height: auto;
 			/* iphonex 等安全区设置，底部安全区适配 */
 			/* #ifndef APP-NVUE */
 			// padding-bottom: constant(safe-area-inset-bottom);

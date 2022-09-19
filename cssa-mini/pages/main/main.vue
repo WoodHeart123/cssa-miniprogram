@@ -46,7 +46,7 @@
 			<text class="stu">CSSA介绍</text>
 			<scroll-view class="leader_intro" scroll-x="true">
 				<view class="scroll-view-item_X" v-for="leader in leader_info" @click="open(leader)">
-					<view class="scroll-view-item_M"/>
+					<image class="scroll-view-item_M" v-bind:src="leader.image"/>
 					<view class="scroll-view-item_H">
 						<view class="intro-box">
 							<view class="name">
@@ -63,9 +63,11 @@
 				</view>
 			</scroll-view>
 			<uni-popup ref="popup" type="bottom" backgroundColor="#ffffff">
-				{{popup_leader.name}}
-				{{popup_leader.postion}}
-				{{popup_leader.intro}}
+				<image v-if="popup_leader.image != ''" class="pop_img" v-bind:src="popup_leader.image"/>
+				<view class="pop_name">{{popup_leader.name}}</view>
+				<view class="pop_div"/>
+				<view class="pop_intro">{{popup_leader.intro}}</view>
+				<view style="height: 4vh;"/>
 			</uni-popup>
 		</view>
 	</view>
@@ -92,28 +94,33 @@
 					{
 						'name':'张三一 George',
 						'postion':'主席',
-						'intro':'你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁'
+						'intro':'你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是好我是谁你好我是谁',
+						'image':'../../static/renwu.jpeg'					
+						}, 
+					{
+						'name':'XXX',
+						'postion':'PPP',
+						'intro':'你好我是谁',
+						'image': "../../static/renwu.jpeg"
 					}, 
 					{
 						'name':'XXX',
 						'postion':'PPP',
-						'intro':'你好我是谁'
-					}, 
-					{
-						'name':'XXX',
-						'postion':'PPP',
-						'intro':'你好我是谁'
+						'intro':'你好我是谁',
+						'image': "../../static/renwu.jpeg"
 					},
 					{
 						'name':'XXX',
 						'postion':'PPP',
-						'intro':'你好我是谁'
+						'intro':'你好我是谁',
+						'image': "../../static/renwu.jpeg"
 					}
 				],
 				popup_leader:{
 					'name':'',
 					'postion':'',
-					'intro':''
+					'intro':'',
+					'image':''
 				}
 
 			}
@@ -128,6 +135,7 @@
 				this.popup_leader.name = leader.name;
 				this.popup_leader.postion = leader.postion;
 				this.popup_leader.intro = leader.intro;
+				this.popup_leader.image = leader.image;
 				this.$refs.popup.open('bottom')
 			},
 			change(e) {
@@ -198,8 +206,6 @@
 		height: 90rpx;
 		width: 90rpx;
 		border-radius: 50%;
-		background-color: bisque;
-		background-image: url("../../static/renwu.jpeg");
 		background-size: 100% 100%;
 	}
 	
@@ -220,6 +226,36 @@
 		background-color: white;
 		box-shadow:0 0px 6px 1px rgba(165,165,165,0.2)
 	}
+	.pop_img{
+		margin-left:35vw;
+		margin-top: 5vh;
+		border-radius: 50%;
+		height: 30vw;
+		width: 30vw;
+	}
+	
+	.pop_name{
+		margin-top: 2vh;
+		text-align: center;
+		font-weight: 700;
+	}
+	
+	.pop_div{
+		background-color: lightgray;
+		height: 0.2vh;
+		width:94vw;
+		margin-top: 4vh;
+		margin-left: 3vw;
+	}
+	
+	.pop_intro{
+		margin-top:4vh;
+		width: 92vw;
+		margin-left: 4vw;
+		font-weight: 200;
+		font-size: 30rpx;
+	}
+	
 	.name{
 		font-size: 28rpx;
 		font-weight: 700;
