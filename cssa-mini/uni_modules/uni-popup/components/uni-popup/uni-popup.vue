@@ -346,7 +346,7 @@
 					position: 'fixed',
 					left: 0,
 					right: 0,
-					bottom: 0,
+					bottom:0,
 					paddingBottom: this.safeAreaInsets + 'px',
 					backgroundColor: this.bg
 				}
@@ -425,7 +425,6 @@
 		position: fixed;
 		/* #ifndef APP-NVUE */
 		z-index: 99;
-
 		/* #endif */
 		&.top,
 		&.left,
@@ -443,7 +442,8 @@
 			display: block;
 			/* #endif */
 			position: relative;
-
+			border-radius: 10ch;
+			height: 80vh;
 			/* iphonex 等安全区设置，底部安全区适配 */
 			/* #ifndef APP-NVUE */
 			// padding-bottom: constant(safe-area-inset-bottom);
