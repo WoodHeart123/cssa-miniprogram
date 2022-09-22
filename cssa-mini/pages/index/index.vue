@@ -122,7 +122,7 @@
 
 	.function-box {
 		width: 80%;
-		margin-top: 50px;
+		margin-top: 20px;
 		background-color: white;
 		display: flex;
 		flex-direction: column;

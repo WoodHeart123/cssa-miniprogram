@@ -7,12 +7,12 @@
 		</view>
 		<text class="sub-text">注：该邮箱不会作为联络邮箱使用</text>
 		<view class="email-box">
-			<input v-model="authCode" class="auth-code-input" placeholder="请输入验证码" @input="input" type="number"/>
-			<button class="button" v-show="!showTime" plain="true" @click="getAuthCode">获取验证码</button>
+			<input v-model="authCode" class="auth-code-input" placeholder="请输入验证码" @input="onAuthCodeInput" type="number" maxlength="6"/>
+			<button class="button" v-show="!showTime" plain="true" @click="getAuthCode" >获取验证码</button>
 			<button class="button disabled" v-show="showTime" plain="true" disabled="true">{{time}}秒后重新获取</button>
 		</view>
 
-		<button class="confirm-button" v-show="showButton" @click="confirm">确定</button>
+		<button class="confirm-button"  v-show="showButton" @click="confirm">确定</button>
 		
 
 	</view>
@@ -35,7 +35,33 @@
 			onEmailInput(event) {
 				this.email = event.detail.value;
 			},
-			getAuthCode: function() {
+			onAuthCodeInput(event){
+				this.authCode = event.detail.value;
+			},
+			async confirm(){
+				if(this.authCode.length == 0){
+					uni.showToast({
+						title: "请输入验证码",
+						icon: "error"
+					});
+					return;
+				}
+				if(this.authCode.length < 6){
+					uni.showToast({
+						title: "验证码错误",
+						icon: "error"
+					});
+					return;
+				}
+			},
+			async getAuthCode(){
+				if(this.email.length == 0){
+					uni.showToast({
+						title: "请输入邮箱",
+						icon: "error"
+					});
+					return;
+				}
 				if (this.regex.test(this.email)) {
 					this.time = 60;
 					this.showTime = true;
@@ -46,6 +72,16 @@
 							this.showTime = false;
 						}
 					}, 1000);
+					const res = await wx.cloud.callContainer({
+						config: {
+							env: 'prod-9go38k3y9fee3b2e', 
+						},
+						path: '/user/getAuthCode?email=' + this.email,
+						method: 'GET', 
+						header: {
+							'X-WX-SERVICE': 'springboot-f8i8',
+						},
+					});
 					this.showButton = true;
 				} else {
 					uni.showToast({

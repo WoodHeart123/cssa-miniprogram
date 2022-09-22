@@ -12,15 +12,20 @@
 						</uni-transition>
 					</view>
 					<view :class="searching?'search-bar-selected':'search-bar'" class="search-bar">
-						<uni-search-bar cancelButton="none" v-model="searchValue" @focus="onFocus" @blur="onBlur">
+						<uni-search-bar  v-model="searchValue" cancelButton="always" clearButton="none" @focus="onFocus" @input="searchBarInput"
+							@confirm="searchBarInput" @cancel="onCancel">
 						</uni-search-bar>
 					</view>
 				</view>
 				<view class="column-container suggest-list" v-if="searching">
-					<view></view>
+					<view class="row-container suggest-box" v-for="(course, index) in suggestList" :key="index" @click="toCourse(course)">
+						<view class="suggest-box-course-num">
+							{{course.departmentAbrev + " " + String(course.courseNum) + " "}}</view>
+						<view class="suggest-box-course-name">{{course.courseName}}</view>
+					</view>
 				</view>
-				<view class="row-container department">
-					<text>Asian Languages and Cultures : Language</text>
+				<view class="row-container department" v-show="!searching">
+					<text>{{departmentName}}</text>
 				</view>
 				<view class="column-container course-list" v-show="!searching">
 					<view class="row-container filter-box">
@@ -74,15 +79,48 @@
 				sort: ["asc", "desc"],
 				sortIndex: 0,
 				list: [],
+				courseList: [],
 				departmentID: 1,
-				courseList: []
+				departmentName: "Accounting and Information System",
+				timer: {},
+				suggestList: [],
 			}
 		},
 		onLoad() {
 			wx.cloud.init();
+			uni.getStorage({
+				key: 'departmentIndexedList',
+				success: (res) => {
+					this.list = res.data;
+				},
+				fail: () => {
+					this.getDepartmentList();
+				},
+			});
 			this.onPulling();
 		},
 		methods: {
+			searchBarInput: function(value) {
+				if (value.length != 0) {
+					clearTimeout(this.timer);
+					this.timer = setTimeout(() => {
+						this.search(value.replace(/\s/g, '').toLowerCase());
+					}, 500);
+				}
+			},
+			async search(value) {
+				const res = await wx.cloud.callContainer({
+					config: {
+						env: 'prod-9go38k3y9fee3b2e',
+					},
+					path: "/course/search?value=" + value,
+					method: 'GET',
+					header: {
+						'X-WX-SERVICE': 'springboot-f8i8',
+					}
+				});
+				this.suggestList = res.data.data;
+			},
 			changeKey: function(num) {
 				if (this.key == num && (this.key == 1 || this.key == 2)) {
 					this.sortIndex = (this.sortIndex + 1) % 2;
@@ -99,7 +137,8 @@
 			onFocus: function() {
 				this.searching = true;
 			},
-			onBlur: function() {
+			onCancel: function() {
+				this.searchValue = "";
 				this.searching = false;
 			},
 			clickMenu: function() {
@@ -108,7 +147,7 @@
 						rotate: '90'
 					});
 					this.$refs.main.step({
-						translateX: '80vw',
+						translateX: '85vw',
 					});
 					this.$refs.main.run();
 					this.$refs.menuOpen.run(() => {
@@ -142,15 +181,12 @@
 					this.clickMenu();
 				}
 			},
-			moreCourse: function() {
-				this.status = "loading"
-				setTimeout(() => {
-					this.status = "noMore";
-				}, 3000)
-				console.log("push");
-			},
 			bindClick(e) {
-				console.log(e);
+				this.departmentName = e.item.name;
+				this.departmentID = e.item.itemIndex + 1;
+				this.courseList = [];
+				this.onPulling();
+				this.clickMenu();
 			},
 			onPulling() {
 				if (!this.triggered) {
@@ -166,10 +202,10 @@
 			async getCourseList() {
 				const res = await wx.cloud.callContainer({
 					config: {
-						env: 'prod-9go38k3y9fee3b2e', // 微信云托管的环境ID
+						env: 'prod-9go38k3y9fee3b2e',
 					},
 					path: "/course/courselist?departmentID=" + this.departmentID,
-					method: 'GET', // 按照自己的业务开发，选择对应的方法
+					method: 'GET',
 					header: {
 						'X-WX-SERVICE': 'springboot-f8i8',
 					}
@@ -178,7 +214,43 @@
 				this.triggered = false;
 			},
 			async getDepartmentList() {
-
+				const res = await wx.cloud.callContainer({
+					config: {
+						env: 'prod-9go38k3y9fee3b2e',
+					},
+					path: "/course/departmentlist",
+					method: 'GET',
+					header: {
+						'X-WX-SERVICE': 'springboot-f8i8',
+					}
+				});
+				let tempList = res.data.data;
+				let wordList = {
+					letter: tempList[0].department[0],
+					data: []
+				};
+				for (let i = 0; i < tempList.length; i++) {
+					if (wordList.letter != tempList[i].department[0]) {
+						this.list.push(wordList);
+						wordList = {
+							letter: tempList[i].department[0],
+							data: [tempList[i].department]
+						};
+					} else {
+						wordList.data.push(tempList[i].department)
+					}
+				}
+				this.list.push(wordList);
+				uni.setStorage({
+					key: "departmentIndexedList",
+					data: this.list
+				});
+			},
+			toCourse:function(course){
+				console.log(course);
+				uni.navigateTo({
+					url: '/pages/coursePage/coursePage?course=' + encodeURIComponent(JSON.stringify(course)),
+				});
 			}
 		}
 	}

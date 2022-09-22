@@ -6,12 +6,21 @@
 			<view class="value">{{this.userInfo.isStudent?"已认证":"暂无认证"}}</view>
 			<view class="arrow" v-if="!this.userInfo.isStudent"><span class="iconfont">&#xe62d;</span></view>
 		</view>
-		<view class="section-title">联系方式</view>
+		<view class="section-title">个人信息</view>
+		<view class="box" @click="toName">
+			<view class="key">昵称</view>
+			<view class="value">{{this.userInfo.nickName}}</view>
+		</view>
 		<view class="box" @click="toEmail">
 			<view class="key">邮箱</view>
 			<view class="value">{{this.userInfo.email?this.userInfo.email:"无"}}</view>
 			<view class="arrow"><span class="iconfont">&#xe62d;</span></view>
 		</view>
+		<!-- <view class="box" @click="toWechatID">
+			<view class="key">微信号</view>
+			<view class="value">{{this.userInfo.email?this.userInfo.email:"无"}}</view>
+			<view class="arrow"><span class="iconfont">&#xe62d;</span></view>
+		</view> -->
 	</view>
 </template>
 

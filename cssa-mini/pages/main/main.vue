@@ -21,7 +21,7 @@
 				</view>
 				<img class="image" src="../../static/forum.svg" />
 			</view>
-			<view class="row-container function-button">
+			<view class="row-container function-button disabled">
 				<view class="row-container function-button">
 					<view class="column-container function-text">
 						<text>二手商品</text>
@@ -30,7 +30,7 @@
 				</view>
 			</view>
 		</view>
-		<view class="row-container function-box">
+		<view class="row-container function-box disabled">
 			<view class="row-container function-button">
 				<view class="row-container function-button">
 					<view class="column-container function-text">
@@ -39,7 +39,7 @@
 					<img class="image" src="../../static/apartment.svg" />
 				</view>
 			</view>
-			<view class="row-container function-button">
+			<view class="row-container function-button disabled">
 				<view class="row-container function-button">
 					<view class="column-container function-text">
 						<text>生活手册</text>
@@ -48,41 +48,31 @@
 				</view>
 			</view>
 		</view>
+
 		<view class="leader-list">
-			<text class="stu">CSSA介绍</text>
-			<scroll-view class="leader-intro" scroll-x="true">
-				<view class="scroll-view-item-X" v-for="(leader,key) in leaderInfo" :key="key" @click="open(leader)">
-					<image class="scroll-view-item-M" :src="leader.image" />
-					<view class="scroll-view-item-H">
-						<view class="intro-box">
-							<view class="name">
-								{{leader.name}}
-							</view>
-							<view class="position">
-								{{leader.postion}}
-							</view>
-							<view class="intro">
-								{{leader.intro}}
-							</view>
-						</view>
-					</view>
-				</view>
+			<text class="cssa-intro-text">CSSA介绍</text>
+			<scroll-view class="row-container leader-intro" :scroll-x="true">
+				<president-box v-for="(leader, index) in leaderInfo" :key="index" :index="index" :leader="leader">
+				</president-box>
 			</scroll-view>
-			<uni-popup ref="popup" type="bottom" backgroundColor="#ffffff">
-				<image v-if="popupLeader.image != ''" class="pop-img" :src="popupLeader.image" />
-				<view class="pop-name">{{popupLeader.name}}</view>
-				<view class="pop-div" />
-				<view class="pop-intro">{{popupLeader.intro}}</view>
-				<view style="height: 4vh;" />
-			</uni-popup>
 		</view>
+
+
+		<uni-popup ref="leaderPopup" type="bottom" backgroundColor="#ffffff">
+			<image class="pop-img" :src="popupLeader.image" />
+			<view class="pop-name">{{popupLeader.name}}</view>
+			<view class="pop-div" />
+			<view class="pop-intro">{{popupLeader.intro}}</view>
+			<view style="height: 4vh;" />
+		</uni-popup>
 	</view>
 </template>
 
 <script>
 	export default {
 		components: {
-			actBoxVue
+			actBoxVue,
+			presidentBoxVue
 		},
 		data() {
 			return {
@@ -96,46 +86,18 @@
 				},
 				current: 0,
 				actDetailList: [],
-				leaderInfo: [{
-						'name': '张三一 ',
-						'postion': '主席',
-						'intro': '你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是好我是谁你好我是谁',
-						'image': '../../static/renwu.jpeg'
-					},
-					{
-						'name': 'XXX',
-						'postion': 'PPP',
-						'intro': '你好我是谁',
-						'image': "../../static/renwu.jpeg"
-					},
-					{
-						'name': 'XXX',
-						'postion': 'PPP',
-						'intro': '你好我是谁',
-						'image': "../../static/renwu.jpeg"
-					},
-					{
-						'name': 'XXX',
-						'postion': 'PPP',
-						'intro': '你好我是谁',
-						'image': "../../static/renwu.jpeg"
-					}
-				],
-				popupLeader: {
-					'name': '',
-					'postion': '',
-					'intro': '',
-					'image': ''
-				}
+				leaderInfo: list,
+				popupLeader: {}
 
 			}
 		},
 		onLoad() {
 			wx.cloud.init();
-			uni.$on('close-welcome', (data) => {
+			uni.$on('closeWelcome', (data) => {
 				this.$refs.welcome.close();
 				console.log(data);
 			})
+			uni.$on("openPopUp", (index) => this.openLeaderPop(index));
 			uni.getStorage({
 				key: 'userInfo',
 				success: (res) => {
@@ -148,15 +110,12 @@
 			});
 		},
 		methods: {
-			open(leader) {
-				console.log(leader);
-				this.popupLeader.name = leader.name;
-				this.popupLeader.postion = leader.postion;
-				this.popupLeader.intro = leader.intro;
-				this.popupLeader.image = leader.image;
-				this.$refs.popup.open('bottom');
+			openLeaderPop:function(index) {
+				this.popupLeader = this.leaderInfo[index];
+				console.log(index)
+				this.$refs.leaderPopup.open('bottom');
 			},
-			change(e) {
+			change:function(e) {
 				this.current = e.detail.current;
 			},
 			clickItem(e) {
@@ -196,10 +155,22 @@
 					data: this.userInfo
 				});
 
+			},
+			getUserProfile: function() {
+				uni.getUserProfile({
+					desc: "获取用户信息",
+					success: (userProfile) => {
+						this.userInfo = userProfile.userInfo;
+						this.$refs.popup.close();
+						this.login();
+					},
+				});
 			}
 		}
 	}
 	import actBoxVue from '@/components/act-box/act-box.vue';
+	import presidentBoxVue from '../../components/president-box/president-box.vue'
+	import list from '@/pages/main/main.js'
 </script>
 
 <style>
@@ -227,9 +198,10 @@
 	.leader-intro {
 		white-space: nowrap;
 		width: 100%;
+		height: 180px;
 	}
 
-	.stu {
+	.cssa-intro-text {
 		margin-left: 20rpx;
 		width: 50%;
 		justify-content: center;
@@ -237,31 +209,7 @@
 		align-items: center;
 	}
 
-	.scroll-view-item-M {
-		position: absolute;
-		height: 90rpx;
-		width: 90rpx;
-		border-radius: 50%;
-		background-size: 100% 100%;
-	}
 
-	.scroll-view-item-X {
-		display: inline-block;
-		border-radius: 10px;
-		margin: 10px;
-		height: 180px;
-		width: 180px;
-	}
-
-	.scroll-view-item-H {
-		margin-left: 20px;
-		margin-top: 20px;
-		height: 150px;
-		width: 150px;
-		border-radius: 5px;
-		background-color: white;
-		box-shadow: 0 0px 6px 1px rgba(165, 165, 165, 0.2)
-	}
 
 	.pop-img {
 		margin-left: 35vw;
@@ -293,31 +241,7 @@
 		font-size: 30rpx;
 	}
 
-	.name {
-		font-size: 28rpx;
-		font-weight: 700;
-	}
 
-	.position {
-		height: 15px;
-		line-height: 15px;
-		font-size: 12px;
-	}
-
-	.intro {
-		flex: 1;
-		max-height: 70px;
-		overflow: hidden;
-		white-space: pre-wrap;
-		text-overflow: ellipsis;
-		display: -webkit-box;
-		-webkit-line-clamp: 3;
-		-webkit-box-orient: vertical;
-		margin-top: 10px;
-		font-size: 10px;
-		font-weight: 200;
-		line-height: 16px;
-	}
 
 	.column-container {
 		display: flex;
@@ -378,5 +302,17 @@
 	.swiper-image {
 		width: 100%;
 		height: 100%;
+	}
+	
+	.disabled{
+		color:#ccc !important;
+	}
+	
+	.button {
+		margin: 20px 10px 20px 10px;
+		border-radius: 10px;
+		border: 1px solid #AAAAAA;
+		background-color: #1684FC;
+		color: white;
 	}
 </style>

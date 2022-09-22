@@ -11,7 +11,7 @@
 		name: "welcome",
 		methods:{
 			toUserInfo:function(){
-				uni.$emit('close-welcome',{msg:'页面关闭'})
+				uni.$emit('closeWelcome',{msg:'页面关闭'})
 				uni.navigateTo({
 					url:'/pages/index/userInfo'
 				});
