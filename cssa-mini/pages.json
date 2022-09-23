@@ -89,12 +89,21 @@
             }
             
         }
+        ,{
+            "path" : "pages/postComment/postComment",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "发布评论",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"condition": {
 		"current": 0,
 		"list": [{
 			"name": "test",
-			"path": "pages/studentAuth/studentAuth"
+			"path": "pages/postComment/postComment"
 		}]
 	},
 	"globalStyle": {
