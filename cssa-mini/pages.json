@@ -103,7 +103,7 @@
 		"current": 0,
 		"list": [{
 			"name": "test",
-			"path": "pages/postComment/postComment"
+			"path": "pages/coursePage/coursePage"
 		}]
 	},
 	"globalStyle": {
