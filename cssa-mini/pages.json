@@ -94,7 +94,7 @@
 		"current": 0,
 		"list": [{
 			"name": "test",
-			"path": "pages/studentAuth/studentAuth"
+			"path": "pages/coursePage/coursePage"
 		}]
 	},
 	"globalStyle": {
