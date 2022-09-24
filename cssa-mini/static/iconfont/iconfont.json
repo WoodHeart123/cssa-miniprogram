@@ -6,6 +6,69 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "16375868",
+      "name": "发现",
+      "font_class": "biaoqianA01_faxian-32",
+      "unicode": "ea6d",
+      "unicode_decimal": 60013
+    },
+    {
+      "icon_id": "16375893",
+      "name": "收藏",
+      "font_class": "biaoqianA01_shoucang-44",
+      "unicode": "ea79",
+      "unicode_decimal": 60025
+    },
+    {
+      "icon_id": "16375907",
+      "name": "工具",
+      "font_class": "biaoqianA01_gongju-264",
+      "unicode": "ea83",
+      "unicode_decimal": 60035
+    },
+    {
+      "icon_id": "16385661",
+      "name": "订阅",
+      "font_class": "biaoqianA01_dingyue-92",
+      "unicode": "ead3",
+      "unicode_decimal": 60115
+    },
+    {
+      "icon_id": "16394795",
+      "name": "消息",
+      "font_class": "biaoqiankuozhan_xiaoxi-252",
+      "unicode": "eb76",
+      "unicode_decimal": 60278
+    },
+    {
+      "icon_id": "16394827",
+      "name": "动态",
+      "font_class": "biaoqiankuozhan_dongtai-254",
+      "unicode": "eb78",
+      "unicode_decimal": 60280
+    },
+    {
+      "icon_id": "16395047",
+      "name": "消息",
+      "font_class": "biaoqiankuozhan_xiaoxi-272",
+      "unicode": "eb81",
+      "unicode_decimal": 60289
+    },
+    {
+      "icon_id": "16395055",
+      "name": "社区",
+      "font_class": "biaoqiankuozhan_shequ-273",
+      "unicode": "eb82",
+      "unicode_decimal": 60290
+    },
+    {
+      "icon_id": "16395059",
+      "name": "订单",
+      "font_class": "biaoqiankuozhan_dingdan-274",
+      "unicode": "eb83",
+      "unicode_decimal": 60291
+    },
+    {
       "icon_id": "31881015",
       "name": "57-向上箭头-copy",
       "font_class": "arrow-down-copy",

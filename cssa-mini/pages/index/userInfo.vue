@@ -1,4 +1,5 @@
 <template>
+	<script src="@/static/iconfont/iconfont.js"></script>
 	<view>
 		<view class="section-title">认证</view>
 		<view class="box" @click="toStudentAuth">
@@ -56,7 +57,7 @@
 </script>
 
 <style>
-	@import "@/static/iconfont.css";
+	/* @import "@/static/iconfont.css"; */
 	.section-title{
 		margin-left:10%;
 		font-size:12px;

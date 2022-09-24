@@ -48,7 +48,7 @@
 </script>
 
 <style>
-	@import "@/static/iconfont.css";
+	/* @import "@/static/iconfont.css"; */
 
 	.container {
 		width: 96vw;

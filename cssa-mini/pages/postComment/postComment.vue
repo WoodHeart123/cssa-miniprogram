@@ -1,22 +1,24 @@
 <template>
 	<scroll-view id="post-comment" :scroll-y="true">
+		<view class="title"><text>CS537 Introduction to Operating System CS537 Introduction to Operating System</text>
+		</view>
 		<uni-forms ref="form" :model="comment" label-align="left" :rules="rules">
-			<uni-forms-item class="professor-box" label="教授名">
+			<uni-forms-item name="professor" label="教授名">
 				<uni-easyinput :clearable="false" v-model="comment.professor" placeholder="教授名" />
 			</uni-forms-item>
 			<view class="blank"></view>
-			<uni-forms-item label="难度">
+			<uni-forms-item name="difficulty" label="难度">
 				<uni-rate v-model="comment.difficulty" size="36" :is-fill="false"></uni-rate>
 			</uni-forms-item>
-			<uni-forms-item label="推荐">
+			<uni-forms-item name="prefer" label="推荐">
 				<uni-rate v-model="comment.prefer" size="36" :is-fill="false"></uni-rate>
 			</uni-forms-item>
 			<view class="blank"></view>
-			<uni-forms-item label="时间">
+			<uni-forms-item name="time" label="时间">
 				<uni-data-picker v-model="comment.time" :localdata="range" @change="change"></uni-data-picker>
 			</uni-forms-item>
 			<view class="blank"></view>
-			<uni-forms-item label="评论" label-position="top">
+			<uni-forms-item name="comment" label="评论" label-position="top">
 				<uni-easyinput class="input" autoHeight :clearable="false" type="textarea" v-model="comment.comment"
 					placeholder="请输入评论" maxlength="400" />
 			</uni-forms-item>
@@ -44,6 +46,30 @@
 							errorMessage: '请选择教学时间',
 						}]
 					},
+					difficulty: {
+						rules: [{
+								required: true,
+								errorMessage: '请选择难度',
+							},
+							{
+								minimum: 1,
+								maximum: 5,
+								errorMessage: '难度应为1-5',
+							}
+						]
+					},
+					prefer: {
+						rules: [{
+								required: true,
+								errorMessage: '请选择推荐度',
+							},
+							{
+								minimum: 1,
+								maximum: 5,
+								errorMessage: '难度应为1-5',
+							}
+						]
+					},
 					comment: {
 						rules: [{
 								required: true,
@@ -60,7 +86,7 @@
 
 			}
 		},
-		onLoad() {
+		onLoad(options) {
 			this.initTimePicker();
 		},
 		methods: {
@@ -92,13 +118,45 @@
 					this.range.push(temp)
 				}
 			},
+			async postComment() {
+				const res = await wx.cloud.callContainer({
+					config: {
+						env: 'prod-9go38k3y9fee3b2e',
+					},
+					path: "/course/postcomment?nickname=" + encodeURI(this.userInfo.nickName),
+					method: 'POST',
+					header: {
+						'X-WX-SERVICE': 'springboot-f8i8',
+					},
+					data: this.comment,
+				});
+				if (res.data.status != 100) {
+					uni.showToast({
+						title: "失败"
+					})
+				} else {
+					uni.getStorage({
+						key: "commentList",
+						success: (res) => {
+							res.data.push(1);
+							uni.setStorage({
+								key: "commentList",
+								data: res
+							});
+						},
+						fail: () => {
+							uni.setStorage({
+								key: "commentList",
+								data: [1]
+							});
+						}
+					})
+				}
+			},
 			submit: function() {
 				console.log(this.comment);
 				this.$refs["form"].validate().then(res => {
-					console.log('success', res);
-					uni.showToast({
-						title: `校验通过`
-					})
+					this.postComment;
 				}).catch(err => {
 					console.log('err', err);
 				})
@@ -111,10 +169,22 @@
 	#post-comment {
 		width: 86vw;
 		height: 100vh;
-		padding-top: 10vh;
+
 		padding-left: 7vw;
 		padding-right: 7vw;
 		background-color: white;
+	}
+
+	.title {
+		margin-top: 5vh;
+		height: 5vh;
+		line-height: 5vh;
+		margin-bottom: 2vh;
+		font-size: 18px;
+		font-weight: 700;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		overflow: hidden;
 	}
 
 	.button {
