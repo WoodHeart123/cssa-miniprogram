@@ -2,34 +2,34 @@
 	<uni-transition ref="course" :show=true customClass="full-screen">
 		<view class="column-container">
 			<view class="course-name">
-				<view comment="courseName"><Text>Biophysical Spectroscopy Biophysical Spectr oscopy Biophysical Spectroscopy Biophysical Spectr oscopy</Text></view>
+				<view comment="courseName"><Text>{{course.courseName}}</Text></view>
 			</view>
 			<view class="row-container course-intro-box">
 				<view class="course-diff-like">
 					<view class="row-container rate-box">
 						<view class="rate-text"><text>难度:</text></view>
-						<uni-rate readonly="true" :value="4.5" allowHalf="true" size="20"></uni-rate>
-						<view class="rate-num"><text>4.5</text></view>
+						<uni-rate readonly="true" :value="course.avgDifficulty" allowHalf="true" size="20"></uni-rate>
+						<view class="rate-num"><text>{{course.avgDifficulty}}</text></view>
 					</view>
 					<view class="row-container rate-box">
-						<view class="rate-text"><text>喜爱:</text></view>
-						<uni-rate readonly="true" :value="1" allowHalf="true" size="20"></uni-rate>
-						<view class="rate-num"><text>1</text></view>
+						<view class="rate-text"><text>推荐:</text></view>
+						<uni-rate readonly="true" :value="course.avgLike" allowHalf="true" size="20"></uni-rate>
+						<view class="rate-num"><text>{{course.avgLike}}</text></view>
 					</view>
 				</view>
 				<view class="column-container credit-box">
-					<text class="credit">2-3</text>
+					<text class="credit">{{course.credit}}</text>
 					<text style="font-size: 10pt; text-align: center;">学分</text>
 				</view>
 			</view>
-			<view class="footnote">56人参与讨论</view>
+			<view class="footnote">{{course.commentCount}}人参与讨论</view>
 		</view>
 		<view class = "grey-line"></view>
 		<view class="row-container filter-box">
-			<view :class="key==0?'filter-selected filter':'filter'" class="row-container" @click="changeKey(0)">
+			<view :class="key==0?'row-container filter filter-selected':'row-container filter'" @click="changeKey(0)">
 				<text>最新</text>
 			</view>
-			<view :class="key==1?'filter-selected filter':'filter'" class="row-container" @click="changeKey(1)">
+			<view :class="key==1?'row-container filter filter-selected':'row-container filter'" @click="changeKey(1)">
 				<text>热度</text>
 			</view>
 		</view>
@@ -39,8 +39,9 @@
 			<commentBoxVue class="box"></commentBoxVue>
 			<commentBoxVue class="box"></commentBoxVue>
 			<commentBoxVue class="box"></commentBoxVue>
-			<uni-load-more :status="status"></uni-load-more>
+			<uni-load-more v-show="showLoad" :status="status"></uni-load-more>
 		</scroll-view>
+		<uni-fab :pattern="pattern" horizontal="right" vertical="bottom" popMene="false" @fabClick="toComment"></uni-fab>
 	</uni-transition>
 </template>
 
@@ -51,23 +52,41 @@
 		},
 		data() {
 			return {
-				course: {}
+				pattern:{
+					buttonColor:"#1684FC"
+				},
+				course: {},
+				showLoad: false,
+				status: "load",
+				currentPage:0,
+				key:0,
+				orderType:["SORT_BY_TIME","SORT_BY_LIKE"],
 			}
 		},
 		methods: {
 			changeKey: function(num) {
-				this.key = num;
+				if(this.key != num){
+					this.currentPage = 0;
+					this.getCommentList();
+					this.key = num;
+				}
 			},
+			async getCommentList() {
+				console.log(1);
+			},
+			toComment: function() {
+				console.log(1);
+			}
 		},
 		onLoad(options) {
 			this.course = JSON.parse(decodeURIComponent(options.course));
 			uni.setNavigationBarTitle({
 				title: this.course.departmentAbrev + " " + String(this.course.courseNum)
-			})
-			console.log(this.course);
+			});
+			this.getCommentList();
 		},
 	}
-	import commentBoxVue from '@/components/course-box/comment-box.vue'
+	import commentBoxVue from '@/components/comment-box/comment-box.vue'
 </script>
 
 <style>
@@ -86,12 +105,13 @@
 		background-color: white;
 	}
 
-	.course-intro-box{
+	.course-intro-box {
 		width: 100%;
 		height: 80px;
 		justify-content: space-between;
 		align-items: center;
 	}
+
 	.course-name {
 		height: 40px;
 		margin-top: 5px;
@@ -113,21 +133,32 @@
 		font-weight: 250;
 	}
 
+<<<<<<< HEAD
 	.credit-box{
 		width: 80px;
 		height: 80%;
 		background-color: #868686;
+=======
+	.credit-box {
+		width: 70px;
+		height: 100%;
+		background-color: #cbcbcb;
+>>>>>>> 8e08678a5dc78768d9f7490c00572687e2b47215
 		border-radius: 10px 0 0 10px;
 		color: white;
 		justify-content: center;
 	}
 
-	.credit{
+	.credit {
 		font-size: 30px;
 		text-align: center;
 	}
 	
 	.footnote {
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8e08678a5dc78768d9f7490c00572687e2b47215
 		color: #aaa;
 		font-size: 10px;
 		text-align: right;
@@ -135,7 +166,7 @@
 	}
 
 	.filter-selected {
-		background-color: #c9d4fc;
+		background-color: #c9d4fc !important;
 	}
 
 	.filter {
@@ -155,16 +186,24 @@
 		margin-bottom: 20px;
 		border-radius: 10px 10px 10px 10px;
 	}
-	.rate-box{
+
+	.rate-box {
 		height: 20px;
 		margin-bottom: 10px;
 	}
+<<<<<<< HEAD
 	.rate-text{
 		margin-right:10px;
 		font-size: 14px;
 		font-weight: 500;
+=======
+
+	.rate-text {
+		margin-right: 10px;
+>>>>>>> 8e08678a5dc78768d9f7490c00572687e2b47215
 	}
-	.rate-num{
+
+	.rate-num {
 		margin-left: 20px;
 		font-size: 13px;
 		line-height: 20px;

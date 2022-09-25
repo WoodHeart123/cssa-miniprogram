@@ -34,9 +34,15 @@
 		</view>
 	</view>
 </template>
-
 <script>
-
+	export default {
+		name:"comment-box",
+		data() {
+			return {
+				
+			};
+		}
+	}
 </script>
 
 <style>
