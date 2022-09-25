@@ -133,17 +133,10 @@
 		font-weight: 250;
 	}
 
-<<<<<<< HEAD
 	.credit-box{
 		width: 80px;
 		height: 80%;
 		background-color: #868686;
-=======
-	.credit-box {
-		width: 70px;
-		height: 100%;
-		background-color: #cbcbcb;
->>>>>>> 8e08678a5dc78768d9f7490c00572687e2b47215
 		border-radius: 10px 0 0 10px;
 		color: white;
 		justify-content: center;
@@ -155,10 +148,6 @@
 	}
 	
 	.footnote {
-<<<<<<< HEAD
-=======
-
->>>>>>> 8e08678a5dc78768d9f7490c00572687e2b47215
 		color: #aaa;
 		font-size: 10px;
 		text-align: right;
@@ -191,16 +180,11 @@
 		height: 20px;
 		margin-bottom: 10px;
 	}
-<<<<<<< HEAD
+
 	.rate-text{
 		margin-right:10px;
 		font-size: 14px;
 		font-weight: 500;
-=======
-
-	.rate-text {
-		margin-right: 10px;
->>>>>>> 8e08678a5dc78768d9f7490c00572687e2b47215
 	}
 
 	.rate-num {
