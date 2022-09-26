@@ -4,14 +4,21 @@
 			<uni-search-bar cancelButton="none" v-model="searchValue" @focus="onFocus" @blur="onBlur">
 			</uni-search-bar>
 		</view>
+		<!--
 		<view class="column-container" v-if="searching">
 			<view></view>
 		</view>
-		<com-box-vue></com-box-vue>
-		<com-box-vue></com-box-vue>
-		<com-box-vue></com-box-vue>
-		<com-box-vue></com-box-vue>
-		<com-box-vue></com-box-vue>
+		-->
+		<view class="boxes">
+			<com-box-vue></com-box-vue>
+			<com-box-vue></com-box-vue>
+			<com-box-vue></com-box-vue>
+			<com-box-vue></com-box-vue>
+			<com-box-vue></com-box-vue>
+		</view>
+		<view class="post">
+			<uni-fab :pattern="pattern" horizontal="right" vertical="bottom"/>
+		</view>
 	</view>
 </template>
 
@@ -22,7 +29,14 @@
 		},
 		data(){
 			return{
-				searching: false
+				searching: false,
+				pattern: {
+							color: '#7A7E83',
+							backgroundColor: '#fff',
+							selectedColor: '#007AFF',
+							buttonColor: '#007AFF',
+							iconColor: '#fff'
+						} 
 			}
 		},
 		onload() {
