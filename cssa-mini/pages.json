@@ -97,7 +97,14 @@
                 "enablePullDownRefresh": false
             }
             
-        }
+        },{
+			"path": "pages/community/com-main",
+			"style": {
+				"navigationBarTitleText": "社区广场",
+				"backgroundColor": "#F5F5F5",
+				"enablePullDownRefresh": true
+			}
+		}
         ,{
             "path" : "pages/ebay/ebay",
             "style" :                                                                                    
@@ -135,6 +142,11 @@
 		}, {
 			"pagePath": "pages/activity/act",
 			"text": "活动",
+			"iconPath": "./static/act.png",
+			"selectedIconPath": "./static/act-selected.png"
+		}, {
+			"pagePath": "pages/community/com-main",
+			"text": "社区广场",
 			"iconPath": "./static/act.png",
 			"selectedIconPath": "./static/act-selected.png"
 		}, {
