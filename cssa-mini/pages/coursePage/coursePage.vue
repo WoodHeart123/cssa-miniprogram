@@ -156,7 +156,7 @@
 </script>
 
 <style>
-
+@import '@/static/iconfont/iconfont.css';
 	.column-container {
 		display: flex;
 		flex-direction: column;

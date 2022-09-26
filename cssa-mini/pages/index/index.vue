@@ -111,6 +111,7 @@
 				}
 				this.userInfo.email = res.data.data.email;
 				this.userInfo.isStudent = res.data.data.isStudent;
+				this.isLogin = true;
 				uni.setStorage({
 					key: "userInfo",
 					data: this.userInfo
@@ -121,7 +122,7 @@
 </script>
 
 <style>
-	/* @import "@/static/iconfont.css"; */
+	@import '@/static/iconfont/iconfont.css';
 
 	.avatar-box {
 		display: flex;

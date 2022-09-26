@@ -147,8 +147,8 @@
 		}, {
 			"pagePath": "pages/community/com-main",
 			"text": "社区广场",
-			"iconPath": "./static/act.png",
-			"selectedIconPath": "./static/act-selected.png"
+			"iconPath": "./static/community.png",
+			"selectedIconPath": "./static/community-selected.png"
 		}, {
 			"pagePath": "pages/index/index",
 			"text": "用户",

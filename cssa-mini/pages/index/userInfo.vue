@@ -57,7 +57,7 @@
 </script>
 
 <style>
-	/* @import "@/static/iconfont.css"; */
+	@import '@/static/iconfont/iconfont.css';
 	.section-title{
 		margin-left:10%;
 		font-size:12px;

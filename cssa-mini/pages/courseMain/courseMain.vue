@@ -258,6 +258,6 @@
 </script>
 
 <style>
-	/* @import "@/static/iconfont.css"; */
+	@import '@/static/iconfont/iconfont.css';
 	@import "./courseMain.css"
 </style>

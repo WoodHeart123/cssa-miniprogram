@@ -202,7 +202,7 @@
 </script>
 
 <style>
-/* @import "@/static/iconfont.css"; */
+@import '@/static/iconfont/iconfont.css';
 </style>
 <style lang="scss">
 	.icon{

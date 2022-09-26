@@ -3,7 +3,7 @@
 		<view class="comment-head-area row-container">
 			<view class="avatar-rate">
 				<view>
-					<image class="avatar" src="../../static/index/maomao.JPG"></image>
+					<image class="avatar" src="../../static/index/maomao.jpg"></image>
 				</view>
 				<view>
 					<view class="row-container rate-box">

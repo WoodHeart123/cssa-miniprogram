@@ -96,6 +96,7 @@
 </script>
 
 <style>
+	@import '@/static/iconfont/iconfont.css';
 	#studentAuth {
 		top: 0;
 		width: 100vw;

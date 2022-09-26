@@ -177,6 +177,7 @@
 </script>
 
 <style>
+	@import '@/static/iconfont/iconfont.css';
 	#main {
 		width: 100vw;
 		height: 100vh;
