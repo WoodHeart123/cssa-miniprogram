@@ -24,6 +24,7 @@
 			</view>
 			<view class="footnote">{{course.commentCount}}人参与讨论</view>
 		</view>
+		<view class = "grey-line"></view>
 		<view class="row-container filter-box">
 			<view :class="key==0?'row-container filter filter-selected':'row-container filter'" @click="changeKey(0)">
 				<text>最新</text>
@@ -32,7 +33,7 @@
 				<text>热度</text>
 			</view>
 		</view>
-		<scroll-view scroll-y="true" show-scrollbar="true" refresher-enabled="true" class="column-container">
+		<scroll-view scroll-y="true" show-scrollbar="true" refresher-enabled="true" class="column-container" style="background-color: #f2f2f2;">
 			<commentBoxVue class="box"></commentBoxVue>
 			<commentBoxVue class="box"></commentBoxVue>
 			<commentBoxVue class="box"></commentBoxVue>
@@ -155,7 +156,6 @@
 </script>
 
 <style>
-	/* @import "@/static/iconfont.css"; */
 
 	.column-container {
 		display: flex;
@@ -166,7 +166,8 @@
 	.row-container {
 		display: flex;
 		flex-direction: row;
-		margin: 5px 0px 5px 5px;
+		margin: 5px 5px 5px 5px;
+		background-color: white;
 	}
 
 	.course-intro-box {
@@ -202,10 +203,10 @@
 		font-weight: 250;
 	}
 
-	.credit-box {
-		width: 70px;
-		height: 100%;
-		background-color: #cbcbcb;
+	.credit-box{
+		width: 80px;
+		height: 80%;
+		background-color: #868686;
 		border-radius: 10px 0 0 10px;
 		color: white;
 		justify-content: center;
@@ -215,9 +216,8 @@
 		font-size: 30px;
 		text-align: center;
 	}
-
+	
 	.footnote {
-
 		color: #aaa;
 		font-size: 10px;
 		text-align: right;
@@ -236,13 +236,14 @@
 		border-radius: 20px;
 		text-align: center;
 		margin-left: 10px;
-		background-color: white;
+		background-color: #f2f2f2;
 		justify-content: space-around;
 		align-items: center;
 	}
 
 	.box {
 		margin-bottom: 20px;
+		border-radius: 10px 10px 10px 10px;
 	}
 
 	.rate-box {
@@ -250,13 +251,19 @@
 		margin-bottom: 10px;
 	}
 
-	.rate-text {
-		margin-right: 10px;
+	.rate-text{
+		margin-right:10px;
+		font-size: 14px;
+		font-weight: 500;
 	}
 
 	.rate-num {
 		margin-left: 20px;
-		font-size: 12px;
+		font-size: 13px;
 		line-height: 20px;
+		font-weight: 400;
+	}
+	.grey-line {
+		height: 2px;
 	}
 </style>

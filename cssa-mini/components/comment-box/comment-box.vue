@@ -1,22 +1,40 @@
 <template>
-	<view>
-		<view class="comment-head-area">
-
-			<view>
-				<view class="row-container rate-box">
-					<view><text>难度：</text></view>
-					<uni-rate readonly="true" :value="4.5" allowHalf="true" size="15"></uni-rate>
-					<view><text>(4.5)</text></view>
+	<view class="comment-box">
+		<view class="comment-head-area row-container">
+			<view class="avatar-rate">
+				<view>
+					<image class="avatar" src="../../static/index/maomao.JPG"></image>
 				</view>
-				<view class="row-container rate-box">
-					<view><text>喜爱： </text></view>
-					<uni-rate readonly="true" :value="4.5" allowHalf="true" size="15"></uni-rate>
-					<view><text>(4.5)</text></view>
+				<view>
+					<view class="row-container rate-box">
+						<view><text>难度：</text></view>
+						<uni-rate readonly="true" :value="4.5" allowHalf="true" size="15"></uni-rate>
+						<view><text>(4.5)</text></view>
+					</view>
+					<view class="row-container rate-box">
+						<view><text>喜爱： </text></view>
+						<uni-rate readonly="true" :value="4.5" allowHalf="true" size="15"></uni-rate>
+						<view><text>(4.5)</text></view>
+					</view>
 				</view>
+			</view>
+			<view class="comment-time"><text>2022-09-16</text></view>
+		</view>
+		<view class="comment-body"><text>叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦</text></view>
+		<view class="row-container comment-end">
+			<view class="row-container">
+				<text class = "time-professor">2019 Fall</text>
+				<text>;</text>
+				<text class = "time-professor">Jack</text>
+			</view>
+			<view class="row-container">
+				<view class ="iconfont icon-like"></view>
+				<text class="zan_count">50</text>
 			</view>
 		</view>
 	</view>
 </template>
+
 <script>
 	export default {
 		name:"comment-box",
@@ -29,23 +47,82 @@
 </script>
 
 <style>
-	.comment {
+	@import "../../static/iconfont/iconfont.css";
+	.comment-box {
 		background-color: white;
 		width: 95vw;
+		height: 110px;
 		margin-left: 2.5vw;
+		margin-right: 2.5vw;
 		border-radius: 10px;
-		margin: 5px 0 5px 2.5vw;
+
+	}
+
+	.comment-head-area {
+		height: 30px;
+		justify-content: space-between;
+	}
+
+	.row-container {
+		display: flex;
+		flex-direction: row;
+		margin: 5px 5px 0px 0px;
 	}
 
 	.column-container {
 		display: flex;
 		flex-direction: column;
 	}
-
-	.row-container {
+	
+	.avatar-rate{
 		display: flex;
 		flex-direction: row;
+		height:40px;
 	}
 
+	.avatar {
+		width: 40px;
+		height: 40px;
+		shape-margin: 1pt;
+		border-radius: 50%;
+		margin: 5px 5px 5px 5px;
+	}
 
+	.rate-box {
+		font-size: 10pt;
+		height: 18px;
+	}
+
+	.comment-time {
+		color: #aaa;
+		font-size: 10px;
+		text-align: right;
+		margin-top: 1vh;
+	}
+	.comment-body {
+		font-size: 10pt;
+		margin-left: 50px;
+		margin-top: 20px;
+		margin-right: 1vw;
+		margin-bottom: 0%;
+		overflow: hidden;
+		white-space: pre-wrap;
+		text-overflow: ellipsis;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+	}
+	.comment-end {
+		justify-content: space-between;
+		font-size: 8pt;
+		color: #aaa;
+		margin-top: 0pt;
+		margin-left: 2pt;
+		margin-right: 2pt;
+	}
+	.time-professor {
+		margin-left: 4pt;
+	}
+	
+	
 </style>
