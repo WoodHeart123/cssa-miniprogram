@@ -109,6 +109,9 @@
 				},
 			});
 		},
+		onHide(){
+			this.$refs.popup.close();
+		},
 		methods: {
 			openLeaderPop:function(index) {
 				this.popupLeader = this.leaderInfo[index];

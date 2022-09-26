@@ -4,18 +4,19 @@
 		<uni-popup ref="welcome" background-color="fff">
 			<welcome></welcome>
 		</uni-popup>
-		<view class="user-box">
+		<view class="user-box" v-if="isLogin">
 			<view class="avatar-box">
 				<img class="avatar" :src="userInfo.avatarUrl">
 			</view>
-			<view class="name-box" v-if="isLogin" @click="toUserInfo">
+			<view class="name-box" @click="toUserInfo">
 				<text class="nickname">{{userInfo.nickName}}</text>
 				<uni-tag class="tag" v-if="userInfo.isStudent" type="primary" :inverted="false" text="学生认证√" size="mini" :circle="true" />
 				<uni-tag class="tag" v-if="!userInfo.isStudent" :inverted="true" text="认证+" size="small" :circle="true" />
 			</view>
-			<view class="name-box" v-if="!isLogin">
-				<button @click="getUserProfile">点击登陆</button>
-			</view>
+			
+		</view>
+		<view class="user-box" v-if="!isLogin" >
+			<button class="login-button" plain="true" @click="getUserProfile">点击登陆</button>
 		</view>
 		<view class="function-box">
 			<view class="function-sub-box">
@@ -193,5 +194,13 @@
 	}
 	.disabled{
 		color:#ccc;
+	}
+	.login-button{
+		color:#aaa !important;
+		border: none !important;
+		height: 100px;
+		width: 100%;
+		background-color: white !important;
+		line-height: 100px; 
 	}
 </style>

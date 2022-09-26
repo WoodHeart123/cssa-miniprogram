@@ -12,8 +12,8 @@
 			</view>
 			<view class="row-container rate-box">
 				<view><text>喜爱： </text></view>
-				<uni-rate readonly="true" :value="course.avgLike" allowHalf="true" size="15"></uni-rate>
-				<view class="rate-text"><text>{{course.avgLike}}</text></view>
+				<uni-rate readonly="true" :value="course.avgPrefer" allowHalf="true" size="15"></uni-rate>
+				<view class="rate-text"><text>{{course.avgPrefer}}</text></view>
 			</view>
 			<view  class="footnote"><text>{{course.commentCount}}人参与此评论</text></view>
 		</view>

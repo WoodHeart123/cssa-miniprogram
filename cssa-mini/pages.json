@@ -98,6 +98,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/ebay/ebay",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"condition": {
 		"current": 0,

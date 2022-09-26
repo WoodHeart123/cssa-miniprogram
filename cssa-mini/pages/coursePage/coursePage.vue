@@ -1,8 +1,8 @@
 <template>
 	<uni-transition ref="course" :show=true customClass="full-screen">
 		<view class="column-container">
-			<view class="course-name">
-				<view comment="courseName"><Text>{{course.courseName}}</Text></view>
+			<view class="course-name-box">
+				<view class="course-name"><Text>{{course.courseName}}</Text></view>
 			</view>
 			<view class="row-container course-intro-box">
 				<view class="course-diff-like">
@@ -13,8 +13,8 @@
 					</view>
 					<view class="row-container rate-box">
 						<view class="rate-text"><text>推荐:</text></view>
-						<uni-rate readonly="true" :value="course.avgLike" allowHalf="true" size="20"></uni-rate>
-						<view class="rate-num"><text>{{course.avgLike}}</text></view>
+						<uni-rate readonly="true" :value="course.avgPrefer" allowHalf="true" size="20"></uni-rate>
+						<view class="rate-num"><text>{{course.avgPrefer}}</text></view>
 					</view>
 				</view>
 				<view class="column-container credit-box">
@@ -60,6 +60,9 @@
 				currentPage:0,
 				key:0,
 				orderType:["SORT_BY_TIME","SORT_BY_LIKE"],
+				isStudent:false,
+				isLogin:true,
+				userInfo:{},
 			}
 		},
 		methods: {
@@ -73,8 +76,60 @@
 			async getCommentList() {
 				console.log(1);
 			},
+			async login() {
+				const res = await wx.cloud.callContainer({
+					config: {
+						env: 'prod-9go38k3y9fee3b2e',
+					},
+					path: "/activity/login?nickname=" + encodeURI(this.userInfo.nickName),
+					method: 'GET',
+					header: {
+						'X-WX-SERVICE': 'springboot-f8i8',
+					}
+				});
+				this.isLogin = true;
+				this.isStudent = res.data.data.isStudent;
+				uni.setStorage({
+					key: "userInfo",
+					data: this.userInfo
+				});
+				this.toComment();
+			},
 			toComment: function() {
-				console.log(1);
+				if(!this.isLogin){
+					uni.getUserProfile({
+						desc: "获取用户信息",
+						success: (userProfile) => {
+							this.userInfo = userProfile.userInfo;
+							this.login();
+						},
+						fail: () =>{
+							uni.showToast({
+								title:"请先登陆",
+								icon: "none"
+							});
+						}
+					});
+					return;
+				}
+				if(!this.isStudent){
+					uni.showModal({
+						title:"请先认证学生身份",
+						content: "我们希望以此能过滤一些代写，谢谢配合",
+						confirmText:"前往认证",
+						success: (res) => {
+							if(res.confirm){
+								uni.navigateTo({
+									url:"/pages/index/userInfo",
+								});	
+							}				
+						},
+					});
+					return;
+				}
+				uni.navigateTo({
+					url:"/pages/postComment/postComment"
+				});
 			}
 		},
 		onLoad(options) {
@@ -82,14 +137,25 @@
 			uni.setNavigationBarTitle({
 				title: this.course.departmentAbrev + " " + String(this.course.courseNum)
 			});
-			this.getCommentList();
+			this.getCommentList();	
 		},
+		onShow(){
+			uni.getStorage({
+				key: "userInfo",
+				success: (res) => {
+					this.isStudent = res.data.isStudent;
+				},
+				fail: () => {
+					this.isLogin = false;
+				},
+			});
+		}
 	}
 	import commentBoxVue from '@/components/comment-box/comment-box.vue'
 </script>
 
 <style>
-	@import "@/static/iconfont.css";
+	/* @import "@/static/iconfont.css"; */
 
 	.column-container {
 		display: flex;
@@ -110,13 +176,18 @@
 		align-items: center;
 	}
 
-	.course-name {
+	.course-name-box{
+		display: flex;
+		flex-direction: row;
+		align-items: center;
 		height: 40px;
-		margin-top: 5px;
-		margin-bottom: 5px;
+		margin: 10px 10px 10px 10px;
+	}
+	.course-name {
+		min-height: 20px;
+		max-height: 40px;
 		width: calc(100% - 20px);
 		font-weight: 700;
-		margin: 10px 10px 10px 10px;
 		text-align: left;
 		line-height: 20px;
 		overflow: hidden;
