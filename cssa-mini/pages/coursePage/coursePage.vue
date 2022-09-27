@@ -1,6 +1,6 @@
 <template>
 	<uni-transition ref="course" :show=true customClass="full-screen">
-		<view class="column-container">
+		<view class="column-container course-box">
 			<view class="course-name-box">
 				<view class="course-name"><Text>{{course.courseName}}</Text></view>
 			</view>
@@ -24,7 +24,6 @@
 			</view>
 			<view class="footnote">{{course.commentCount}}人参与讨论</view>
 		</view>
-		<view class = "grey-line"></view>
 		<view class="row-container filter-box">
 			<view :class="key==0?'row-container filter filter-selected':'row-container filter'" @click="changeKey(0)">
 				<text>最新</text>
@@ -33,15 +32,14 @@
 				<text>热度</text>
 			</view>
 		</view>
-		<scroll-view scroll-y="true" show-scrollbar="true" refresher-enabled="true" class="column-container" style="background-color: #f2f2f2;">
-			<commentBoxVue class="box"></commentBoxVue>
-			<commentBoxVue class="box"></commentBoxVue>
-			<commentBoxVue class="box"></commentBoxVue>
-			<commentBoxVue class="box"></commentBoxVue>
-			<commentBoxVue class="box"></commentBoxVue>
+		<scroll-view scroll-y="true" show-scrollbar="true" refresher-enabled="true" class="column-container comment-container">
+			<view class="box" v-for="index in 12" :key="index">
+				<commentBoxVue></commentBoxVue>
+			</view>
 			<uni-load-more v-show="showLoad" :status="status"></uni-load-more>
 		</scroll-view>
-		<uni-fab :pattern="pattern" horizontal="right" vertical="bottom" popMene="false" @fabClick="toComment"></uni-fab>
+		<uni-fab :pattern="pattern" horizontal="right" vertical="bottom" popMene="false" @fabClick="toComment">
+		</uni-fab>
 	</uni-transition>
 </template>
 
@@ -52,23 +50,23 @@
 		},
 		data() {
 			return {
-				pattern:{
-					buttonColor:"#1684FC"
+				pattern: {
+					buttonColor: "#1684FC"
 				},
 				course: {},
 				showLoad: false,
 				status: "load",
-				currentPage:0,
-				key:0,
-				orderType:["SORT_BY_TIME","SORT_BY_LIKE"],
-				isStudent:false,
-				isLogin:true,
-				userInfo:{},
+				currentPage: 0,
+				key: 0,
+				orderType: ["SORT_BY_TIME", "SORT_BY_LIKE"],
+				isStudent: false,
+				isLogin: true,
+				userInfo: {},
 			}
 		},
 		methods: {
 			changeKey: function(num) {
-				if(this.key != num){
+				if (this.key != num) {
 					this.currentPage = 0;
 					this.getCommentList();
 					this.key = num;
@@ -97,39 +95,39 @@
 				this.toComment();
 			},
 			toComment: function() {
-				if(!this.isLogin){
+				if (!this.isLogin) {
 					uni.getUserProfile({
 						desc: "获取用户信息",
 						success: (userProfile) => {
 							this.userInfo = userProfile.userInfo;
 							this.login();
 						},
-						fail: () =>{
+						fail: () => {
 							uni.showToast({
-								title:"请先登陆",
+								title: "请先登陆",
 								icon: "none"
 							});
 						}
 					});
 					return;
 				}
-				if(!this.isStudent){
+				if (!this.isStudent) {
 					uni.showModal({
-						title:"请先认证学生身份",
+						title: "请先认证学生身份",
 						content: "我们希望以此能过滤一些代写，谢谢配合",
-						confirmText:"前往认证",
+						confirmText: "前往认证",
 						success: (res) => {
-							if(res.confirm){
+							if (res.confirm) {
 								uni.navigateTo({
-									url:"/pages/index/userInfo",
-								});	
-							}				
+									url: "/pages/index/userInfo",
+								});
+							}
 						},
 					});
 					return;
 				}
 				uni.navigateTo({
-					url:"/pages/postComment/postComment"
+					url: "/pages/postComment/postComment"
 				});
 			}
 		},
@@ -138,9 +136,9 @@
 			uni.setNavigationBarTitle({
 				title: this.course.departmentAbrev + " " + String(this.course.courseNum)
 			});
-			this.getCommentList();	
+			this.getCommentList();
 		},
-		onShow(){
+		onShow() {
 			uni.getStorage({
 				key: "userInfo",
 				success: (res) => {
@@ -156,7 +154,8 @@
 </script>
 
 <style>
-@import '@/static/iconfont/iconfont.css';
+	@import '@/static/iconfont/iconfont.css';
+
 	.column-container {
 		display: flex;
 		flex-direction: column;
@@ -166,8 +165,16 @@
 	.row-container {
 		display: flex;
 		flex-direction: row;
-		margin: 5px 5px 5px 5px;
 		background-color: white;
+	}
+
+	.filter-box {
+		height: 50px;
+		width: 100%;
+		align-items: center;
+		background-color: white;
+		margin-top: 5px;
+		border-radius: 5px 5px 0 0;
 	}
 
 	.course-intro-box {
@@ -175,15 +182,17 @@
 		height: 80px;
 		justify-content: space-between;
 		align-items: center;
+		margin: 5px;
 	}
 
-	.course-name-box{
+	.course-name-box {
 		display: flex;
 		flex-direction: row;
 		align-items: center;
 		height: 40px;
 		margin: 10px 10px 10px 10px;
 	}
+
 	.course-name {
 		min-height: 20px;
 		max-height: 40px;
@@ -202,8 +211,12 @@
 	.course-diff-like {
 		font-weight: 250;
 	}
-
-	.credit-box{
+	
+	.course-box{
+		height: 168px;
+		margin-bottom: 2px;
+	}
+	.credit-box {
 		width: 80px;
 		height: 80%;
 		background-color: #868686;
@@ -216,7 +229,7 @@
 		font-size: 30px;
 		text-align: center;
 	}
-	
+
 	.footnote {
 		color: #aaa;
 		font-size: 10px;
@@ -242,8 +255,8 @@
 	}
 
 	.box {
-		margin-bottom: 20px;
-		border-radius: 10px 10px 10px 10px;
+		padding-bottom: 10px;
+		border-radius: 10px;
 	}
 
 	.rate-box {
@@ -251,8 +264,8 @@
 		margin-bottom: 10px;
 	}
 
-	.rate-text{
-		margin-right:10px;
+	.rate-text {
+		margin-right: 10px;
 		font-size: 14px;
 		font-weight: 500;
 	}
@@ -263,7 +276,11 @@
 		line-height: 20px;
 		font-weight: 400;
 	}
-	.grey-line {
-		height: 2px;
+
+	.comment-container{
+		height: calc(100vh - 225px);
+		width: 100%;
+		overflow: hidden;
+		background-color: white;
 	}
 </style>

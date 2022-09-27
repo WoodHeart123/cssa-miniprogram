@@ -50,10 +50,8 @@
 	@import "../../static/iconfont/iconfont.css";
 	.comment-box {
 		background-color: white;
-		width: 95vw;
+		width: 100%vw;
 		height: 110px;
-		margin-left: 2.5vw;
-		margin-right: 2.5vw;
 		border-radius: 10px;
 
 	}
