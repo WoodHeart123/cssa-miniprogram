@@ -33,8 +33,8 @@
 			</view>
 		</view>
 		<scroll-view scroll-y="true" show-scrollbar="true" refresher-enabled="true" class="column-container comment-container">
-			<view class="box" v-for="index in 12" :key="index">
-				<commentBoxVue></commentBoxVue>
+			<view class="box" v-for="(comment, index) in commentList" :key="index">
+				<commentBoxVue :comment="comment"></commentBoxVue>
 			</view>
 			<uni-load-more v-show="showLoad" :status="status"></uni-load-more>
 		</scroll-view>
@@ -62,6 +62,11 @@
 				isStudent: false,
 				isLogin: true,
 				userInfo: {},
+				commentList:[
+					{comment:"叽里呱啦叽里呱啦叽里呱啦"},
+					{comment:"叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦"},
+					{comment:"叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦"}
+				]
 			}
 		},
 		methods: {
@@ -255,8 +260,7 @@
 	}
 
 	.box {
-		padding-bottom: 10px;
-		border-radius: 10px;
+		padding-bottom: 20px;
 	}
 
 	.rate-box {

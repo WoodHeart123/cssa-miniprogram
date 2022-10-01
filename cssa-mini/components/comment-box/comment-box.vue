@@ -17,7 +17,7 @@
 			<view class="comment-time"><text>2022-09-16</text></view>
 		</view>
 		<view class="comment-body">
-			<text>叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦</text>
+			<text>{{comment.comment}}</text>
 		</view>
 		<view class="row-container comment-end">
 			<view class="row-container">
@@ -35,6 +35,7 @@
 
 <script>
 	export default {
+		props:["comment"],
 		name: "comment-box",
 		data() {
 			return {
@@ -49,8 +50,7 @@
 
 	.comment-box {
 		background-color: white;
-		width: 100%vw;
-		height: 115px;
+		width: 100vw;
 		border-radius: 10px;
 
 	}
@@ -81,9 +81,10 @@
 
 	.rate-box {
 		font-size: 10pt;
-		height: 20px;
+		height: 50px;
 		text-align: left;
-		width : calc(100% - 130px);
+		margin-left:10px;
+		width : calc(100% - 140px);
 	}
 
 	.comment-time {
@@ -95,17 +96,18 @@
 	}
 
 	.comment-body {
-		height: 45px;
-		font-size: 10pt;
+		margin-top: 10px;
+		margin-bottom: 5px;
+		max-height: 100px;
+		font-size: 13px;
 		margin-left: 50px;
 		margin-right: 1vw;
-		margin-bottom: 0%;
-		line-height: 170%;
+		line-height: 25px;
 		overflow: hidden;
 		white-space: pre-wrap;
 		text-overflow: ellipsis;
 		display: -webkit-box;
-		-webkit-line-clamp: 2;
+		-webkit-line-clamp: 4;
 		-webkit-box-orient: vertical;
 	}
 
