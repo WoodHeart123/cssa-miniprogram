@@ -38,8 +38,7 @@
 			</view>
 			<uni-load-more  status="more"></uni-load-more>
 		</scroll-view>
-		<uni-fab :pattern="pattern" horizontal="left" vertical="bottom" popMene="false" @fabClick="toComment">
-		</uni-fab>
+		<uni-fab :pattern="pattern" horizontal="left" vertical="bottom" popMene="false" @fabClick="toComment" />
 		</view>
 </template>
 
