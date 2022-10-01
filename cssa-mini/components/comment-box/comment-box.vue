@@ -83,7 +83,7 @@
 		font-size: 10pt;
 		height: 20px;
 		text-align: left;
-		/*width : calc(100% - 130px);*/
+		width : calc(100% - 130px);
 	}
 
 	.comment-time {
