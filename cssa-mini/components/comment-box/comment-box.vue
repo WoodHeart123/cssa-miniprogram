@@ -2,7 +2,7 @@
 	<view class="comment-box">
 		<view class="comment-head-area row-container">
 			<image class="avatar" src="../../static/index/maomao.jpg"></image>
-			<view class = "rate-box">
+			<view class="rate-box">
 				<view class="row-container">
 					<view><text>难度：</text></view>
 					<uni-rate readonly="true" :value="4.5" allowHalf="true" size="15"></uni-rate>
@@ -16,9 +16,13 @@
 			</view>
 			<view class="comment-time"><text>2022-09-16</text></view>
 		</view>
-		<view class="comment-body">
-			<text>{{comment.comment}}</text>
+		<view class="wrap">
+			<view  :class="this.more?'comment-body comment-body-more':'comment-body'">
+				<text v-if="!more" class="more-button" @click="moreText">更多</text>
+				<text id="comment-text">{{comment.comment}}</text>
+			</view>
 		</view>
+
 		<view class="row-container comment-end">
 			<view class="row-container">
 				<text class="time-professor">2019 Fall</text>
@@ -35,12 +39,26 @@
 
 <script>
 	export default {
-		props:["comment"],
+		props: ["comment"],
 		name: "comment-box",
 		data() {
 			return {
-
+				more:false,
 			};
+		},
+		onShow(){
+			const query = uni.createSelectorQuery().in(this);
+			query.select('#comment-text').boundingClientRect(data => {
+			  console.log(JSON.stringify(data));
+			  if(data.height < 100){
+				  this.more = true;
+			  }
+			}).exec();
+		},
+		methods:{
+			moreText:function(){
+				this.more = true;
+			}
 		}
 	}
 </script>
@@ -60,6 +78,15 @@
 		margin: 5px 5px 5px 5px;
 	}
 
+	.more-button {
+		color: #1684FC;
+		float: right;
+		clear: both;
+		line-height: 25px;
+	}
+
+
+
 	.row-container {
 		display: flex;
 		flex-direction: row;
@@ -69,6 +96,10 @@
 	.column-container {
 		display: flex;
 		flex-direction: column;
+	}
+	
+	.wrap{
+		display: flex;
 	}
 
 	.avatar {
@@ -83,8 +114,8 @@
 		font-size: 10pt;
 		height: 50px;
 		text-align: left;
-		margin-left:10px;
-		width : calc(100% - 140px);
+		margin-left: 10px;
+		width: calc(100% - 140px);
 	}
 
 	.comment-time {
@@ -96,6 +127,7 @@
 	}
 
 	.comment-body {
+		width: calc(99vw - 50px);
 		margin-top: 10px;
 		margin-bottom: 5px;
 		max-height: 100px;
@@ -104,11 +136,24 @@
 		margin-right: 1vw;
 		line-height: 25px;
 		overflow: hidden;
-		white-space: pre-wrap;
+		overflow-x: hidden;
+		/* white-space: pre-wrap; */
 		text-overflow: ellipsis;
-		display: -webkit-box;
+		/* display: -webkit-box;
 		-webkit-line-clamp: 4;
-		-webkit-box-orient: vertical;
+		-webkit-box-orient: vertical; */
+		transition: .3s max-height;
+	}
+	.comment-body-more{
+		max-height: 500px;
+		-webkit-line-clamp: 999;
+	}
+
+	.comment-body::before {
+		content: ' ';
+		float: right;
+		width:0;
+		height: calc(100% - 25px);
 	}
 
 	.comment-end {

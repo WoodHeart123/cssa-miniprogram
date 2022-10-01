@@ -51,7 +51,7 @@
 						class="column-container course-list-box" @scrolltolower="moreCourse"
 						refresher-background="white" @refresherrefresh="refresh" enable-back-to-top="true"
 						:refresher-triggered="triggered" @refresherpulling="onPulling">
-						<view class="box" v-for="(course,index) in courseList" :key="index">
+						<view v-for="(course,index) in courseList" :key="index">
 							<course-box-vue :course="course" class="box"></course-box-vue>
 						</view>
 					</scroll-view>
@@ -79,10 +79,7 @@
 				sort: ["asc", "desc"],
 				sortIndex: 0,
 				list: [],
-				commentList: [{
-					comment:"叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽"
-				},
-				{comment:"叽里呱啦叽里呱啦叽里呱啦"}],
+				courseList: [],
 				departmentID: 1,
 				departmentName: "Accounting and Information System",
 				timer: {},

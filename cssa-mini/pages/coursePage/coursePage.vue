@@ -1,5 +1,5 @@
 <template>
-	<uni-transition ref="course" :show=true customClass="full-screen">
+	<view>
 		<view class="column-container course-box">
 			<view class="course-name-box">
 				<view class="course-name"><Text>{{course.courseName}}</Text></view>
@@ -36,11 +36,11 @@
 			<view class="box" v-for="(comment, index) in commentList" :key="index">
 				<commentBoxVue :comment="comment"></commentBoxVue>
 			</view>
-			<uni-load-more v-show="showLoad" :status="status"></uni-load-more>
+			<uni-load-more  status="more"></uni-load-more>
 		</scroll-view>
-		<uni-fab :pattern="pattern" horizontal="right" vertical="bottom" popMene="false" @fabClick="toComment">
+		<uni-fab :pattern="pattern" horizontal="left" vertical="bottom" popMene="false" @fabClick="toComment">
 		</uni-fab>
-	</uni-transition>
+		</view>
 </template>
 
 <script>
@@ -64,7 +64,10 @@
 				userInfo: {},
 				commentList:[
 					{comment:"叽里呱啦叽里呱啦叽里呱啦"},
-					{comment:"叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦"},
+					{comment:"叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽"},
+					{comment:"叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦"},
+					{comment:"叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦里叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦"},
+					{comment:"叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦里叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽"},
 					{comment:"叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦"}
 				]
 			}
@@ -266,6 +269,7 @@
 	.rate-box {
 		height: 20px;
 		margin-bottom: 10px;
+		margin-left: 10px;
 	}
 
 	.rate-text {
