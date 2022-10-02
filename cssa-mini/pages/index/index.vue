@@ -5,45 +5,47 @@
 			<welcome></welcome>
 		</uni-popup>
 		<view class="user-box" v-if="isLogin">
-			<view class="avatar-box">
-				<img class="avatar" :src="userInfo.avatarUrl">
+			<view class="avatar-box" @click="toChangeAvatar">
+				<img class="avatar" :src="'https://cssa-mini.oss-cn-shanghai.aliyuncs.com/cssa-mini-avatar/' + userInfo.avatar + '.png'">
 			</view>
 			<view class="name-box" @click="toUserInfo">
 				<text class="nickname">{{userInfo.nickName}}</text>
-				<uni-tag class="tag" v-if="userInfo.isStudent" type="primary" :inverted="false" text="学生认证√" size="mini" :circle="true" />
-				<uni-tag class="tag" v-if="!userInfo.isStudent" :inverted="true" text="认证+" size="small" :circle="true" />
+				<uni-tag class="tag" v-if="userInfo.isStudent" type="primary" :inverted="false" text="学生认证√" size="mini"
+					:circle="true" />
+				<uni-tag class="tag" v-if="!userInfo.isStudent" :inverted="true" text="认证+" size="small"
+					:circle="true" />
 			</view>
-			
+
 		</view>
-		<view class="user-box" v-if="!isLogin" >
+		<view class="user-box" v-if="!isLogin">
 			<button class="login-button" plain="true" @click="getUserProfile">点击登陆</button>
 		</view>
 		<view class="function-box">
 			<view class="function-sub-box">
 				<view class="button-box disabled">
-					<img class="image" src="../../static/index/community.svg"/>
+					<img class="image" src="../../static/index/community.svg" />
 					<text class="text-box">我的帖子</text>
 				</view>
 				<view class="button-box disabled">
-					<img class="image" src="../../static/index/zan.svg"/>
+					<img class="image" src="../../static/index/zan.svg" />
 					<text class="text-box">赞/收藏</text>
 				</view>
 				<view class="button-box">
-					<img class="image" src="../../static/index/comment.svg"/>
+					<img class="image" src="../../static/index/comment.svg" />
 					<text class="text-box">我的评论</text>
 				</view>
 				<view class="button-box disabled">
-					<img class="image" src="../../static/index/ebay.svg"/>
+					<img class="image" src="../../static/index/ebay.svg" />
 					<text class="text-box">我的二手</text>
 				</view>
 			</view>
 			<view class="function-sub-box">
 				<view class="button-box disabled">
-					<img class="image" src="../../static/index/mem.svg"/>
+					<img class="image" src="../../static/index/mem.svg" />
 					<text class="text-box">活动回忆</text>
 				</view>
 				<view class="button-box disabled">
-					<img class="image" src="../../static/index/join.svg"/>
+					<img class="image" src="../../static/index/join.svg" />
 					<text class="text-box">加入CSSA</text>
 				</view>
 			</view>
@@ -61,30 +63,26 @@
 			}
 		},
 		onLoad() {
+			wx.cloud.init();
+		},
+		onShow(){
 			uni.getStorage({
 				key: 'userInfo',
 				success: (res) => {
 					this.userInfo = res.data;
-					this.login();
 				},
 				fail: () => {
 					this.isLogin = false;
 				},
 			});
-			wx.cloud.init();
 		},
 		methods: {
 			getUserProfile: function() {
 				uni.getUserProfile({
 					desc: "获取用户头像",
 					success: (userProfile) => {
-						this.userInfo = userProfile.userInfo;
-						uni.setStorage({
-							key: "userInfo",
-							data: this.userInfo
-						});
 						this.$refs.popup.close();
-						this.login();
+						this.login(userProfile.userInfo.nickName);
 					},
 				});
 			},
@@ -93,28 +91,32 @@
 					url: "/pages/index/userInfo"
 				})
 			},
-			async login() {
+			async login(nickname) {
 				const res = await wx.cloud.callContainer({
 					config: {
 						env: 'prod-9go38k3y9fee3b2e',
 					},
-					path: "/activity/login?nickname=" + encodeURI(this.userInfo.nickName),
+					path: "/activity/login?nickname=" + encodeURI(nickname),
 					method: 'GET',
 					header: {
 						'X-WX-SERVICE': 'springboot-f8i8',
 					}
 				});
 				if (res.data.status == 103) {
-					this.$refs.popup.close();
 					this.$refs.welcome.open();
-					return;
+				} else {
+					this.userInfo = res.data.data;
+					this.isLogin = true;
+					uni.setStorage({
+						key: "userInfo",
+						data: this.userInfo
+					});
 				}
-				this.userInfo.email = res.data.data.email;
-				this.userInfo.isStudent = res.data.data.isStudent;
-				this.isLogin = true;
-				uni.setStorage({
-					key: "userInfo",
-					data: this.userInfo
+
+			},
+			toChangeAvatar:function(){
+				uni.navigateTo({
+					url: '/pages/changeAvatar/changeAvatar?avatar=' + encodeURIComponent(JSON.stringify(this.userInfo.avatar)),
 				});
 			}
 		}
@@ -131,20 +133,22 @@
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-		
+
 	}
-	.user-box{
+
+	.user-box {
 		width: 96vw;
 		height: 100px;
 		margin-left: 2vw;
-		margin-top:10px; 
+		margin-top: 10px;
 		border-radius: 10px;
-		display:flex;
+		display: flex;
 		flex-direction: row;
 		background-color: white;
 	}
-	.function-box{
-		margin-top:20px; 
+
+	.function-box {
+		margin-top: 20px;
 		display: flex;
 		flex-direction: column;
 		height: 180px;
@@ -153,55 +157,64 @@
 		border-radius: 10px;
 		background-color: white;
 	}
-	.function-sub-box{
+
+	.function-sub-box {
 		display: flex;
 		flex-direction: row;
 		height: 90px;
-		width:100%;
+		width: 100%;
 	}
-	.button-box{
+
+	.button-box {
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
 		width: 25%;
 	}
+
 	.image {
 		width: 60%;
 		height: 30%;
 	}
-	.text-box{
+
+	.text-box {
 		text-align: center;
 		height: 30%;
 		margin-top: 10%;
 		font-size: 12px;
 	}
+
 	.avatar {
 		border-radius: 10px;
 		width: 70px;
 		height: 70px;
 	}
-	.name-box{
+
+	.name-box {
 		width: 70%;
 		display: flex;
 		flex-direction: row;
 		align-items: center;
 	}
+
 	.nickname {
 		font-size: 15px;
 		padding-top: 2px;
 		font-weight: 700;
 		margin-right: 10px;
 	}
-	.disabled{
-		color:#ccc;
+
+	.disabled {
+		color: #ccc;
 	}
-	.login-button{
-		color:#aaa !important;
+
+	.login-button {
+		color: #aaa !important;
 		border: none !important;
 		height: 100px;
 		width: 100%;
 		background-color: white !important;
-		line-height: 100px; 
+		line-height: 100px;
 	}
 </style>

@@ -25,8 +25,6 @@
 		},
 		components: {
 			actBoxVue,
-			welcome,
-			loading,
 		},
 		data() {
 			return {
@@ -102,22 +100,9 @@
 				this.registerList = res.data.data;
 				uni.stopPullDownRefresh();
 			},
-			getUserProfile: function() {
-				uni.getUserProfile({
-					desc: "获取用户信息",
-					success: (userProfile) => {
-						this.userInfo = userProfile.userInfo;
-						this.$refs.popup.close();
-						this.login();
-					},
-				});
-			}
-
 		}
 	}
 	import actBoxVue from '@/components/act-box/act-box.vue';
-	import welcome from '@/components/welcome/welcome.vue';
-	import loading from '@/components/loading/loading.vue';
 	import moment from 'moment';
 </script>
 

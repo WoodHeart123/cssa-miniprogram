@@ -93,16 +93,14 @@
 		},
 		onLoad() {
 			wx.cloud.init();
-			uni.$on('closeWelcome', (data) => {
-				this.$refs.welcome.close();
-				console.log(data);
-			})
+			uni.$on('closeWelcome', (data) => {this.$refs.welcome.close();})
 			uni.$on("openPopUp", (index) => this.openLeaderPop(index));
+		},
+		onShow(){
 			uni.getStorage({
 				key: 'userInfo',
 				success: (res) => {
 					this.userInfo = res.data;
-					this.login();
 				},
 				fail: () => {
 					this.$refs.popup.open();
@@ -134,38 +132,33 @@
 					url: "/pages/courseMain/courseMain"
 				})
 			},
-			async login() {
+			async login(nickName) {
 				const res = await wx.cloud.callContainer({
 					config: {
 						env: 'prod-9go38k3y9fee3b2e',
 					},
-					path: "/activity/login?nickname=" + encodeURI(this.userInfo.nickName),
+					path: "/user/login?nickname=" + encodeURI(nickName),
 					method: 'GET',
 					header: {
 						'X-WX-SERVICE': 'springboot-f8i8',
 					}
 				});
 				if (res.data.status == 103) {
-					this.$refs.popup.close();
 					this.$refs.welcome.open();
-					return;
+				}else{
+					this.userInfo = res.data.data;
+					uni.setStorage({
+						key: "userInfo",
+						data: this.userInfo
+					});
 				}
-				this.userInfo.email = res.data.data.email;
-				this.userInfo.isStudent = res.data.data.isStudent;
-				console.log(this.userInfo);
-				uni.setStorage({
-					key: "userInfo",
-					data: this.userInfo
-				});
-
 			},
 			getUserProfile: function() {
 				uni.getUserProfile({
 					desc: "获取用户信息",
 					success: (userProfile) => {
-						this.userInfo = userProfile.userInfo;
 						this.$refs.popup.close();
-						this.login();
+						this.login(userProfile.userInfo.nickName);
 					},
 				});
 			}

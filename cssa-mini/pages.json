@@ -114,12 +114,21 @@
             }
             
         }
+        ,{
+            "path" : "pages/changeAvatar/changeAvatar",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "头像",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"condition": {
 		"current": 0,
 		"list": [{
 			"name": "test",
-			"path": "pages/coursePage/coursePage"
+			"path": "pages/changeAvatar/changeAvatar"
 		}]
 	},
 	"globalStyle": {
