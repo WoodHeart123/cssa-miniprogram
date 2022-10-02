@@ -40,7 +40,7 @@
 		data(){
 			return{
 				isShow: false,
-				content:"Madison周围都有什么好玩的呢，有谁推荐一下吗，如果有推荐可以联系我：123456789. 大家可以一起玩，开心最重要了",
+				content:"Madison周围都有什么好玩的呢，有谁推荐一下吗，如果有推荐可以联系我：123456789. 大家可以一起玩，开心最重要了,Madison周围都有什么好玩的呢，有谁推荐一下吗，如果有推荐可以联系我：123456789. 大家可以一起玩，开心最重要了",
 				shrinkContent:"",
 				imageUrls:["../../static/renwu.jpeg","../../static/renwu.jpeg","../../static/renwu.jpeg","../../static/renwu.jpeg","../../static/renwu.jpeg","../../static/renwu.jpeg"],
 				imageNum:0
@@ -50,6 +50,7 @@
 		onLoad() {
 			this.imageNum = this.imageUrls.length;
 			console.log(this.imageNum);
+			console.log(this.content);
 			var contentLength = this.content.length;
 			if (contentLength > 52){
 				this.isShow = true;
