@@ -122,7 +122,14 @@
                 "enablePullDownRefresh": false
             }
             
-        }
+        },
+		{
+			"path": "pages/detail/secondDetail",
+			"style": {
+				"navigationBarTitleText": "二手页面",
+				"backgroundColor": "#F5F5F5"
+			}
+		}
     ],
 	"condition": {
 		"current": 0,
