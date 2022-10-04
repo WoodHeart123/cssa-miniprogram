@@ -2,10 +2,10 @@
 	<view class="container">
 		<view class="top-container">
 			<image class= "image" src="../../static/renwu.jpeg"></image>
-			<text class="user-name">Jucy</text>
+			<text class="user-name">{{name}}</text>
 		</view>
 		<view class="content-container">
-			<view class="title">有没有周末推荐去玩的地方吗？</view>
+			<view class="title">{{title}}</view>
 			<view class="content">
 				<view class="content-text">{{shrinkContent}}</view>
 				<template v-if="content != null && content.length > 52">
@@ -37,9 +37,12 @@
 
 <script>
 	export default {
+		props:['comDetail']
 		data(){
 			return{
 				isShow: false,
+				title: 有没有周末推荐去玩的地方吗,
+				name: Jucy,
 				content:"Madison周围都有什么好玩的呢，有谁推荐一下吗，如果有推荐可以联系我：123456789. 大家可以一起玩，开心最重要了",
 				shrinkContent:"",
 				imageUrls:["../../static/renwu.jpeg","../../static/renwu.jpeg","../../static/renwu.jpeg","../../static/renwu.jpeg","../../static/renwu.jpeg","../../static/renwu.jpeg"],
