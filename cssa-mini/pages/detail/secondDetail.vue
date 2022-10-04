@@ -23,6 +23,11 @@
 			<text style="margin-left: 10px;">成色：{{quantity}}</text>
 		</view>
 		<view class="blank_line"></view>
+		<view class="contact">
+			<view style="margin-left: 10px;">微信号：1234567</view>
+			<view style="margin-left: 10px;">手机号：2343459234</view>
+		</view>
+		<view class="blank_line"></view>
 		<view class="description">
 			<view class="tit">详情介绍</view>
 			<scroll-view class="scroll_page" scroll-y="true" :style="height">
@@ -129,6 +134,9 @@
 				font-weight: 600;
 			}
 		}
+		.contact{
+			position: relative;
+		}
 		.description {
 			.tit {
 				font-size: 32rpx;
@@ -139,7 +147,7 @@
 			
 			.scroll_page{
 				padding: 10px;
-				width:calc(100% - 20px);
+				width:calc(100% - 15px);
 			}
 		}
 		.favorite {
