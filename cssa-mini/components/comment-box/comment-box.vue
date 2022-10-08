@@ -5,16 +5,16 @@
 			<view class="rate-box">
 				<view class="row-container">
 					<view><text>难度：</text></view>
-					<uni-rate readonly="true" :value="4.5" allowHalf="true" size="15"></uni-rate>
-					<view><text>(4.5)</text></view>
+					<uni-rate readonly="true" :value="comment.difficulty" allowHalf="true" size="15"></uni-rate>
+					<view><text>{{comment.difficulty}}</text></view>
 				</view>
 				<view class="row-container">
 					<view><text>喜爱： </text></view>
-					<uni-rate readonly="true" :value="4.5" allowHalf="true" size="15"></uni-rate>
-					<view><text>(4.5)</text></view>
+					<uni-rate readonly="true" :value="comment.prefer" allowHalf="true" size="15"></uni-rate>
+					<view><text>{{comment.prefer}}</text></view>
 				</view>
 			</view>
-			<view class="comment-time"><text>2022-09-16</text></view>
+			<view class="comment-time"><text>{{comment.commentTime}}</text></view>
 		</view>
 		<view class="wrap">
 			<view  :class="this.more?'comment-body comment-body-more':'comment-body'">
@@ -25,13 +25,13 @@
 
 		<view class="row-container comment-end">
 			<view class="row-container">
-				<text class="time-professor">2019 Fall</text>
+				<text class="time-professor">{{comment.courseTime}}</text>
 				<text>;</text>
-				<text class="time-professor">Jack</text>
+				<text class="time-professor">{{comment.professor}}</text>
 			</view>
 			<view class="row-container">
 				<view class="iconfont icon-like"></view>
-				<text class="zan_count">50</text>
+				<text class="zan_count">{{comment.likeCount}}</text>
 			</view>
 		</view>
 	</view>

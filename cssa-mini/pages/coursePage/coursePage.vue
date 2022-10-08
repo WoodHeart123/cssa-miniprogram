@@ -32,11 +32,12 @@
 				<text>热度</text>
 			</view>
 		</view>
-		<scroll-view scroll-y="true" show-scrollbar="true" refresher-enabled="true" class="column-container comment-container">
+		<scroll-view scroll-y="true" show-scrollbar="true" refresher-enabled="true" 
+			class="column-container comment-container" @scrolltolower="moreComments()">
 			<view class="box" v-for="(comment, index) in commentList" :key="index">
 				<commentBoxVue :comment="comment"></commentBoxVue>
 			</view>
-			<uni-load-more  status="more"></uni-load-more>
+			<uni-load-more status="more"></uni-load-more>
 		</scroll-view>
 		<uni-fab :pattern="pattern" horizontal="left" vertical="bottom" popMene="false" @fabClick="toComment" />
 		</view>
@@ -61,14 +62,10 @@
 				isStudent: false,
 				isLogin: true,
 				userInfo: {},
-				commentList:[
-					{comment:"叽里呱啦叽里呱啦叽里呱啦"},
-					{comment:"叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽"},
-					{comment:"叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦"},
-					{comment:"叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦里叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦"},
-					{comment:"叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦里叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽"},
-					{comment:"叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦"}
-				]
+				commentList:[],
+				offset: 0,
+				limit: 10,
+				order: [],
 			}
 		},
 		methods: {
@@ -79,8 +76,23 @@
 					this.key = num;
 				}
 			},
+			moreComments: function() {
+				this.getCommentList();
+				offset += limit;
+				limit *= 2;
+			},
 			async getCommentList() {
-				console.log(1);
+				const res = await wx.cloud.callContainer({
+					config: {
+						env: 'prod-9go38k3y9fee3b2e',
+					},
+					path: "/course/getCommentList?courseID=" + this.courseID + "&offset=" + this.offset + "&limit=" + this.limit + "&order=" + this.orderType[this.key],
+					method: 'GET',
+					header: {
+						'X-WX-SERVICE': 'springboot-f8i8',
+					}
+				});
+				this.commentList = res.data.data;
 			},
 			async login() {
 				const res = await wx.cloud.callContainer({
