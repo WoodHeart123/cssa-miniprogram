@@ -1,11 +1,5 @@
 <template>
 	<view id="main" class="column-container">
-		<uni-popup ref="popup" type="bottom" background-color="#fff">
-			<button class="button" @click="getUserProfile">授权信息</button>
-		</uni-popup>
-		<uni-popup ref="welcome" background-color="fff">
-			<welcome></welcome>
-		</uni-popup>
 		<uni-swiper-dot class="uni-swiper-dot-box" @clickItem="clickItem" :info="actDetailList" :current="current"
 			mode="dot" :dots-styles="dotStyle" field="content">
 			<swiper class="swiper-box" @change="change">
@@ -93,30 +87,15 @@
 		},
 		onLoad() {
 			wx.cloud.init();
-			uni.$on('closeWelcome', (data) => {this.$refs.welcome.close();})
 			uni.$on("openPopUp", (index) => this.openLeaderPop(index));
 		},
-		onShow(){
-			uni.getStorage({
-				key: 'userInfo',
-				success: (res) => {
-					this.userInfo = res.data;
-				},
-				fail: () => {
-					this.$refs.popup.open();
-				},
-			});
-		},
-		onHide(){
-			this.$refs.popup.close();
-		},
 		methods: {
-			openLeaderPop:function(index) {
+			openLeaderPop: function(index) {
 				this.popupLeader = this.leaderInfo[index];
 				console.log(index)
 				this.$refs.leaderPopup.open('bottom');
 			},
-			change:function(e) {
+			change: function(e) {
 				this.current = e.detail.current;
 			},
 			clickItem(e) {
@@ -132,36 +111,6 @@
 					url: "/pages/courseMain/courseMain"
 				})
 			},
-			async login(nickName) {
-				const res = await wx.cloud.callContainer({
-					config: {
-						env: 'prod-9go38k3y9fee3b2e',
-					},
-					path: "/user/login?nickname=" + encodeURI(nickName),
-					method: 'GET',
-					header: {
-						'X-WX-SERVICE': 'springboot-f8i8',
-					}
-				});
-				if (res.data.status == 103) {
-					this.$refs.welcome.open();
-				}else{
-					this.userInfo = res.data.data;
-					uni.setStorage({
-						key: "userInfo",
-						data: this.userInfo
-					});
-				}
-			},
-			getUserProfile: function() {
-				uni.getUserProfile({
-					desc: "获取用户信息",
-					success: (userProfile) => {
-						this.$refs.popup.close();
-						this.login(userProfile.userInfo.nickName);
-					},
-				});
-			}
 		}
 	}
 	import actBoxVue from '@/components/act-box/act-box.vue';
@@ -171,6 +120,7 @@
 
 <style>
 	@import '@/static/iconfont/iconfont.css';
+
 	#main {
 		width: 100vw;
 		height: 100vh;
@@ -300,11 +250,11 @@
 		width: 100%;
 		height: 100%;
 	}
-	
-	.disabled{
-		color:#ccc !important;
+
+	.disabled {
+		color: #ccc !important;
 	}
-	
+
 	.button {
 		margin: 20px 10px 20px 10px;
 		border-radius: 10px;

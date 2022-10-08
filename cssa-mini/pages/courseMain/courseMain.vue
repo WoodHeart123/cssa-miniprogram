@@ -12,15 +12,18 @@
 						</uni-transition>
 					</view>
 					<view :class="searching?'search-bar-selected':'search-bar'" class="search-bar">
-						<uni-search-bar  v-model="searchValue" cancelButton="always" clearButton="none" @focus="onFocus" @input="searchBarInput"
-							@confirm="searchBarInput" @cancel="onCancel">
+						<uni-search-bar v-model="searchValue" cancelButton="auto" placeholder="搜索课程" clearButton="none"
+							@focus="onFocus" @input="searchBarInput" @confirm="searchBarInput" @cancel="onCancel">
 						</uni-search-bar>
 					</view>
 				</view>
+				<view class="overlay" v-show="showMenu"></view>
 				<view class="column-container suggest-list" v-if="searching">
-					<view class="row-container suggest-box" v-for="(course, index) in suggestList" :key="index" @click="toCourse(course)">
+					<view class="row-container suggest-box" v-for="(course, index) in suggestList" :key="index"
+						@click="toCourse(course)">
 						<view class="suggest-box-course-num">
-							{{course.departmentAbrev + " " + String(course.courseNum) + " "}}</view>
+							{{course.departmentAbrev + " " + String(course.courseNum) + " "}}
+						</view>
 						<view class="suggest-box-course-name">{{course.courseName}}</view>
 					</view>
 				</view>
@@ -48,12 +51,13 @@
 						<view class="filter-button" v-show="key!=-1"><text @click="cancelFilter()">取消筛选</text></view>
 					</view>
 					<scroll-view scroll-y="true" show-scrollbar="true" refresher-enabled="true"
-						class="column-container course-list-box" @scrolltolower="moreCourse"
+						class="column-container course-list-box"
 						refresher-background="white" @refresherrefresh="refresh" enable-back-to-top="true"
-						:refresher-triggered="triggered" @refresherpulling="onPulling">
+						:refresher-triggered="triggered" @refresherpulling="onPulling" @scrolltolower="onScrollLower">
 						<view v-for="(course,index) in courseList" :key="index">
 							<course-box-vue :course="course" class="box"></course-box-vue>
 						</view>
+						<uni-load-more v-show="courseList.length >= 10" :status="status"></uni-load-more>
 					</scroll-view>
 				</view>
 			</view>
@@ -76,12 +80,13 @@
 				key: -1,
 				triggered: false,
 				status: "more",
-				sort: ["asc", "desc"],
+				sort: ["SORT_BY_COURSE_NUM","SORT_BY_COMMENT_COUNT","SORT_BY_AVG_DIFFICULTY_DESC","SORT_BY_AVG_DIFFICULTY_ASC","SORT_BY_AVG_PREFER_DESC","SORT_BY_AVG_PREFER_ASC"],
+				courseCount: 0,
 				sortIndex: 0,
-				list: [],
+				departmentList: [],
 				courseList: [],
-				departmentID: 1,
-				departmentName: "Accounting and Information System",
+				departmentID: 0,
+				departmentName: "所有课程",
 				timer: {},
 				suggestList: [],
 			}
@@ -143,6 +148,7 @@
 			},
 			clickMenu: function() {
 				if (!this.showMenu) {
+					this.showMenu = true;
 					this.$refs.menuOpen.step({
 						rotate: '90'
 					});
@@ -150,10 +156,9 @@
 						translateX: '85vw',
 					});
 					this.$refs.main.run();
-					this.$refs.menuOpen.run(() => {
-						this.showMenu = true;
-					});
+					this.$refs.menuOpen.run();
 				} else {
+					this.showMenu = false;
 					this.$refs.menuOpen.step({
 						rotate: '0'
 					});
@@ -161,10 +166,12 @@
 						translateX: '0',
 					});
 					this.$refs.main.run();
-					this.$refs.menuOpen.run(() => {
-						this.showMenu = false;
-					})
+					this.$refs.menuOpen.run();
 				}
+			},
+			onScrollLower:function(){
+				this.status = "loading";
+				this.getCourseList();
 			},
 			touchstart(e) {
 				this.startX = e.touches[0].clientX
@@ -173,17 +180,13 @@
 			touchmove(e) {
 				this.moveX = e.touches[0].clientX
 				this.moveY = e.touches[0].clientY
-				if (Math.abs(this.startY - this.moveY) <= 50 && this.startX - this.moveX <= -100 && !this
-					.showMenu) {
-					this.clickMenu();
-				}
-				if (Math.abs(this.startY - this.moveY) <= 50 && this.startX - this.moveX >= 100 && this.showMenu) {
+				if (Math.abs(this.startY - this.moveY) <= 50 && Math.abs(this.startX - this.moveX) >= -100 && !this.showMenu) {
 					this.clickMenu();
 				}
 			},
 			bindClick(e) {
 				this.departmentName = e.item.name;
-				this.departmentID = e.item.itemIndex + 1;
+				this.departmentID = e.item.itemIndex;
 				this.courseList = [];
 				this.onPulling();
 				this.clickMenu();
@@ -197,6 +200,7 @@
 				}
 			},
 			refresh: function() {
+				this.courseCount = 0;
 				this.getCourseList()
 			},
 			async getCourseList() {
@@ -204,14 +208,23 @@
 					config: {
 						env: 'prod-9go38k3y9fee3b2e',
 					},
-					path: "/course/courselist?departmentID=" + this.departmentID,
+					path: `/course/courselist?departmentID=${this.departmentID}&limit=20&offset=${this.courseCount}&orderType=${this.sort[this.sortIndex]}`,
 					method: 'GET',
 					header: {
 						'X-WX-SERVICE': 'springboot-f8i8',
 					}
 				});
-				this.courseList = res.data.data;
+				if(res.data.status == 100){
+					this.courseList = this.courseList.concat(res.data.data);
+					this.courseCount += 20;
+				}
+				if(res.data.data.length == 0){
+					this.status = "noMore";
+				}else{
+					this.status = "more";
+				}
 				this.triggered = false;
+				
 			},
 			async getDepartmentList() {
 				const res = await wx.cloud.callContainer({
@@ -225,13 +238,17 @@
 					}
 				});
 				let tempList = res.data.data;
+				this.departmentList=[{
+					letter: ' ',
+					data: ["所有课程"]
+				}];
 				let wordList = {
 					letter: tempList[0].department[0],
 					data: []
 				};
 				for (let i = 0; i < tempList.length; i++) {
 					if (wordList.letter != tempList[i].department[0]) {
-						this.list.push(wordList);
+						this.departmentList.push(wordList);
 						wordList = {
 							letter: tempList[i].department[0],
 							data: [tempList[i].department]
@@ -240,13 +257,13 @@
 						wordList.data.push(tempList[i].department)
 					}
 				}
-				this.list.push(wordList);
+				this.departmentList.push(wordList);
 				uni.setStorage({
 					key: "departmentIndexedList",
-					data: this.list
+					data: this.departmentList
 				});
 			},
-			toCourse:function(course){
+			toCourse: function(course) {
 				console.log(course);
 				uni.navigateTo({
 					url: '/pages/coursePage/coursePage?course=' + encodeURIComponent(JSON.stringify(course)),

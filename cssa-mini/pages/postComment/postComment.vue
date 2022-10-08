@@ -15,7 +15,7 @@
 			</uni-forms-item>
 			<view class="blank"></view>
 			<uni-forms-item name="time" label="时间">
-				<uni-data-picker v-model="comment.time" :localdata="range" @change="change"></uni-data-picker>
+				<uni-data-picker v-model="comment.courseTime" :localdata="range" @change="change"></uni-data-picker>
 			</uni-forms-item>
 			<view class="blank"></view>
 			<uni-forms-item name="comment" label="评论" label-position="top">
@@ -40,7 +40,7 @@
 							errorMessage: '请填写教授名字',
 						}, ]
 					},
-					time: {
+					courseTime: {
 						rules: [{
 							required: true,
 							errorMessage: '请选择教学时间',
@@ -123,7 +123,7 @@
 					config: {
 						env: 'prod-9go38k3y9fee3b2e',
 					},
-					path: "/course/postcomment?nickname=" + encodeURI(this.userInfo.nickName),
+					path: "/course/postcomment",
 					method: 'POST',
 					header: {
 						'X-WX-SERVICE': 'springboot-f8i8',
@@ -134,29 +134,15 @@
 					uni.showToast({
 						title: "失败"
 					})
-				} else {
-					uni.getStorage({
-						key: "commentList",
-						success: (res) => {
-							res.data.push(1);
-							uni.setStorage({
-								key: "commentList",
-								data: res
-							});
-						},
-						fail: () => {
-							uni.setStorage({
-								key: "commentList",
-								data: [1]
-							});
-						}
-					})
+				}else{
+					uni.navigateBack();
 				}
+				
 			},
 			submit: function() {
 				console.log(this.comment);
 				this.$refs["form"].validate().then(res => {
-					this.postComment;
+					this.postComment();
 				}).catch(err => {
 					console.log('err', err);
 				})

@@ -87,7 +87,7 @@
 					config: {
 						env: 'prod-9go38k3y9fee3b2e',
 					},
-					path: "/activity/login?nickname=" + encodeURI(this.userInfo.nickName),
+					path: "/user/login?nickname=" + encodeURI(this.userInfo.nickName),
 					method: 'GET',
 					header: {
 						'X-WX-SERVICE': 'springboot-f8i8',
@@ -118,21 +118,21 @@
 					});
 					return;
 				}
-				if (!this.isStudent) {
-					uni.showModal({
-						title: "请先认证学生身份",
-						content: "我们希望以此能过滤一些代写，谢谢配合",
-						confirmText: "前往认证",
-						success: (res) => {
-							if (res.confirm) {
-								uni.navigateTo({
-									url: "/pages/index/userInfo",
-								});
-							}
-						},
-					});
-					return;
-				}
+				// if (!this.isStudent) {
+				// 	uni.showModal({
+				// 		title: "请先认证学生身份",
+				// 		content: "我们希望以此能过滤一些代写，谢谢配合",
+				// 		confirmText: "前往认证",
+				// 		success: (res) => {
+				// 			if (res.confirm) {
+				// 				uni.navigateTo({
+				// 					url: "/pages/index/userInfo",
+				// 				});
+				// 			}
+				// 		},
+				// 	});
+				// 	return;
+				// }
 				uni.navigateTo({
 					url: "/pages/postComment/postComment"
 				});
