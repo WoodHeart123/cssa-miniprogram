@@ -146,7 +146,7 @@
 				// 	return;
 				// }
 				uni.navigateTo({
-					url: "/pages/postComment/postComment"
+					url: "/pages/postComment/postComment?courseID=" + this.course.courseID,
 				});
 			}
 		},

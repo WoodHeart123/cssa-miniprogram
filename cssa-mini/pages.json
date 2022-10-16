@@ -111,6 +111,7 @@
 			"style": {
 				"navigationBarTitleText": "头像",
 				"enablePullDownRefresh": false
+				
 			}
 
 		}

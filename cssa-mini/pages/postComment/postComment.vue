@@ -88,6 +88,7 @@
 		},
 		onLoad(options) {
 			this.initTimePicker();
+			this.comment.courseID = options.courseID;
 		},
 		methods: {
 			initTimePicker: function() {

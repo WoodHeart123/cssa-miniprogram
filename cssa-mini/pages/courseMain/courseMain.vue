@@ -2,7 +2,7 @@
 	<uni-transition ref="main" :show=true customClass="full-screen">
 		<view id="course" class="row-container" @touchstart="touchstart" @touchmove="touchmove">
 			<view class="menu column-container">
-				<uni-indexed-list :options="list" :show-select="false" @click="bindClick"></uni-indexed-list>
+				<uni-indexed-list :options="departmentList" :show-select="false" @click="bindClick"></uni-indexed-list>
 			</view>
 			<view :class="showMenu?'main-menu-half':'main-content'" class="column-container main-content">
 				<view class="row-container top-bar">
@@ -32,23 +32,23 @@
 				</view>
 				<view class="column-container course-list" v-show="!searching">
 					<view class="row-container filter-box">
-						<view :class="key==0?'filter-selected filter':'filter'" class="row-container"
-							@click="changeKey(0)">
-							<text>热门课程</text>
-						</view>
 						<view :class="key==1?'filter-selected filter':'filter'" class="row-container"
 							@click="changeKey(1)">
-							<text>喜爱</text>
-							<text class="iconfont" v-show="key==1&&sort[sortIndex]=='desc'">&#xed58;</text>
-							<text class="iconfont" v-show="key==1&&sort[sortIndex]=='asc'">&#xed59;</text>
+							<text>热门课程</text>
 						</view>
 						<view :class="key==2?'filter-selected filter':'filter'" class="row-container"
 							@click="changeKey(2)">
-							<text>难度</text>
-							<text class="iconfont" v-show="key==2&&sort[sortIndex]=='desc'">&#xed58;</text>
-							<text class="iconfont" v-show="key==2&&sort[sortIndex]=='asc'">&#xed59;</text>
+							<text>喜爱</text>
+							<text class="iconfont" v-show="key==2&&sortIndex==3">&#xed58;</text>
+							<text class="iconfont" v-show="key==2&&sortIndex==2">&#xed59;</text>
 						</view>
-						<view class="filter-button" v-show="key!=-1"><text @click="cancelFilter()">取消筛选</text></view>
+						<view :class="key==4?'filter-selected filter':'filter'" class="row-container"
+							@click="changeKey(4)">
+							<text>难度</text>
+							<text class="iconfont" v-show="key==4&&sortIndex==4">&#xed58;</text>
+							<text class="iconfont" v-show="key==4&&sortIndex==5">&#xed59;</text>
+						</view>
+						<view class="filter-button" v-show="key!=0"><text @click="cancelFilter()">取消筛选</text></view>
 					</view>
 					<scroll-view scroll-y="true" show-scrollbar="true" refresher-enabled="true"
 						class="column-container course-list-box"
@@ -77,13 +77,14 @@
 				showMenu: false,
 				startX: 0,
 				startY: 0,
-				key: -1,
+				key: 0,
 				triggered: false,
 				status: "more",
-				sort: ["SORT_BY_COURSE_NUM","SORT_BY_COMMENT_COUNT","SORT_BY_AVG_DIFFICULTY_DESC","SORT_BY_AVG_DIFFICULTY_ASC","SORT_BY_AVG_PREFER_DESC","SORT_BY_AVG_PREFER_ASC"],
+				sort: ["SORT_BY_COURSE_NUM","SORT_BY_COMMENT_COUNT","SORT_BY_AVG_DIFFICULTY_ASC","SORT_BY_AVG_DIFFICULTY_DESC","SORT_BY_AVG_PREFER_DESC","SORT_BY_AVG_PREFER_ASC"],
 				courseCount: 0,
 				sortIndex: 0,
 				departmentList: [],
+				departmentDict:[],
 				courseList: [],
 				departmentID: 0,
 				departmentName: "所有课程",
@@ -93,15 +94,7 @@
 		},
 		onLoad() {
 			wx.cloud.init();
-			uni.getStorage({
-				key: 'departmentIndexedList',
-				success: (res) => {
-					this.list = res.data;
-				},
-				fail: () => {
-					this.getDepartmentList();
-				},
-			});
+			this.getDepartmentList();
 			this.onPulling();
 		},
 		methods: {
@@ -127,17 +120,19 @@
 				this.suggestList = res.data.data;
 			},
 			changeKey: function(num) {
-				if (this.key == num && (this.key == 1 || this.key == 2)) {
-					this.sortIndex = (this.sortIndex + 1) % 2;
-				} else if (num == 1) {
-					this.sortIndex = 1;
-				} else if (num == 2) {
-					this.sortIndex = 0;
+				if (this.key == num && (this.key == 2 || this.key == 4)) {
+					this.sortIndex = (this.sortIndex - num + 1) % 2 + num;
+				} else{
+					this.sortIndex = num;
 				}
+				console.log(this.sortIndex);
 				this.key = num;
+				this.onPulling();
 			},
 			cancelFilter: function() {
-				this.key = -1;
+				this.key = 0;
+				this.sortIndex = 0;
+				this.onPulling();
 			},
 			onFocus: function() {
 				this.searching = true;
@@ -171,6 +166,10 @@
 			},
 			onScrollLower:function(){
 				this.status = "loading";
+				if(this.departmentID != 0){
+					this.status = "noMore";
+					return;
+				}
 				this.getCourseList();
 			},
 			touchstart(e) {
@@ -180,13 +179,13 @@
 			touchmove(e) {
 				this.moveX = e.touches[0].clientX
 				this.moveY = e.touches[0].clientY
-				if (Math.abs(this.startY - this.moveY) <= 50 && Math.abs(this.startX - this.moveX) >= -100 && !this.showMenu) {
+				if (Math.abs(this.startY - this.moveY) <= 50 && Math.abs(this.startX - this.moveX) >= 100 && !this.showMenu) {
 					this.clickMenu();
 				}
 			},
 			bindClick(e) {
 				this.departmentName = e.item.name;
-				this.departmentID = e.item.itemIndex;
+				this.departmentID = this.departmentDict[e.item.itemIndex.toString()];
 				this.courseList = [];
 				this.onPulling();
 				this.clickMenu();
@@ -200,6 +199,7 @@
 				}
 			},
 			refresh: function() {
+				this.courseList = [];
 				this.courseCount = 0;
 				this.getCourseList()
 			},
@@ -246,6 +246,7 @@
 					letter: tempList[0].department[0],
 					data: []
 				};
+				this.departmentDict["0"] = 0;
 				for (let i = 0; i < tempList.length; i++) {
 					if (wordList.letter != tempList[i].department[0]) {
 						this.departmentList.push(wordList);
@@ -256,6 +257,7 @@
 					} else {
 						wordList.data.push(tempList[i].department)
 					}
+					this.departmentDict[(i+1).toString()] = tempList[i].departmentID;
 				}
 				this.departmentList.push(wordList);
 				uni.setStorage({
