@@ -30,7 +30,7 @@
 				<text class="time-professor">{{comment.professor}}</text>
 			</view>
 			<view class="row-container">
-				<view class="iconfont icon-like"></view>
+				<view :class="liked==false?'iconfont icon-like':'iconfont icon-like-fill'" @click="addZan"></view>
 				<text class="zan_count">{{comment.likeCount}}</text>
 			</view>
 		</view>
@@ -44,6 +44,7 @@
 		data() {
 			return {
 				more:false,
+				liked:false,
 			};
 		},
 		onShow(){
@@ -58,7 +59,21 @@
 		methods:{
 			moreText:function(){
 				this.more = true;
-			}
+			},
+			async addZan(){
+				const res = await wx.cloud.callContainer({
+					config: {
+						env: 'prod-9go38k3y9fee3b2e',
+					},
+					path: "/course/zan",
+					method: 'GET',
+					header: {
+						'X-WX-SERVICE': 'springboot-f8i8',
+					},
+					data: this.comment.commentID,
+				});
+				this.liked = true;
+			},
 		}
 	}
 </script>
