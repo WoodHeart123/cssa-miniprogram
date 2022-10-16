@@ -7,26 +7,26 @@
 		<view class="content-container">
 			<view class="title">有没有周末推荐去玩的地方吗？</view>
 			<view class="content">
-				<view class="content-text">{{shrinkContent}}</view>
-				<template v-if="content != null && content.length > 52">
+				<view class="content-text">{{this.comDetail.shrinkContent}}</view>
+				<template v-if="this.comDetail.content != null && this.comDetail.content.length > 52">
 					<text class="content-description" v-if="isShow" @click="toggleDescription">全文</text>
 					<text class="content-description" v-else @click="toggleDescription">收起</text>
 				</template>
 			</view>
 		</view>
 		<view class="image-box">
-			<view class="image-1" v-if="imageNum == 1">
-				<view v-for="(url,index) in imageUrls">
+			<view class="image-1" v-if="this.comDetail.imageNum == 1">
+				<view v-for="(url,index) in comDetail.imageUrls">
 					<image class="picture-1" :src="url" @tap="previewImage(url)" mode="heightFix"/>
 				</view>
 			</view>
-			<view class="image-more" v-else-if="imageNum == 2">
-				<view v-for="(url,index) in imageUrls">
+			<view class="image-more" v-else-if="this.comDetail.imageNum == 2">
+				<view v-for="(url,index) in this.comDetail.imageUrls">
 					<image class="picture-2" :src="url" @tap="previewImage(url)"/>
 				</view>
 			</view>
-			<view class="image-more" v-else="imageNum > 2">
-				<view v-for="(url,index) in imageUrls">
+			<view class="image-more" v-else="this.comDetail.imageNum > 2">
+				<view v-for="(url,index) in this.comDetail.imageUrls">
 					<image class="picture-more" :src="url" @tap="previewImage(url)"/>
 				</view>
 			</view>
@@ -37,27 +37,25 @@
 
 <script>
 	export default {
+		props: ['comDetail'],
+		
 		data(){
 			return{
-				isShow: false,
-				content:"Madison周围都有什么好玩的呢，有谁推荐一下吗，如果有推荐可以联系我：123456789. 大家可以一起玩，开心最重要了,Madison周围都有什么好玩的呢，有谁推荐一下吗，如果有推荐可以联系我：123456789. 大家可以一起玩，开心最重要了",
-				shrinkContent:"",
-				imageUrls:["../../static/renwu.jpeg","../../static/renwu.jpeg","../../static/renwu.jpeg","../../static/renwu.jpeg","../../static/renwu.jpeg","../../static/renwu.jpeg"],
-				imageNum:0
+				isShow: false
 			}
 		},
 		
 		onLoad() {
-			this.imageNum = this.imageUrls.length;
-			console.log(this.imageNum);
-			console.log(this.content);
-			var contentLength = this.content.length;
+			this.comDetail.imageNum = this.comDetail.imageUrls.length;
+			console.log(this.comDetail.imageNum);
+			console.log(this.comDetail.content);
+			var contentLength = this.comDetail.content.length;
 			if (contentLength > 52){
 				this.isShow = true;
-				this.shrinkContent = this.content.substr(0, 51) + "..."
+				this.comDetail.shrinkContent = this.comDetail.content.substr(0, 51) + "..."
 			} else {
 				this.isShow = false;
-				this.shrinkContent = this.content;
+				this.comDetail.shrinkContent = this.comDetail.content;
 			}
 		},
 		
@@ -65,10 +63,10 @@
 			toggleDescription: function(){
 				if (this.isShow) {
 				    this.isShow = false;
-				    this.shrinkContent = this.content;
+				    this.comDetail.shrinkContent = this.comDetail.content;
 				} else {
 				    this.isShow = true;
-				    this.shrinkContent = this.content.substr(0, 51) + "...";
+				    this.comDetail.shrinkContent = this.comDetail.content.substr(0, 51) + "...";
 				}
 			},
 			previewImage: function(url){

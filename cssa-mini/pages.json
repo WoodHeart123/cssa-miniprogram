@@ -111,9 +111,30 @@
 			"style": {
 				"navigationBarTitleText": "头像",
 				"enablePullDownRefresh": false
-				
+
 			}
 
+		}, {
+			"path": "pages/ebay/ebay",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/changeAvatar/changeAvatar",
+			"style": {
+				"navigationBarTitleText": "头像",
+				"enablePullDownRefresh": false
+			}
+
+		},
+		{
+			"path": "pages/detail/secondDetail",
+			"style": {
+				"navigationBarTitleText": "二手页面",
+				"backgroundColor": "#F5F5F5"
+			}
 		}
 	],
 	"condition": {

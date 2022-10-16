@@ -9,12 +9,8 @@
 			<view></view>
 		</view>
 		-->
-		<view class="boxes">
-			<com-box-vue></com-box-vue>
-			<com-box-vue></com-box-vue>
-			<com-box-vue></com-box-vue>
-			<com-box-vue></com-box-vue>
-			<com-box-vue></com-box-vue>
+		<view class="boxes" v-for="(comDetail,index) in comDetailList">
+			<com-box-vue :comDetail="comDetail"></com-box-vue>
 		</view>
 		<view class="post">
 			<uni-fab :pattern="pattern" horizontal="right" vertical="bottom"/>
@@ -27,8 +23,35 @@
 		components: {
 			comBoxVue
 		},
+		
 		data(){
 			return{
+				comDetailList:[
+					{
+						content:"Madison周围都有什么好玩的呢，有谁推荐一下吗，如果有推荐可以联系我：123456789. 大家可以一起玩，开心最重要了,Madison周围都有什么好玩的呢，有谁推荐一下吗，如果有推荐可以联系我：123456789. 大家可以一起玩，开心最重要了",
+						shrinkContent:"",
+						imageUrls:["../../static/renwu.jpeg"],
+						imageNum:0,
+					},
+					{
+						content:"Madison周围都有什么好玩的呢，有谁推荐一下吗，如果有推荐可以联系我：123456789. 大家可以一起玩，开心最重要了,Madison周围都有什么好玩的呢，有谁推荐一下吗，如果有推荐可以联系我：123456789. 大家可以一起玩，开心最重要了",
+						shrinkContent:"",
+						imageUrls:["../../static/renwu.jpeg", "../../static/renwu.jpeg"],
+						imageNum:0,
+					},
+					{
+						content:"Madison周围都有什么好玩的呢，有谁推荐一下吗，如果有推荐可以联系我：123456789. 大家可以一起玩，开心最重要了,Madison周围都有什么好玩的呢，有谁推荐一下吗，如果有推荐可以联系我：123456789. 大家可以一起玩，开心最重要了",
+						shrinkContent:"",
+						imageUrls:["../../static/renwu.jpeg", "../../static/renwu.jpeg", "../../static/renwu.jpeg"],
+						imageNum:0,
+					},
+					{
+						content:"Madison周围都有什么好玩的呢，有谁推荐一下吗，如果有推荐可以联系我：123456789. 大家可以一起玩，开心最重要了,Madison周围都有什么好玩的呢，有谁推荐一下吗，如果有推荐可以联系我：123456789. 大家可以一起玩，开心最重要了",
+						shrinkContent:"",
+						imageUrls:["../../static/renwu.jpeg","../../static/renwu.jpeg","../../static/renwu.jpeg","../../static/renwu.jpeg","../../static/renwu.jpeg","../../static/renwu.jpeg"],
+						imageNum:0,
+					},
+				],
 				searching: false,
 				pattern: {
 							buttonColor: '#007AFF',
