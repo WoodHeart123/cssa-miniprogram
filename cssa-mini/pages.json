@@ -114,20 +114,6 @@
 
 			}
 
-		}, {
-			"path": "pages/ebay/ebay",
-			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
-			}
-
-		}, {
-			"path": "pages/changeAvatar/changeAvatar",
-			"style": {
-				"navigationBarTitleText": "头像",
-				"enablePullDownRefresh": false
-			}
-
 		},
 		{
 			"path": "pages/detail/secondDetail",
@@ -135,17 +121,28 @@
 				"navigationBarTitleText": "二手页面",
 				"backgroundColor": "#F5F5F5"
 			}
+		}, {
+			"path": "pages/second/secondMainSearch",
+			"style": {
+				"navigationBarTitleText": "搜索",
+				"enablePullDownRefresh": false
+			}
+
 		}
 	],
 	"condition": {
 		"current": 0,
 		"list": [{
-				"name": "test",
+				"name": "avatar",
 				"path": "pages/changeAvatar/changeAvatar"
 			},
 			{
 				"name": "second",
 				"path": "pages/second/secondMain"
+			},
+			{
+				"name": "secondDetail",
+				"path": "pages/detail/secondDetail"
 			}
 		]
 	},
