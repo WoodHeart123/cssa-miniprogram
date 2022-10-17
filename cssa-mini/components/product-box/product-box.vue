@@ -1,14 +1,15 @@
 <template>
 	<view class='product-box'>
+		<view class='condition'><text>完好如初</text></view>
 		<image class='photo' src="../../static/index/maomao.jpg" mode='aspectFill'></image>
 		<view class='product-name'>
 			<text>A cat 一只猫</text>
 		</view>
-		<view class='price-condition row-container'>
-			<view class='price'><text>$89</text></view> <!-- $+{{product.price}} -->
-			<view class='condition'><text>完好如初</text></view>
+		<view class='description'>
+			<text>一只会喵喵叫的猫。汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪呱呱呱</text>
 		</view>
 		
+			<view class='price'><text>$89</text></view> <!-- $+{{product.price}} -->
 		<view class='seller row-container'>
 			<image class='avatar' src="../../static/index/maomao.jpg"></image>
 			<view class = 'seller-name'><text>路人甲jia</text></view>
@@ -37,27 +38,32 @@
 
 	.photo {
 		width: 100%;
-		height: 70%;
+		height: 60%;
 		border-radius: 10px 10px 0px 0px;
 		overflow: hidden;
 	}
 
 	.product-name {
-		height: 10%;
+		height: 8%;
 		font-weight: 600;
 		margin-left: 5%;
 		margin-right: 5%;
 	}
-
-	.price-condition {
-		justify-content: space-between;
-		height: 10%;
+	
+	.description {
+		height: 12%;
+		font-size: 80%;
 		margin-left: 5%;
 		margin-right: 5%;
+		overflow: hidden;
 	}
 
 	.price {
 		font-weight: 600;
+		height: 10%;
+		margin-left: 5%;
+		margin-right: 5%;
+		color: darkblue;
 	}
 
 	.time {
@@ -68,6 +74,18 @@
 	}
 
 	.condition {
+		position:fixed;
+		margin-left: 25%;/*...*/
+		padding-left: 2%;
+		padding-right: 2%;
+		padding-top: 0.5%;
+		padding-bottom: 0.5%;
+		margin-top: 40%;
+		background-color: black;
+		opacity: 0.45;
+		color: white;
+		border-radius: 5px 5px 5px 5px;
+		font-size: 10pt;
 
 	}
 
