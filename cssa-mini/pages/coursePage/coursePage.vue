@@ -32,15 +32,15 @@
 				<text>热度</text>
 			</view>
 		</view>
-		<scroll-view scroll-y="true" show-scrollbar="true" refresher-enabled="true" 
-			class="column-container comment-container" @scrolltolower="moreComments()">
+		<scroll-view scroll-y="true" show-scrollbar="true" refresher-enabled="true"
+			class="column-container comment-container" @scrolltolower="getCommentList()">
 			<view class="box" v-for="(comment, index) in commentList" :key="index">
 				<commentBoxVue :comment="comment"></commentBoxVue>
 			</view>
-			<uni-load-more status="more"></uni-load-more>
+			<uni-load-more status="status"></uni-load-more>
 		</scroll-view>
 		<uni-fab :pattern="pattern" horizontal="left" vertical="bottom" popMene="false" @fabClick="toComment" />
-		</view>
+	</view>
 </template>
 
 <script>
@@ -55,14 +55,14 @@
 				},
 				course: {},
 				showLoad: false,
-				status: "load",
+				status: "more",
 				currentPage: 0,
 				key: 0,
 				orderType: ["SORT_BY_TIME", "SORT_BY_LIKE"],
 				isStudent: false,
 				isLogin: true,
 				userInfo: {},
-				commentList:[],
+				commentList: [],
 				offset: 0,
 				limit: 10,
 				order: [],
@@ -76,23 +76,34 @@
 					this.key = num;
 				}
 			},
-			moreComments: function() {
-				this.getCommentList();
-				offset += limit;
-				limit *= 2;
-			},
 			async getCommentList() {
 				const res = await wx.cloud.callContainer({
 					config: {
 						env: 'prod-9go38k3y9fee3b2e',
 					},
-					path: "/course/getCommentList?courseID=" + this.courseID + "&offset=" + this.offset + "&limit=" + this.limit + "&order=" + this.orderType[this.key],
+					path: "/course/getCommentList?courseID=" + this.course.courseID + "&offset=" + this
+						.offset + "&limit=" + this.limit + "&order=" + this.orderType[this.key],
 					method: 'GET',
 					header: {
 						'X-WX-SERVICE': 'springboot-f8i8',
 					}
 				});
-				this.commentList = res.data.data;
+				if (res.data.status == 100 && limit <= 40) {
+					offset += limit;
+					limit *= 2;
+				} else if (res.data.status == 100) {
+					offset += limit;
+				} else {
+					/* 没有成功获取commentList */
+					uni.showToast({
+						title: '出现未知错误',
+						duration: 2000
+					})
+				}
+				this.commentList = this.commentList.concat(res.data.data); /* commentList拼接到最近请求的数据 */
+				if (res.data.length == 0){
+					status = 'noMore';
+				}
 			},
 			async login() {
 				const res = await wx.cloud.callContainer({
@@ -230,11 +241,12 @@
 	.course-diff-like {
 		font-weight: 250;
 	}
-	
-	.course-box{
+
+	.course-box {
 		height: 168px;
 		margin-bottom: 2px;
 	}
+
 	.credit-box {
 		width: 80px;
 		height: 80%;
@@ -296,7 +308,7 @@
 		font-weight: 400;
 	}
 
-	.comment-container{
+	.comment-container {
 		height: calc(100vh - 225px);
 		width: 100%;
 		overflow: hidden;

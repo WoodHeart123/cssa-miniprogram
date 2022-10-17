@@ -1,12 +1,10 @@
+/* CDN 服务仅供平台体验和调试使用，平台不承诺服务的稳定性，企业客户需下载字体包自行发布使用并做好备份。 */
+/* CDN 服务仅供平台体验和调试使用，平台不承诺服务的稳定性，企业客户需下载字体包自行发布使用并做好备份。 */
 @font-face {
-	font-family: "iconfont";
-	/* Project id 3406119 */
-	src: url('iconfont.woff2?t=1663950477317') format('woff2'),
-		url('iconfont.woff?t=1663950477317') format('woff'),
-		url('iconfont.ttf?t=1663950477317') format('truetype');
-/* 	src: url('//at.alicdn.com/t/c/font_3671410_q9pdbwrs21c.woff2?t=1664141559638') format('woff2'),
-		url('//at.alicdn.com/t/c/font_3671410_q9pdbwrs21c.woff?t=1664141559638') format('woff'),
-		url('//at.alicdn.com/t/c/font_3671410_q9pdbwrs21c.ttf?t=1664141559638') format('truetype'); */
+  font-family: 'iconfont';  /* Project id 3406119 */
+  src: url('//at.alicdn.com/t/c/font_3406119_6s4dqgzmyfk.woff2?t=1664649487409') format('woff2'),
+       url('//at.alicdn.com/t/c/font_3406119_6s4dqgzmyfk.woff?t=1664649487409') format('woff'),
+       url('//at.alicdn.com/t/c/font_3406119_6s4dqgzmyfk.ttf?t=1664649487409') format('truetype');
 }
 
 .iconfont {
