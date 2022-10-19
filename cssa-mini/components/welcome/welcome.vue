@@ -1,8 +1,8 @@
 <template>
 	<view class="welcome">
 		<view class="welcome-title">欢迎来到CSSA小助手</view>
-		<view class="welcome-text">请完善个人信息以更好的帮助CSSA了解你</view>
-		<button class="button" @click="toUserInfo">完善个人信息</button>
+		<view class="welcome-text">请完善联系方式以更好的帮助CSSA了解你</view>
+		<button class="button" @click="toUserInfo">完善联系方式</button>
 	</view>
 </template>
 

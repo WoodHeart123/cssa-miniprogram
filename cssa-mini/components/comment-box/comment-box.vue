@@ -2,23 +2,23 @@
 	<view class="comment-box">
 		<view class="comment-head-area row-container">
 			<image class="avatar" src="../../static/index/maomao.jpg"></image>
-			<view class="rate-box">
-				<view class="row-container">
-					<view><text>难度：</text></view>
-					<uni-rate readonly="true" :value="comment.difficulty" allowHalf="true" size="15"></uni-rate>
-					<view><text>{{comment.difficulty}}</text></view>
+			<view class="user-rate-box">
+				<view class="row-container rate-sub-box">
+					<view><text class="rate-text">难度：</text></view>
+					<uni-rate readonly="true" :value="comment.difficulty" allowHalf="true" size="17"></uni-rate>
+					<view><text class="rate-text">{{comment.difficulty}}</text></view>
 				</view>
-				<view class="row-container">
-					<view><text>喜爱： </text></view>
-					<uni-rate readonly="true" :value="comment.prefer" allowHalf="true" size="15"></uni-rate>
-					<view><text>{{comment.prefer}}</text></view>
+				<view class="row-container rate-sub-box">
+					<view><text class="rate-text">喜爱： </text></view>
+					<uni-rate readonly="true" :value="comment.prefer" allowHalf="true" size="17"></uni-rate>
+					<view><text class="rate-text">{{comment.prefer}}</text></view>
 				</view>
 			</view>
-			<view class="comment-time"><text>{{comment.commentTime}}</text></view>
+			<view class="comment-time"><text>{{computeCommentTime}}</text></view>
 		</view>
 		<view class="wrap">
 			<view  :class="this.more?'comment-body comment-body-more':'comment-body'">
-				<text v-if="!more" class="more-button" @click="moreText">更多</text>
+				<text v-if="this.more" class="more-button" @click="moreText">更多</text>
 				<text id="comment-text">{{comment.comment}}</text>
 			</view>
 		</view>
@@ -26,7 +26,7 @@
 		<view class="row-container comment-end">
 			<view class="row-container">
 				<text class="time-professor">{{comment.courseTime}}</text>
-				<text>;</text>
+				<text>|</text>
 				<text class="time-professor">{{comment.professor}}</text>
 			</view>
 			<view class="row-container">
@@ -50,7 +50,6 @@
 		onShow(){
 			const query = uni.createSelectorQuery().in(this);
 			query.select('#comment-text').boundingClientRect(data => {
-			  console.log(JSON.stringify(data));
 			  if(data.height < 100){
 				  this.more = true;
 			  }
@@ -74,8 +73,16 @@
 				});
 				this.liked = true;
 			},
+		},
+		computed:{
+			computeCommentTime(){
+				 moment.locale('zh-cn');
+				return Date.now()-this.comment.commentTime >= 86400000 * 7 ?moment(this.comment.commentTime).format("MM-DD"):moment(this.comment.commentTime).fromNow();
+			}
 		}
 	}
+	import moment from "moment/min/moment-with-locales";  
+	import 'moment/locale/zh-cn';
 </script>
 
 <style>
@@ -125,9 +132,8 @@
 
 	}
 
-	.rate-box {
+	.user-rate-box {
 		font-size: 10pt;
-		height: 50px;
 		text-align: left;
 		margin-left: 10px;
 		width: calc(100% - 140px);
@@ -182,6 +188,19 @@
 	}
 
 	.time-professor {
-		margin-left: 4pt;
+		margin-left: 4px;
+		margin-right: 5px;
+	}
+	.rate-sub-box {
+		height: 17px;
+		line-height: 17px;
+		align-items: center;
+		font-size: 14px;
+	}
+	
+	.rate-text{
+		color:#aaa;
+		font-size: 12px;
+		margin-left:5px;
 	}
 </style>

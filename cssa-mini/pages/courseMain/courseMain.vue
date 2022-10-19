@@ -7,8 +7,8 @@
 			<view :class="showMenu?'main-menu-half':'main-content'" class="column-container main-content">
 				<view class="row-container top-bar">
 					<view class="row-container department-select">
-						<uni-transition ref="menuOpen" :show=true>
-							<text class='iconfont icon' @click="clickMenu">&#xed55;</text>
+						<uni-transition ref="menuOpen" show="true">
+							<text class="iconfont icon" @click="clickMenu">&#xed55;</text>
 						</uni-transition>
 					</view>
 					<view :class="searching?'search-bar-selected':'search-bar'" class="search-bar">
@@ -57,7 +57,7 @@
 						<view v-for="(course,index) in courseList" :key="index">
 							<course-box-vue :course="course" class="box"></course-box-vue>
 						</view>
-						<uni-load-more v-show="courseList.length >= 10" :status="status"></uni-load-more>
+						<uni-load-more v-show="courseList.length >= 10" :status="status" :contentText="contentText"></uni-load-more>
 					</scroll-view>
 				</view>
 			</view>
@@ -90,6 +90,11 @@
 				departmentName: "所有课程",
 				timer: {},
 				suggestList: [],
+				contentText:{
+					contentdown:"上拉显示更多",
+					contentrefresh:"正在加载...",
+					contentnomore:"没有更多课程了"
+				}
 			}
 		},
 		onLoad() {
@@ -278,5 +283,5 @@
 
 <style>
 	@import '@/static/iconfont/iconfont.css';
-	@import "./courseMain.css"
+	@import "./courseMain.css";
 </style>

@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view id="second-main">
 		<view class="menu row-container">
 			<view class="search-box">
 				<uni-icons type="search" size="30"></uni-icons>
@@ -12,25 +12,24 @@
 				</view>
 			</view>
 		</view>
-		<view></view>
+		<scroll-view scroll-y="true" show-scrollbar="true" refresher-enabled="true"
+			class="column-container comment-container" @scrolltolower="">
+			<view class="box">
+				<productBoxVue></productBoxVue>
+				<productBoxVue></productBoxVue>
+				<productBoxVue></productBoxVue>
+				<productBoxVue></productBoxVue>
+				<productBoxVue></productBoxVue>
+				<productBoxVue></productBoxVue>
+				<productBoxVue></productBoxVue>
+				<productBoxVue></productBoxVue>
+				<productBoxVue></productBoxVue>
+				<productBoxVue></productBoxVue>
+				<productBoxVue></productBoxVue>
+			</view>
+			<uni-load-more status="more"></uni-load-more>
+		</scroll-view>
 	</view>
-	<scroll-view scroll-y="true" show-scrollbar="true" refresher-enabled="true"
-		class="column-container comment-container" @scrolltolower="">
-		<view class="box">
-			<productBoxVue></productBoxVue>
-			<productBoxVue></productBoxVue>
-			<productBoxVue></productBoxVue>
-			<productBoxVue></productBoxVue>
-			<productBoxVue></productBoxVue>
-			<productBoxVue></productBoxVue>
-			<productBoxVue></productBoxVue>
-			<productBoxVue></productBoxVue>
-			<productBoxVue></productBoxVue>
-			<productBoxVue></productBoxVue>
-			<productBoxVue></productBoxVue>
-		</view>
-		<uni-load-more status="more"></uni-load-more>
-	</scroll-view>
 </template>
 
 <script>
@@ -55,10 +54,22 @@
 </script>
 
 <style>
+	#second-main{
+		position:absolute;
+		width: 100vw;
+		height: 100vh;
+		top:0;
+	}
 	.column-container {
 		display: flex;
 	}
 
+	.comment-container{
+		margin-top:55px;
+		height: calc(100vh - 55px);
+		width: 100vw;
+		background-color: white;
+	}
 	.row-container {
 		display: flex;
 		flex-direction: row;
@@ -70,8 +81,9 @@
 		height: 50px;
 		align-items: center;
 		background-color: white;
-		padding-bottom: 10px;
-		transition: all 1s;
+		/* border-bottom:1px solid #ccc; */
+		box-shadow: rgba(0, 0, 0, 0.35) 0px 2px 5px;
+		box-sizing: border-box;
 	}
 
 	.menu-scroll {

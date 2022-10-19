@@ -15,7 +15,7 @@
 				</view>
 				<img class="image" src="../../static/forum.svg" />
 			</view>
-			<view class="row-container function-button disabled">
+			<view class="row-container function-button" @click="toSecond">
 				<view class="row-container function-button">
 					<view class="column-container function-text">
 						<text>二手商品</text>
@@ -43,7 +43,7 @@
 			</view>
 		</view>
 
-		<view class="leader-list">
+<!-- 		<view class="leader-list">
 			<text class="cssa-intro-text">CSSA介绍</text>
 			<scroll-view class="row-container leader-intro" :scroll-x="true">
 				<president-box v-for="(leader, index) in leaderInfo" :key="index" :index="index" :leader="leader">
@@ -58,7 +58,7 @@
 			<view class="pop-div" />
 			<view class="pop-intro">{{popupLeader.intro}}</view>
 			<view style="height: 4vh;" />
-		</uni-popup>
+		</uni-popup> -->
 	</view>
 </template>
 
@@ -92,7 +92,6 @@
 		methods: {
 			openLeaderPop: function(index) {
 				this.popupLeader = this.leaderInfo[index];
-				console.log(index)
 				this.$refs.leaderPopup.open('bottom');
 			},
 			change: function(e) {
@@ -111,6 +110,11 @@
 					url: "/pages/courseMain/courseMain"
 				})
 			},
+			toSecond:function(){
+				uni.navigateTo({
+					url:"/pages/second/secondMain",
+				})
+			}
 		}
 	}
 	import actBoxVue from '@/components/act-box/act-box.vue';
@@ -118,6 +122,7 @@
 	import list from '@/pages/main/main.js'
 </script>
 
+Login
 <style>
 	@import '@/static/iconfont/iconfont.css';
 

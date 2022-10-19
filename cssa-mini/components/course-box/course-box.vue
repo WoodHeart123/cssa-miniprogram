@@ -15,7 +15,7 @@
 				<uni-rate readonly="true" :value="course.avgPrefer" allowHalf="true" size="15"></uni-rate>
 				<view class="rate-text"><text>{{course.avgPrefer}}</text></view>
 			</view>
-			<view  class="footnote"><text>{{course.commentCount}}人参与此评论</text></view>
+			<view  class="footnote"><text>{{course.commentCount==0?'暂时无人评论':course.commentCount.toString() + '人参与此评论'}}</text></view>
 		</view>
 	</view>
 </template>
@@ -81,7 +81,7 @@
 	.rate-box {
 		margin: 0 10px 2px 10px;
 		height: 23px;
-		line-height: 20px;
+		line-height: 23px;
 		align-items: center;
 		font-size: 14px;
 	}
@@ -92,7 +92,7 @@
 		margin-right: 10px;
 	}
 	.rate-text{
-		color:#aaa;
+		color:#ccc;
 		font-size: 12px;
 		margin-left:5px;
 	}

@@ -13,7 +13,7 @@
 			<com-box-vue :comDetail="comDetail"></com-box-vue>
 		</view>
 		<view class="post">
-			<uni-fab :pattern="pattern" horizontal="right" vertical="bottom"/>
+			<uni-fab :pattern="pattern" horizontal="right" vertical="bottom" />
 		</view>
 	</view>
 </template>
@@ -23,80 +23,66 @@
 		components: {
 			comBoxVue
 		},
-		
-		data(){
-			return{
-				comDetailList:[
-					{
-						content:"Madison周围都有什么好玩的呢，有谁推荐一下吗，如果有推荐可以联系我：123456789. 大家可以一起玩，开心最重要了,Madison周围都有什么好玩的呢，有谁推荐一下吗，如果有推荐可以联系我：123456789. 大家可以一起玩，开心最重要了",
-						shrinkContent:"",
-						imageUrls:["../../static/renwu.jpeg"],
-						imageNum:0,
+
+		data() {
+			return {
+				comDetailList: [{
+						title: "Madison周围都有什么好玩的呢",
+						content: "Madison周围都有什么好玩的呢，有谁推荐一下吗，如果有推荐可以联系我：123456789. 大家可以一起玩，开心最重要了。",
+						shrinkContent: "",
+						imageUrls: ["https://cssa-mini.oss-cn-shanghai.aliyuncs.com/cssa-community-image/renwu.jpeg"],
 					},
 					{
-						content:"Madison周围都有什么好玩的呢，有谁推荐一下吗，如果有推荐可以联系我：123456789. 大家可以一起玩，开心最重要了,Madison周围都有什么好玩的呢，有谁推荐一下吗，如果有推荐可以联系我：123456789. 大家可以一起玩，开心最重要了",
-						shrinkContent:"",
-						imageUrls:["../../static/renwu.jpeg", "../../static/renwu.jpeg"],
-						imageNum:0,
+						title: "Madison周围都有什么好玩的呢Madison周围都有什么好玩的呢Madison周围都有什么好玩的呢",
+						content: "Madison周围都有什么好玩的呢。",
+						shrinkContent: "",
+						imageUrls: ["https://cssa-mini.oss-cn-shanghai.aliyuncs.com/cssa-community-image/renwu.jpeg",
+							"https://cssa-mini.oss-cn-shanghai.aliyuncs.com/cssa-community-image/renwu.jpeg"
+						],
 					},
 					{
-						content:"Madison周围都有什么好玩的呢，有谁推荐一下吗，如果有推荐可以联系我：123456789. 大家可以一起玩，开心最重要了,Madison周围都有什么好玩的呢，有谁推荐一下吗，如果有推荐可以联系我：123456789. 大家可以一起玩，开心最重要了",
-						shrinkContent:"",
-						imageUrls:["../../static/renwu.jpeg", "../../static/renwu.jpeg", "../../static/renwu.jpeg"],
-						imageNum:0,
+						title: "Madison周围都有什么好玩的呢Madison周围都有什么好玩的呢Madison周围都有什么好玩的呢",
+						content: "Madison周围都有什么好玩的呢，有谁推荐一下吗，如果有推荐可以联系我：123456789. 大家可以一起玩，开心最重要了,Madison周围都有什么好玩的呢，有谁推荐一下吗，如果有推荐可以联系我：123456789. 大家可以一起玩，开心最重要了",
+						shrinkContent: "",
+						imageUrls: [
+							"https://cssa-mini.oss-cn-shanghai.aliyuncs.com/cssa-community-image/renwu.jpeg",
+							"https://cssa-mini.oss-cn-shanghai.aliyuncs.com/cssa-community-image/renwu.jpeg",
+							"https://cssa-mini.oss-cn-shanghai.aliyuncs.com/cssa-community-image/renwu.jpeg"
+						],
 					},
 					{
-						content:"Madison周围都有什么好玩的呢，有谁推荐一下吗，如果有推荐可以联系我：123456789. 大家可以一起玩，开心最重要了,Madison周围都有什么好玩的呢，有谁推荐一下吗，如果有推荐可以联系我：123456789. 大家可以一起玩，开心最重要了",
-						shrinkContent:"",
-						imageUrls:["../../static/renwu.jpeg","../../static/renwu.jpeg","../../static/renwu.jpeg","../../static/renwu.jpeg","../../static/renwu.jpeg","../../static/renwu.jpeg"],
-						imageNum:0,
+						title: "Madison周围都有什么好玩的呢Madison周围都有什么好玩的呢Madison周围都有什么好玩的呢",
+						content: "Madison周围都有什么好玩的呢，有谁推荐一下吗，如果有推荐可以联系我：123456789. 大家可以一起玩，开心最重要了,Madison周围都有什么好玩的呢，有谁推荐一下吗。",
+						shrinkContent: "",
+						imageUrls: [],
 					},
 				],
 				searching: false,
 				pattern: {
-							buttonColor: '#007AFF',
-							iconColor: '#fff'
-						},
-				comDetailList:[
-					{
-						title: 有没有周末推荐去玩的地方吗,
-						name: Jucy,
-						content:"Madison周围都有什么好玩的呢，有谁推荐一下吗，如果有推荐可以联系我：123456789. 大家可以一起玩，开心最重要了",
-						shrinkContent:"",
-						imageUrls:["../../static/renwu.jpeg","../../static/renwu.jpeg","../../static/renwu.jpeg","../../static/renwu.jpeg","../../static/renwu.jpeg","../../static/renwu.jpeg"],
-						imageNum:0
-					},
-					{
-						title: 有没有周末推荐去玩的地方吗,
-						name: Jucy,
-						content:"Madison周围都有什么好玩的呢，有谁推荐一下吗，如果有推荐可以联系我：123456789. 大家可以一起玩，开心最重要了",
-						shrinkContent:"",
-						imageUrls:["../../static/renwu.jpeg","../../static/renwu.jpeg","../../static/renwu.jpeg","../../static/renwu.jpeg","../../static/renwu.jpeg","../../static/renwu.jpeg"],
-						imageNum:0
-					}
-				]
-				
+					buttonColor: '#007AFF',
+					iconColor: '#fff'
+				},
+
 			}
 		},
 		onload() {
 			this.init();
 			uni.startPullDownRefresh();
 		},
-		
-		onPullDownRefresh(){
+
+		onPullDownRefresh() {
 			console.log("refresh");
 			this.init();
 			setTimeout(function() {
 				uni.stopPullDownRefresh();
-			},1000);
+			}, 1000);
 		},
-		
-		onReachBottom(){
-			console.log("...");
+
+		onReachBottom() {
 			this.loadMore();
 			this.init();
 			uni.showNavigationBarLoading()
-			setTimeout(function(){
+			setTimeout(function() {
 				uni.hideNavigationBarLoading();
 			}, 1000);
 		},
@@ -120,11 +106,14 @@
 </script>
 
 <style>
+	#community{
+		padding-bottom: 20px;
+	}
 	.search-bar {
 		height: 10vh;
 		background-color: white;
 	}
-	
+
 	.column-container {
 		height: 100vh;
 		display: flex;

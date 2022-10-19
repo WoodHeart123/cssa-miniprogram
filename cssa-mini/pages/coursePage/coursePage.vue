@@ -32,14 +32,14 @@
 				<text>热度</text>
 			</view>
 		</view>
-		<scroll-view scroll-y="true" show-scrollbar="true" refresher-enabled="true"
+		<scroll-view scroll-y="true" show-scrollbar="true" refresher-enabled="false"
 			class="column-container comment-container" @scrolltolower="getCommentList()">
 			<view class="box" v-for="(comment, index) in commentList" :key="index">
 				<commentBoxVue :comment="comment"></commentBoxVue>
 			</view>
-			<uni-load-more status="status"></uni-load-more>
+			<uni-load-more :status="status" :contentText="contentText"></uni-load-more>
 		</scroll-view>
-		<uni-fab :pattern="pattern" horizontal="left" vertical="bottom" popMene="false" @fabClick="toComment" />
+		<uni-fab :pattern="pattern" horizontal="right" vertical="bottom" popMene="false" @fabClick="toComment" />
 	</view>
 </template>
 
@@ -56,7 +56,6 @@
 				course: {},
 				showLoad: false,
 				status: "more",
-				currentPage: 0,
 				key: 0,
 				orderType: ["SORT_BY_TIME", "SORT_BY_LIKE"],
 				isStudent: false,
@@ -66,17 +65,26 @@
 				offset: 0,
 				limit: 10,
 				order: [],
+				contentText:{
+					contentdown:"上拉显示更多",
+					contentrefresh:"正在加载...",
+					contentnomore:"没有更多评论了"
+				}
 			}
 		},
 		methods: {
 			changeKey: function(num) {
 				if (this.key != num) {
-					this.currentPage = 0;
-					this.getCommentList();
+					this.offset = 0;
 					this.key = num;
+					this.getCommentList();
 				}
 			},
 			async getCommentList() {
+				if (this.status == "noMore") {
+					return;
+				}
+				this.status = "loading"
 				const res = await wx.cloud.callContainer({
 					config: {
 						env: 'prod-9go38k3y9fee3b2e',
@@ -88,11 +96,16 @@
 						'X-WX-SERVICE': 'springboot-f8i8',
 					}
 				});
-				if (res.data.status == 100 && limit <= 40) {
-					offset += limit;
-					limit *= 2;
+				if (res.data.data.length < this.limit) {
+					this.status = 'noMore';
+				} else {
+					this.status = "more";
+				}
+				if (res.data.status == 100 && this.limit <= 40) {
+					this.offset += this.limit;
+					this.limit *= 2;
 				} else if (res.data.status == 100) {
-					offset += limit;
+					this.offset += this.limit;
 				} else {
 					/* 没有成功获取commentList */
 					uni.showToast({
@@ -101,9 +114,7 @@
 					})
 				}
 				this.commentList = this.commentList.concat(res.data.data); /* commentList拼接到最近请求的数据 */
-				if (res.data.length == 0){
-					status = 'noMore';
-				}
+
 			},
 			async login() {
 				const res = await wx.cloud.callContainer({
@@ -157,7 +168,8 @@
 				// 	return;
 				// }
 				uni.navigateTo({
-					url: "/pages/postComment/postComment?courseID=" + this.course.courseID,
+					url: "/pages/postComment/postComment?course=" + encodeURIComponent(JSON.stringify(this
+						.course)),
 				});
 			}
 		},
@@ -166,9 +178,14 @@
 			uni.setNavigationBarTitle({
 				title: this.course.departmentAbrev + " " + String(this.course.courseNum)
 			});
-			this.getCommentList();
+		},
+		onHide() {
+			this.status = "more";
+			this.offset = 0;
+			this.commentList = [];
 		},
 		onShow() {
+			this.getCommentList();
 			uni.getStorage({
 				key: "userInfo",
 				success: (res) => {
