@@ -1,17 +1,17 @@
 <template>
 	<view class="comment-box">
 		<view class="comment-head-area row-container">
-			<image class="avatar" src="../../static/index/maomao.jpg"></image>
+			<image class="avatar" :src="'https://cssa-mini.oss-cn-shanghai.aliyuncs.com/cssa-mini-avatar/' + this.comment.userAvatar + '.png'"></image>
 			<view class="user-rate-box">
 				<view class="row-container rate-sub-box">
-					<view><text class="rate-text">难度：</text></view>
+					<view><text class="user-rate-text">难度:</text></view>
 					<uni-rate readonly="true" :value="comment.difficulty" allowHalf="true" size="17"></uni-rate>
-					<view><text class="rate-text">{{comment.difficulty}}</text></view>
+					<view><text class="user-rate-text">{{comment.difficulty}}</text></view>
 				</view>
 				<view class="row-container rate-sub-box">
-					<view><text class="rate-text">喜爱： </text></view>
+					<view><text class="user-rate-text">喜爱:</text></view>
 					<uni-rate readonly="true" :value="comment.prefer" allowHalf="true" size="17"></uni-rate>
-					<view><text class="rate-text">{{comment.prefer}}</text></view>
+					<view><text class="user-rate-text">{{comment.prefer}}</text></view>
 				</view>
 			</view>
 			<view class="comment-time"><text>{{computeCommentTime}}</text></view>
@@ -31,7 +31,7 @@
 			</view>
 			<view class="row-container">
 				<view :class="liked==false?'iconfont icon-like':'iconfont icon-like-fill'" @click="addZan"></view>
-				<text class="zan_count">{{comment.likeCount}}</text>
+<!-- 				<text class="zan_count">{{comment.likeCount}}</text> -->
 			</view>
 		</view>
 	</view>
@@ -198,9 +198,10 @@
 		font-size: 14px;
 	}
 	
-	.rate-text{
+	.user-rate-text{
 		color:#aaa;
 		font-size: 12px;
-		margin-left:5px;
+		margin-right:5px;
+		margin-left: 5px;
 	}
 </style>

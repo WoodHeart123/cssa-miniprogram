@@ -48,7 +48,7 @@
 							<text class="iconfont" v-show="key==4&&sortIndex==4">&#xed58;</text>
 							<text class="iconfont" v-show="key==4&&sortIndex==5">&#xed59;</text>
 						</view>
-						<view class="filter-button" v-show="key!=0"><text @click="cancelFilter()">取消筛选</text></view>
+						<view class="filter-button" v-show="key!=0"><text @click="cancelFilter">取消筛选</text></view>
 					</view>
 					<scroll-view scroll-y="true" show-scrollbar="true" refresher-enabled="true"
 						class="column-container course-list-box"
