@@ -1,9 +1,11 @@
 <template>
 	<scroll-view id="post-comment" :scroll-y="true">
-		<view class="title"><text>{{this.comment.courseName}}</text>
-		</view>
-		<uni-forms ref="form" :model="comment" label-align="left" :rules="rules">
-			<uni-forms-item name="professor" label="教授名">
+		<view class="comment-form">
+			<view class="title">
+				<text>{{this.comment.courseName}}</text>
+			</view>
+			<uni-forms ref="form" :model="comment" label-align="left" :rules="rules">
+			<uni-forms-item name="professor" label="教授">
 				<uni-easyinput :clearable="false" v-model="comment.professor" placeholder="教授名" />
 			</uni-forms-item>
 			<view class="blank"></view>
@@ -24,6 +26,8 @@
 			</uni-forms-item>
 		</uni-forms>
 		<button class="button" type="default" @click="submit">提交</button>
+		</view>
+		
 	</scroll-view>
 </template>
 
@@ -161,14 +165,14 @@
 
 <style>
 	#post-comment {
-		width: 86vw;
 		height: 100vh;
-
-		padding-left: 7vw;
-		padding-right: 7vw;
+		width:100vw;
 		background-color: white;
 	}
-
+	.comment-form{
+		padding:15px;
+		width:calc(100vw - 30px);
+	}
 	.title {
 		margin-top: 2vh;
 		height: 5vh;
