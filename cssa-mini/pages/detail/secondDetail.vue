@@ -8,19 +8,14 @@
 		<view class="blank_line"></view>
 		<view class="basic">
 			<view class="price-box">
-				<text class="iconfont icon">&#xe70b;</text>
-				<text class="price">1200</text>
+				<view class="iconfont icon">&#xe70b;</view>
+				<view class="price">1200</view>
 			</view>
-			<view class="second_name"><span>{{secondItem.name}}</span></view>
-		</view>
-		<view class="blank_line"></view>
-		<view class="type">
-			<text style="margin-left: 10px;">类型：</text>
-			<text style="margin-right: 10px;" v-for="(type, index) in secondItem.types">{{type}}</text>
-		</view>
-		<view class="blank_line"></view>
-		<view class="quantity">
-			<text style="margin-left: 10px;">成色：{{secondItem.quantity}}</text>
+			<view class="second_desc">
+				<view class="quantity-tag"><view class="quantity-content">全新</view></view>
+				<view class="deliver-tag"><view class="deliver-content">自取</view></view>
+				<text class = "second_name">{{secondItem.name}}</text>
+			</view>
 		</view>
 		<view class="blank_line"></view>
 		<view class="contact">
@@ -30,13 +25,21 @@
 		<view class="blank_line"></view>
 		<view class="description">
 			<view class="tit">详情介绍</view>
+			<!--
 			<scroll-view class="scroll_page" scroll-y="true" :style="height">
 				<rich-text  class="content">{{secondItem.content}}</rich-text>
 			</scroll-view>
+			-->
+			<view class="scroll_page">
+				<rich-text class="content">{{secondItem.content}}</rich-text>
+			</view>
 		</view>
+		<view class="white"/>
 		<view class="favorite">
 			<!--<uni-goods-nav class="buy" :buttonGroup="buttonGroup" :options="options" fill="true" @buttonClick="toPay"></uni-goods-nav>-->
-			<button class="share" open-type="share">分享</button>
+			<button class="share" style="background-color: #f5f5f5;" open-type="share">
+				<img class="share-img" src="/static/fenxiang.png">
+			</button>
 			<button class="buy" type="primary">收藏</button>
 		</view>
 	</view>
@@ -65,14 +68,7 @@
 							buttonColor: '#007AFF',
 							iconColor: '#fff'
 						},
-				options: [{
-									icon: 'upload',
-									text: '分享'
-								}, 
-								{
-									icon: 'pyq',
-									text: '朋友圈'
-								}]
+				options: []
 				}
 		},
 		
@@ -89,7 +85,9 @@
 			    console.log(res.target)
 			  }
 			  return {
-			    title: this.secondItem.name,
+			    title: this.secondItem.name + ": $" + 1200,
+				desc: "CSSA二手交易平台",
+				content: "very happy",
 				imageUrl: "/static/renwu.jpeg",
 			    path: '/pages/detail/secondDetail?secondItem=' + encodeURIComponent(JSON.stringify(this.secondItem))
 			  }
@@ -129,13 +127,12 @@
 			background: #eee;
 		}
 		.basic {
-			padding: 10px;
+			//padding-left: 10px;
+			//padding-right: 10px;
 			.price-box {
 				display:flex;
 				flex-direction: row;
-				align-items: center;
-				font-size: 30rpx;
-				color: darkred;
+				//align-items: center;
 				
 				/*
 				text:nth-child(2) {
@@ -145,17 +142,57 @@
 					margin-left: 20rpx;
 				}
 				*/
+				.iconfont{
+					padding-left: 5px;
+					padding-top: 5px;
+					font-size: 25px;
+					font-weight: bold;
+					color: #e13f05;
+				}
 				
 				.price{
-					line-height: 30rpx;
-					font-size:30rpx;
+					font-size:25px;
+					font-weight: bold;
+					color: #e13f05;
 				}
+				
 			}
-		
-			.second_name {
-				font-size: 32rpx;
-				line-height: 60rpx;
-				font-weight: 600;
+			
+			.second_desc{
+				display:flex;
+				flex-direction: row;
+				.quantity-tag{
+					font-size: 13px;
+					margin-left: 8px;
+					padding-left: 5px;
+					color: #db3024;
+					.quantity-content{
+						margin-top: 3px;
+						padding-left: 5px;
+						padding-right: 5px;
+						background-color: #f2b4b0;
+						border-radius: 5px;
+					}
+				}
+				.deliver-tag{
+					font-size: 13px;
+					padding-left: 5px;
+					color: #db3024;
+					.deliver-content{
+						margin-top: 3px;
+						padding-left: 5px;
+						padding-right: 5px;
+						background-color: #f2b4b0;
+						border-radius: 5px;
+					}
+				}
+				.second_name {
+					padding-left: 10px;
+					padding-right: 10px;
+					font-size: 18px;
+					//line-height: 40px;
+					font-weight: 700;
+				}
 			}
 		}
 		.contact{
@@ -173,23 +210,41 @@
 				padding: 10px;
 				width:calc(100% - 15px);
 			}
+			
 		}
 		.favorite {
+			padding-top: 1vh;
+			height: 8vh;
 			display: flex;
 			flex-direction: row;
 			position: fixed;
 			left: 0;
 			right: 0;
 			bottom: 0;
+			background-color: #f5f5f5;
 			
 			.buy{
+				border-radius: 100px;
+				height: 6vh;
 				width: 70vw;
 				background-color: dodgerblue;
 			}
 			
-			.share{
-				width:20vw
+			.share::after{
+				border: none;
+				height: 6vh;
+				width:20vw;
 			}
+			
+			
+			.share-img{
+				padding-top: 1vh;
+				height:8vw;
+				width: 8vw;
+			}
+		}
+		.white{
+			height: 9vh;
 		}
 	}
 </style>
