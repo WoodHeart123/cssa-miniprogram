@@ -130,7 +130,16 @@
 			}
 
 		}
-	],
+	    ,{
+            "path" : "pages/myComment/myComment",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
 	"condition": {
 		"current": 0,
 		"list": [{

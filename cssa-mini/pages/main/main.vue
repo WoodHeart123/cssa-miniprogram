@@ -88,6 +88,7 @@
 		onLoad() {
 			wx.cloud.init();
 			uni.$on("openPopUp", (index) => this.openLeaderPop(index));
+			console.log(this);
 		},
 		methods: {
 			openLeaderPop: function(index) {
