@@ -110,8 +110,9 @@
 					/* 没有成功获取commentList */
 					uni.showToast({
 						title: '出现未知错误',
-						duration: 2000
-					})
+						duration: 2000,
+						image: "../../static/wrong.png"
+					});
 				}
 				this.commentList = this.commentList.concat(res.data.data); /* commentList拼接到最近请求的数据 */
 
