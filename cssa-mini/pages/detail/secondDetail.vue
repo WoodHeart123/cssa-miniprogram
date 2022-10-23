@@ -19,8 +19,16 @@
 		</view>
 		<view class="blank_line"></view>
 		<view class="contact">
-			<view style="margin-left: 10px;">微信号：1234567</view>
-			<view style="margin-left: 10px;">手机号：2343459234</view>
+			<view class="contact-box">
+				<view class="contact-tag">
+					<view class="contact-content">联系方式</view>
+				</view>
+				<view class="fuzhi-bt">
+					<img class="fuzhi-img" src="/static/fuzhi.png" @click="setClipboardData">
+				</view>
+			</view>
+			<view style="margin-left: 13px;">微信号：1234567</view>
+			<view style="margin-left: 13px; margin-bottom: 10px;">手机号：2343459234</view>
 		</view>
 		<view class="blank_line"></view>
 		<view class="description">
@@ -105,6 +113,17 @@
 				console.log(this.height);
 			});
 		},
+	
+		methods: {
+			setClipboardData: function() {
+				uni.setClipboardData({
+					data: 'hello',
+					success: function () {
+						console.log('success');
+					}
+				});
+			}
+		}
 	}
 </script>
 
@@ -122,9 +141,10 @@
 			display: inline;
 		}
 		.blank_line {
-			height: 10rpx;
-			width: 100%;
+			height: 2px;
+			width: 90vw;
 			background: #eee;
+			margin-left: 5vw;
 		}
 		.basic {
 			//padding-left: 10px;
@@ -143,7 +163,7 @@
 				}
 				*/
 				.iconfont{
-					padding-left: 5px;
+					padding-left: 8px;
 					padding-top: 5px;
 					font-size: 25px;
 					font-weight: bold;
@@ -196,7 +216,35 @@
 			}
 		}
 		.contact{
-			position: relative;
+			.contact-box{
+				display: flex;
+				flex-direction: row;
+				.contact-tag{
+					margin-top: 7px;
+					font-size: 13px;
+					margin-left: 8px;
+					padding-left: 5px;
+					color: #db3024;
+					.contact-content{
+						margin-top: 3px;
+						padding-left: 5px;
+						padding-right: 5px;
+						background-color: #f2b4b0;
+						border-radius: 5px;
+					}
+				}
+				.fuzhi-bt{
+					height: 8vw;
+					width: 8vw;
+					margin-left: 69vw;
+					//background-color: #db3024;
+					margin-top: 2vw;
+					.fuzhi-img{
+						height: 7vw;
+						width: 7vw;
+					}
+				}
+			}
 		}
 		.description {
 			.tit {
