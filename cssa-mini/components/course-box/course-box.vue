@@ -11,7 +11,7 @@
 				<view class="rate-text"><text>{{course.avgDifficulty}}</text></view>
 			</view>
 			<view class="row-container rate-box">
-				<view><text>喜爱： </text></view>
+				<view><text>推荐： </text></view>
 				<uni-rate readonly="true" :value="course.avgPrefer" allowHalf="true" size="15"></uni-rate>
 				<view class="rate-text"><text>{{course.avgPrefer}}</text></view>
 			</view>

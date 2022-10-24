@@ -32,23 +32,26 @@
 				</view>
 				<view class="column-container course-list" v-show="!searching">
 					<view class="row-container filter-box">
+						<view :class="key==0?'filter-selected filter':'filter'" class="row-container"
+							@click="changeKey(0)">
+							<text>课号</text>
+						</view>
 						<view :class="key==1?'filter-selected filter':'filter'" class="row-container"
 							@click="changeKey(1)">
 							<text>热门课程</text>
 						</view>
-						<view :class="key==2?'filter-selected filter':'filter'" class="row-container"
-							@click="changeKey(2)">
-							<text>喜爱</text>
-							<text class="iconfont" v-show="key==2&&sortIndex==3">&#xed58;</text>
-							<text class="iconfont" v-show="key==2&&sortIndex==2">&#xed59;</text>
-						</view>
 						<view :class="key==4?'filter-selected filter':'filter'" class="row-container"
 							@click="changeKey(4)">
-							<text>难度</text>
+							<text>推荐</text>
 							<text class="iconfont" v-show="key==4&&sortIndex==4">&#xed58;</text>
 							<text class="iconfont" v-show="key==4&&sortIndex==5">&#xed59;</text>
 						</view>
-						<view class="filter-button" v-show="key!=0"><text @click="cancelFilter">取消筛选</text></view>
+						<view :class="key==2?'filter-selected filter':'filter'" class="row-container"
+							@click="changeKey(2)">
+							<text>难度</text>
+							<text class="iconfont" v-show="key==2&&sortIndex==3">&#xed58;</text>
+							<text class="iconfont" v-show="key==2&&sortIndex==2">&#xed59;</text>
+						</view>
 					</view>
 					<scroll-view scroll-y="true" show-scrollbar="true" refresher-enabled="true"
 						class="column-container course-list-box"

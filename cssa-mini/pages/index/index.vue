@@ -6,8 +6,8 @@
 		</uni-popup>
 		<view class="user-box" v-if="isLogin">
 			<view class="avatar-box" @click="toChangeAvatar">
-				<img class="avatar"
-					:src="'https://cssa-mini.oss-cn-shanghai.aliyuncs.com/cssa-mini-avatar/' + userInfo.avatar + '.png'">
+				<img class="avatar" 
+					:src="'https://cssa-mini.oss-cn-shanghai.aliyuncs.com/cssa-mini-avatar/' + this.userInfo.avatar + '.png'">
 			</view>
 			<view class="name-box" @click="toUserInfo">
 				<text class="nickname">{{userInfo.nickname}}</text>
