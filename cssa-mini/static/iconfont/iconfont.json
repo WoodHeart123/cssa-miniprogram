@@ -6,6 +6,41 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "4766692",
+      "name": "like",
+      "font_class": "like1",
+      "unicode": "e7c8",
+      "unicode_decimal": 59336
+    },
+    {
+      "icon_id": "4936669",
+      "name": "like-fill",
+      "font_class": "like-fill",
+      "unicode": "e869",
+      "unicode_decimal": 59497
+    },
+    {
+      "icon_id": "1120959",
+      "name": "爱心",
+      "font_class": "aixin",
+      "unicode": "e617",
+      "unicode_decimal": 58903
+    },
+    {
+      "icon_id": "8288959",
+      "name": "爱心",
+      "font_class": "aixin1",
+      "unicode": "e85c",
+      "unicode_decimal": 59484
+    },
+    {
+      "icon_id": "11372696",
+      "name": "社区",
+      "font_class": "shequ",
+      "unicode": "e8b8",
+      "unicode_decimal": 59576
+    },
+    {
       "icon_id": "16375868",
       "name": "发现",
       "font_class": "biaoqianA01_faxian-32",

@@ -9,6 +9,7 @@
 				<img class="avatar" :src="'https://cssa-mini.oss-cn-shanghai.aliyuncs.com/cssa-mini-avatar/' + index + '.png'" />
 			</view>
 		</view>
+		<button class="button" v-show="showConfirm">确认</button>
 	</view>
 </template>
 
@@ -24,6 +25,7 @@
 		},
 		onLoad(options){
 			this.currentAvatar = JSON.parse(decodeURIComponent(options.avatar));
+			this.orignalAvatar = this.currentAvatar;
 		},
 		methods: {
 			select:function(index){
@@ -47,7 +49,7 @@
 }
 .avatar-container{
 	width: 100vw;
-	height: 40vh;
+	height: 45vh;
 	display: flex;
 	flex-flow: row wrap;
 	justify-content: space-around;
@@ -61,6 +63,7 @@
 	width: 90px;
 	height: 90px;
 	border-radius: 10px;
+	margin-top: 20px;
 	
 }
 .selected{
@@ -91,5 +94,14 @@
 	height: 2px;
 	margin-left: 5vw;
 	margin-bottom: 20px;
+}
+.button{
+	width: 30vw;
+	right: 20px;
+	background-color:  #1684FC;
+	border: none;
+	color:white;
+	margin-top: 20px;
+	margin-left: 70vw;
 }
 </style>

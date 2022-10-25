@@ -6,10 +6,11 @@
 		</uni-popup>
 		<view class="user-box" v-if="isLogin">
 			<view class="avatar-box" @click="toChangeAvatar">
-				<img class="avatar" :src="'https://cssa-mini.oss-cn-shanghai.aliyuncs.com/cssa-mini-avatar/' + userInfo.avatar + '.png'">
+				<img class="avatar" 
+					:src="'https://cssa-mini.oss-cn-shanghai.aliyuncs.com/cssa-mini-avatar/' + this.userInfo.avatar + '.png'">
 			</view>
 			<view class="name-box" @click="toUserInfo">
-				<text class="nickname">{{userInfo.nickName}}</text>
+				<text class="nickname">{{userInfo.nickname}}</text>
 				<uni-tag class="tag" v-if="userInfo.isStudent" type="primary" :inverted="false" text="学生认证√" size="mini"
 					:circle="true" />
 				<uni-tag class="tag" v-if="!userInfo.isStudent" :inverted="true" text="认证+" size="small"
@@ -18,7 +19,7 @@
 
 		</view>
 		<view class="user-box" v-if="!isLogin">
-			<button class="login-button" plain="true" @click="getUserProfile">点击登陆</button>
+			<button class="login-button" plain="true" @click="getUserProfile">点击微信授权登陆</button>
 		</view>
 		<view class="function-box">
 			<view class="function-sub-box">
@@ -65,7 +66,7 @@
 		onLoad() {
 			wx.cloud.init();
 		},
-		onShow(){
+		onShow() {
 			uni.getStorage({
 				key: 'userInfo',
 				success: (res) => {
@@ -79,9 +80,8 @@
 		methods: {
 			getUserProfile: function() {
 				uni.getUserProfile({
-					desc: "获取用户头像",
+					desc: "获取用户昵称",
 					success: (userProfile) => {
-						this.$refs.popup.close();
 						this.login(userProfile.userInfo.nickName);
 					},
 				});
@@ -96,7 +96,7 @@
 					config: {
 						env: 'prod-9go38k3y9fee3b2e',
 					},
-					path: "/activity/login?nickname=" + encodeURI(nickname),
+					path: "/user/login?nickname=" + encodeURI(nickname),
 					method: 'GET',
 					header: {
 						'X-WX-SERVICE': 'springboot-f8i8',
@@ -104,19 +104,20 @@
 				});
 				if (res.data.status == 103) {
 					this.$refs.welcome.open();
-				} else {
-					this.userInfo = res.data.data;
-					this.isLogin = true;
-					uni.setStorage({
-						key: "userInfo",
-						data: this.userInfo
-					});
 				}
+				this.userInfo = res.data.data;
+				this.isLogin = true;
+				uni.setStorage({
+					key: "userInfo",
+					data: this.userInfo
+				});
+
 
 			},
-			toChangeAvatar:function(){
+			toChangeAvatar: function() {
 				uni.navigateTo({
-					url: '/pages/changeAvatar/changeAvatar?avatar=' + encodeURIComponent(JSON.stringify(this.userInfo.avatar)),
+					url: '/pages/changeAvatar/changeAvatar?avatar=' + encodeURIComponent(JSON.stringify(this
+						.userInfo.avatar)),
 				});
 			}
 		}

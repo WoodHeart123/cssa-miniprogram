@@ -32,14 +32,15 @@
 				<text>热度</text>
 			</view>
 		</view>
-		<scroll-view scroll-y="true" show-scrollbar="true" refresher-enabled="true" class="column-container comment-container">
+		<scroll-view scroll-y="true" show-scrollbar="true" refresher-enabled="false"
+			class="column-container comment-container" @scrolltolower="getCommentList()">
 			<view class="box" v-for="(comment, index) in commentList" :key="index">
 				<commentBoxVue :comment="comment"></commentBoxVue>
 			</view>
-			<uni-load-more  status="more"></uni-load-more>
+			<uni-load-more :status="status" :contentText="contentText"></uni-load-more>
 		</scroll-view>
-		<uni-fab :pattern="pattern" horizontal="left" vertical="bottom" popMene="false" @fabClick="toComment" />
-		</view>
+		<uni-fab :pattern="pattern" horizontal="right" vertical="bottom" popMene="false" @fabClick="toComment" />
+	</view>
 </template>
 
 <script>
@@ -54,40 +55,74 @@
 				},
 				course: {},
 				showLoad: false,
-				status: "load",
-				currentPage: 0,
+				status: "more",
 				key: 0,
 				orderType: ["SORT_BY_TIME", "SORT_BY_LIKE"],
 				isStudent: false,
 				isLogin: true,
 				userInfo: {},
-				commentList:[
-					{comment:"叽里呱啦叽里呱啦叽里呱啦"},
-					{comment:"叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽"},
-					{comment:"叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦"},
-					{comment:"叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦里叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦"},
-					{comment:"叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦里叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽"},
-					{comment:"叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦叽里呱啦"}
-				]
+				commentList: [],
+				offset: 0,
+				limit: 10,
+				order: [],
+				contentText:{
+					contentdown:"上拉显示更多",
+					contentrefresh:"正在加载...",
+					contentnomore:"没有更多评论了"
+				}
 			}
 		},
 		methods: {
 			changeKey: function(num) {
 				if (this.key != num) {
-					this.currentPage = 0;
-					this.getCommentList();
+					this.offset = 0;
 					this.key = num;
+					this.getCommentList();
 				}
 			},
 			async getCommentList() {
-				console.log(1);
+				if (this.status == "noMore") {
+					return;
+				}
+				this.status = "loading"
+				const res = await wx.cloud.callContainer({
+					config: {
+						env: 'prod-9go38k3y9fee3b2e',
+					},
+					path: "/course/getCommentList?courseID=" + this.course.courseID + "&offset=" + this
+						.offset + "&limit=" + this.limit + "&order=" + this.orderType[this.key],
+					method: 'GET',
+					header: {
+						'X-WX-SERVICE': 'springboot-f8i8',
+					}
+				});
+				if (res.data.data.length < this.limit) {
+					this.status = 'noMore';
+				} else {
+					this.status = "more";
+				}
+				if (res.data.status == 100 && this.limit <= 40) {
+					this.offset += this.limit;
+					this.limit *= 2;
+				} else if (res.data.status == 100) {
+					this.offset += this.limit;
+				} else {
+					/* 没有成功获取commentList */
+					uni.showToast({
+						title: '出现未知错误',
+						duration: 2000,
+						image: "../../static/wrong.png"
+					});
+				}
+				this.commentList = this.commentList.concat(res.data.data); /* commentList拼接到最近请求的数据 */
+
 			},
 			async login() {
 				const res = await wx.cloud.callContainer({
 					config: {
 						env: 'prod-9go38k3y9fee3b2e',
 					},
-					path: "/activity/login?nickname=" + encodeURI(this.userInfo.nickName),
+					path: "/user/login?nickname=" + encodeURI(this.userInfo.nickName),
 					method: 'GET',
 					header: {
 						'X-WX-SERVICE': 'springboot-f8i8',
@@ -118,23 +153,24 @@
 					});
 					return;
 				}
-				if (!this.isStudent) {
-					uni.showModal({
-						title: "请先认证学生身份",
-						content: "我们希望以此能过滤一些代写，谢谢配合",
-						confirmText: "前往认证",
-						success: (res) => {
-							if (res.confirm) {
-								uni.navigateTo({
-									url: "/pages/index/userInfo",
-								});
-							}
-						},
-					});
-					return;
-				}
+				// if (!this.isStudent) {
+				// 	uni.showModal({
+				// 		title: "请先认证学生身份",
+				// 		content: "我们希望以此能过滤一些代写，谢谢配合",
+				// 		confirmText: "前往认证",
+				// 		success: (res) => {
+				// 			if (res.confirm) {
+				// 				uni.navigateTo({
+				// 					url: "/pages/index/userInfo",
+				// 				});
+				// 			}
+				// 		},
+				// 	});
+				// 	return;
+				// }
 				uni.navigateTo({
-					url: "/pages/postComment/postComment"
+					url: "/pages/postComment/postComment?course=" + encodeURIComponent(JSON.stringify(this
+						.course)),
 				});
 			}
 		},
@@ -143,9 +179,14 @@
 			uni.setNavigationBarTitle({
 				title: this.course.departmentAbrev + " " + String(this.course.courseNum)
 			});
-			this.getCommentList();
+		},
+		onHide() {
+			this.status = "more";
+			this.offset = 0;
+			this.commentList = [];
 		},
 		onShow() {
+			this.getCommentList();
 			uni.getStorage({
 				key: "userInfo",
 				success: (res) => {
@@ -218,11 +259,12 @@
 	.course-diff-like {
 		font-weight: 250;
 	}
-	
-	.course-box{
+
+	.course-box {
 		height: 168px;
 		margin-bottom: 2px;
 	}
+
 	.credit-box {
 		width: 80px;
 		height: 80%;
@@ -284,7 +326,7 @@
 		font-weight: 400;
 	}
 
-	.comment-container{
+	.comment-container {
 		height: calc(100vh - 225px);
 		width: 100%;
 		overflow: hidden;

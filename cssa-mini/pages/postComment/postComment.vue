@@ -1,9 +1,11 @@
 <template>
 	<scroll-view id="post-comment" :scroll-y="true">
-		<view class="title"><text>CS537 Introduction to Operating System CS537 Introduction to Operating System</text>
-		</view>
-		<uni-forms ref="form" :model="comment" label-align="left" :rules="rules">
-			<uni-forms-item name="professor" label="教授名">
+		<view class="comment-form">
+			<view class="title">
+				<text>{{this.comment.courseName}}</text>
+			</view>
+			<uni-forms ref="form" :model="comment" label-align="left" :rules="rules">
+			<uni-forms-item name="professor" label="教授">
 				<uni-easyinput :clearable="false" v-model="comment.professor" placeholder="教授名" />
 			</uni-forms-item>
 			<view class="blank"></view>
@@ -15,7 +17,7 @@
 			</uni-forms-item>
 			<view class="blank"></view>
 			<uni-forms-item name="time" label="时间">
-				<uni-data-picker v-model="comment.time" :localdata="range" @change="change"></uni-data-picker>
+				<uni-data-picker v-model="comment.courseTime" :localdata="range" @change="change"></uni-data-picker>
 			</uni-forms-item>
 			<view class="blank"></view>
 			<uni-forms-item name="comment" label="评论" label-position="top">
@@ -24,6 +26,8 @@
 			</uni-forms-item>
 		</uni-forms>
 		<button class="button" type="default" @click="submit">提交</button>
+		</view>
+		
 	</scroll-view>
 </template>
 
@@ -40,7 +44,7 @@
 							errorMessage: '请填写教授名字',
 						}, ]
 					},
-					time: {
+					courseTime: {
 						rules: [{
 							required: true,
 							errorMessage: '请选择教学时间',
@@ -88,31 +92,39 @@
 		},
 		onLoad(options) {
 			this.initTimePicker();
+			let course = JSON.parse(decodeURIComponent(options.course));
+			this.comment.courseID = course.courseID;
+			this.comment.courseName = course.courseName;
+			uni.getStorage({
+				key: "userInfo",
+				success: (res) => {
+					this.comment.userAvatar = res.data.avatar;
+				},
+			});
 		},
 		methods: {
 			initTimePicker: function() {
 				let year = new Date().getFullYear();
 				let month = new Date().getMonth();
-				console.log(month)
 				for (let i = 2018; i <= year; i++) {
 					let temp = {
 						text: String(i),
 						value: String(i),
 						children: [{
 							text: "Spring",
-							value: String(i) + "Spring"
+							value: String(i) + " Spring"
 						}]
 					}
 					if ((i == year && month >= 6) || i < year) {
 						temp.children.push({
 							text: "Summer",
-							value: String(i) + "Summer"
+							value: String(i) + " Summer"
 						})
 					}
 					if ((i == year && month >= 9) || i < year) {
 						temp.children.push({
 							text: "Fall",
-							value: String(i) + "Fall"
+							value: String(i) + " Fall"
 						})
 					}
 					this.range.push(temp)
@@ -123,7 +135,7 @@
 					config: {
 						env: 'prod-9go38k3y9fee3b2e',
 					},
-					path: "/course/postcomment?nickname=" + encodeURI(this.userInfo.nickName),
+					path: "/course/postcomment",
 					method: 'POST',
 					header: {
 						'X-WX-SERVICE': 'springboot-f8i8',
@@ -132,31 +144,17 @@
 				});
 				if (res.data.status != 100) {
 					uni.showToast({
-						title: "失败"
+						icon:"fail",
+						title:"服务发生错误，请稍后尝试"
 					})
-				} else {
-					uni.getStorage({
-						key: "commentList",
-						success: (res) => {
-							res.data.push(1);
-							uni.setStorage({
-								key: "commentList",
-								data: res
-							});
-						},
-						fail: () => {
-							uni.setStorage({
-								key: "commentList",
-								data: [1]
-							});
-						}
-					})
+				}else{
+					uni.navigateBack();
 				}
+				
 			},
 			submit: function() {
-				console.log(this.comment);
 				this.$refs["form"].validate().then(res => {
-					this.postComment;
+					this.postComment();
 				}).catch(err => {
 					console.log('err', err);
 				})
@@ -167,16 +165,16 @@
 
 <style>
 	#post-comment {
-		width: 86vw;
 		height: 100vh;
-
-		padding-left: 7vw;
-		padding-right: 7vw;
+		width:100vw;
 		background-color: white;
 	}
-
+	.comment-form{
+		padding:15px;
+		width:calc(100vw - 30px);
+	}
 	.title {
-		margin-top: 5vh;
+		margin-top: 2vh;
 		height: 5vh;
 		line-height: 5vh;
 		margin-bottom: 2vh;

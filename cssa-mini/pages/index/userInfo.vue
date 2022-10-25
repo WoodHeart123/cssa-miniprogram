@@ -10,7 +10,7 @@
 		<view class="section-title">个人信息</view>
 		<view class="box" @click="toName">
 			<view class="key">昵称</view>
-			<view class="value">{{this.userInfo.nickName}}</view>
+			<view class="value">{{this.userInfo.nickname}}</view>
 		</view>
 		<view class="box" @click="toEmail">
 			<view class="key">邮箱</view>

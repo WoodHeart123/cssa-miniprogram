@@ -2,19 +2,19 @@ const list = [{
 		'name': '张三一',
 		'postion': '主席',
 		'intro': '你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是谁你好我是好我是谁你好我是谁',
-		'image': '../../static/renwu.jpeg'
+		'image': ''
 	},
 	{
-		'name': 'XXX',
-		'postion': 'PPP',
+		'name': '楚芸蔚',
+		'postion': '外联部部长',
 		'intro': '你好我是谁',
-		'image': "../../static/renwu.jpeg"
+		'image': "https://cssa-mini.oss-cn-shanghai.aliyuncs.com/cssa-board/chu.jpg"
 	},
 	{
-		'name': 'XXX',
-		'postion': 'PPP',
+		'name': '马伊侬',
+		'postion': '宣传部部长',
 		'intro': '你好我是谁',
-		'image': "../../static/renwu.jpeg"
+		'image': "https://cssa-mini.oss-cn-shanghai.aliyuncs.com/cssa-board/ma.jpg"
 	},
 	{
 		'name': 'XXX',

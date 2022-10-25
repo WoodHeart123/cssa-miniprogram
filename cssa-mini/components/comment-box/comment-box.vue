@@ -1,37 +1,41 @@
 <template>
 	<view class="comment-box">
 		<view class="comment-head-area row-container">
-			<image class="avatar" src="../../static/index/maomao.jpg"></image>
-			<view class="rate-box">
-				<view class="row-container">
-					<view><text>难度：</text></view>
-					<uni-rate readonly="true" :value="4.5" allowHalf="true" size="15"></uni-rate>
-					<view><text>(4.5)</text></view>
+			<image class="avatar"
+				:src="'https://cssa-mini.oss-cn-shanghai.aliyuncs.com/cssa-mini-avatar/' + this.comment.userAvatar + '.png'">
+			</image>
+			<view class="user-rate-box">
+				<view class="row-container rate-sub-box">
+					<view><text class="user-rate-text">难度:</text></view>
+					<uni-rate readonly="true" :value="comment.difficulty" allowHalf="true" size="17"></uni-rate>
+					<view><text class="user-rate-text">{{comment.difficulty}}</text></view>
 				</view>
-				<view class="row-container">
-					<view><text>喜爱： </text></view>
-					<uni-rate readonly="true" :value="4.5" allowHalf="true" size="15"></uni-rate>
-					<view><text>(4.5)</text></view>
+				<view class="row-container rate-sub-box">
+					<view><text class="user-rate-text">喜爱:</text></view>
+					<uni-rate readonly="true" :value="comment.prefer" allowHalf="true" size="17"></uni-rate>
+					<view><text class="user-rate-text">{{comment.prefer}}</text></view>
 				</view>
 			</view>
-			<view class="comment-time"><text>2022-09-16</text></view>
+			<view class="comment-time"><text>{{computeCommentTime}}</text></view>
 		</view>
 		<view class="wrap">
-			<view  :class="this.more?'comment-body comment-body-more':'comment-body'">
-				<text v-if="!more" class="more-button" @click="moreText">更多</text>
+			<view :class="this.more?'comment-body comment-body-more':'comment-body'">
+				<text v-if="this.more" class="more-button" @click="moreText">更多</text>
 				<text id="comment-text">{{comment.comment}}</text>
 			</view>
 		</view>
 
 		<view class="row-container comment-end">
 			<view class="row-container">
-				<text class="time-professor">2019 Fall</text>
-				<text>;</text>
-				<text class="time-professor">Jack</text>
+				<text class="time-professor">{{comment.courseTime}}</text>
+				<text style="font-size: 10px">|</text>
+				<text class="time-professor">{{comment.professor}}</text>
 			</view>
 			<view class="row-container">
-				<view class="iconfont icon-like"></view>
-				<text class="zan_count">50</text>
+				<text class="iconfont icon" v-show="this.liked==false" @click="addZan">&#xe839</text>
+				<text class="iconfont icon zan" v-show="this.liked==true">&#xe876</text>
+				<!-- <view :class="liked==false?'iconfont icon-like1':'iconfont icon-like-fill'"></view> -->
+				<text class="zan-count">&nbsp{{comment.likeCount}}</text>
 			</view>
 		</view>
 	</view>
@@ -43,24 +47,75 @@
 		name: "comment-box",
 		data() {
 			return {
-				more:false,
+				more: false,
+				liked: false,
 			};
 		},
-		onShow(){
+		onShow() {
 			const query = uni.createSelectorQuery().in(this);
 			query.select('#comment-text').boundingClientRect(data => {
-			  console.log(JSON.stringify(data));
-			  if(data.height < 100){
-				  this.more = true;
-			  }
+				if (data.height < 100) {
+					this.more = true;
+				}
 			}).exec();
+			// uni.getStorage({
+			// 	fail: () -> {
+			// 		const res;
+					
+			// 		uni.setStorage({
+			// 			key:zanList,
+			// 			value: res.data.data,
+			// 		});
+			// 		// addZanList();
+			// 	}
+			// })
 		},
-		methods:{
-			moreText:function(){
+		methods: {
+			moreText: function() {
 				this.more = true;
+			},
+			async addZan() {
+				const res = await wx.cloud.callContainer({
+					config: {
+						env: 'prod-9go38k3y9fee3b2e',
+					},
+					path: "/course/zan?commentID=" + this.comment.commentID,
+					method: 'GET',
+					header: {
+						'X-WX-SERVICE': 'springboot-f8i8',
+					},
+				});
+				
+				
+				if (res.data.status == 107) {
+					uni.showToast({
+						title: '您已经点过赞啦',
+						duration: 2000
+					});
+					this.liked = true;
+				}else if (res.data.status == 100) {
+					this.liked = true;
+					this.comment.likeCount += 1;
+				}else{
+					uni.showToast({
+						title: '出现未知错误',
+						duration: 2000,
+						image: "../../static/wrong.png"
+					});
+				}
+				
+			},
+		},
+		computed: {
+			computeCommentTime() {
+				moment.locale('zh-cn');
+				return Date.now() - this.comment.commentTime >= 86400000 * 7 ? moment(this.comment.commentTime).format(
+					"MM-DD") : moment(this.comment.commentTime).fromNow();
 			}
 		}
 	}
+	import moment from "moment/min/moment-with-locales";
+	import 'moment/locale/zh-cn';
 </script>
 
 <style>
@@ -97,8 +152,8 @@
 		display: flex;
 		flex-direction: column;
 	}
-	
-	.wrap{
+
+	.wrap {
 		display: flex;
 	}
 
@@ -110,9 +165,8 @@
 
 	}
 
-	.rate-box {
+	.user-rate-box {
 		font-size: 10pt;
-		height: 50px;
 		text-align: left;
 		margin-left: 10px;
 		width: calc(100% - 140px);
@@ -144,7 +198,8 @@
 		-webkit-box-orient: vertical; */
 		transition: .3s max-height;
 	}
-	.comment-body-more{
+
+	.comment-body-more {
 		max-height: 500px;
 		-webkit-line-clamp: 999;
 	}
@@ -152,14 +207,14 @@
 	.comment-body::before {
 		content: ' ';
 		float: right;
-		width:0;
+		width: 0;
 		height: calc(100% - 25px);
 	}
 
 	.comment-end {
 		justify-content: space-between;
 		height: 20px;
-		font-size: 10px;
+		
 		color: #aaa;
 		margin-top: 0pt;
 		margin-left: 2pt;
@@ -167,6 +222,33 @@
 	}
 
 	.time-professor {
-		margin-left: 4pt;
+		margin-left: 4px;
+		margin-right: 5px;
+		font-size: 10px;
+	}
+
+	.rate-sub-box {
+		height: 17px;
+		line-height: 17px;
+		align-items: center;
+		font-size: 14px;
+	}
+
+	.user-rate-text {
+		color: #aaa;
+		font-size: 12px;
+		margin-right: 5px;
+		margin-left: 5px;
+	}
+	
+	.zan-count{
+		font-size: 12px;
+	}
+	
+	.icon {
+		font-size: 15px;
+	}
+	.zan{
+		color:red;
 	}
 </style>

@@ -2,32 +2,26 @@
 	<view class="container">
 		<view class="top-container">
 			<image class= "image" src="../../static/renwu.jpeg"></image>
-			<text class="user-name">Jucy</text>
+			<text class="user-name">{{this.comDetail.nickname}}</text>
 		</view>
 		<view class="content-container">
-			<view class="title">有没有周末推荐去玩的地方吗？</view>
+			<view class="title">{{this.comDetail.title}}</view>
 			<view class="content">
 				<view class="content-text">{{this.comDetail.shrinkContent}}</view>
-				<template v-if="this.comDetail.content != null && this.comDetail.content.length > 52">
+				<template v-if="this.comDetail.content != null && this.comDetail.content.length > 100">
 					<text class="content-description" v-if="isShow" @click="toggleDescription">全文</text>
-					<text class="content-description" v-else @click="toggleDescription">收起</text>
 				</template>
 			</view>
 		</view>
 		<view class="image-box">
-			<view class="image-1" v-if="this.comDetail.imageNum == 1">
+			<view class="image-1" v-if="this.comDetail.imageUrls.length == 1">
 				<view v-for="(url,index) in comDetail.imageUrls">
-					<image class="picture-1" :src="url" @tap="previewImage(url)" mode="heightFix"/>
+					<image class="picture-1" :src="url" @tap="previewImage" mode="heightFix"/>
 				</view>
 			</view>
-			<view class="image-more" v-else-if="this.comDetail.imageNum == 2">
+			<view class="image-more" v-else>
 				<view v-for="(url,index) in this.comDetail.imageUrls">
-					<image class="picture-2" :src="url" @tap="previewImage(url)"/>
-				</view>
-			</view>
-			<view class="image-more" v-else="this.comDetail.imageNum > 2">
-				<view v-for="(url,index) in this.comDetail.imageUrls">
-					<image class="picture-more" :src="url" @tap="previewImage(url)"/>
+					<image class="picture-more" :src="url" @tap="previewImage"/>
 				</view>
 			</view>
 		</view>
@@ -37,11 +31,11 @@
 
 <script>
 	export default {
-		props: ['comDetail'],
-		
+		props:['comDetail'],
 		data(){
 			return{
-				isShow: false
+				isShow: false,
+				shrinkContent:"",
 			}
 		},
 		
@@ -50,9 +44,9 @@
 			console.log(this.comDetail.imageNum);
 			console.log(this.comDetail.content);
 			var contentLength = this.comDetail.content.length;
-			if (contentLength > 52){
+			if (contentLength > 100){
 				this.isShow = true;
-				this.comDetail.shrinkContent = this.comDetail.content.substr(0, 51) + "..."
+				this.comDetail.shrinkContent = this.comDetail.content.substr(0, 100) + "...";
 			} else {
 				this.isShow = false;
 				this.comDetail.shrinkContent = this.comDetail.content;
@@ -66,15 +60,13 @@
 				    this.comDetail.shrinkContent = this.comDetail.content;
 				} else {
 				    this.isShow = true;
-				    this.comDetail.shrinkContent = this.comDetail.content.substr(0, 51) + "...";
+				    this.comDetail.shrinkContent = this.comDetail.content.substr(0, 100) + "...";
 				}
 			},
-			previewImage: function(url){
-				var arr = [];
-				arr.push(url);
+			previewImage: function(){
 				uni.previewImage({
-					current:arr[0],
-					urls:arr
+					current:this.comDetail.imageUrls[0],
+					urls:this.comDetail.imageUrls,
 				})
 			}
 		}
