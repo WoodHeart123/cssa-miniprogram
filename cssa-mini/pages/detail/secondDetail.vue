@@ -9,7 +9,8 @@
 		<view class="basic">
 			<view class="price-box">
 				<view class="iconfont icon">&#xe70b;</view>
-				<view class="price">1200</view>
+				<view class="price">12</view>
+				<img class="shoucang" src="/static/yishoucang.png" :style="left"/>
 			</view>
 			<view class="second_desc">
 				<view class="quantity-tag"><view class="quantity-content">全新</view></view>
@@ -23,7 +24,7 @@
 				<view class="contact-tag">
 					<view class="contact-content">联系方式</view>
 				</view>
-				<view class="fuzhi-bt">
+				<view class="fuzhi-bt" :style="left_1">
 					<img class="fuzhi-img" src="/static/fuzhi.png" @click="setClipboardData">
 				</view>
 			</view>
@@ -57,6 +58,10 @@
 	export default {
 		data() {
 			return{
+				distance_1:0,
+				distance_2:0,
+				left:"",
+				left_1:"",
 				secondItem:{
 					name:"Macbook Pro",
 					imageList:["/static/renwu.jpeg", "/static/renwu.jpeg", "/static/renwu.jpeg"],
@@ -103,13 +108,21 @@
 		mounted() {
 			const query = uni.createSelectorQuery().in(this);
 			let a = 0;
-			query.select('.tit').boundingClientRect();
-			query.select('.buy').boundingClientRect();
+			var width = 0;
+			uni.getSystemInfo({
+				success: function(res){
+					width = res.screenWidth;
+				}
+			})
+			query.select('.price').boundingClientRect();
+			query.select('.contact-content').boundingClientRect();
 			query.exec((res) => {
-				this.distance_1 = res[0].bottom;
-				this.distance_2 = res[1].top;
-				console.log(this.distance_2 - this.distance_1);
-				this.height = "height: " + (this.distance_2 - this.distance_1 - 20) + "px;";
+				this.distance_1 = res[0].right;
+				this.distance_2 = res[1].right;
+				console.log(this.distance_1);
+				console.log(this.distance_2);
+				this.left = "padding-left: " + (0.95*width - this.distance_1 - 0.07*width) + "px;";
+				this.left_1 = "margin-left: " + (0.95*width - this.distance_2 - 0.07*width) + "px;";
 				console.log(this.height);
 			});
 		},
@@ -176,6 +189,13 @@
 					color: #e13f05;
 				}
 				
+				.shoucang{
+					height: 7vw;
+					width: 7vw;
+					padding-top: 5px;
+					//padding-left: 65.5vw;
+				}
+				
 			}
 			
 			.second_desc{
@@ -236,7 +256,7 @@
 				.fuzhi-bt{
 					height: 8vw;
 					width: 8vw;
-					margin-left: 69vw;
+					//margin-left: 68vw;
 					//background-color: #db3024;
 					margin-top: 2vw;
 					.fuzhi-img{
