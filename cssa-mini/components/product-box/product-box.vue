@@ -1,5 +1,5 @@
 <template>
-	<view class='product-box'>
+	<view class='product-box' @click="toSecondDetail">
 		<image class='photo' src="../../static/index/maomao.jpg" mode='aspectFill'></image>
 		<view class='product-name'>
 			<text>A cat 一只猫</text>
@@ -18,6 +18,22 @@
 </template>
 
 <script>
+	export default {
+		props:["course"],
+		name: "product-box",
+		data() {
+			return {
+	
+			}
+		},
+		methods: {
+			toSecondDetail:function(){
+				uni.navigateTo({
+					url: '/pages/detail/secondDetail',
+				});
+			}
+		}
+	}
 </script>
 
 <style>

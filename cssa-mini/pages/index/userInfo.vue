@@ -84,12 +84,14 @@
 		text-align: right;
 		color:#AAA;
 		font-size:13px;
+		line-height: 20px;
 	}
 	.arrow{
 		width:10%;
 		margin-left:2%;
 		color:#AAA;
-		
+		font-size: 13px;
+		line-height: 20px;
 	}
 	
 </style>

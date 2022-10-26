@@ -65,19 +65,30 @@
 		},
 		onLoad() {
 			wx.cloud.init();
+			this.getUserProfile();
+			this.preLoadAvatar();
 		},
 		onShow() {
 			uni.getStorage({
 				key: 'userInfo',
 				success: (res) => {
 					this.userInfo = res.data;
+					this.login("用户");
 				},
 				fail: () => {
 					this.isLogin = false;
 				},
 			});
+			
 		},
 		methods: {
+			preLoadAvatar:function(){
+				for(let i = 1;i <= 12;i++){
+					// uni.getImageInfo({
+					// 	src:'https://cssa-mini.oss-cn-shanghai.aliyuncs.com/cssa-mini-avatar/' + i.toString() + '.png'
+					// })
+				}
+			},
 			getUserProfile: function() {
 				uni.getUserProfile({
 					desc: "获取用户昵称",
@@ -111,8 +122,6 @@
 					key: "userInfo",
 					data: this.userInfo
 				});
-
-
 			},
 			toChangeAvatar: function() {
 				uni.navigateTo({

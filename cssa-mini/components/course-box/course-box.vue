@@ -8,12 +8,12 @@
 			<view class="row-container rate-box">
 				<view><text>难度：</text></view>
 				<uni-rate readonly="true" :value="course.avgDifficulty" allowHalf="true" size="15"></uni-rate>
-				<view class="rate-text"><text>{{course.avgDifficulty}}</text></view>
+				<view class="rate-text"><text>{{course.avgDifficulty.toFixed(1)}}</text></view>
 			</view>
 			<view class="row-container rate-box">
 				<view><text>推荐： </text></view>
 				<uni-rate readonly="true" :value="course.avgPrefer" allowHalf="true" size="15"></uni-rate>
-				<view class="rate-text"><text>{{course.avgPrefer}}</text></view>
+				<view class="rate-text"><text>{{course.avgPrefer.toFixed(1)}}</text></view>
 			</view>
 			<view  class="footnote"><text>{{course.commentCount==0?'暂时无人评论':course.commentCount.toString() + '人参与此评论'}}</text></view>
 		</view>

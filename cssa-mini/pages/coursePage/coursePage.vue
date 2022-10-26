@@ -9,12 +9,12 @@
 					<view class="row-container rate-box">
 						<view class="rate-text"><text>难度:</text></view>
 						<uni-rate readonly="true" :value="course.avgDifficulty" allowHalf="true" size="20"></uni-rate>
-						<view class="rate-num"><text>{{course.avgDifficulty}}</text></view>
+						<view class="rate-num"><text>{{course.avgDifficulty.toFixed(1)}}</text></view>
 					</view>
 					<view class="row-container rate-box">
 						<view class="rate-text"><text>推荐:</text></view>
 						<uni-rate readonly="true" :value="course.avgPrefer" allowHalf="true" size="20"></uni-rate>
-						<view class="rate-num"><text>{{course.avgPrefer}}</text></view>
+						<view class="rate-num"><text>{{course.avgPrefer.toFixed(1)}}</text></view>
 					</view>
 				</view>
 				<view class="column-container credit-box">
@@ -60,6 +60,7 @@
 				orderType: ["SORT_BY_TIME", "SORT_BY_LIKE"],
 				isStudent: false,
 				isLogin: true,
+				likedComment:[],
 				userInfo: {},
 				commentList: [],
 				offset: 0,
@@ -103,10 +104,13 @@
 				}
 				if (res.data.status == 100 && this.limit <= 40) {
 					this.offset += this.limit;
-					this.limit *= 2;
-				} else if (res.data.status == 100) {
-					this.offset += this.limit;
-				} else {
+					if(this.limit <= 40){
+						this.limit *= 2;
+					}
+					for(let i = 0;i < res.data.data.length;i++){
+						res.data.data[i].liked = (this.likedComment.indexOf(res.data.data[i].commentID) != -1)
+					}
+				}else {
 					/* 没有成功获取commentList */
 					uni.showToast({
 						title: '出现未知错误',
@@ -191,6 +195,7 @@
 				key: "userInfo",
 				success: (res) => {
 					this.isStudent = res.data.isStudent;
+					this.likedComment = res.data.likedComment;
 				},
 				fail: () => {
 					this.isLogin = false;
