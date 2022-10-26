@@ -9,7 +9,8 @@
 		<view class="basic">
 			<view class="price-box">
 				<view class="iconfont icon">&#xe70b;</view>
-				<view class="price">1200</view>
+				<view class="price">12</view>
+				<img class="shoucang" src="/static/yishoucang.png" :style="left"/>
 			</view>
 			<view class="second_desc">
 				<view class="quantity-tag"><view class="quantity-content">全新</view></view>
@@ -19,8 +20,16 @@
 		</view>
 		<view class="blank_line"></view>
 		<view class="contact">
-			<view style="margin-left: 10px;">微信号：1234567</view>
-			<view style="margin-left: 10px;">手机号：2343459234</view>
+			<view class="contact-box">
+				<view class="contact-tag">
+					<view class="contact-content">联系方式</view>
+				</view>
+				<view class="fuzhi-bt" :style="left_1">
+					<img class="fuzhi-img" src="/static/fuzhi.png" @click="setClipboardData">
+				</view>
+			</view>
+			<view style="margin-left: 13px;">微信号：1234567</view>
+			<view style="margin-left: 13px; margin-bottom: 10px;">手机号：2343459234</view>
 		</view>
 		<view class="blank_line"></view>
 		<view class="description">
@@ -49,6 +58,10 @@
 	export default {
 		data() {
 			return{
+				distance_1:0,
+				distance_2:0,
+				left:"",
+				left_1:"",
 				secondItem:{
 					name:"Macbook Pro",
 					imageList:["/static/renwu.jpeg", "/static/renwu.jpeg", "/static/renwu.jpeg"],
@@ -95,16 +108,35 @@
 		mounted() {
 			const query = uni.createSelectorQuery().in(this);
 			let a = 0;
-			query.select('.tit').boundingClientRect();
-			query.select('.buy').boundingClientRect();
+			var width = 0;
+			uni.getSystemInfo({
+				success: function(res){
+					width = res.screenWidth;
+				}
+			})
+			query.select('.price').boundingClientRect();
+			query.select('.contact-content').boundingClientRect();
 			query.exec((res) => {
-				this.distance_1 = res[0].bottom;
-				this.distance_2 = res[1].top;
-				console.log(this.distance_2 - this.distance_1);
-				this.height = "height: " + (this.distance_2 - this.distance_1 - 20) + "px;";
+				this.distance_1 = res[0].right;
+				this.distance_2 = res[1].right;
+				console.log(this.distance_1);
+				console.log(this.distance_2);
+				this.left = "padding-left: " + (0.95*width - this.distance_1 - 0.07*width) + "px;";
+				this.left_1 = "margin-left: " + (0.95*width - this.distance_2 - 0.07*width) + "px;";
 				console.log(this.height);
 			});
 		},
+	
+		methods: {
+			setClipboardData: function() {
+				uni.setClipboardData({
+					data: 'hello',
+					success: function () {
+						console.log('success');
+					}
+				});
+			}
+		}
 	}
 </script>
 
@@ -122,9 +154,10 @@
 			display: inline;
 		}
 		.blank_line {
-			height: 10rpx;
-			width: 100%;
+			height: 2px;
+			width: 90vw;
 			background: #eee;
+			margin-left: 5vw;
 		}
 		.basic {
 			//padding-left: 10px;
@@ -143,7 +176,7 @@
 				}
 				*/
 				.iconfont{
-					padding-left: 5px;
+					padding-left: 8px;
 					padding-top: 5px;
 					font-size: 25px;
 					font-weight: bold;
@@ -154,6 +187,13 @@
 					font-size:25px;
 					font-weight: bold;
 					color: #e13f05;
+				}
+				
+				.shoucang{
+					height: 7vw;
+					width: 7vw;
+					padding-top: 5px;
+					//padding-left: 65.5vw;
 				}
 				
 			}
@@ -196,7 +236,35 @@
 			}
 		}
 		.contact{
-			position: relative;
+			.contact-box{
+				display: flex;
+				flex-direction: row;
+				.contact-tag{
+					margin-top: 7px;
+					font-size: 13px;
+					margin-left: 8px;
+					padding-left: 5px;
+					color: #db3024;
+					.contact-content{
+						margin-top: 3px;
+						padding-left: 5px;
+						padding-right: 5px;
+						background-color: #f2b4b0;
+						border-radius: 5px;
+					}
+				}
+				.fuzhi-bt{
+					height: 8vw;
+					width: 8vw;
+					//margin-left: 68vw;
+					//background-color: #db3024;
+					margin-top: 2vw;
+					.fuzhi-img{
+						height: 7vw;
+						width: 7vw;
+					}
+				}
+			}
 		}
 		.description {
 			.tit {
