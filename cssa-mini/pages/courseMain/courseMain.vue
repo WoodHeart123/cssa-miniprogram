@@ -2,12 +2,12 @@
 	<uni-transition ref="main" :show=true customClass="full-screen">
 		<view id="course" class="row-container" @touchstart="touchstart" @touchmove="touchmove">
 			<view class="menu column-container">
-				<uni-indexed-list :options="departmentList" :show-select="false" @click="bindClick"></uni-indexed-list>
+				<uni-indexed-list :options="departmentList" :show-select=false @click="bindClick"></uni-indexed-list>
 			</view>
 			<view :class="showMenu?'main-menu-half':'main-content'" class="column-container main-content">
 				<view class="row-container top-bar">
 					<view class="row-container department-select">
-						<uni-transition ref="menuOpen" show="true">
+						<uni-transition ref="menuOpen" :show=true>
 							<text class="iconfont icon" @click="clickMenu">&#xed55;</text>
 						</uni-transition>
 					</view>

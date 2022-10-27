@@ -2,7 +2,7 @@
 	<view class="comment-box">
 		<view class="comment-head-area row-container">
 			<image class="avatar"
-				:src="'https://cssa-mini.oss-cn-shanghai.aliyuncs.com/cssa-mini-avatar/' + comment.userAvatar + '.png'">
+				:src="'https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/' + this.comment.userAvatar + '.jpg'">
 			</image>
 			<view class="user-rate-box">
 				<view class="row-container rate-sub-box">
@@ -79,16 +79,9 @@
 				if (res.data.status == 100 || res.data.status == 107) {
 					this.liked = true;
 					this.count = 1;
-					uni.getStorage({
-						key: "userInfo",
-						success: (res) => {
-							res.data.likedComment.push(this.comment.commentID);
-							uni.setStorage({
-								key: "userInfo",
-								value: res.data
-							});
-						}
-					});
+					let userInfo = uni.getStorageSync("userInfo");
+					userInfo.likedComment.push(this.comment.commentID);
+					uni.setStorageSync("userInfo",userInfo);
 				}
 				if (res.data.status == 107) {
 					uni.showToast({
@@ -209,9 +202,8 @@
 		height: 20px;
 		font-size: 10px;
 		color: #aaa;
-		margin-left: 2px;
-		margin-right: 2px;
-		margin: 5px 5px 0px 0px;
+		margin-left: 5px;
+		margin-right: 5px;
 	}
 
 	.time-professor {
@@ -238,7 +230,7 @@
 		font-size: 12px;
 		line-height: 20px;
 		width: 20px;
-		text-align: center;
+		text-align: left;
 	}
 
 	.icon {

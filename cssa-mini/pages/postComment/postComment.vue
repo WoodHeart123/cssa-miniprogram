@@ -5,29 +5,29 @@
 				<text>{{this.comment.courseName}}</text>
 			</view>
 			<uni-forms ref="form" :model="comment" label-align="left" :rules="rules">
-			<uni-forms-item name="professor" label="教授">
-				<uni-easyinput :clearable="false" v-model="comment.professor" placeholder="教授名" />
-			</uni-forms-item>
-			<view class="blank"></view>
-			<uni-forms-item name="difficulty" label="难度">
-				<uni-rate v-model="comment.difficulty" size="36" :is-fill="false"></uni-rate>
-			</uni-forms-item>
-			<uni-forms-item name="prefer" label="推荐">
-				<uni-rate v-model="comment.prefer" size="36" :is-fill="false"></uni-rate>
-			</uni-forms-item>
-			<view class="blank"></view>
-			<uni-forms-item name="time" label="时间">
-				<uni-data-picker v-model="comment.courseTime" :localdata="range" @change="change"></uni-data-picker>
-			</uni-forms-item>
-			<view class="blank"></view>
-			<uni-forms-item name="comment" label="评论" label-position="top">
-				<uni-easyinput class="input" autoHeight :clearable="false" type="textarea" v-model="comment.comment"
-					placeholder="请输入评论" maxlength="400" />
-			</uni-forms-item>
-		</uni-forms>
-		<button class="button" type="default" @click="submit">提交</button>
+				<uni-forms-item name="professor" label="教授">
+					<uni-easyinput :clearable="false" v-model="comment.professor" placeholder="教授名" />
+				</uni-forms-item>
+				<view class="blank"></view>
+				<uni-forms-item name="difficulty" label="难度">
+					<uni-rate v-model="comment.difficulty" size="36" :is-fill="false"></uni-rate>
+				</uni-forms-item>
+				<uni-forms-item name="prefer" label="推荐">
+					<uni-rate v-model="comment.prefer" size="36" :is-fill="false"></uni-rate>
+				</uni-forms-item>
+				<view class="blank"></view>
+				<uni-forms-item name="time" label="时间">
+					<uni-data-picker v-model="comment.courseTime" :localdata="range"></uni-data-picker>
+				</uni-forms-item>
+				<view class="blank"></view>
+				<uni-forms-item name="comment" label="评论" label-position="top">
+					<uni-easyinput class="input" autoHeight :clearable="false" type="textarea" v-model="comment.comment"
+						placeholder="请输入评论" maxlength="400" />
+				</uni-forms-item>
+			</uni-forms>
+			<button class="button" type="default" @click="submit">提交</button>
 		</view>
-		
+
 	</scroll-view>
 </template>
 
@@ -101,6 +101,15 @@
 					this.comment.userAvatar = res.data.avatar;
 				},
 			});
+			uni.getStorage({
+				key: "commentMap",
+				fail: () => {
+					uni.setStorage({
+						key: "commentMap",
+						data: {}
+					});
+				}
+			})
 		},
 		methods: {
 			initTimePicker: function() {
@@ -131,6 +140,11 @@
 				}
 			},
 			async postComment() {
+				let commentMap = uni.getStorageSync("commentMap");
+				uni.showLoading({
+					title:"正在上传中",
+					mask:true
+				})
 				const res = await wx.cloud.callContainer({
 					config: {
 						env: 'prod-9go38k3y9fee3b2e',
@@ -142,15 +156,39 @@
 					},
 					data: this.comment,
 				});
-				if (res.data.status != 100) {
+				if (res.data.status == 500) {
 					uni.showToast({
-						icon:"fail",
-						title:"服务发生错误，请稍后尝试"
-					})
-				}else{
-					uni.navigateBack();
+						icon: "fail",
+						title: "服务发生错误，请稍后尝试"
+					});
+					uni.hideLoading()
+					return;
+				}else if(res.data.status == 110){
+					commentMap[this.comment.courseID] = 2;
+					uni.showToast({
+						title:"超过两条评论",
+						icon: "error",
+						mask:true,
+						complete: () => {
+							uni.setStorageSync("commentMap",commentMap);
+						}
+					});
+					setTimeout(() => {							
+						uni.hideLoading();
+						uni.navigateBack();},1500
+					);
+					return;
+				}else if(res.data.status == 100){
+					if(commentMap[this.comment.courseID] == undefined){
+						commentMap[this.comment.courseID] = 1;
+					}else{
+						commentMap[this.comment.courseID] += 1;
+					}
+					uni.setStorageSync("commentMap",commentMap);
 				}
-				
+				uni.hideLoading();
+				uni.navigateBack();
+
 			},
 			submit: function() {
 				this.$refs["form"].validate().then(res => {
@@ -166,13 +204,15 @@
 <style>
 	#post-comment {
 		height: 100vh;
-		width:100vw;
+		width: 100vw;
 		background-color: white;
 	}
-	.comment-form{
-		padding:15px;
-		width:calc(100vw - 30px);
+
+	.comment-form {
+		padding: 15px;
+		width: calc(100vw - 30px);
 	}
+
 	.title {
 		margin-top: 2vh;
 		height: 5vh;

@@ -7,7 +7,7 @@
 		<view class="user-box" v-if="isLogin">
 			<view class="avatar-box" @click="toChangeAvatar">
 				<img class="avatar" 
-					:src="'https://cssa-mini.oss-cn-shanghai.aliyuncs.com/cssa-mini-avatar/' + this.userInfo.avatar + '.png'">
+					:src="'https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/' + this.userInfo.avatar + '.jpg'">
 			</view>
 			<view class="name-box" @click="toUserInfo">
 				<text class="nickname">{{userInfo.nickname}}</text>
@@ -73,7 +73,7 @@
 				key: 'userInfo',
 				success: (res) => {
 					this.userInfo = res.data;
-					this.login("用户");
+					this.login(res.data.nickName?res.data.nickName:res.data.nickname);
 				},
 				fail: () => {
 					this.isLogin = false;

@@ -28,17 +28,17 @@
 			<view :class="key==0?'row-container filter filter-selected':'row-container filter'" @click="changeKey(0)">
 				<text>最新</text>
 			</view>
-			<view :class="key==1?'row-container filter filter-selected':'row-container filter'" @click="changeKey(1)">
+			<!-- <view :class="key==1?'row-container filter filter-selected':'row-container filter'" @click="changeKey(1)">
 				<text>热度</text>
-			</view>
+			</view> -->
 		</view>
-		<scroll-view scroll-y="true" show-scrollbar="true" refresher-enabled="false"
+		<view scroll-y="true" show-scrollbar="true" refresher-enabled="false" refresher-triggered="false"
 			class="column-container comment-container" @scrolltolower="getCommentList()">
 			<view class="box" v-for="(comment, index) in commentList" :key="index">
 				<commentBoxVue :comment="comment"></commentBoxVue>
 			</view>
 			<uni-load-more :status="status" :contentText="contentText"></uni-load-more>
-		</scroll-view>
+		</view>
 		<uni-fab :pattern="pattern" horizontal="right" vertical="bottom" popMene="false" @fabClick="toComment" />
 	</view>
 </template>
@@ -70,7 +70,8 @@
 					contentdown:"上拉显示更多",
 					contentrefresh:"正在加载...",
 					contentnomore:"没有更多评论了"
-				}
+				},
+				commentMap:{},
 			}
 		},
 		methods: {
@@ -141,6 +142,13 @@
 				this.toComment();
 			},
 			toComment: function() {
+				if(this.commentMap[this.course.courseID] != undefined && this.commentMap[this.course.courseID] >= 2){
+					uni.showToast({
+						title:"超过两条评论",
+						icon: "error",
+					});
+					return;
+				}
 				if (!this.isLogin) {
 					uni.getUserProfile({
 						desc: "获取用户信息",
@@ -182,7 +190,7 @@
 			this.course = JSON.parse(decodeURIComponent(options.course));
 			uni.setNavigationBarTitle({
 				title: this.course.departmentAbrev + " " + String(this.course.courseNum)
-			});
+			});	
 		},
 		onHide() {
 			this.status = "more";
@@ -190,6 +198,19 @@
 			this.commentList = [];
 		},
 		onShow() {
+			uni.getStorage({
+				key: "commentMap",
+				success: (res) => {
+					this.commentMap = res.data;
+				},
+				fail: () => {
+					this.commentMap = {};
+					uni.setStorage({
+						key: "commentMap",
+						data: {}
+					});
+				}
+			})
 			this.getCommentList();
 			uni.getStorage({
 				key: "userInfo",
@@ -336,5 +357,6 @@
 		width: 100%;
 		overflow: hidden;
 		background-color: white;
+		overflow-y:scroll ;
 	}
 </style>

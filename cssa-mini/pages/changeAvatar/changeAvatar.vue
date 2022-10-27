@@ -1,12 +1,12 @@
 <template>
 	<view id="change-avatar">
 		<view class="avatar-show-box">
-			<img class="avatar-large" :src="'https://cssa-mini.oss-cn-shanghai.aliyuncs.com/cssa-mini-avatar/' + currentAvatar + '.png'" />
+			<img class="avatar-large" :src="'https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/' + currentAvatar + '.jpg'" />
 		</view>
 		<view class="bottom-line"></view>
 		<view class="avatar-container">
 			<view v-for="index in avatar" :key="index" :class="currentAvatar==index?'selected avatar-box':'avatar-box'" @click="select(index)">
-				<img class="avatar" :src="'https://cssa-mini.oss-cn-shanghai.aliyuncs.com/cssa-mini-avatar/' + index + '.png'" />
+				<img class="avatar" :src="'https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/' + index + '.jpg'" />
 			</view>
 		</view>
 		<button class="button" v-show="showConfirm" @click="changeAvatar">确认</button>
