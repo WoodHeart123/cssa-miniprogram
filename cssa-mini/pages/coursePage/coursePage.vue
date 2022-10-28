@@ -35,7 +35,7 @@
 		<view scroll-y="true" show-scrollbar="true" refresher-enabled="false" refresher-triggered="false"
 			class="column-container comment-container" @scrolltolower="getCommentList()">
 			<view class="box" v-for="(comment, index) in commentList" :key="index">
-				<commentBoxVue :comment="comment"></commentBoxVue>
+				<commentBoxVue :comment="comment" :user="false"></commentBoxVue>
 			</view>
 			<uni-load-more :status="status" :contentText="contentText"></uni-load-more>
 		</view>

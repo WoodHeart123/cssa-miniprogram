@@ -1,5 +1,10 @@
 <template>
 	<view class="comment-box">
+		<view class="row-container course-title" v-if="user">
+			<text class="course-num">{{comment.departmentAbrev + " " + comment.courseNum}}</text>
+			<text>-</text>
+			<text class="course-name">{{comment.courseName}}</text>
+		</view>
 		<view class="comment-head-area row-container">
 			<image class="avatar"
 				:src="'https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/' + this.comment.userAvatar + '.jpg'">
@@ -41,7 +46,7 @@
 
 <script>
 	export default {
-		props: ["comment"],
+		props: ["comment","user"],
 		name: "comment-box",
 		data() {
 			return {
@@ -109,11 +114,27 @@
 
 	.comment-box {
 		background-color: white;
-		width: 100vw;
-		border-radius: 10px;
+		width: 100%;
 
 	}
-
+	.course-title{
+		width: 100%;
+		height: 40px;
+		line-height: 40px;
+		font-size: 12px;
+		overflow: hidden;
+	}
+	.course-num{
+		font-size: 15px;
+		font-weight: 500;
+		margin-left: 5px;
+		margin-right: 5px;
+	}
+	.course-name{
+		font-size: 12px;
+		margin-left: 5px;
+		color:#aaa;
+	}
 	.comment-head-area {
 		height: 50px;
 		margin: 5px 5px 5px 5px;
@@ -167,13 +188,13 @@
 	}
 
 	.comment-body {
-		width: calc(99vw - 50px);
+		width: calc(99% - 50px);
 		margin-top: 10px;
 		margin-bottom: 5px;
 		max-height: 100px;
 		font-size: 13px;
 		margin-left: 50px;
-		margin-right: 1vw;
+		margin-right: 1%;
 		line-height: 25px;
 		overflow: hidden;
 		overflow-x: hidden;

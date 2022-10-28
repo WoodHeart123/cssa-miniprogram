@@ -103,6 +103,8 @@
 		onLoad() {
 			wx.cloud.init();
 			this.getDepartmentList();
+		},
+		onShow(){
 			this.onPulling();
 		},
 		methods: {

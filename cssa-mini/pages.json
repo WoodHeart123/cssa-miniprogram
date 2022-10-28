@@ -24,9 +24,9 @@
 			"style": {
 				"navigationBarTitleText": "活动列表",
 				"backgroundColor": "#F5F5F5",
-				"enablePullDownRefresh": true,
+				"enablePullDownRefresh": true
 			}
-		},{
+		}, {
 			"path": "pages/detail/detail",
 			"style": {
 				"navigationBarTitleText": "详情",
@@ -59,7 +59,7 @@
 			"path": "pages/courseMain/courseMain",
 			"style": {
 				"navigationBarTitleText": "课程吐槽",
-				"disableScroll": true,
+				"disableScroll": true
 			}
 		}, {
 			"path": "pages/coursePage/coursePage",
@@ -129,8 +129,11 @@
 		}, {
 			"path": "pages/myComment/myComment",
 			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
+				"navigationBarTitleText": "我的吐槽",
+				"disableScroll": true,
+				"app-plus": {
+					"bounce": "none"
+				}
 			}
 
 		}
@@ -148,6 +151,10 @@
 			{
 				"name": "secondDetail",
 				"path": "pages/detail/secondDetail"
+			},
+			{
+				"name": "myComment",
+				"path": "pages/myComment/myComment"
 			}
 		]
 	},
