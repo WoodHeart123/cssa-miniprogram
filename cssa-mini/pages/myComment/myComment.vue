@@ -1,16 +1,26 @@
 <template>
 	<view class="my-comment">
 		<uni-swipe-action>
-			<uni-swipe-action-item :right-options="options1" v-for="(comment, index) in myComment"
-				:key="index">
+			<uni-swipe-action-item v-for="(comment, index) in myComment" :key="index">
 				<view class="box">
 					<view class="left-bar">
 						<commentBoxVue :comment="comment" user="true"></commentBoxVue>
 					</view>
 					<view class="right-bar"><span class="iconfont icon">&#xe66d;</span></view>
 				</view>
+				<template v-slot:right>
+					<view class="slot">
+						<view class="slot-button" @click="bindClick({key:0,index:index})">
+							<uni-icons type="gear" size="20" color="#007aff"></uni-icons>
+							<text class="slot-button-text" >修改</text>
+						</view>
+						<view class="slot-button" @click="bindClick({key:1,index:index})">
+							<uni-icons type="trash" size="20" color="#F56C6C"></uni-icons>
+							<text class="slot-button-text">删除</text>
+						</view>
+					</view>
+				</template>
 			</uni-swipe-action-item>
-
 		</uni-swipe-action>
 		<uni-load-more :status="status" :contentText="contentText"></uni-load-more>
 	</view>
@@ -41,11 +51,18 @@
 				},
 				likedComment: [],
 				options1: [{
-					text: '修改评论'
-				},
-				{
-					text:'删除'
-				}],
+						text: '修改评论',
+						style: {
+							backgroundColor: '#007aff'
+						}
+					},
+					{
+						text: '删除',
+						style: {
+							backgroundColor: '#F56C6C'
+						}
+					}
+				],
 			}
 		},
 		methods: {
@@ -74,6 +91,16 @@
 					this.offset = res.data.data[res.data.data.length - 1].commentID;
 				}
 				this.myComment = this.myComment.concat(res.data.data);
+			},
+			bindClick: function(e) {
+				console.log(e);
+				if(e.key == 0){
+					uni.navigateTo({
+						url: "/pages/postComment/postComment?comment=" + encodeURIComponent(JSON.stringify(this.myComment[e.index])) + "&edit=true",
+					});
+				}else{
+					this.myComment.splice(e.index,1);
+				}
 			}
 		},
 		components: {
@@ -85,6 +112,7 @@
 
 <style>
 	@import '@/static/iconfont/iconfont.css';
+
 	.my-comment {
 		width: 100vw;
 		height: 100vh;
@@ -96,21 +124,40 @@
 		display: flex;
 		flex-direction: row;
 	}
-	.right-bar{
+
+	.right-bar {
 		width: 8vw;
 		background-color: white;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 	}
-	.left-bar{
-		width:92vw;
+
+	.left-bar {
+		width: 92vw;
 	}
-	.icon{
+
+	.icon {
 		font-size: 15px;
-		color:#ccc;
+		color: #ccc;
 	}
-	.uni-swipe{
+
+	.uni-swipe {
 		margin-bottom: 10px;
+	}
+	.slot{
+		width: 20vw;
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+		background-color: white;
+	}
+	.slot-button{
+		height: 50%;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		color:#777;
 	}
 </style>

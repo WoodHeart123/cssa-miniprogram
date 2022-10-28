@@ -31,7 +31,7 @@
 					<img class="image" src="../../static/index/zan.svg" />
 					<text class="text-box">赞/收藏</text>
 				</view>
-				<view class="button-box">
+				<view class="button-box" @click="jump(2)">
 					<img class="image" src="../../static/index/comment.svg" />
 					<text class="text-box">我的评论</text>
 				</view>
@@ -96,6 +96,14 @@
 						this.login(userProfile.userInfo.nickName);
 					},
 				});
+			},
+			jump:function(num){
+				if(num == 2){
+					uni.navigateTo({
+						url: "/pages/myComment/myComment"
+					});
+				}
+				
 			},
 			toUserInfo: function() {
 				uni.navigateTo({

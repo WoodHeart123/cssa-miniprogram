@@ -130,10 +130,7 @@
 			"path": "pages/myComment/myComment",
 			"style": {
 				"navigationBarTitleText": "我的吐槽",
-				"disableScroll": true,
-				"app-plus": {
-					"bounce": "none"
-				}
+				"disableScroll": true
 			}
 
 		}

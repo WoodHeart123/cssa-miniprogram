@@ -4,7 +4,7 @@
 			<view class="title">
 				<text>{{this.comment.courseName}}</text>
 			</view>
-			<uni-forms ref="form" :model="comment" label-align="left" :rules="rules">
+			<uni-forms ref="form" :model="comment" label-align="left" :rules="rules" v-if="!edit">
 				<uni-forms-item name="professor" label="教授">
 					<uni-easyinput :clearable="false" v-model="comment.professor" placeholder="教授名" />
 				</uni-forms-item>
@@ -16,10 +16,16 @@
 					<uni-rate v-model="comment.prefer" size="36" :is-fill="false"></uni-rate>
 				</uni-forms-item>
 				<view class="blank"></view>
-				<uni-forms-item name="time" label="时间">
+				<uni-forms-item name="courseTime" label="时间">
 					<uni-data-picker v-model="comment.courseTime" :localdata="range"></uni-data-picker>
 				</uni-forms-item>
 				<view class="blank"></view>
+				<uni-forms-item name="comment" label="评论" label-position="top">
+					<uni-easyinput class="input" autoHeight :clearable="false" type="textarea" v-model="comment.comment"
+						placeholder="请输入评论" maxlength="400" />
+				</uni-forms-item>
+			</uni-forms>
+			<uni-forms ref="form" :model="comment" label-align="left" :rules="rules" v-else>
 				<uni-forms-item name="comment" label="评论" label-position="top">
 					<uni-easyinput class="input" autoHeight :clearable="false" type="textarea" v-model="comment.comment"
 						placeholder="请输入评论" maxlength="400" />
@@ -37,43 +43,9 @@
 			return {
 				comment: {},
 				range: [],
+				edit: false,
+				commentMap: {},
 				rules: {
-					professor: {
-						rules: [{
-							required: true,
-							errorMessage: '请填写教授名字',
-						}, ]
-					},
-					courseTime: {
-						rules: [{
-							required: true,
-							errorMessage: '请选择教学时间',
-						}]
-					},
-					difficulty: {
-						rules: [{
-								required: true,
-								errorMessage: '请选择难度',
-							},
-							{
-								minimum: 1,
-								maximum: 5,
-								errorMessage: '难度应为1-5',
-							}
-						]
-					},
-					prefer: {
-						rules: [{
-								required: true,
-								errorMessage: '请选择推荐度',
-							},
-							{
-								minimum: 1,
-								maximum: 5,
-								errorMessage: '难度应为1-5',
-							}
-						]
-					},
 					comment: {
 						rules: [{
 								required: true,
@@ -91,25 +63,53 @@
 			}
 		},
 		onLoad(options) {
-			this.initTimePicker();
-			let course = JSON.parse(decodeURIComponent(options.course));
-			this.comment.courseID = course.courseID;
-			this.comment.courseName = course.courseName;
-			uni.getStorage({
-				key: "userInfo",
-				success: (res) => {
-					this.comment.userAvatar = res.data.avatar;
-				},
-			});
+			if (options.edit == "false") {
+				this.edit = false;
+			} else {
+				this.edit = true;
+			}
+			if (!this.edit) {
+				this.initTimePicker();
+				let course = JSON.parse(decodeURIComponent(options.course));
+				this.rules["professor"] = {
+					rules: [{
+						required: true,
+						errorMessage: '请填写教授名字',
+					}, ]
+				};
+				this.rules["courseTime"] = {
+					rules: [{
+						required: true,
+						errorMessage: '请选择教学时间',
+					}]
+				};
+				this.rules["difficulty"] = {
+					rules: [{
+						required: true,
+						errorMessage: '请选择难度',
+					}]
+				};
+				this.rules["prefer"] = {
+					rules: [{
+						required: true,
+						errorMessage: '请选择推荐度',
+					}]
+				};
+				this.comment.courseID = course.courseID;
+				this.comment.courseName = course.courseName;
+				this.comment.userAvatar = uni.getStorageSync("userInfo").avatar;
+			}else{
+				this.comment = JSON.parse(decodeURIComponent(options.comment));
+			}		
 			uni.getStorage({
 				key: "commentMap",
+				success: (res) => {
+					this.commentMap = res.data;
+				},
 				fail: () => {
-					uni.setStorage({
-						key: "commentMap",
-						data: {}
-					});
+					this.commentMap = {};
 				}
-			})
+			});
 		},
 		methods: {
 			initTimePicker: function() {
@@ -140,10 +140,9 @@
 				}
 			},
 			async postComment() {
-				let commentMap = uni.getStorageSync("commentMap");
 				uni.showLoading({
-					title:"正在上传中",
-					mask:true
+					title: "正在上传中",
+					mask: true
 				})
 				const res = await wx.cloud.callContainer({
 					config: {
@@ -163,36 +162,43 @@
 					});
 					uni.hideLoading()
 					return;
-				}else if(res.data.status == 110){
-					commentMap[this.comment.courseID] = 2;
+				} else if (res.data.status == 110) {
+					this.commentMap[this.comment.courseID] = 2;
 					uni.showToast({
-						title:"超过两条评论",
+						title: "超过两条评论",
 						icon: "error",
-						mask:true,
+						mask: true,
 						complete: () => {
-							uni.setStorageSync("commentMap",commentMap);
+							uni.setStorageSync("commentMap", this.commentMap);
 						}
 					});
-					setTimeout(() => {							
+					setTimeout(() => {
 						uni.hideLoading();
-						uni.navigateBack();},1500
-					);
+						uni.navigateBack();
+					}, 1500);
 					return;
-				}else if(res.data.status == 100){
-					if(commentMap[this.comment.courseID] == undefined){
-						commentMap[this.comment.courseID] = 1;
-					}else{
-						commentMap[this.comment.courseID] += 1;
+				} else if (res.data.status == 100) {
+					if (this.commentMap[this.comment.courseID] == undefined) {
+						this.commentMap[this.comment.courseID] = 1;
+					} else {
+						this.commentMap[this.comment.courseID] += 1;
 					}
-					uni.setStorageSync("commentMap",commentMap);
+					uni.setStorageSync("commentMap", this.commentMap);
 				}
 				uni.hideLoading();
 				uni.navigateBack();
 
 			},
-			submit: function() {
+			async editComment(){
+				console.log("edit");
+			},
+			submit: function() {	
 				this.$refs["form"].validate().then(res => {
-					this.postComment();
+					if(!this.edit){
+						this.postComment();
+					}else{
+						this.editComment();
+					}
 				}).catch(err => {
 					console.log('err', err);
 				})

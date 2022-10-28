@@ -123,6 +123,7 @@
 
 			},
 			async login() {
+				uni.showLoading();
 				const res = await wx.cloud.callContainer({
 					config: {
 						env: 'prod-9go38k3y9fee3b2e',
@@ -137,8 +138,9 @@
 				this.isStudent = res.data.data.isStudent;
 				uni.setStorage({
 					key: "userInfo",
-					data: this.userInfo
+					data: res.data.data
 				});
+				uni.hideLoading();
 				this.toComment();
 			},
 			toComment: function() {
@@ -153,8 +155,7 @@
 					uni.getUserProfile({
 						desc: "获取用户信息",
 						success: (userProfile) => {
-							this.userInfo = userProfile.userInfo;
-							this.login();
+							this.login(userProfile.userInfo.nickName);
 						},
 						fail: () => {
 							uni.showToast({
@@ -181,8 +182,7 @@
 				// 	return;
 				// }
 				uni.navigateTo({
-					url: "/pages/postComment/postComment?course=" + encodeURIComponent(JSON.stringify(this
-						.course)),
+					url: "/pages/postComment/postComment?course=" + encodeURIComponent(JSON.stringify(this.course)) + "&edit=false",
 				});
 			}
 		},
