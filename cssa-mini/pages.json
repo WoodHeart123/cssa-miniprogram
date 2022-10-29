@@ -133,6 +133,13 @@
 				"disableScroll": true
 			}
 
+		}, {
+			"path": "pages/searchProduct/searchProduct",
+			"style": {
+				"navigationBarTitleText": "搜索",
+				"enablePullDownRefresh": false
+			}
+
 		}
 	],
 	"condition": {
@@ -152,6 +159,10 @@
 			{
 				"name": "myComment",
 				"path": "pages/myComment/myComment"
+			},
+			{
+				"name": "searchProduct",
+				"path": "pages/searchProduct/searchProduct"
 			}
 		]
 	},
