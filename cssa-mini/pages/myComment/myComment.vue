@@ -100,6 +100,9 @@
 					});
 				}else{
 					this.myComment.splice(e.index,1);
+					uni.showToast({
+						title:"成功删除",
+					})
 				}
 			}
 		},
@@ -117,12 +120,14 @@
 		width: 100vw;
 		height: 100vh;
 		overflow-y: scroll;
+		transition: all 3s ease;
 	}
 
 	.box {
 		width: 100vw;
 		display: flex;
 		flex-direction: row;
+		
 	}
 
 	.right-bar {

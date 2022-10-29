@@ -58,7 +58,7 @@
 		onShow() {
 			const query = uni.createSelectorQuery().in(this);
 			query.select('#comment-text').boundingClientRect(data => {
-				if (data.height < 100) {
+				if (data.height > 100) {
 					this.more = true;
 				}
 			}).exec();
