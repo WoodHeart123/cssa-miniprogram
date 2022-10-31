@@ -58,15 +58,18 @@
 						]
 					},
 
-				}
+				},
+				path:"/course/postcomment"
 
 			}
 		},
 		onLoad(options) {
 			if (options.edit == "false") {
 				this.edit = false;
+				this.path = "/course/postcomment";
 			} else {
 				this.edit = true;
+				this.path = "/user/updateComment"
 			}
 			if (!this.edit) {
 				this.initTimePicker();
@@ -143,12 +146,12 @@
 				uni.showLoading({
 					title: "正在上传中",
 					mask: true
-				})
+				});
 				const res = await wx.cloud.callContainer({
 					config: {
 						env: 'prod-9go38k3y9fee3b2e',
 					},
-					path: "/course/postcomment",
+					path: this.path,
 					method: 'POST',
 					header: {
 						'X-WX-SERVICE': 'springboot-f8i8',
@@ -177,7 +180,7 @@
 						uni.navigateBack();
 					}, 1500);
 					return;
-				} else if (res.data.status == 100) {
+				} else if (res.data.status == 100 && !this.edit) {
 					if (this.commentMap[this.comment.courseID] == undefined) {
 						this.commentMap[this.comment.courseID] = 1;
 					} else {
@@ -189,16 +192,9 @@
 				uni.navigateBack();
 
 			},
-			async editComment(){
-				console.log("edit");
-			},
 			submit: function() {	
 				this.$refs["form"].validate().then(res => {
-					if(!this.edit){
 						this.postComment();
-					}else{
-						this.editComment();
-					}
 				}).catch(err => {
 					console.log('err', err);
 				})

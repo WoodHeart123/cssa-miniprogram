@@ -1,5 +1,6 @@
 <template>
 	<view class="my-comment">
+		<view class="hint">向左划可修改或删除评论</view>
 		<uni-swipe-action>
 			<uni-swipe-action-item v-for="(comment, index) in myComment" :key="index">
 				<view class="box">
@@ -30,13 +31,20 @@
 	export default {
 		onLoad() {
 			wx.cloud.init();
-			this.getMyComment();
 			uni.getStorage({
 				key: "userInfo",
 				success: (res) => {
 					this.likedComment = res.data.likedComment;
 				},
 			});
+		},
+		onShow(){
+			this.getMyComment();
+		},
+		onHide(){
+			this.status = "more";
+			this.offset = 0;
+			this.myComment = [];
 		},
 		data() {
 			return {
@@ -117,8 +125,9 @@
 	@import '@/static/iconfont/iconfont.css';
 
 	.my-comment {
+		margin-top: 30px;
 		width: 100vw;
-		height: 100vh;
+		height: calc(100vh - 30px);
 		overflow-y: scroll;
 		transition: all 3s ease;
 	}
@@ -146,7 +155,18 @@
 		font-size: 15px;
 		color: #ccc;
 	}
-
+	.hint{
+		position: fixed;
+		top:0;
+		width: 100%;
+		background-color: white;
+		height: 30px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 12px;
+		color:#ccc;
+	}
 	.uni-swipe {
 		margin-bottom: 10px;
 	}
