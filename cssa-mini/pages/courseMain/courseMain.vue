@@ -19,6 +19,7 @@
 				</view>
 				<view class="overlay" v-show="showMenu"></view>
 				<view class="column-container suggest-list" v-if="searching">
+					<uni-load-more v-show="searchStatus!='more'" :status="searchStatus" :contentText="searchContentText"></uni-load-more>
 					<view class="row-container suggest-box" v-for="(course, index) in suggestList" :key="index"
 						@click="toCourse(course)">
 						<view class="suggest-box-course-num">
@@ -97,7 +98,13 @@
 					contentdown:"上拉显示更多",
 					contentrefresh:"正在加载...",
 					contentnomore:"没有更多课程了"
-				}
+				},
+				searchContentText:{
+					contentdown:"上拉显示更多",
+					contentrefresh:"正在搜索...",
+					contentnomore:"没有匹配课程"
+				},
+				searchStatus:"",
 			}
 		},
 		onLoad() {
@@ -117,6 +124,7 @@
 				}
 			},
 			async search(value) {
+				this.searchStatus = "loading";
 				const res = await wx.cloud.callContainer({
 					config: {
 						env: 'prod-9go38k3y9fee3b2e',
@@ -128,6 +136,11 @@
 					}
 				});
 				this.suggestList = res.data.data;
+				if(this.suggestList.length == 0){
+					this.searchStatus = "noMore";
+				}else{
+					this.searchStatus = "more";
+				}
 			},
 			changeKey: function(num) {
 				if (this.key == num && (this.key == 2 || this.key == 4)) {
@@ -197,15 +210,17 @@
 				this.departmentName = e.item.name;
 				this.departmentID = this.departmentDict[e.item.itemIndex.toString()];
 				this.courseList = [];
-				this.onPulling();
 				this.clickMenu();
+				console.log(this.departmentID);
+				this.onPulling();
+				
 			},
 			onPulling() {
 				if (!this.triggered) {
 					this.triggered = true;
 					setTimeout(() => {
 						this.triggered = false;
-					}, 3000)
+					}, 6000);
 				}
 			},
 			refresh: function() {
@@ -233,7 +248,9 @@
 				}else{
 					this.status = "more";
 				}
-				this.triggered = false;
+				this.$nextTick(() => {  
+                    this.triggered = false;
+                });  
 				
 			},
 			async getDepartmentList() {

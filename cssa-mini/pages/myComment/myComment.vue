@@ -107,10 +107,20 @@
 						url: "/pages/postComment/postComment?comment=" + encodeURIComponent(JSON.stringify(this.myComment[e.index])) + "&edit=true",
 					});
 				}else{
-					this.myComment.splice(e.index,1);
-					uni.showToast({
-						title:"成功删除",
-					})
+					uni.showModal({
+						title: "删除吐槽",
+						content: "是否删除吐槽？删除后将无法恢复",
+						confirmColor: "#1684FC",
+						success: function(res) {
+							var that = this;
+							if (res.confirm) {
+								this.myComment.splice(e.index,1);
+								uni.showToast({
+									title:"成功删除",
+								});
+							}
+						}.bind(this)
+					});	
 				}
 			}
 		},

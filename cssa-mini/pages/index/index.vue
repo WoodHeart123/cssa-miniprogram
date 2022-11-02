@@ -11,10 +11,10 @@
 			</view>
 			<view class="name-box" @click="toUserInfo">
 				<text class="nickname">{{userInfo.nickname}}</text>
-				<uni-tag class="tag" v-if="userInfo.isStudent" type="primary" :inverted="false" text="学生认证√" size="mini"
+				<!-- <uni-tag class="tag" v-if="userInfo.isStudent" type="primary" :inverted="false" text="学生认证√" size="mini"
 					:circle="true" />
 				<uni-tag class="tag" v-if="!userInfo.isStudent" :inverted="true" text="认证+" size="small"
-					:circle="true" />
+					:circle="true" /> -->
 			</view>
 
 		</view>
@@ -73,13 +73,16 @@
 				key: 'userInfo',
 				success: (res) => {
 					this.userInfo = res.data;
-					this.login(res.data.nickName?res.data.nickName:res.data.nickname);
+					this.login(res.data.nickName!=undefined?res.data.nickName:res.data.nickname);
 				},
 				fail: () => {
 					this.isLogin = false;
 				},
 			});
 			
+		},
+		onHide(){
+			this.$refs.welcome.close();
 		},
 		methods: {
 			preLoadAvatar:function(){
@@ -121,15 +124,13 @@
 						'X-WX-SERVICE': 'springboot-f8i8',
 					}
 				});
+				this.userInfo = res.data.data;
+				this.isLogin = true;
+				uni.setStorageSync("userInfo",res.data.data);
 				if (res.data.status == 103) {
 					this.$refs.welcome.open();
 				}
-				this.userInfo = res.data.data;
-				this.isLogin = true;
-				uni.setStorage({
-					key: "userInfo",
-					data: this.userInfo
-				});
+				
 			},
 			toChangeAvatar: function() {
 				uni.navigateTo({
