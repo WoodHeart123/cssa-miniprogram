@@ -15,11 +15,10 @@
 				</view>
 				<img class="image" src="../../static/forum.svg" />
 			</view>
-			<view class="row-container function-button disabled">
+			<view class="row-container function-button" @click="toSecond">
 				<view class="row-container function-button">
 					<view class="column-container function-text">
 						<text>二手商品</text>
-						<text style="font-size: 10px;">（待开发）</text>
 					</view>
 					<img class="image" src="../../static/ebay.svg" />
 				</view>
