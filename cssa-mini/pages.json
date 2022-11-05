@@ -184,12 +184,13 @@
 			"iconPath": "./static/home.png",
 			"selectedIconPath": "./static/home-selected.png"
 		},
-		}, {
+		{
 			"pagePath": "pages/activity/act",
 			"text": "活动",
 			"iconPath": "./static/act.png",
 			"selectedIconPath": "./static/act-selected.png"
-		}, {
+		}, 
+		{
 			"pagePath": "pages/community/com-main",
 			"text": "社区广场",
 			"iconPath": "./static/community.png",
