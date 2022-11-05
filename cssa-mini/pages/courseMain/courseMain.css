@@ -14,9 +14,6 @@
 	flex: 0;
 }
 
-.main-menu-half {
-	/* box-shadow: 0px 0px 25px #222; */
-}
 
 .menu {
 	position: fixed;
@@ -48,38 +45,42 @@
 }
 
 .top-bar {
-	width: 100%;
+	position:fixed;
+	top:0;
+	left: 0;
+	width: 100vw;
 	height: 56px;
 	background-color: white;
+	justify-content: space-between;
+	align-items: center;
 }
 
 .search-bar {
 	transition: all 500ms;
 	height: 56px;
-	width: 85%;
-	margin-left: 15%;
-
-}
-
-.search-bar-selected {
 	width: 100%;
-	margin-left: 0%;
 }
 
 .department-select {
-	position: fixed;
-	font-size: 20px;
 	width: 15vw;
-	height: 56px;
 	align-items: center;
 	justify-content: center;
-	color: #555;
+}
+
+.search-select{
+	width: 15vw;
+	align-items: center;
+	justify-content: center;
 }
 
 .suggest-list {
+	position: fixed;
+	left: 0;
+	top:56px;
 	background-color: white;
 	height: calc(100% - 56px) !important;
 	width: 100%;
+	z-index:15;
 }
 
 .icon {
@@ -88,16 +89,7 @@
 	transition: all 3s ease;
 }
 
-.course-list {
-	background-color: #F5F5F5;
-	border-radius: 20px 20px 0 0;
-	width: 100%;
-	height: calc(100vh - 126px);
-	flex: 0;
-}
-
 .filter-box {
-	position:relative;
 	height: 50px;
 	width: 100%;
 	align-items: center;
@@ -137,19 +129,13 @@
 }
 
 .department {
-	display: block;
-	margin-top: 5px;
 	height: 40px;
-	margin-bottom: 5px;
-	width: calc(100% - 20px);
+	width: 70vw;
 	font-size: 18px;
 	font-weight: 700;
-	background-color: #F5F5F5;
-	margin: 10px 10px 10px 10px;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	overflow: hidden;
-	text-align: left;
 	line-height: 40px;
 }
 
@@ -159,8 +145,13 @@
 
 .course-list-box {
 	overflow-y: auto;
-	height: calc(100vh - 156px);
+	left: 0;
+	margin-left: 85vw;
+	width: 100vw;
+	height: calc(100 - 56px)vh;
+	margin-top:56px;
 	background-color: #F5F5F5;
+	z-index:2;
 }
 
 .filter-button {

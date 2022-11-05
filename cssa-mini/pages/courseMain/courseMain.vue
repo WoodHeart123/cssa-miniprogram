@@ -4,67 +4,66 @@
 			<view class="menu column-container">
 				<uni-indexed-list :options="departmentList" :show-select=false @click="bindClick"></uni-indexed-list>
 			</view>
-			<view :class="showMenu?'main-menu-half':'main-content'" class="column-container main-content">
-				<view class="row-container top-bar">
-					<view class="row-container department-select">
-						<uni-transition ref="menuOpen" :show=true>
-							<text class="iconfont icon" @click="clickMenu">&#xed55;</text>
-						</uni-transition>
+
+			<view class="overlay" v-show="showMenu"></view>
+			<view class="column-container suggest-list" v-if="searching">
+				<uni-load-more v-show="searchStatus!='more'" :status="searchStatus" :contentText="searchContentText">
+				</uni-load-more>
+				<view class="row-container suggest-box" v-for="(course, index) in suggestList" :key="index"
+					@click="toCourse(course)">
+					<view class="suggest-box-course-num">
+						{{course.departmentAbrev + " " + String(course.courseNum) + " "}}
 					</view>
-					<view :class="searching?'search-bar-selected':'search-bar'" class="search-bar">
-						<uni-search-bar v-model="searchValue" cancelButton="auto" placeholder="搜索课程" clearButton="none"
-							@focus="onFocus" @input="searchBarInput" @confirm="searchBarInput" @cancel="onCancel">
-						</uni-search-bar>
-					</view>
+					<view class="suggest-box-course-name">{{course.courseName}}</view>
 				</view>
-				<view class="overlay" v-show="showMenu"></view>
-				<view class="column-container suggest-list" v-if="searching">
-					<uni-load-more v-show="searchStatus!='more'" :status="searchStatus" :contentText="searchContentText"></uni-load-more>
-					<view class="row-container suggest-box" v-for="(course, index) in suggestList" :key="index"
-						@click="toCourse(course)">
-						<view class="suggest-box-course-num">
-							{{course.departmentAbrev + " " + String(course.courseNum) + " "}}
-						</view>
-						<view class="suggest-box-course-name">{{course.courseName}}</view>
-					</view>
+			</view>
+			<view class="row-container top-bar">
+				<view class="row-container department-select" v-show="!searching">
+					<uni-transition ref="menuOpen" :show=true>
+						<text class="iconfont icon" @click="clickMenu">&#xed55;</text>
+					</uni-transition>
 				</view>
 				<view class="row-container department" v-show="!searching">
 					<text>{{departmentName}}</text>
 				</view>
-				<view class="column-container course-list" v-show="!searching">
-					<view class="row-container filter-box">
-						<view :class="key==0?'filter-selected filter':'filter'" class="row-container"
-							@click="changeKey(0)">
-							<text>课号</text>
-						</view>
-						<view :class="key==1?'filter-selected filter':'filter'" class="row-container"
-							@click="changeKey(1)">
-							<text>热门课程</text>
-						</view>
-						<view :class="key==4?'filter-selected filter':'filter'" class="row-container"
-							@click="changeKey(4)">
-							<text>推荐</text>
-							<text class="iconfont" v-show="key==4&&sortIndex==4">&#xed58;</text>
-							<text class="iconfont" v-show="key==4&&sortIndex==5">&#xed59;</text>
-						</view>
-						<view :class="key==2?'filter-selected filter':'filter'" class="row-container"
-							@click="changeKey(2)">
-							<text>难度</text>
-							<text class="iconfont" v-show="key==2&&sortIndex==3">&#xed58;</text>
-							<text class="iconfont" v-show="key==2&&sortIndex==2">&#xed59;</text>
-						</view>
-					</view>
-					<scroll-view scroll-y="true" show-scrollbar="true" refresher-enabled="true"
-						class="column-container course-list-box"
-						refresher-background="white" @refresherrefresh="refresh" enable-back-to-top="true"
-						:refresher-triggered="triggered" @refresherpulling="onPulling" @scrolltolower="onScrollLower">
-						<view v-for="(course,index) in courseList" :key="index">
-							<course-box-vue :course="course" class="box"></course-box-vue>
-						</view>
-						<uni-load-more v-show="courseList.length >= 10" :status="status" :contentText="contentText"></uni-load-more>
-					</scroll-view>
+				<view class="row-container search-select" v-show="!searching">
+					<uni-icons type="search" size="30" color="#1684FC" v-show="!searching" @click="onSearch"></uni-icons>
+				</view>
+				<view class="search-bar" v-show="searching">
+					<uni-search-bar v-model="searchValue" cancelButton="auto" placeholder="搜索课程" clearButton="none" :focus="searching"
+						@focus="onFocus" @input="searchBarInput" @confirm="searchBarInput" @cancel="onCancel">
+					</uni-search-bar>
 				</view>
 			</view>
+			<scroll-view scroll-y="true" show-scrollbar="true" refresher-enabled="true"
+				class="column-container course-list-box" refresher-background="white" @refresherrefresh="refresh"
+				enable-back-to-top="true" :refresher-triggered="triggered" @refresherpulling="onPulling"
+				@scrolltolower="onScrollLower" @scroll="onScroll">
+				
+				<view class="row-container filter-box">
+					<view :class="key==0?'filter-selected filter':'filter'" class="row-container" @click="changeKey(0)">
+						<text>课号</text>
+					</view>
+					<view :class="key==1?'filter-selected filter':'filter'" class="row-container" @click="changeKey(1)">
+						<text>热门课程</text>
+					</view>
+					<view :class="key==4?'filter-selected filter':'filter'" class="row-container" @click="changeKey(4)">
+						<text>推荐</text>
+						<text class="iconfont" v-show="key==4&&sortIndex==4">&#xed58;</text>
+						<text class="iconfont" v-show="key==4&&sortIndex==5">&#xed59;</text>
+					</view>
+					<view :class="key==2?'filter-selected filter':'filter'" class="row-container" @click="changeKey(2)">
+						<text>难度</text>
+						<text class="iconfont" v-show="key==2&&sortIndex==3">&#xed58;</text>
+						<text class="iconfont" v-show="key==2&&sortIndex==2">&#xed59;</text>
+					</view>
+				</view>
+				<view v-for="(course,index) in courseList" :key="index">
+					<course-box-vue :course="course" class="box"></course-box-vue>
+				</view>
+				<uni-load-more v-show="courseList.length >= 10" :status="status" :contentText="contentText">
+				</uni-load-more>
+			</scroll-view>
 		</view>
 	</uni-transition>
 </template>
@@ -84,37 +83,62 @@
 				key: 0,
 				triggered: false,
 				status: "more",
-				sort: ["SORT_BY_COURSE_NUM","SORT_BY_COMMENT_COUNT","SORT_BY_AVG_DIFFICULTY_ASC","SORT_BY_AVG_DIFFICULTY_DESC","SORT_BY_AVG_PREFER_DESC","SORT_BY_AVG_PREFER_ASC"],
+				sort: ["SORT_BY_COURSE_NUM", "SORT_BY_COMMENT_COUNT", "SORT_BY_AVG_DIFFICULTY_ASC",
+					"SORT_BY_AVG_DIFFICULTY_DESC", "SORT_BY_AVG_PREFER_DESC", "SORT_BY_AVG_PREFER_ASC"
+				],
 				courseCount: 0,
 				sortIndex: 0,
 				departmentList: [],
-				departmentDict:[],
+				departmentDict: [],
 				courseList: [],
 				departmentID: 0,
 				departmentName: "所有课程",
 				timer: {},
 				suggestList: [],
-				contentText:{
-					contentdown:"上拉显示更多",
-					contentrefresh:"正在加载...",
-					contentnomore:"没有更多课程了"
+				contentText: {
+					contentdown: "上拉显示更多",
+					contentrefresh: "正在加载...",
+					contentnomore: "没有更多课程了"
 				},
-				searchContentText:{
-					contentdown:"上拉显示更多",
-					contentrefresh:"正在搜索...",
-					contentnomore:"没有匹配课程"
+				searchContentText: {
+					contentdown: "上拉显示更多",
+					contentrefresh: "正在搜索...",
+					contentnomore: "没有匹配课程"
 				},
-				searchStatus:"",
+				searchStatus: "",
+				sharing: false,
 			}
 		},
 		onLoad() {
 			wx.cloud.init();
 			this.getDepartmentList();
 		},
-		onShow(){
-			this.onPulling();
+		onShow() {
+			if (!this.sharing) {
+				this.onPulling();
+			}
+			this.sharing = false;
+		},
+		onShareAppMessage(res) {
+			this.sharing = true;
+			return {
+				title: "麦屯小助手-课程吐槽",
+				path: '/pages/courseMain/courseMain',
+				imageUrl: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-share/forum.png"
+			}
+		},
+		onShareTimeline(res) {
+			this.sharing = true;
+			return {
+				title: "麦屯小助手-课程吐槽",
+				path: '/pages/courseMain/courseMain',
+
+			}
 		},
 		methods: {
+			onSearch:function(){
+				this.searching = true;
+			},
 			searchBarInput: function(value) {
 				if (value.length != 0) {
 					clearTimeout(this.timer);
@@ -136,16 +160,16 @@
 					}
 				});
 				this.suggestList = res.data.data;
-				if(this.suggestList.length == 0){
+				if (this.suggestList.length == 0) {
 					this.searchStatus = "noMore";
-				}else{
+				} else {
 					this.searchStatus = "more";
 				}
 			},
 			changeKey: function(num) {
 				if (this.key == num && (this.key == 2 || this.key == 4)) {
 					this.sortIndex = (this.sortIndex - num + 1) % 2 + num;
-				} else{
+				} else {
 					this.sortIndex = num;
 				}
 				console.log(this.sortIndex);
@@ -187,9 +211,9 @@
 					this.$refs.menuOpen.run();
 				}
 			},
-			onScrollLower:function(){
+			onScrollLower: function() {
 				this.status = "loading";
-				if(this.departmentID != 0){
+				if (this.departmentID != 0) {
 					this.status = "noMore";
 					return;
 				}
@@ -202,7 +226,8 @@
 			touchmove(e) {
 				this.moveX = e.touches[0].clientX
 				this.moveY = e.touches[0].clientY
-				if (Math.abs(this.startY - this.moveY) <= 50 && Math.abs(this.startX - this.moveX) >= 100 && !this.showMenu) {
+				if (Math.abs(this.startY - this.moveY) <= 50 && Math.abs(this.startX - this.moveX) >= 100 && !this
+					.showMenu) {
 					this.clickMenu();
 				}
 			},
@@ -213,7 +238,7 @@
 				this.clickMenu();
 				console.log(this.departmentID);
 				this.onPulling();
-				
+
 			},
 			onPulling() {
 				if (!this.triggered) {
@@ -239,19 +264,19 @@
 						'X-WX-SERVICE': 'springboot-f8i8',
 					}
 				});
-				if(res.data.status == 100){
+				if (res.data.status == 100) {
 					this.courseList = this.courseList.concat(res.data.data);
 					this.courseCount += 20;
 				}
-				if(res.data.data.length == 0){
+				if (res.data.data.length == 0) {
 					this.status = "noMore";
-				}else{
+				} else {
 					this.status = "more";
 				}
-				this.$nextTick(() => {  
-                    this.triggered = false;
-                });  
-				
+				this.$nextTick(() => {
+					this.triggered = false;
+				});
+
 			},
 			async getDepartmentList() {
 				const res = await wx.cloud.callContainer({
@@ -265,7 +290,7 @@
 					}
 				});
 				let tempList = res.data.data;
-				this.departmentList=[{
+				this.departmentList = [{
 					letter: ' ',
 					data: ["所有课程"]
 				}];
@@ -284,7 +309,7 @@
 					} else {
 						wordList.data.push(tempList[i].department)
 					}
-					this.departmentDict[(i+1).toString()] = tempList[i].departmentID;
+					this.departmentDict[(i + 1).toString()] = tempList[i].departmentID;
 				}
 				this.departmentList.push(wordList);
 				uni.setStorage({

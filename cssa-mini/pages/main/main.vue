@@ -1,10 +1,10 @@
 <template>
 	<view id="main" class="column-container">
-		<uni-swiper-dot class="uni-swiper-dot-box" @clickItem="clickItem" :info="actDetailList" :current="current"
-			mode="dot" :dots-styles="dotStyle" field="content">
-			<swiper class="swiper-box" @change="change">
-				<swiper-item v-for="(actDetail, index) in actDetailList" :key="index">
-					<img class='swiper-image' :src="actDetail.imgs" @click="toAct" />
+		<uni-swiper-dot class="uni-swiper-dot-box" @clickItem="clickItem" :info="images" :current="current"
+			mode="dot" field="content">
+			<swiper class="swiper-box" @change="change" :current="current">
+				<swiper-item v-for="(image, index) in images" :key="index">
+					<img class='swiper-image' :src="image" @click="toPreview" />
 				</swiper-item>
 			</swiper>
 		</uni-swiper-dot>
@@ -15,7 +15,7 @@
 				</view>
 				<img class="image" src="../../static/forum.svg" />
 			</view>
-			<view class="row-container function-button disabled">
+<!-- 			<view class="row-container function-button disabled" @click="toSecond">
 				<view class="row-container function-button">
 					<view class="column-container function-text">
 						<text>二手商品</text>
@@ -23,9 +23,9 @@
 					</view>
 					<img class="image" src="../../static/ebay.svg" />
 				</view>
-			</view>
+			</view> -->
 		</view>
-		<view class="row-container function-box disabled">
+<!-- 		<view class="row-container function-box disabled">
 			<view class="row-container function-button">
 				<view class="row-container function-button">
 					<view class="column-container function-text">
@@ -44,7 +44,7 @@
 					<img class="image" src="../../static/handbook.svg" />
 				</view>
 			</view>
-		</view>
+		</view> -->
 <!-- 		<view class="leader-list">
 			<text class="cssa-intro-text">CSSA介绍</text>
 			<scroll-view class="row-container leader-intro" :scroll-x="true">
@@ -81,10 +81,15 @@
 					selectedBorder: '1px rgba(83, 200, 249,0.9) solid'
 				},
 				current: 0,
-				actDetailList: [],
 				leaderInfo: list,
-				popupLeader: {}
-
+				popupLeader: {},
+				images:[
+					"https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-main/cssa1.png",
+					"https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-main/cssa3.png",
+					"https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-main/cssa4.png",
+				],
+				current:0,
+				timer:"",
 			}
 		},
 		onLoad() {
@@ -97,9 +102,27 @@
 						url:"/pages/index/index"
 					})
 				}
-			})
+			});
+			setInterval(() => {
+				this.current = (this.current + 1) % this.images.length;
+			},10000);
+		},
+		onShareAppMessage(res) {
+			return {
+				title: "麦屯小助手",
+				path: '/pages/main/main'
+			}
+		},
+		onShareTimeline(res) {
+			return {
+				title: "麦屯小助手",
+				path: '/pages/activity/act'
+			}
 		},
 		methods: {
+			change:function(e) {
+				this.current = e.detail.current;
+			},
 			openLeaderPop: function(index) {
 				this.popupLeader = this.leaderInfo[index];
 				this.$refs.leaderPopup.open('bottom');
@@ -121,8 +144,18 @@
 				})
 			},
 			toSecond:function(){
-				uni.navigateTo({
-					url:"/pages/second/secondMain",
+				uni.showToast({
+					title:"内容将在2022年底上线，敬请期待",
+					icon:"none",
+				});
+				// uni.navigateTo({
+				// 	url:"/pages/second/secondMain",
+				// })
+			},
+			toPreview:function(){
+				uni.previewImage({
+					current:this.current,
+					urls:this.images
 				})
 			}
 		}
@@ -243,11 +276,7 @@ Login
 		box-shadow: 0 0px 6px 1px rgba(165, 165, 165, 0.2);
 		transition: width 0.05s;
 	}
-	.function-button:hover{
-		margin-left: 2.5vw;
-		width: 40vw;
-		margin-right: 2.5vw;
-	}
+
 
 	.image {
 		width: 40%;

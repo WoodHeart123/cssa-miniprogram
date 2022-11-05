@@ -91,35 +91,39 @@
 				"enablePullDownRefresh": false
 			}
 
-		}, {
-			"path": "pages/community/com-main",
-			"style": {
-				"navigationBarTitleText": "社区广场",
-				"backgroundColor": "#F5F5F5",
-				"enablePullDownRefresh": true,
-				"onReachBottomDistance": 100
-			}
-		}, {
-			"path": "pages/second/secondMain",
-			"style": {
-				"navigationBarTitleText": "二手市场",
-				"enablePullDownRefresh": false
-			}
+		}, 
+		// {
+		// 	"path": "pages/community/com-main",
+		// 	"style": {
+		// 		"navigationBarTitleText": "社区广场",
+		// 		"backgroundColor": "#F5F5F5",
+		// 		"enablePullDownRefresh": true,
+		// 		"onReachBottomDistance": 100
+		// 	}
+		// },
+		// {
+		// 	"path": "pages/second/secondMain",
+		// 	"style": {
+		// 		"navigationBarTitleText": "二手市场",
+		// 		"enablePullDownRefresh": false
+		// 	}
 
-		}, {
+		// },
+		{
 			"path": "pages/changeAvatar/changeAvatar",
 			"style": {
 				"navigationBarTitleText": "头像",
 				"enablePullDownRefresh": false
 			}
 		},
+		// {
+		// 	"path": "pages/detail/secondDetail",
+		// 	"style": {
+		// 		"navigationBarTitleText": "二手页面",
+		// 		"backgroundColor": "#F5F5F5"
+		// 	}
+		// }, 
 		{
-			"path": "pages/detail/secondDetail",
-			"style": {
-				"navigationBarTitleText": "二手页面",
-				"backgroundColor": "#F5F5F5"
-			}
-		}, {
 			"path": "pages/second/secondMainSearch",
 			"style": {
 				"navigationBarTitleText": "搜索",

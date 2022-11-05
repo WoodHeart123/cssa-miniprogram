@@ -100,8 +100,31 @@
 				}
 				this.myComment = this.myComment.concat(res.data.data);
 			},
+			deleteComment: async function(index,commentID){
+				const res = await wx.cloud.callContainer({
+					config: {
+						env: 'prod-9go38k3y9fee3b2e',
+					},
+					path: `/user/deleteComment`,
+					method: 'POST',
+					header: {
+						'X-WX-SERVICE': 'springboot-f8i8',
+					},
+					data:commentID
+				});
+				if(res.data.status == 100){
+					this.myComment.splice(index,1);
+					uni.showToast({
+						title:"成功删除",
+					});
+				}else{
+					uni.showToast({
+						title:"删除失败",
+						icon:"error"
+					});
+				}
+			},
 			bindClick: function(e) {
-				console.log(e);
 				if(e.key == 0){
 					uni.navigateTo({
 						url: "/pages/postComment/postComment?comment=" + encodeURIComponent(JSON.stringify(this.myComment[e.index])) + "&edit=true",
@@ -114,10 +137,8 @@
 						success: function(res) {
 							var that = this;
 							if (res.confirm) {
-								this.myComment.splice(e.index,1);
-								uni.showToast({
-									title:"成功删除",
-								});
+								this.deleteComment(e.index,this.myComment[e.index].commentID);
+								
 							}
 						}.bind(this)
 					});	
