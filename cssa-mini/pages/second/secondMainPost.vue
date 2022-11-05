@@ -15,7 +15,7 @@
 				</view>
 			</uni-group>
 			<uni-group mode="card">
-				<view>
+				<view >
 					<radio-group @change="radioChange">
 						<label class="radio radio_group1"><radio value="pickup" checked="true" color=#8B0000 style="transform:scale(0.8)"/>自取</label>
 						<label class="radio radio_group1"><radio value="delivery" color=#8B0000 style="transform:scale(0.8)"/>可送货</label>
@@ -26,7 +26,7 @@
 			<uni-group mode="card">
 				<view class="uni-list">
 					<view class="uni-list-cell">
-						<view class="uni-list-cell-left">
+						<view class="uni-list-cell-left type_font">
 							分类选择
 						</view>
 						<view class="divider"/>
@@ -59,7 +59,7 @@
 					<span class="span_margin">微信号</span>
 					<input class="uni-input" @blur="bindTextAreaBlur" maxlength="22" placeholder="请填写联系方式"  placeholder-style="font-size:14px"/>
 				</view>
-			<view class="checkbox">
+			<view class="checkbox check_message">
 				<checkbox value="save_contact" checked="false" color=#8B0000 style="transform:scale(0.8);"/>保存联系方式，方便后续使用
 			</view>
 			</uni-group>
@@ -116,14 +116,17 @@
 	
 	.checkbox{
 		margin-top: 10px;
+		font-size: 16px;
 	}
 	
 	.radio_group1{
 		margin-right: 15px;
+		font-size: 16px;
 	}
 	
 	.radio_group2{
 		margin-right: 5px;
+		font-size: 16px;
 	}
 	
 	.row_view{
@@ -141,6 +144,14 @@
 		 height: 5rpx;
 		 margin-top: 10px;
 		 margin-bottom: 10px;
+	}
+	
+	.type_font{
+		font-size: 16px;
+	}
+	
+	.check_message{
+		font-size: 14px;
 	}
 
 </style>
