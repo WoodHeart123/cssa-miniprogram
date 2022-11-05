@@ -173,7 +173,7 @@
 
 .suggest-box{
 	width: 100vw;
-	height: 30px;
+	height: 40px;
 	border-top:1px #F5F5F5 solid;
 	box-sizing: border-box;
 	align-items: center;
@@ -182,21 +182,22 @@
 
 .suggest-box-course-num{
 	display: flex;
-	font-size: 14px;
+	font-size: 17px;
 	margin-left: 10px;
-	line-height: 30px;
+	line-height: 40px;
 	width:auto;
-	height: 30px;
+	height: 40px;
+	font-weight: 700;
 	flex-shrink: 0;
 }
 
 .suggest-box-course-name{
-	font-size:12px;
-	height: 30px;
+	font-size:14px;
+	height: 40px;
 	color:#ccc;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	overflow: hidden;
 	padding-left: 10px;
-	line-height: 30px;
+	line-height: 40px;
 }

@@ -1,15 +1,15 @@
 <template>
 	<view id="change-avatar">
 		<view class="avatar-show-box">
-			<img class="avatar-large" :src="'https://cssa-mini.oss-cn-shanghai.aliyuncs.com/cssa-mini-avatar/' + currentAvatar + '.png'" />
+			<img class="avatar-large" :src="'https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/' + currentAvatar + '.jpg'" />
 		</view>
 		<view class="bottom-line"></view>
 		<view class="avatar-container">
 			<view v-for="index in avatar" :key="index" :class="currentAvatar==index?'selected avatar-box':'avatar-box'" @click="select(index)">
-				<img class="avatar" :src="'https://cssa-mini.oss-cn-shanghai.aliyuncs.com/cssa-mini-avatar/' + index + '.png'" />
+				<img class="avatar" :src="'https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/' + index + '.jpg'" />
 			</view>
 		</view>
-		<button class="button" v-show="showConfirm">确认</button>
+		<button class="button" v-show="showConfirm" @click="changeAvatar">确认</button>
 	</view>
 </template>
 
@@ -34,6 +34,25 @@
 					this.showConfirm = true;
 				}else{
 					this.showConfirm = false;
+				}
+			},
+			async changeAvatar(){
+				const res = await wx.cloud.callContainer({
+					config: {
+						env: 'prod-9go38k3y9fee3b2e',
+					},
+					path: "/user/updateAvatar?avatar=" + this.currentAvatar.toString(),
+					method: 'GET',
+					header: {
+						'X-WX-SERVICE': 'springboot-f8i8',
+					},
+				});
+				console.log(res);
+				if(res.data.status == 100){
+					let userInfo = uni.getStorageSync("userInfo");
+					userInfo.avatar = this.currentAvatar;
+					uni.setStorageSync("userInfo",userInfo);
+					uni.navigateBack();
 				}
 			}
 		}

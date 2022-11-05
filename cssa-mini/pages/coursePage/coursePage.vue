@@ -9,12 +9,12 @@
 					<view class="row-container rate-box">
 						<view class="rate-text"><text>难度:</text></view>
 						<uni-rate readonly="true" :value="course.avgDifficulty" allowHalf="true" size="20"></uni-rate>
-						<view class="rate-num"><text>{{course.avgDifficulty}}</text></view>
+						<view class="rate-num"><text>{{course.avgDifficulty.toFixed(1)}}</text></view>
 					</view>
 					<view class="row-container rate-box">
 						<view class="rate-text"><text>推荐:</text></view>
 						<uni-rate readonly="true" :value="course.avgPrefer" allowHalf="true" size="20"></uni-rate>
-						<view class="rate-num"><text>{{course.avgPrefer}}</text></view>
+						<view class="rate-num"><text>{{course.avgPrefer.toFixed(1)}}</text></view>
 					</view>
 				</view>
 				<view class="column-container credit-box">
@@ -28,17 +28,17 @@
 			<view :class="key==0?'row-container filter filter-selected':'row-container filter'" @click="changeKey(0)">
 				<text>最新</text>
 			</view>
-			<view :class="key==1?'row-container filter filter-selected':'row-container filter'" @click="changeKey(1)">
+			<!-- <view :class="key==1?'row-container filter filter-selected':'row-container filter'" @click="changeKey(1)">
 				<text>热度</text>
-			</view>
+			</view> -->
 		</view>
-		<scroll-view scroll-y="true" show-scrollbar="true" refresher-enabled="false"
+		<view scroll-y="true" show-scrollbar="true" refresher-enabled="false" refresher-triggered="false"
 			class="column-container comment-container" @scrolltolower="getCommentList()">
 			<view class="box" v-for="(comment, index) in commentList" :key="index">
-				<commentBoxVue :comment="comment"></commentBoxVue>
+				<commentBoxVue :comment="comment" :user="false"></commentBoxVue>
 			</view>
 			<uni-load-more :status="status" :contentText="contentText"></uni-load-more>
-		</scroll-view>
+		</view>
 		<uni-fab :pattern="pattern" horizontal="right" vertical="bottom" popMene="false" @fabClick="toComment" />
 	</view>
 </template>
@@ -60,6 +60,7 @@
 				orderType: ["SORT_BY_TIME", "SORT_BY_LIKE"],
 				isStudent: false,
 				isLogin: true,
+				likedComment:[],
 				userInfo: {},
 				commentList: [],
 				offset: 0,
@@ -69,7 +70,8 @@
 					contentdown:"上拉显示更多",
 					contentrefresh:"正在加载...",
 					contentnomore:"没有更多评论了"
-				}
+				},
+				commentMap:{},
 			}
 		},
 		methods: {
@@ -103,10 +105,13 @@
 				}
 				if (res.data.status == 100 && this.limit <= 40) {
 					this.offset += this.limit;
-					this.limit *= 2;
-				} else if (res.data.status == 100) {
-					this.offset += this.limit;
-				} else {
+					if(this.limit <= 40){
+						this.limit *= 2;
+					}
+					for(let i = 0;i < res.data.data.length;i++){
+						res.data.data[i].liked = (this.likedComment.indexOf(res.data.data[i].commentID) != -1)
+					}
+				}else {
 					/* 没有成功获取commentList */
 					uni.showToast({
 						title: '出现未知错误',
@@ -118,6 +123,7 @@
 
 			},
 			async login() {
+				uni.showLoading();
 				const res = await wx.cloud.callContainer({
 					config: {
 						env: 'prod-9go38k3y9fee3b2e',
@@ -132,17 +138,24 @@
 				this.isStudent = res.data.data.isStudent;
 				uni.setStorage({
 					key: "userInfo",
-					data: this.userInfo
+					data: res.data.data
 				});
+				uni.hideLoading();
 				this.toComment();
 			},
 			toComment: function() {
+				if(this.commentMap[this.course.courseID] != undefined && this.commentMap[this.course.courseID] >= 2){
+					uni.showToast({
+						title:"超过两条评论",
+						icon: "error",
+					});
+					return;
+				}
 				if (!this.isLogin) {
 					uni.getUserProfile({
 						desc: "获取用户信息",
 						success: (userProfile) => {
-							this.userInfo = userProfile.userInfo;
-							this.login();
+							this.login(userProfile.userInfo.nickName);
 						},
 						fail: () => {
 							uni.showToast({
@@ -169,8 +182,7 @@
 				// 	return;
 				// }
 				uni.navigateTo({
-					url: "/pages/postComment/postComment?course=" + encodeURIComponent(JSON.stringify(this
-						.course)),
+					url: "/pages/postComment/postComment?course=" + encodeURIComponent(JSON.stringify(this.course)) + "&edit=false",
 				});
 			}
 		},
@@ -178,7 +190,7 @@
 			this.course = JSON.parse(decodeURIComponent(options.course));
 			uni.setNavigationBarTitle({
 				title: this.course.departmentAbrev + " " + String(this.course.courseNum)
-			});
+			});	
 		},
 		onHide() {
 			this.status = "more";
@@ -186,11 +198,25 @@
 			this.commentList = [];
 		},
 		onShow() {
+			uni.getStorage({
+				key: "commentMap",
+				success: (res) => {
+					this.commentMap = res.data;
+				},
+				fail: () => {
+					this.commentMap = {};
+					uni.setStorage({
+						key: "commentMap",
+						data: {}
+					});
+				}
+			})
 			this.getCommentList();
 			uni.getStorage({
 				key: "userInfo",
 				success: (res) => {
 					this.isStudent = res.data.isStudent;
+					this.likedComment = res.data.likedComment;
 				},
 				fail: () => {
 					this.isLogin = false;
@@ -331,5 +357,6 @@
 		width: 100%;
 		overflow: hidden;
 		background-color: white;
+		overflow-y:scroll ;
 	}
 </style>

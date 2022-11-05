@@ -7,7 +7,7 @@
 		<view class="user-box" v-if="isLogin">
 			<view class="avatar-box" @click="toChangeAvatar">
 				<img class="avatar" 
-					:src="'https://cssa-mini.oss-cn-shanghai.aliyuncs.com/cssa-mini-avatar/' + this.userInfo.avatar + '.png'">
+					:src="'https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/' + this.userInfo.avatar + '.jpg'">
 			</view>
 			<view class="name-box" @click="toUserInfo">
 				<text class="nickname">{{userInfo.nickname}}</text>
@@ -31,7 +31,7 @@
 					<img class="image" src="../../static/index/zan.svg" />
 					<text class="text-box">赞/收藏</text>
 				</view>
-				<view class="button-box">
+				<view class="button-box" @click="jump(2)">
 					<img class="image" src="../../static/index/comment.svg" />
 					<text class="text-box">我的评论</text>
 				</view>
@@ -65,19 +65,33 @@
 		},
 		onLoad() {
 			wx.cloud.init();
+			this.getUserProfile();
+			this.preLoadAvatar();
 		},
 		onShow() {
 			uni.getStorage({
 				key: 'userInfo',
 				success: (res) => {
 					this.userInfo = res.data;
+					this.login(res.data.nickName!=undefined?res.data.nickName:res.data.nickname);
 				},
 				fail: () => {
 					this.isLogin = false;
 				},
 			});
+			
+		},
+		onHide(){
+			this.$refs.welcome.close();
 		},
 		methods: {
+			preLoadAvatar:function(){
+				for(let i = 1;i <= 12;i++){
+					// uni.getImageInfo({
+					// 	src:'https://cssa-mini.oss-cn-shanghai.aliyuncs.com/cssa-mini-avatar/' + i.toString() + '.png'
+					// })
+				}
+			},
 			getUserProfile: function() {
 				uni.getUserProfile({
 					desc: "获取用户昵称",
@@ -85,6 +99,14 @@
 						this.login(userProfile.userInfo.nickName);
 					},
 				});
+			},
+			jump:function(num){
+				if(num == 2){
+					uni.navigateTo({
+						url: "/pages/myComment/myComment"
+					});
+				}
+				
 			},
 			toUserInfo: function() {
 				uni.navigateTo({
@@ -102,17 +124,13 @@
 						'X-WX-SERVICE': 'springboot-f8i8',
 					}
 				});
+				this.userInfo = res.data.data;
+				this.isLogin = true;
+				uni.setStorageSync("userInfo",res.data.data);
 				if (res.data.status == 103) {
 					this.$refs.welcome.open();
 				}
-				this.userInfo = res.data.data;
-				this.isLogin = true;
-				uni.setStorage({
-					key: "userInfo",
-					data: this.userInfo
-				});
-
-
+				
 			},
 			toChangeAvatar: function() {
 				uni.navigateTo({

@@ -11,7 +11,7 @@
 		<view class="row-container function-box">
 			<view class="row-container function-button" @click="toCourse">
 				<view class="column-container function-text">
-					<text>课程论坛</text>
+					<text>课程吐槽</text>
 				</view>
 				<img class="image" src="../../static/forum.svg" />
 			</view>
@@ -29,6 +29,7 @@
 				<view class="row-container function-button">
 					<view class="column-container function-text">
 						<text>公寓转租</text>
+						<text style="font-size: 10px;">（待开发）</text>
 					</view>
 					<img class="image" src="../../static/apartment.svg" />
 				</view>
@@ -37,17 +38,16 @@
 				<view class="row-container function-button">
 					<view class="column-container function-text">
 						<text>生活手册</text>
+						<text style="font-size: 10px;">（待开发）</text>
 					</view>
 					<img class="image" src="../../static/handbook.svg" />
 				</view>
 			</view>
 		</view>
-
 <!-- 		<view class="leader-list">
 			<text class="cssa-intro-text">CSSA介绍</text>
 			<scroll-view class="row-container leader-intro" :scroll-x="true">
-				<president-box v-for="(leader, index) in leaderInfo" :key="index" :index="index" :leader="leader">
-				</president-box>
+				<president-box v-for="(leader, index) in leaderInfo" :key="index" :index="index" :leader="leader" />
 			</scroll-view>
 		</view>
 
@@ -59,6 +59,7 @@
 			<view class="pop-intro">{{popupLeader.intro}}</view>
 			<view style="height: 4vh;" />
 		</uni-popup> -->
+
 	</view>
 </template>
 
@@ -88,7 +89,14 @@
 		onLoad() {
 			wx.cloud.init();
 			uni.$on("openPopUp", (index) => this.openLeaderPop(index));
-			console.log(this);
+			uni.getStorage({
+				key:"userInfo",
+				fail: () => {
+					uni.switchTab({
+						url:"/pages/index/index"
+					})
+				}
+			})
 		},
 		methods: {
 			openLeaderPop: function(index) {
@@ -231,7 +239,13 @@ Login
 		width: 45vw;
 		border-radius: 5px;
 		background-color: white;
-		box-shadow: 0 0px 6px 1px rgba(165, 165, 165, 0.2)
+		box-shadow: 0 0px 6px 1px rgba(165, 165, 165, 0.2);
+		transition: width 0.05s;
+	}
+	.function-button:hover{
+		margin-left: 2.5vw;
+		width: 40vw;
+		margin-right: 2.5vw;
 	}
 
 	.image {

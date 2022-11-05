@@ -1,12 +1,12 @@
 <template>
 	<script src="@/static/iconfont/iconfont.js"></script>
 	<view>
-		<view class="section-title">认证</view>
-		<view class="box" @click="toStudentAuth">
+		<!-- <view class="section-title">认证</view> -->
+<!-- 		<view class="box" @click="toStudentAuth">
 			<view class="key">学生认证</view>
 			<view class="value">{{this.userInfo.isStudent?"已认证":"暂无认证"}}</view>
 			<view class="arrow" v-if="!this.userInfo.isStudent"><span class="iconfont">&#xe62d;</span></view>
-		</view>
+		</view> -->
 		<view class="section-title">个人信息</view>
 		<view class="box" @click="toName">
 			<view class="key">昵称</view>
@@ -84,12 +84,14 @@
 		text-align: right;
 		color:#AAA;
 		font-size:13px;
+		line-height: 20px;
 	}
 	.arrow{
 		width:10%;
 		margin-left:2%;
 		color:#AAA;
-		
+		font-size: 13px;
+		line-height: 20px;
 	}
 	
 </style>
