@@ -13,7 +13,7 @@
 				<img class="shoucang" :src="shoucang" :style="left" @click="setShouCang"/>
 			</view>
 			<view class="second_desc">
-				<view class="quantity-tag"><view class="quantity-content">已损坏</view></view>
+				<view class="quantity-tag"><view class="quantity-content">全新</view></view>
 				<view class="deliver-tag"><view class="deliver-content">自取</view></view>
 			</view>
 			<view class = "second_name">{{secondItem.name}}</view>
@@ -36,7 +36,7 @@
 					<img class="fuzhi-img" src="/static/fuzhi.png" @click="setClipboardData">
 				</view>
 			</view>
-			<view class="weixin" style="margin-left: 20px; margin-bottom: 2vw;">微信号：{{secondItem.contact[0]}}</view>
+			<view class="weixin" style="margin-top: 10px;margin-left: 40px; margin-bottom: 2vw; color: dimgray;">微信号：{{secondItem.contact[0]}}</view>
 		</view>
 		<view class="blank_line"></view>
 		<view class="description">
@@ -229,28 +229,36 @@
 				display:flex;
 				flex-direction: row;
 				.quantity-tag{
+					padding-right: 5px;
 					font-size: 13px;
-					margin-left: 8px;
+					margin-left: 12px;
 					padding-left: 5px;
+					padding-bottom: 4px;
+					background-color: #1e90ff;
+					border-radius: 5px;
 					color: #f5f5f5;
 					.quantity-content{
 						margin-top: 3px;
 						padding-left: 5px;
 						padding-right: 5px;
-						background-color: #1e90ff;
-						border-radius: 5px;
+						//background-color: #1e90ff;
+						//border-radius: 5px;
 					}
 				}
 				.deliver-tag{
+					margin-left: 2px;
 					font-size: 13px;
 					padding-left: 5px;
+					padding-right: 6px;
 					color: #f5f5f5;
+					background-color: #1e90ff;
+					border-radius: 5px;
 					.deliver-content{
 						margin-top: 3px;
 						padding-left: 5px;
 						padding-right: 5px;
-						background-color: #1e90ff;
-						border-radius: 5px;
+						//background-color: #1e90ff;
+						//border-radius: 5px;
 					}
 				}
 			}
