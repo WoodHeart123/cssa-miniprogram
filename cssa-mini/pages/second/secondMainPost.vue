@@ -11,22 +11,25 @@
 			</uni-group>
 			<uni-group mode="card">
 				<view class="uni-textarea">
-					<textarea @blur="bindTextAreaBlur" placeholder="请输入商品内容信息" maxlength="400" placeholder-style="font-size:14px"/>
+					<textarea @blur="bindTextAreaBlur" placeholder="请输入商品描述信息" maxlength="400" placeholder-style="font-size:14px"/>
 				</view>
 			</uni-group>
 			<uni-group mode="card">
 				<view>
-					<label class="radio"><radio value="pickup" checked="true" color=#8B0000 style="transform:scale(0.8)"/>自取</label>
-					<label class="radio"><radio value="delivery" color=#8B0000 style="transform:scale(0.8)"/>可送货</label>
-					<label class="radio"><radio value="pnd" color=#8B0000 style="transform:scale(0.8)"/>都可以</label>
+					<radio-group @change="radioChange">
+						<label class="radio radio_group1"><radio value="pickup" checked="true" color=#8B0000 style="transform:scale(0.8)"/>自取</label>
+						<label class="radio radio_group1"><radio value="delivery" color=#8B0000 style="transform:scale(0.8)"/>可送货</label>
+						<label class="radio radio_group1"><radio value="pnd" color=#8B0000 style="transform:scale(0.8)"/>都可以</label>
+					</radio-group>
 				</view>
 			</uni-group>
 			<uni-group mode="card">
 				<view class="uni-list">
 					<view class="uni-list-cell">
 						<view class="uni-list-cell-left">
-							分类
+							分类选择
 						</view>
+						<view class="divider"/>
 						<view class="uni-list-cell-db">
 							<picker @change="bindPickerChange" :value="index" :range="item_types">
 								<view class="uni-input">{{item_types[item_type_idx]}}</view>
@@ -36,23 +39,27 @@
 				</view>
 			</uni-group>
 			<uni-group mode="card">
-				<view>
-					<label class="radio"><radio value="new" checked="true" color=#8B0000 style="transform:scale(0.8)"/>全新\t\t</label>
-					<label class="radio"><radio value="almostnew" color=#8B0000 style="transform:scale(0.8)"/>几乎全新\n</label>
-					<label class="radio"><radio value="used" color=#8B0000 style="transform:scale(0.8)"/>明显使用痕迹\t\t</label>
-					<label class="radio"><radio value="impaired" color=#8B0000 style="transform:scale(0.8)"/>部分损毁</label>
+				<view class="label_group">
+					<radio-group @change="radioChange">
+						<label class="radio radio_group2"><radio value="new" checked="true" color=#8B0000 style="transform:scale(0.8)"/>全新</label>
+						<label class="radio radio_group2"><radio value="almostnew" color=#8B0000 style="transform:scale(0.8)"/>几乎全新</label>
+						<label class="radio radio_group2"><radio value="used" color=#8B0000 style="transform:scale(0.8)"/>明显使用痕迹</label>
+						<label class="radio radio_group2"><radio value="impaired" color=#8B0000 style="transform:scale(0.8)"/>部分损毁</label>
+					</radio-group>
 				</view>
 			</uni-group>
 			<uni-group mode="card">
-				<view class="uni-form-item uni-column">
-					<input class="uni-input" @blur="bindTextAreaBlur" maxlength="10" placeholder="请填写价格 $"  placeholder-style="font-size:14px"/>
+				<view class="uni-form-item uni-column row_view">
+					<span class="span_margin">价格 $</span>
+					<input class="uni-input" type="number" @blur="bindTextAreaBlur" maxlength="10" placeholder="请填写价格"  placeholder-style="font-size:14px"/>
 				</view>
 			</uni-group>
 			<uni-group mode="card">
-				<view class="uni-form-item uni-column">
-					<input class="uni-input" @blur="bindTextAreaBlur" maxlength="22" placeholder="请填写联系方式(微信号)"  placeholder-style="font-size:14px"/>
+				<view class="uni-form-item uni-column row_view">
+					<span class="span_margin">微信号</span>
+					<input class="uni-input" @blur="bindTextAreaBlur" maxlength="22" placeholder="请填写联系方式"  placeholder-style="font-size:14px"/>
 				</view>
-			<view>
+			<view class="checkbox">
 				<checkbox value="save_contact" checked="false" color=#8B0000 style="transform:scale(0.8);"/>保存联系方式，方便后续使用
 			</view>
 			</uni-group>
@@ -101,6 +108,39 @@
 	.image_upload {
 		padding: 14px;
 		padding-top: 0;
+	}
+	
+	.label_group{
+		flex-wrap: wrap;
+	}
+	
+	.checkbox{
+		margin-top: 10px;
+	}
+	
+	.radio_group1{
+		margin-right: 15px;
+	}
+	
+	.radio_group2{
+		margin-right: 5px;
+	}
+	
+	.row_view{
+		display: flex;
+		flex-direction: row;
+	}
+	
+	.span_margin{
+		margin-right: 10px;
+	}
+	
+	.divider{
+		 background: #000000;
+		 width: 100%;
+		 height: 5rpx;
+		 margin-top: 10px;
+		 margin-bottom: 10px;
 	}
 
 </style>
