@@ -73,13 +73,16 @@
 				key: 'userInfo',
 				success: (res) => {
 					this.userInfo = res.data;
-					this.login(res.data.nickName?res.data.nickName:res.data.nickname);
+					this.login(res.data.nickName!=undefined?res.data.nickName:res.data.nickname);
 				},
 				fail: () => {
 					this.isLogin = false;
 				},
 			});
 			
+		},
+		onHide(){
+			this.$refs.welcome.close();
 		},
 		methods: {
 			preLoadAvatar:function(){
@@ -121,15 +124,13 @@
 						'X-WX-SERVICE': 'springboot-f8i8',
 					}
 				});
+				this.userInfo = res.data.data;
+				this.isLogin = true;
+				uni.setStorageSync("userInfo",res.data.data);
 				if (res.data.status == 103) {
 					this.$refs.welcome.open();
 				}
-				this.userInfo = res.data.data;
-				this.isLogin = true;
-				uni.setStorage({
-					key: "userInfo",
-					data: this.userInfo
-				});
+				
 			},
 			toChangeAvatar: function() {
 				uni.navigateTo({

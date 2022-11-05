@@ -179,6 +179,7 @@
 			"text": "主页",
 			"iconPath": "./static/home.png",
 			"selectedIconPath": "./static/home-selected.png"
+		},
 		}, {
 			"pagePath": "pages/activity/act",
 			"text": "活动",
@@ -189,7 +190,8 @@
 			"text": "社区广场",
 			"iconPath": "./static/community.png",
 			"selectedIconPath": "./static/community-selected.png"
-		}, {
+		},
+		{
 			"pagePath": "pages/index/index",
 			"text": "用户",
 			"iconPath": "./static/user.png",
