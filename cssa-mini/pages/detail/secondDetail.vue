@@ -206,7 +206,7 @@
 					padding-left: 8px;
 					padding-top: 5px;
 					font-size: 25px;
-					font-weight: bold;
+					font-weight: 500;
 					color: #e13f05;
 				}
 				
@@ -246,7 +246,7 @@
 					}
 				}
 				.deliver-tag{
-					margin-left: 2px;
+					margin-left: 6px;
 					font-size: 13px;
 					padding-left: 5px;
 					padding-right: 6px;
