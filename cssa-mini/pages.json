@@ -91,7 +91,8 @@
 				"enablePullDownRefresh": false
 			}
 
-		}, {
+		}, 
+		{
 			"path": "pages/community/com-main",
 			"style": {
 				"navigationBarTitleText": "社区广场",
@@ -99,14 +100,16 @@
 				"enablePullDownRefresh": true,
 				"onReachBottomDistance": 100
 			}
-		}, {
+		},
+		{
 			"path": "pages/second/secondMain",
 			"style": {
 				"navigationBarTitleText": "二手市场",
 				"enablePullDownRefresh": false
 			}
 
-		}, {
+		},
+		{
 			"path": "pages/changeAvatar/changeAvatar",
 			"style": {
 				"navigationBarTitleText": "头像",
@@ -119,7 +122,8 @@
 				"navigationBarTitleText": "二手页面",
 				"backgroundColor": "#F5F5F5"
 			}
-		}, {
+		}, 
+		{
 			"path": "pages/second/secondMainSearch",
 			"style": {
 				"navigationBarTitleText": "搜索",
@@ -183,8 +187,7 @@
 			"text": "主页",
 			"iconPath": "./static/home.png",
 			"selectedIconPath": "./static/home-selected.png"
-		},
-		}, {
+		},{
 			"pagePath": "pages/activity/act",
 			"text": "活动",
 			"iconPath": "./static/act.png",

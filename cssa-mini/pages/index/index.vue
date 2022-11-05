@@ -23,24 +23,24 @@
 		</view>
 		<view class="function-box">
 			<view class="function-sub-box">
-				<view class="button-box disabled">
+<!-- 				<view class="button-box disabled">
 					<img class="image" src="../../static/index/community.svg" />
 					<text class="text-box">我的帖子</text>
 				</view>
 				<view class="button-box disabled">
 					<img class="image" src="../../static/index/zan.svg" />
 					<text class="text-box">赞/收藏</text>
-				</view>
+				</view> -->
 				<view class="button-box" @click="jump(2)">
 					<img class="image" src="../../static/index/comment.svg" />
 					<text class="text-box">我的评论</text>
 				</view>
-				<view class="button-box disabled">
+<!-- 				<view class="button-box disabled">
 					<img class="image" src="../../static/index/ebay.svg" />
 					<text class="text-box">我的二手</text>
-				</view>
+				</view> -->
 			</view>
-			<view class="function-sub-box">
+<!-- 			<view class="function-sub-box">
 				<view class="button-box disabled">
 					<img class="image" src="../../static/index/mem.svg" />
 					<text class="text-box">活动回忆</text>
@@ -49,7 +49,7 @@
 					<img class="image" src="../../static/index/join.svg" />
 					<text class="text-box">加入CSSA</text>
 				</view>
-			</view>
+			</view> -->
 		</view>
 	</view>
 </template>
@@ -83,6 +83,18 @@
 		},
 		onHide(){
 			this.$refs.welcome.close();
+		},
+		onShareAppMessage(res) {
+			return {
+				title: "麦屯小助手",
+				path: '/pages/main/main'
+			}
+		},
+		onShareTimeline(res) {
+			return {
+				title: "麦屯小助手",
+				path: '/pages/main/main'
+			}
 		},
 		methods: {
 			preLoadAvatar:function(){
