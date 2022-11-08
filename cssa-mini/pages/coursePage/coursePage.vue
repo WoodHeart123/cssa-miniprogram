@@ -182,21 +182,9 @@
 					});
 					return;
 				}
-				// if (!this.isStudent) {
-				// 	uni.showModal({
-				// 		title: "请先认证学生身份",
-				// 		content: "我们希望以此能过滤一些代写，谢谢配合",
-				// 		confirmText: "前往认证",
-				// 		success: (res) => {
-				// 			if (res.confirm) {
-				// 				uni.navigateTo({
-				// 					url: "/pages/index/userInfo",
-				// 				});
-				// 			}
-				// 		},
-				// 	});
-				// 	return;
-				// }
+				uni.$once("updateCourse", data => {
+					this.course = data.course;
+				})
 				uni.navigateTo({
 					url: "/pages/postComment/postComment?course=" + encodeURIComponent(JSON.stringify(this.course)) + "&edit=false",
 				});
