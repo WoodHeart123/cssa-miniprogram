@@ -2,7 +2,7 @@
 	<view id="second-main">
 		<view class="menu row-container">
 			<view class="search-box">
-				<uni-icons type="search" size="30" @click="toSearch"></uni-icons>
+				<uni-icons type="search" size="30"></uni-icons>
 			</view>
 			<view class="menu-box row-container">
 				<view class="row-container product-type-item" v-for="(productType, index) in productTypeList"
@@ -47,9 +47,6 @@
 			onClickMenu: function(index) {
 				this.currentIndex = index;
 			},
-			toSearch:function(){
-				uni.navigateTo({url:'/pages/searchProduct/searchProduct'});
-			}
 		}
 	}
 	import productTypeList from './secondMain.js';

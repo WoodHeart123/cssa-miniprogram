@@ -107,9 +107,14 @@
 				"navigationBarTitleText": "二手市场",
 				"enablePullDownRefresh": false
 			}
+		}, {
+			"path": "pages/second/secondMainPost",
+			"style": {
+				"navigationBarTitleText": "发布二手",
+				"enablePullDownRefresh": false
+			}
 
-		},
-		{
+		}, {
 			"path": "pages/changeAvatar/changeAvatar",
 			"style": {
 				"navigationBarTitleText": "头像",
@@ -137,13 +142,6 @@
 				"disableScroll": true
 			}
 
-		}, {
-			"path": "pages/searchProduct/searchProduct",
-			"style": {
-				"navigationBarTitleText": "搜索",
-				"enablePullDownRefresh": false
-			}
-
 		}
 	],
 	"condition": {
@@ -163,10 +161,6 @@
 			{
 				"name": "myComment",
 				"path": "pages/myComment/myComment"
-			},
-			{
-				"name": "searchProduct",
-				"path": "pages/searchProduct/searchProduct"
 			}
 		]
 	},

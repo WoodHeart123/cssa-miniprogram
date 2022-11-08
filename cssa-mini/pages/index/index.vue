@@ -21,7 +21,7 @@
 		<view class="user-box" v-if="!isLogin">
 			<button class="login-button" plain="true" @click="getUserProfile">点击微信授权登陆</button>
 		</view>
-<!-- 		<view class="function-box">
+		<view class="function-box">
 			<view class="function-sub-box">
 				<view class="button-box disabled">
 					<img class="image" src="../../static/index/community.svg" />
@@ -50,7 +50,7 @@
 					<text class="text-box">加入CSSA</text>
 				</view>
 			</view>
-		</view> -->
+		</view>
 	</view>
 </template>
 

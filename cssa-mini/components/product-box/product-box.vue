@@ -1,20 +1,18 @@
 <template>
 	<view class='product-box' @click="toSecondDetail">
+		<view class='condition'><text>完好如初</text></view>
 		<image class='photo' src="../../static/index/maomao.jpg" mode='aspectFill'></image>
 		<view class='product-name'>
-			<text class='delivery'>邮寄</text>
-			<text>&nbspA cat 一只猫一只猫一只猫</text>
+			<text>A cat 一只猫</text>
 		</view>
-		<view style='height: 12%;'>
-			<text class='description'>一只会喵喵叫的猫。汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪呱呱呱</text>
+		<view class='description'>
+			<text>一只会喵喵叫的猫。汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪呱呱呱</text>
 		</view>
-		<view class='row-container' style='justify-content: space-between;height: 10%;align-items: center;'>
-			<text class = 'price'>$89.7</text>
-			<view class='condition'><text>完好如初</text></view>
-		</view>
+		
+			<view class='price'><text>$89</text></view> <!-- $+{{product.price}} -->
 		<view class='seller row-container'>
 			<image class='avatar' src="../../static/index/maomao.jpg"></image>
-			<view class = 'seller-name'><text>路人甲jia甲乙丙丁戊己庚辛</text></view>
+			<view class = 'seller-name'><text>路人甲jia</text></view>
 			<view class='time'><text>3小时前</text></view>
 		</view>
 	</view>
@@ -47,7 +45,7 @@
 	}
 
 	.product-box {
-		background-color: rgb(2540,250,250);
+		background-color: white;
 		margin: 2vw;
 		width: 45vw;
 		height: 40vh;
@@ -62,87 +60,64 @@
 	}
 
 	.product-name {
-		height: 10%;
+		height: 8%;
 		font-weight: 600;
-		font-size: 100%;
-		overflow: hidden;
-		text-overflow:ellipsis;
-		white-space:nowrap;
+		margin-left: 5%;
+		margin-right: 5%;
 	}
 	
 	.description {
-
-		font-size: 12px;
-		display: -webkit-box;
+		height: 12%;
+		font-size: 80%;
+		margin-left: 5%;
+		margin-right: 5%;
 		overflow: hidden;
-		text-overflow: ellipsis;
-		word-wrap: break-word;
-		-webkit-line-clamp: 2;
-		-webkit-box-orient: vertical; 
-		color:darkgrey;
 	}
 
 	.price {
 		font-weight: 600;
-		color: #1E90FF;
-		font-size: 120%;
+		height: 10%;
+		margin-left: 5%;
+		margin-right: 5%;
+		color: darkblue;
 	}
 
 	.time {
-		font-size: 70%;
+		font-size: 50%;
 		text-align: right;
 		margin-left: auto;
-		color:darkgrey;
+		padding-top: 5%;
 	}
 
 	.condition {
-		margin-top: 3%;
-		height:20px;
-		line-height: 20px;
-		padding-left: 3%;
-		padding-right: 3%;
-		text-align: center;
-		font-size: 12px;
-		color:#1E90FF;
-		border-radius: 5px;
-		border-color: #1E90FF;
-		border-style: solid;
-		border-width: 1pt;
+		position:fixed;
+		margin-left: 25%;/*...*/
+		padding-left: 2%;
+		padding-right: 2%;
+		padding-top: 0.5%;
+		padding-bottom: 0.5%;
+		margin-top: 40%;
+		background-color: black;
+		opacity: 0.45;
+		color: white;
+		border-radius: 5px 5px 5px 5px;
+		font-size: 10pt;
 
 	}
 
 	.seller {
+		margin-left: 5%;
+		margin-right: 5%;
 		height: 10%;
-		font-size: 10pt;
-		align-items: center;
-
+		font-size: 10pt;		
 	}
-	
 	.avatar {
 		width: 20px;
 		height: 20px;/*??*/
 		border-radius: 50%;
 	}
-	
 	.seller-name{
 		margin-left: 5%;
-		overflow: hidden;
-		text-overflow:ellipsis;
-		white-space: nowrap;
-		width: 60%;
-		font-size: 80%;
-		color: darkgrey;
-	}
-	
-	.delivery {
-		background-color: #4169E1;
-		color: white;
-		padding-left: 3%;
-		padding-right: 3%;
-		padding-top: 1%;
-		padding-bottom: 1%;
-		border-radius: 5px;
-		font-size: 12px;
 	}
 	
 </style>

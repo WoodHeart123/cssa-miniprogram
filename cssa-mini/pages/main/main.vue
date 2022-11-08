@@ -14,15 +14,15 @@
 					<text>课程吐槽</text>
 				</view>
 				<img class="image" src="../../static/forum.svg" />
-							<view class="row-container function-button disabled" @click="toSecond">
-					<view class="column-container function-text">
-						<text>二手商品</text>
-					</view>
-					<img class="image" src="../../static/ebay.svg" />
+			</view>
+			<view class="row-container function-button" @click="toSecond">
+				<view class="column-container function-text">
+					<text>二手商品</text>
 				</view>
+				<img class="image" src="../../static/ebay.svg" />
 			</view>
-			</view>
-					<view class="row-container function-box disabled">
+		</view>
+		<view class="row-container function-box disabled">
 			<view class="row-container function-button">
 				<view class="row-container function-button">
 					<view class="column-container function-text">
@@ -42,7 +42,7 @@
 				</view>
 			</view>
 		</view>
-			<!-- 		<view class="leader-list">
+		<!-- 		<view class="leader-list">
 			<text class="cssa-intro-text">CSSA介绍</text>
 			<scroll-view class="row-container leader-intro" :scroll-x="true">
 				<president-box v-for="(leader, index) in leaderInfo" :key="index" :index="index" :leader="leader" />
@@ -56,7 +56,7 @@
 			<view style="height: 4vh;" />
 		</uni-popup> -->
 
-		</view>
+	</view>
 </template>
 
 <script>
@@ -139,13 +139,9 @@
 				})
 			},
 			toSecond: function() {
-				uni.showToast({
-					title: "内容将在2022年底上线，敬请期待",
-					icon: "none",
-				});
-				// uni.navigateTo({
-				// 	url:"/pages/second/secondMain",
-				// })
+				uni.navigateTo({
+					url:"/pages/second/secondMain",
+				})
 			},
 			toPreview: function() {
 				uni.previewImage({
