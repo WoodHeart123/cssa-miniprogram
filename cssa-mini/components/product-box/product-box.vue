@@ -2,19 +2,19 @@
 	<view class='product-box' @click="toSecondDetail">
 		<image class='photo' src="../../static/index/maomao.jpg" mode='aspectFill'></image>
 		<view class='product-name'>
-			<text>A cat 一只猫</text>
+			<text class='delivery'>邮寄</text>
+			<text>&nbspA cat 一只猫一只猫一只猫</text>
 		</view>
-		<view style='height: 30px;'>
+<!-- 		<view style='height: 30px;'>
 			<text class='description'>一只会喵喵叫的猫。汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪呱呱呱</text>
-		</view>
+		</view> -->
 		<view class='row-container' style='justify-content: space-between;height: 10%;align-items: center;'>
 			<text class = 'price'>$89.7</text>
 			<view class='condition'><text>完好如初</text></view>
 		</view>
-		
 		<view class='seller row-container'>
 			<image class='avatar' src="../../static/index/maomao.jpg"></image>
-			<view class = 'seller-name'><text>路人甲jia</text></view>
+			<view class = 'seller-name'><text>路人甲jia甲乙丙丁戊己庚辛</text></view>
 			<view class='time'><text>3小时前</text></view>
 		</view>
 	</view>
@@ -55,7 +55,7 @@
 	}
 
 	.photo {
-		width: 168px;
+		width: 100%;
 		height: 144px;
 		border-radius: 10px 10px 0px 0px;
 		overflow: hidden;
@@ -66,8 +66,6 @@
 		font-weight: 600;
 		font-size: 17px;
 		overflow: hidden;
-		text-overflow:ellipsis;
-		white-space:nowrap;
 	}
 	
 	.description {

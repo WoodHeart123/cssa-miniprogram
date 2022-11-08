@@ -23,7 +23,6 @@
 				<view class="contact-tag">
 					<view class="contact-content">联系方式</view>
 				</view>
-				-->
 				<view class="avatar-box">
 					<img class="avatar" 
 						:src="'https://cssa-mini.oss-cn-shanghai.aliyuncs.com/cssa-mini-avatar/' + 1 + '.png'">
