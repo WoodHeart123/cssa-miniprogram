@@ -10,11 +10,11 @@
 			<view class="price-box">
 				<view class="iconfont icon">&#xe70b;</view>
 				<view class="price">1200</view>
-				<img class="shoucang" src="/static/yishoucang.png" :style="left"/>
+				<img class="shoucang" :src="shoucang" :style="left" @click="setShouCang"/>
 			</view>
 			<view class="second_desc">
-				<view class="quantity-tag"><view class="quantity-content">几乎全新</view></view>
-				<view class="deliver-tag"><view class="deliver-content">邮寄</view></view>
+				<view class="quantity-tag"><view class="quantity-content">全新</view></view>
+				<view class="deliver-tag"><view class="deliver-content">自取</view></view>
 			</view>
 			<view class = "second_name">{{secondItem.name}}</view>
 		</view>
@@ -30,13 +30,13 @@
 					<img class="avatar" 
 						:src="'https://cssa-mini.oss-cn-shanghai.aliyuncs.com/cssa-mini-avatar/' + 1 + '.png'">
 				</view>
-				<text class="nickname" style="margin-left: 5px; margin-top: 4vw;">小红豆</text>
+				<text class="nickname" style="margin-left: 10px; margin-top: 4vw;">小红豆</text>
 				<view class="fuzhi-bt" :style="left_1">
-					<view class="fuzhi-string" style="font-size: 11px; margin-left: 2px; color: #999999">复制</view>
+					<view class="fuzhi-string" style="font-size: 11px; margin-left: 2px; margin-top: 5px; color: #999999">复制</view>
 					<img class="fuzhi-img" src="/static/fuzhi.png" @click="setClipboardData">
 				</view>
 			</view>
-			<view class="weixin" style="margin-left: 13px; margin-bottom: 2vw;">微信号：{{secondItem.contact[0]}}</view>
+			<view class="weixin" style="margin-top: 10px;margin-left: 40px; margin-bottom: 2vw; color: dimgray;">微信号：{{secondItem.contact[0]}}</view>
 		</view>
 		<view class="blank_line"></view>
 		<view class="description">
@@ -76,6 +76,7 @@
 	export default {
 		data() {
 			return{
+				shoucang: "/static/weishoucang.png",
 				distance_1:0,
 				distance_2:0,
 				left:"",
@@ -154,6 +155,13 @@
 						console.log('success');
 					}
 				});
+			}, 
+			setShouCang: function() {
+				if(this.shoucang == "/static/shoucang.png"){
+					this.shoucang = "/static/weishoucang.png";
+				} else{
+					this.shoucang = "/static/shoucang.png";
+				}
 			}
 		}
 	}
@@ -221,28 +229,36 @@
 				display:flex;
 				flex-direction: row;
 				.quantity-tag{
+					padding-right: 5px;
 					font-size: 13px;
-					margin-left: 8px;
+					margin-left: 12px;
 					padding-left: 5px;
-					color: #db3024;
+					padding-bottom: 4px;
+					background-color: #1e90ff;
+					border-radius: 5px;
+					color: #f5f5f5;
 					.quantity-content{
 						margin-top: 3px;
 						padding-left: 5px;
 						padding-right: 5px;
-						background-color: #f2b4b0;
-						border-radius: 5px;
+						//background-color: #1e90ff;
+						//border-radius: 5px;
 					}
 				}
 				.deliver-tag{
+					margin-left: 2px;
 					font-size: 13px;
 					padding-left: 5px;
-					color: #db3024;
+					padding-right: 6px;
+					color: #f5f5f5;
+					background-color: #1e90ff;
+					border-radius: 5px;
 					.deliver-content{
 						margin-top: 3px;
 						padding-left: 5px;
 						padding-right: 5px;
-						background-color: #f2b4b0;
-						border-radius: 5px;
+						//background-color: #1e90ff;
+						//border-radius: 5px;
 					}
 				}
 			}
