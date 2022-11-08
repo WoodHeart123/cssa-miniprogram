@@ -21,26 +21,26 @@
 		<view class="user-box" v-if="!isLogin">
 			<button class="login-button" plain="true" @click="getUserProfile">点击微信授权登陆</button>
 		</view>
-		<view class="function-box">
+<!-- 		<view class="function-box">
 			<view class="function-sub-box">
-<!-- 				<view class="button-box disabled">
+				<view class="button-box disabled">
 					<img class="image" src="../../static/index/community.svg" />
 					<text class="text-box">我的帖子</text>
 				</view>
 				<view class="button-box disabled">
 					<img class="image" src="../../static/index/zan.svg" />
 					<text class="text-box">赞/收藏</text>
-				</view> -->
+				</view>
 				<view class="button-box" @click="jump(2)">
 					<img class="image" src="../../static/index/comment.svg" />
 					<text class="text-box">我的评论</text>
 				</view>
-<!-- 				<view class="button-box disabled">
+				<view class="button-box disabled">
 					<img class="image" src="../../static/index/ebay.svg" />
 					<text class="text-box">我的二手</text>
-				</view> -->
+				</view>
 			</view>
-<!-- 			<view class="function-sub-box">
+			<view class="function-sub-box">
 				<view class="button-box disabled">
 					<img class="image" src="../../static/index/mem.svg" />
 					<text class="text-box">活动回忆</text>
@@ -49,8 +49,8 @@
 					<img class="image" src="../../static/index/join.svg" />
 					<text class="text-box">加入CSSA</text>
 				</view>
-			</view> -->
-		</view>
+			</view>
+		</view> -->
 	</view>
 </template>
 
@@ -97,13 +97,6 @@
 			}
 		},
 		methods: {
-			preLoadAvatar:function(){
-				for(let i = 1;i <= 12;i++){
-					// uni.getImageInfo({
-					// 	src:'https://cssa-mini.oss-cn-shanghai.aliyuncs.com/cssa-mini-avatar/' + i.toString() + '.png'
-					// })
-				}
-			},
 			getUserProfile: function() {
 				uni.getUserProfile({
 					desc: "获取用户昵称",
@@ -111,14 +104,6 @@
 						this.login(userProfile.userInfo.nickName);
 					},
 				});
-			},
-			jump:function(num){
-				if(num == 2){
-					uni.navigateTo({
-						url: "/pages/myComment/myComment"
-					});
-				}
-				
 			},
 			toUserInfo: function() {
 				uni.navigateTo({

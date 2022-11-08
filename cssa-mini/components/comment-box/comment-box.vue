@@ -25,7 +25,7 @@
 		</view>
 		<view class="wrap">
 			<view :class="this.more?'comment-body comment-body-more':'comment-body'">
-				<text v-if="this.more" class="more-button" @click="moreText">更多</text>
+				<text v-if="!this.more" class="more-button" @click="moreText">更多</text>
 				<text id="comment-text">{{comment.comment}}</text>
 			</view>
 		</view>
@@ -50,16 +50,16 @@
 		name: "comment-box",
 		data() {
 			return {
-				more: false,
+				more: true,
 				liked: false,
 				count: 0,
 			};
 		},
-		onShow() {
+		onReady(){
 			const query = uni.createSelectorQuery().in(this);
 			query.select('#comment-text').boundingClientRect(data => {
-				if (data.height > 100) {
-					this.more = true;
+				if (data.height > 150) {
+					this.more = false;
 				}
 			}).exec();
 		},
@@ -191,7 +191,7 @@
 		width: calc(99% - 50px);
 		margin-top: 10px;
 		margin-bottom: 5px;
-		max-height: 100px;
+		max-height: 150px;
 		font-size: 13px;
 		margin-left: 50px;
 		margin-right: 1%;

@@ -37,8 +37,8 @@
 			</view>
 			<scroll-view scroll-y="true" show-scrollbar="true" refresher-enabled="true"
 				class="column-container course-list-box" refresher-background="white" @refresherrefresh="refresh"
-				enable-back-to-top="true" :refresher-triggered="triggered" @refresherpulling="onPulling"
-				@scrolltolower="onScrollLower" @scroll="onScroll">
+				enable-back-to-top="true" :refresher-triggered="triggered" @refresherabort="refreshRestore"
+				@scrolltolower="onScrollLower">
 				
 				<view class="row-container filter-box">
 					<view :class="key==0?'filter-selected filter':'filter'" class="row-container" @click="changeKey(0)">
@@ -106,21 +106,17 @@
 					contentnomore: "没有匹配课程"
 				},
 				searchStatus: "",
-				sharing: false,
 			}
 		},
 		onLoad() {
 			wx.cloud.init();
+			this.refresh();
 			this.getDepartmentList();
-		},
-		onShow() {
-			if (!this.sharing) {
-				this.onPulling();
-			}
-			this.sharing = false;
+			uni.$on("refreshPage", () =>{
+				this.refresh();
+			})
 		},
 		onShareAppMessage(res) {
-			this.sharing = true;
 			return {
 				title: "麦屯小助手-课程吐槽",
 				path: '/pages/courseMain/courseMain',
@@ -128,7 +124,6 @@
 			}
 		},
 		onShareTimeline(res) {
-			this.sharing = true;
 			return {
 				title: "麦屯小助手-课程吐槽",
 				path: '/pages/courseMain/courseMain',
@@ -172,14 +167,8 @@
 				} else {
 					this.sortIndex = num;
 				}
-				console.log(this.sortIndex);
 				this.key = num;
-				this.onPulling();
-			},
-			cancelFilter: function() {
-				this.key = 0;
-				this.sortIndex = 0;
-				this.onPulling();
+				this.refresh();
 			},
 			onFocus: function() {
 				this.searching = true;
@@ -219,36 +208,20 @@
 				}
 				this.getCourseList();
 			},
-			touchstart(e) {
-				this.startX = e.touches[0].clientX
-				this.startY = e.touches[0].clientY
-			},
-			touchmove(e) {
-				this.moveX = e.touches[0].clientX
-				this.moveY = e.touches[0].clientY
-				if (Math.abs(this.startY - this.moveY) <= 50 && Math.abs(this.startX - this.moveX) >= 100 && !this
-					.showMenu) {
-					this.clickMenu();
-				}
-			},
 			bindClick(e) {
 				this.departmentName = e.item.name;
 				this.departmentID = this.departmentDict[e.item.itemIndex.toString()];
 				this.courseList = [];
 				this.clickMenu();
-				console.log(this.departmentID);
-				this.onPulling();
+				this.refresh();
 
 			},
-			onPulling() {
+			refresh: function() {
 				if (!this.triggered) {
 					this.triggered = true;
-					setTimeout(() => {
-						this.triggered = false;
-					}, 6000);
+				}else{
+					return;
 				}
-			},
-			refresh: function() {
 				this.courseList = [];
 				this.courseCount = 0;
 				this.getCourseList()
