@@ -16,13 +16,16 @@
 				<view class="quantity-tag"><view class="quantity-content">全新</view></view>
 				<view class="deliver-tag"><view class="deliver-content">自取</view></view>
 			</view>
+			<view class = "second_name">{{secondItem.name}}</view>
 		</view>
 		<view class="blank_line"></view>
 		<view class="contact">
 			<view class="contact-box">
+				<!--
 				<view class="contact-tag">
 					<view class="contact-content">联系方式</view>
 				</view>
+				-->
 				<view class="avatar-box">
 					<img class="avatar" 
 						:src="'https://cssa-mini.oss-cn-shanghai.aliyuncs.com/cssa-mini-avatar/' + 1 + '.png'">
@@ -37,17 +40,17 @@
 		</view>
 		<view class="blank_line"></view>
 		<view class="description">
+			<!--
 			<view class="tit">
 				<view class="tit-tag">
 					<view class="tit-content">详情介绍</view>
 				</view>
-				<!--
 				<button class="share" style="background-color: #7f7f7f;height: 7vw; width: 20vw; padding-left: 20vw;" open-type="share">
 					<img class="share-img" src="/static/fenxiang.png">
 				</button>
-				-->
 			</view>
-			<view class="blank_line_1"></view>
+			-->
+			<!--<view class="blank_line_1"></view>-->
 			<!--
 			<scroll-view class="scroll_page" scroll-y="true" :style="height">
 				<rich-text  class="content">{{secondItem.content}}</rich-text>
@@ -79,12 +82,12 @@
 				left:"",
 				left_1:"",
 				secondItem:{
-					name:"Macbook Pro",
+					name:"Macbook Pro 2022 1TB M2 非海南免税版",
 					imageList:["/static/renwu.jpeg", "/static/renwu.jpeg", "/static/renwu.jpeg"],
-					contact:["123456", "123456789"],
+					contact:["123456"],
 					types:["电子产品", "学习用品"],
-					quantity: "全新",
-					content: "恶魔方面则是更像《女神异闻录》一些每个人只能携带一个恶魔上场，如果在战斗中更换“仲魔”，需要使用前文提到的“指挥官技能”。只不过本作并不像《女神异闻录》或者《幻影异闻录FE#》一样，除了主角之外都有固定的恶魔（好吧，或者说 Persona、幻影）。 作者：游戏时光VGtime https://www.bilibili.com/read/cv18456093?from=category_0 出处：bilibili在《灵魂骇客2》中，“仲魔”类似于“装备”，除了使用恶魔的技能和共享属性弱点之外，恶魔还会给角色提供数值面板方面的增益。也就是说，游戏鼓励玩家合成高等级的恶魔，以此获取更高的数值增益。 作者：游戏时光VGtime https://www.bilibili.com/read/cv18456093?from=category_0 出处：bilibili在《灵魂骇客2》中，“仲魔”类似于“装备”，除了使用恶魔的技能和共享属性弱点之外，恶魔还会给角色提供数值面板方面的增益。也就是说，游戏鼓励玩家合成高等级的恶魔，以此获取更高的数值增益。 作者：游戏时光VGtime https://www.bilibili.com/read/cv18456093?from=category_0 出处：bilibili"
+					quantity: "几乎全新",
+					content: "全新 M2 芯片现身，13 英寸 MacBook Pro 实力大涨。同样的紧凑设计之下，电池续航最长达 20 小时1，并以主动散热系统让强悍性能持续迸发。还有绚丽的视网膜显示屏、FaceTime 高清摄像头和录音棚级麦克风也全部到位，一台超机动的专业级笔记本电脑整装待发。"
 				},
 				distance_1: 0,
 				distance_2: 0,
@@ -132,7 +135,7 @@
 				}
 			})
 			query.select('.price').boundingClientRect();
-			query.select('.contact-content').boundingClientRect();
+			query.select('.nickname').boundingClientRect();
 			query.exec((res) => {
 				this.distance_1 = res[0].right;
 				this.distance_2 = res[1].right;
@@ -147,7 +150,7 @@
 		methods: {
 			setClipboardData: function() {
 				uni.setClipboardData({
-					data: "电话号: " + this.secondItem.contact[0] + " 微信号: " + this.secondItem.contact[1],
+					data: " 微信号: " + this.secondItem.contact[0],
 					success: function () {
 						console.log('success');
 					}
@@ -258,19 +261,22 @@
 						//border-radius: 5px;
 					}
 				}
-				.second_name {
-					padding-left: 10px;
-					padding-right: 10px;
-					font-size: 18px;
-					//line-height: 40px;
-					font-weight: 700;
-				}
+			}
+			.second_name {
+				padding-left: 13px;
+				padding-right: 13px;
+				padding-top: 5px;
+				padding-bottom: 5px;
+				font-size: 18px;
+				//line-height: 40px;
+				font-weight: 700;
 			}
 		}
 		.contact{
 			.contact-box{
 				display: flex;
 				flex-direction: row;
+				/*
 				.contact-tag{
 					margin-top: 7px;
 					font-size: 13px;
@@ -285,12 +291,22 @@
 						border-radius: 5px;
 					}
 				}
+				*/
+			   .avatar-box{
+				   margin-top: 1vw;
+				   margin-left: 13px;
+					.avatar{
+						height: 11vw;
+						width: 11vw;
+						border-radius: 50%;
+					}
+			   }
 				.fuzhi-bt{
 					height: 8vw;
 					width: 8vw;
 					//margin-left: 68vw;
 					//background-color: #db3024;
-					margin-top: 2vw;
+					//margin-top: 1vw;
 					.fuzhi-img{
 						height: 7vw;
 						width: 7vw;
@@ -376,6 +392,7 @@
 		.white{
 			//height: 9vh;
 			height: 2vh;
+			//style="font-size: 10px; margin-left: 88.7vw; color: "
 		}
 	}
 </style>

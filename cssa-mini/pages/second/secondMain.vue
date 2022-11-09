@@ -1,7 +1,7 @@
 <template>
 	<view id="second-main">
 		<view class="menu row-container">
-			<view class="search-box">
+			<view class="search-box" @click="toSearch">
 				<uni-icons type="search" size="30"></uni-icons>
 			</view>
 			<view class="menu-box row-container">
@@ -29,6 +29,7 @@
 			</view>
 			<uni-load-more status="more"></uni-load-more>
 		</scroll-view>
+		<uni-fab :pattern="pattern" horizontal="right" vertical="bottom" popMene="false" @fabClick="toPostProduct" />
 	</view>
 </template>
 
@@ -41,12 +42,16 @@
 			return {
 				productTypeList: productTypeList,
 				currentIndex: 0,
+				pattern: {
+					buttonColor: "#1684FC"
+				},
 			}
 		},
 		methods: {
 			onClickMenu: function(index) {
 				this.currentIndex = index;
 			},
+			
 		}
 	}
 	import productTypeList from './secondMain.js';
@@ -117,6 +122,7 @@
 		font-size: 15px;
 		color: #aaa;
 		margin-right: 10px;
+		transition: all 0.5s;
 	}
 
 	.selected {
