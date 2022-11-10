@@ -155,11 +155,13 @@
 					}
 				});
 				this.suggestList = res.data.data;
-				if (this.suggestList.length == 0) {
-					this.searchStatus = "noMore";
-				} else {
+				if(res.data.status == 100){
 					this.searchStatus = "more";
+				}else{
+					this.searchStatus = "noMore";
+					this.suggestList = [];
 				}
+				
 			},
 			changeKey: function(num) {
 				if (this.key == num && (this.key == 2 || this.key == 4)) {
