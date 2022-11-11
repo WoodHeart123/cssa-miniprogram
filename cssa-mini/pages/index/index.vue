@@ -66,7 +66,6 @@
 		onLoad() {
 			wx.cloud.init();
 			this.getUserProfile();
-			this.preLoadAvatar();
 		},
 		onShow() {
 			uni.getStorage({

@@ -79,7 +79,7 @@
 	top:56px;
 	background-color: white;
 	height: calc(100% - 56px) !important;
-	width: 100%;
+	width: 100vw;
 	z-index:15;
 }
 
