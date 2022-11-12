@@ -1,20 +1,24 @@
 <template>
 	<view class='product-box' @click="toSecondDetail">
 		<image class='photo' src="../../static/index/maomao.jpg" mode='aspectFill'></image>
-		<view class='product-name'>
-			<text class='delivery'>邮寄</text>
-			<text>&nbspA cat 一只猫一只猫一只猫</text>
+		<view class='row-container product-name-box'>
+			<view class='row-container delivery'>
+				<text>邮寄</text>
+			</view>
+			<view class="product-name">
+				<text>一只猫一只猫一只猫一只猫一只猫一只猫一只猫一只猫一只猫</text>
+			</view>
 		</view>
-<!-- 		<view style='height: 30px;'>
+		<!-- 		<view style='height: 30px;'>
 			<text class='description'>一只会喵喵叫的猫。汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪呱呱呱</text>
 		</view> -->
-		<view class='row-container' style='justify-content: space-between;height: 10%;align-items: center;'>
-			<text class = 'price'>$89.7</text>
+		<view class='row-container' style='justify-content: space-between;height: 10%;align-items: center;margin-top: 3px;'>
+			<text class='price'>$89.7</text>
 			<view class='condition'><text>完好如初</text></view>
 		</view>
 		<view class='seller row-container'>
 			<image class='avatar' src="../../static/index/maomao.jpg"></image>
-			<view class = 'seller-name'><text>路人甲jia甲乙丙丁戊己庚辛</text></view>
+			<view class='seller-name'><text>路人甲jia甲乙丙丁戊己庚辛</text></view>
 			<view class='time'><text>3小时前</text></view>
 		</view>
 	</view>
@@ -22,15 +26,15 @@
 
 <script>
 	export default {
-		props:["course"],
+		props: ["course"],
 		name: "product-box",
 		data() {
 			return {
-	
+
 			}
 		},
 		methods: {
-			toSecondDetail:function(){
+			toSecondDetail: function() {
 				uni.navigateTo({
 					url: '/pages/detail/secondDetail',
 				});
@@ -50,7 +54,7 @@
 		background-color: white;
 		margin: 2vw;
 		width: 45vw;
-/* 		height: 40vh; */
+		/* 		height: 40vh; */
 		border-radius: 10px;
 	}
 
@@ -61,25 +65,33 @@
 		overflow: hidden;
 	}
 
-	.product-name {
-		height: 24px;
-		font-weight: 600;
-		font-size: 17px;
+	.product-name-box {
+		height: 48px;
+		width: 100%;
+		flex-shrink: 0;
 		overflow: hidden;
+		white-space: normal;
 	}
-	
-	.description {
 
-		font-size: 11px;
-		display: -webkit-box;
+	.product-name {
+		height: 48px;
+		font-size: 15px;
+		line-height: 24px;
+		white-space: normal;
 		overflow: hidden;
+		text-overflow: ellipsis;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+	}
+	.product-name::before{
+		margin-left: 45px;
+		content: '';
 	}
 
 	.price {
 		font-weight: 600;
 		height: 10%;
-		margin-left: 5%;
-		margin-right: 5%;
 		color: darkblue;
 	}
 
@@ -87,19 +99,19 @@
 		font-size: 10px;
 		text-align: right;
 		margin-left: auto;
-		color:darkgrey;
+		color: darkgrey;
 		height: 12px;
 	}
 
 	.condition {
 		margin-top: 2%;
-		height:20px;
+		height: 20px;
 		line-height: 20px;
 		padding-left: 3%;
 		padding-right: 3%;
 		text-align: center;
 		font-size: 10px;
-		color:#1E90FF;
+		color: #1E90FF;
 		border-radius: 5px;
 		border-color: #1E90FF;
 		border-style: solid;
@@ -110,35 +122,37 @@
 		height: 24px;
 		font-size: 20px;
 		align-items: center;
-
+		margin-top: 3px;
 	}
+
 	.avatar {
 		width: 20px;
 		height: 20px;
 		border-radius: 50%;
 	}
-	.seller-name{
-		margin-left: 5%;
 
+	.seller-name {
+		margin-left: 5%;
 		overflow: hidden;
-		text-overflow:ellipsis;
+		text-overflow: ellipsis;
 		white-space: nowrap;
 		width: 101px;
 		font-size: 10px;
 		color: darkgrey;
 		height: 12px;
 	}
-	
+
 	.delivery {
+		position: fixed;
+		justify-content: center;
+		align-items: center;
 		background-color: #4169E1;
 		color: white;
-		padding-left: 3%;
-		padding-right: 3%;
-		padding-top: 2%;
-		padding-bottom: 2%;
 		border-radius: 5px;
-		font-size: 10px;
-		height: 24px;
+		font-size: 12px;
+		height: 20px;
+		width: 40px;
+		margin-right: 5px;
+		margin:2px 5px 2px 0;
 	}
-	
 </style>

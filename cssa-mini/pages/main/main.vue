@@ -22,7 +22,7 @@
 				<img class="image" src="../../static/ebay.svg" />
 			</view>
 		</view>
-		<view class="row-container function-box disabled">
+<!-- 		<view class="row-container function-box disabled">
 			<view class="row-container function-button">
 				<view class="row-container function-button">
 					<view class="column-container function-text">
@@ -41,7 +41,7 @@
 					<img class="image" src="../../static/handbook.svg" />
 				</view>
 			</view>
-		</view>
+		</view> -->
 		<!-- 		<view class="leader-list">
 			<text class="cssa-intro-text">CSSA介绍</text>
 			<scroll-view class="row-container leader-intro" :scroll-x="true">
