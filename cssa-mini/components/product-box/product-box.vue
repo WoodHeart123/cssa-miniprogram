@@ -74,9 +74,9 @@
 	}
 
 	.product-name {
-		height: 48px;
-		font-size: 15px;
-		line-height: 24px;
+		height: 40px;
+		font-size: 12px;
+		line-height: 20px;
 		white-space: normal;
 		overflow: hidden;
 		text-overflow: ellipsis;
@@ -153,6 +153,5 @@
 		height: 20px;
 		width: 40px;
 		margin-right: 5px;
-		margin:2px 5px 2px 0;
 	}
 </style>

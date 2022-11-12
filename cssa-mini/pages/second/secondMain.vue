@@ -51,6 +51,11 @@
 			onClickMenu: function(index) {
 				this.currentIndex = index;
 			},
+			toPostProduct:function(index){
+				uni.navigateTo({
+					url:"/pages/second/secondMainPost"
+				})
+			}
 			
 		}
 	}

@@ -1,6 +1,6 @@
 <template>
-	<view class="sec-detail">
-		<swiper indicator-dots>
+	<view>
+		<swiper class="swiper" indicator-dots>
 			<swiper-item v-for="(image, index) in secondItem.imageList">
 				<image :src="image"></image>
 			</swiper-item>
@@ -9,23 +9,15 @@
 			<view class="price-box">
 				<view class="row-container" style="align-items: center;">
 					<view class="iconfont icon">&#xe70b;</view>
-					<view class="price">1200</view>
-					<view class="row-container tag">
-						<text>全新</text>
-					</view>
-					<view class="row-container tag">
-						<text>自取</text>
-					</view>
+					<view class="price"><text>1200</text></view>
+					<view class="row-container tag"><text>全新</text></view>
+					<view class="row-container tag"><text>自取</text></view>
 				</view>
 				<view class="row-container">
 					<img class="shoucang" :src="shoucang" @click="setShouCang" />
 				</view>
 			</view>
-			<view class="second-name">
-				<text>
-					{{secondItem.name}}
-				</text>
-			</view>
+			<view class="second-name"><text>{{secondItem.name}}</text></view>
 		</view>
 		<view class="contact">
 			<view class="contact-box">
@@ -33,7 +25,7 @@
 					:src="'https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/' + 1 + '.jpg'">
 				<text class="nickname">小红豆</text>
 				<view class="copy-box">
-					<view>复制</view>
+					<text>复制</text>
 					<img class="copy-img" src="/static/fuzhi.png" @click="setClipboardData">
 				</view>
 			</view>
@@ -207,14 +199,12 @@
 		width: 30px;
 	}
 
-	.sec-detail {
-		swiper {
-			height: 500rpx;
+	.swiper {
+		height: 500rpx;
 
-			image {
-				width: 100%;
-				height: 100%;
-			}
+		image {
+			width: 100%;
+			height: 100%;
 		}
 	}
 
