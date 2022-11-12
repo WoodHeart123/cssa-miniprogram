@@ -15,17 +15,9 @@
 		<scroll-view scroll-y="true" show-scrollbar="true" refresher-enabled="true"
 			class="column-container comment-container" @scrolltolower="">
 			<view class="box">
-				<productBoxVue></productBoxVue>
-				<productBoxVue></productBoxVue>
-				<productBoxVue></productBoxVue>
-				<productBoxVue></productBoxVue>
-				<productBoxVue></productBoxVue>
-				<productBoxVue></productBoxVue>
-				<productBoxVue></productBoxVue>
-				<productBoxVue></productBoxVue>
-				<productBoxVue></productBoxVue>
-				<productBoxVue></productBoxVue>
-				<productBoxVue></productBoxVue>
+				<view v-for="(,index) in 12">
+					<productBoxVue></productBoxVue>
+				</view>
 			</view>
 			<uni-load-more status="more"></uni-load-more>
 		</scroll-view>
@@ -149,7 +141,6 @@
 
 	.box {
 		display: flex;
-		display: -webkit-flex;
 		justify-content: left;
 		flex-direction: row;
 		flex-wrap: wrap;

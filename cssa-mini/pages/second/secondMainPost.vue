@@ -17,9 +17,9 @@
 			<uni-group mode="card">
 				<view >
 					<radio-group @change="radioChange">
-						<label class="radio radio_group1"><radio value="pickup" checked="true" color=#8B0000 style="transform:scale(0.8)"/>自取</label>
-						<label class="radio radio_group1"><radio value="delivery" color=#8B0000 style="transform:scale(0.8)"/>可送货</label>
-						<label class="radio radio_group1"><radio value="pnd" color=#8B0000 style="transform:scale(0.8)"/>都可以</label>
+						<label class="radio radio_group1"><radio value="pickup" checked="true" color="#1E90FF" style="transform:scale(0.8)"/>自取</label>
+						<label class="radio radio_group1"><radio value="delivery" color="#1E90FF" style="transform:scale(0.8)"/>可送货</label>
+						<label class="radio radio_group1"><radio value="pnd" color="#1E90FF" style="transform:scale(0.8)"/>都可以</label>
 					</radio-group>
 				</view>
 			</uni-group>
@@ -41,10 +41,10 @@
 			<uni-group mode="card">
 				<view class="label_group">
 					<radio-group @change="radioChange">
-						<label class="radio radio_group2"><radio value="new" checked="true" color=#8B0000 style="transform:scale(0.8)"/>全新</label>
-						<label class="radio radio_group2"><radio value="almostnew" color=#8B0000 style="transform:scale(0.8)"/>几乎全新</label>
-						<label class="radio radio_group2"><radio value="used" color=#8B0000 style="transform:scale(0.8)"/>明显使用痕迹</label>
-						<label class="radio radio_group2"><radio value="impaired" color=#8B0000 style="transform:scale(0.8)"/>部分损毁</label>
+						<label class="radio radio_group2"><radio value="new" checked="true" color="#1E90FF" style="transform:scale(0.8)"/>全新</label>
+						<label class="radio radio_group2"><radio value="almostnew" color="#1E90FF" style="transform:scale(0.8)"/>几乎全新</label>
+						<label class="radio radio_group2"><radio value="used" color="#1E90FF" style="transform:scale(0.8)"/>明显使用痕迹</label>
+						<label class="radio radio_group2"><radio value="impaired" color="#1E90FF" style="transform:scale(0.8)"/>部分损毁</label>
 					</radio-group>
 				</view>
 			</uni-group>
@@ -60,12 +60,12 @@
 					<input class="uni-input" @blur="bindTextAreaBlur" maxlength="22" placeholder="请填写联系方式"  placeholder-style="font-size:14px"/>
 				</view>
 			<view class="checkbox check_message">
-				<checkbox value="save_contact" checked="false" color=#8B0000 style="transform:scale(0.8);"/>保存联系方式，方便后续使用
+				<checkbox value="save_contact" checked="false" color="#1E90FF" style="transform:scale(0.8);"/>保存联系方式，方便后续使用
 			</view>
 			</uni-group>
 			<uni-group>
 				<view class="uni-padding-wrap uni-common-mt">
-					<button type="default" style="background-color: #8B0000; color: #ffffff;" plain="true">发布</button>
+					<button type="default" style="background-color: #1E90FF; color: #ffffff;" plain="true">发布</button>
 				</view>
 			</uni-group>
 		</uni-section>
