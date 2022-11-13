@@ -11,47 +11,70 @@
 				<text id="clear" v-show="historyList.length!=0">清除</text>
 			</view>
 			<view class="row-container history-box-container">
-				<view class="history-box" v-for="(history,index) in historyList">
+				<view class="history-box" v-for="(history,index) in historyList" @click="onClickHistory(index)">
 					<text>{{history}}</text>
 				</view>
 			</view>
 		</view>
-		<view v-show="searching&&!showResult"></view>
+		<view class="suggest-section" v-show="searching&&!showResult">
+			<view class="suggest-item" v-for="(suggest,index) in suggestList">
+				{{suggest}}
+			</view>
+		</view>
+		<view class="result-section" v-show="showResult">
+			<view v-for="(,index) in 12">
+				<productBoxVue></productBoxVue>
+			</view>
+		</view>
 	</view>
 </template>
 
 <script>
 	export default {
+		components: {
+				productBoxVue,
+		},
 		data() {
 			return {
 				searchValue: "",
 				historyList: ["", ""],
 				searching: false,
 				showResult: false,
+				suggestList:["吹风机", "笔记本"]
 			}
 		},
 		onLoad() {
 			this.historyList = uni.getStorageSync("historyList");
 			if (!this.historyList) {
-				this.historyList = ["吹风机", "笔记本"];
 				uni.setStorageSync("historyList", []);
 			}
 			console.log(this.historyList);
+			this.historyList = ["吹风机", "笔记本"];
 		},
 		methods: {
+			onFocus: function(){
+				this.showResult = false;
+			},
 			onCancel: function() {
 				uni.navigateBack()
 			},
 			searchBarInput: function(e) {
-				console.log(e.length);
 				if (e.length == 0) {
 					this.searching = false;
 				} else {
 					this.searching = true;
 				}
+			},
+			onConfirm:function(){
+				this.showResult = true;
+			},
+			onClickHistory:function(index){
+				this.searchValue = this.historyList[index];
+				this.showResult = true;
 			}
 		}
 	}
+	import productBoxVue from '@/components/product-box/product-box.vue';
 </script>
 
 <style>
@@ -109,5 +132,27 @@
 		background-color: #f4f4f4;
 		color: #333;
 		margin: 8px;
+	}
+	
+	.suggest-item{
+		height:40px;
+		font-size: 14px;
+		width: 95vw;
+		padding-left: 5vw;
+		line-height: 40px;
+		border-bottom: 1px solid #f1f1f1;
+	}
+	
+	.suggest-section{
+		
+	}
+	.result-section{
+		display: flex;
+		justify-content: left;
+		flex-direction: row;
+		flex-wrap: wrap;
+		margin-left: 1vw;
+		width: 100vw;
+		height: calc(100vh - 50px);
 	}
 </style>
