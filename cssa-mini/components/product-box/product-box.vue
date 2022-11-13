@@ -66,7 +66,7 @@
 	}
 
 	.product-name-box {
-		height: 48px;
+		height: 40px;
 		width: 100%;
 		flex-shrink: 0;
 		overflow: hidden;

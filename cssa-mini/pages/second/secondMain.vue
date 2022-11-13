@@ -47,7 +47,13 @@
 				uni.navigateTo({
 					url:"/pages/second/secondMainPost"
 				})
-			}
+			},
+			toSearch:function(){
+				uni.navigateTo({
+					url:"/pages/second/secondMainSearch",
+					animationType:"pop-in"
+				})
+			},
 			
 		}
 	}
