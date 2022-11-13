@@ -163,6 +163,9 @@
 			{
 				"name": "secondPost",
 				"path": "pages/second/secondMainPost"
+			},{
+				"name":"secondSearch",
+				"path":"pages/second/secondMainSearch"
 			}
 		]
 	},

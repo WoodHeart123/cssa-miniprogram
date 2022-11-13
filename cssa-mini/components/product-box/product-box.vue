@@ -56,6 +56,7 @@
 		width: 45vw;
 		/* 		height: 40vh; */
 		border-radius: 10px;
+		position: relative;
 	}
 
 	.photo {
@@ -143,7 +144,7 @@
 	}
 
 	.delivery {
-		position: fixed;
+		position: absolute;
 		justify-content: center;
 		align-items: center;
 		background-color: #4169E1;
