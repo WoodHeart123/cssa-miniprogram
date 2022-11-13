@@ -112,15 +112,13 @@
 				"navigationBarTitleText": "发布二手",
 				"enablePullDownRefresh": false
 			}
-
 		}, {
 			"path": "pages/changeAvatar/changeAvatar",
 			"style": {
 				"navigationBarTitleText": "头像",
 				"enablePullDownRefresh": false
 			}
-		},
-		{
+		},{
 			"path": "pages/detail/secondDetail",
 			"style": {
 				"navigationBarTitleText": "二手页面",
@@ -159,6 +157,10 @@
 			{
 				"name": "myComment",
 				"path": "pages/myComment/myComment"
+			},
+			{
+				"name": "secondPost",
+				"path": "pages/second/secondMainPost"
 			}
 		]
 	},
@@ -179,7 +181,6 @@
 			"text": "主页",
 			"iconPath": "./static/home.png",
 			"selectedIconPath": "./static/home-selected.png"
-		},
 		}, {
 			"pagePath": "pages/activity/act",
 			"text": "活动",

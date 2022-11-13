@@ -10,7 +10,7 @@
 				</view>
 			</uni-group>
 			<uni-group mode="card">
-				<view class="uni-textarea">
+				<view class="uni-textarea textbox">
 					<textarea @blur="bindTextAreaBlur" placeholder="请输入商品描述信息" maxlength="400" placeholder-style="font-size:14px"/>
 				</view>
 			</uni-group>
@@ -25,14 +25,13 @@
 			</uni-group>
 			<uni-group mode="card">
 				<view class="uni-list">
-					<view class="uni-list-cell">
+					<view class="uni-list-cell row_view">
 						<view class="uni-list-cell-left type_font">
 							分类选择
 						</view>
-						<view class="divider"/>
 						<view class="uni-list-cell-db">
 							<picker @change="bindPickerChange" :value="index" :range="item_types">
-								<view class="uni-input">{{item_types[item_type_idx]}}</view>
+								<view class="uni-input type_view">{{item_types[item_type_idx]}}</view>
 							</picker>
 						</view>
 					</view>
@@ -111,6 +110,7 @@
 	}
 	
 	.label_group{
+		display: flex;
 		flex-wrap: wrap;
 	}
 	
@@ -136,6 +136,7 @@
 	
 	.span_margin{
 		margin-right: 10px;
+		font-size: 16px;
 	}
 	
 	.divider{
@@ -152,6 +153,17 @@
 	
 	.check_message{
 		font-size: 14px;
+		color: #8B0000;
+	}
+	
+	.text-box{
+		width: 100%;
+		height: 100%;
+	}
+	
+	.type_view{
+		margin-left: 20px;
+		color: #575757;
 	}
 
 </style>
