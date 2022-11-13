@@ -99,9 +99,7 @@
 
 <style lang="scss">
 	.weixin {
-		margin-top: 10px;
-		margin-left: 40px;
-		margin-bottom: 2vw;
+		margin: 10px 0 10vw 40px;
 		color: dimgray;
 	}
 

@@ -161,6 +161,10 @@
 			{
 				"name": "myComment",
 				"path": "pages/myComment/myComment"
+			},
+			{
+				"name":"secondSearch",
+				"path":"pages/second/secondMainSearch"
 			}
 		]
 	},
