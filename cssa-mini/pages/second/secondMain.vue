@@ -13,13 +13,14 @@
 			</view>
 		</view>
 		<scroll-view scroll-y="true" show-scrollbar="true" refresher-enabled="true"
-			class="column-container comment-container" @scrolltolower="">
+			class="column-container comment-container" refresher-background="white" @refresherrefresh="refresh"
+			enable-back-to-top="true" :refresher-triggered="triggered" @scrolltolower="onScrollLower">
 			<view class="box">
-				<view v-for="(,index) in 12">
+				<view v-for="(,index) in limit" :key="index">
 					<productBoxVue></productBoxVue>
 				</view>
 			</view>
-			<uni-load-more status="more"></uni-load-more>
+			<uni-load-more :status="status"></uni-load-more>
 		</scroll-view>
 		<uni-fab :pattern="pattern" horizontal="right" vertical="bottom" popMene="false" @fabClick="toPostProduct" />
 	</view>
@@ -32,52 +33,84 @@
 		},
 		data() {
 			return {
+				limit: 20,
 				productTypeList: productTypeList,
 				currentIndex: 0,
 				pattern: {
 					buttonColor: "#1684FC"
 				},
+				triggered: false,
+				status: "loading"
 			}
+		},
+		onShow() {
+			this.refresh();
 		},
 		methods: {
 			onClickMenu: function(index) {
-				this.currentIndex = index;
+				if (this.currentIndex != index) {
+					this.currentIndex = index;
+					this.refresh();
+				}
 			},
-			toPostProduct:function(index){
+			refresh: function() {
+				this.triggered = true;
+				this.limit = 20;
+				setTimeout(() => {
+					this.getProductList();
+				},2000);
+				
+			},
+			onScrollLower: function() {
+				this.status = "loading";
+				this.getProductList();
+				this.status = "more";
+			},
+			getProductList:function(){
+				this.limit *= 2;
+				this.$nextTick(() => {
+					this.triggered = false;
+				});
+				
+			},
+			toPostProduct: function(index) {
 				uni.navigateTo({
-					url:"/pages/second/secondMainPost"
+					url: "/pages/second/secondMainPost"
 				})
 			},
-			toSearch:function(){
+			toSearch: function() {
 				uni.navigateTo({
-					url:"/pages/second/secondMainSearch",
-					animationType:"pop-in"
+					url: "/pages/second/secondMainSearch",
+					animationType: "pop-in"
 				})
 			},
-			
+
 		}
 	}
 	import productTypeList from './secondMain.js';
 	import productBoxVue from '@/components/product-box/product-box.vue';
+import { nextTick } from 'process';
 </script>
 
 <style>
-	#second-main{
-		position:absolute;
+	#second-main {
+		position: absolute;
 		width: 100vw;
 		height: 100vh;
-		top:0;
+		top: 0;
 	}
+
 	.column-container {
 		display: flex;
 	}
 
-	.comment-container{
-		margin-top:55px;
+	.comment-container {
+		margin-top: 55px;
 		height: calc(100vh - 55px);
 		width: 100vw;
 		background-color: white;
 	}
+
 	.row-container {
 		display: flex;
 		flex-direction: row;
@@ -125,7 +158,7 @@
 		font-size: 15px;
 		color: #aaa;
 		margin-right: 10px;
-		transition: all 0.5s;
+		transition: all 0.3s;
 	}
 
 	.selected {

@@ -9,9 +9,6 @@
 				<text>一只猫一只猫一只猫一只猫一只猫一只猫一只猫一只猫一只猫</text>
 			</view>
 		</view>
-		<!-- 		<view style='height: 30px;'>
-			<text class='description'>一只会喵喵叫的猫。汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪呱呱呱</text>
-		</view> -->
 		<view class='row-container' style='justify-content: space-between;height: 10%;align-items: center;margin-top: 3px;'>
 			<text class='price'>$89.7</text>
 			<view class='condition'><text>完好如初</text></view>
