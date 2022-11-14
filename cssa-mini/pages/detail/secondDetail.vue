@@ -13,8 +13,9 @@
 					<view class="row-container tag"><text>全新</text></view>
 					<view class="row-container tag"><text>自取</text></view>
 				</view>
-				<view class="row-container">
-					<img class="shoucang" :src="shoucang" @click="setShouCang" />
+				<view class="shoucang-box">
+					<text>收藏</text>
+					<img class="shoucang" :src="shoucang" @click="changeShouCang" />
 				</view>
 			</view>
 			<view class="second-name"><text>{{secondItem.name}}</text></view>
@@ -46,6 +47,7 @@
 		data() {
 			return {
 				shoucang: "/static/weishoucang.png",
+				shoucangle: 1,
 				secondItem: {
 					name: "Macbook Pro 2022 1TB M2 非海南免税版",
 					imageList: ["/static/renwu.jpeg", "/static/renwu.jpeg", "/static/renwu.jpeg"],
@@ -56,7 +58,26 @@
 				},
 			}
 		},
+		
+		/*
+		onLoad(options){
+			
+			this.secondItem = JSON.parse(decodeURIComponent(options.secondItem));
+			console.log(this.secondItem);
+			
+		   if(this.shoucangle == -1){
+			   checkShoucang();
+		   }	
+		   
+		   if (this.shoucangle == 1) {
+			this.shoucang = "/static/shoucang.png";
+		   } else {
+		   	this.shoucang = "/static/weishoucang.png";
+		   }
+		},
+		*/
 
+		
 		onShareTimeline() {
 			return {
 				title: this.secondItem.name,
@@ -78,6 +99,40 @@
 			}
 		},
 		methods: {
+			async checkShoucang(){
+				/*
+				const res = await wx.cloud.callContainer({
+				  config: {
+				    env: 'prod-9go38k3y9fee3b2e', // 微信云托管的环境ID
+				  },
+				  path: '/activity/checksignup?actID=' + this.actDetail.actID +'&date=0',
+				  method: 'GET', // 按照自己的业务开发，选择对应的方法
+				  header: {
+				    'X-WX-SERVICE': 'springboot-f8i8',
+				  }
+				});
+			   this.userInfo = res.data.data;
+			   */
+			   this.shoucangle = 0;
+			},
+			
+			async setShoucang(){
+				this.shoucangle = 1;
+				/*
+				const res = await wx.cloud.callContainer({
+				  config: {
+				    env: 'prod-9go38k3y9fee3b2e', // 微信云托管的环境ID
+				  },
+				  path: '/activity/checksignup?actID=' + this.actDetail.actID +'&date=0',
+				  method: 'POST', // 按照自己的业务开发，选择对应的方法
+				  header: {
+				    'X-WX-SERVICE': 'springboot-f8i8',
+				  }
+				});
+			   this.userInfo = res.data.data;
+			   */
+			},
+			
 			setClipboardData: function() {
 				uni.setClipboardData({
 					data: " 微信号: " + this.secondItem.contact[0],
@@ -86,11 +141,10 @@
 					}
 				});
 			},
-			setShouCang: function() {
-				if (this.shoucang == "/static/shoucang.png") {
-					this.shoucang = "/static/weishoucang.png";
-				} else {
+			changeShouCang: function() {
+				if (this.shoucang == "/static/weishoucang.png") {
 					this.shoucang = "/static/shoucang.png";
+					//setShoucang();
 				}
 			}
 		}
@@ -136,11 +190,22 @@
 	}
 
 	.shoucang {
-		height: 7vw;
+		height: 8vw;
 		width: 7vw;
+	}
+	
+	.shoucang-box {
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+		width: 50px;
+		font-size: 11px;
+		color: #999999;
+		align-items: center;
+		justify-content: center;
 		margin-right: 10px;
 	}
-
+	
 	.price-box {
 		display: flex;
 		flex-direction: row;
@@ -150,7 +215,7 @@
 	}
 
 	.second-name {
-		padding: 5px;
+		padding: 10px;
 		font-size: 18px;
 		font-weight: 700;
 	}
@@ -159,8 +224,17 @@
 		margin-bottom: 2vh;
 		margin-top: 1vh;
 	}
-
+	
+	.contact{
+		width: 90vw;
+		height: 110px;
+		margin-left: 5vw;
+		box-shadow: 0 0px 6px 1px rgba(165, 165, 165, 0.2);
+		border-radius: 5px;
+	}
+	
 	.contact-box {
+		padding-top: 10px;
 		display: flex;
 		flex-direction: row;
 		align-items: center;
@@ -170,13 +244,13 @@
 
 	.avatar {
 		height: 50px;
-		width: 50px;
+		width: 58.5px;
 		border-radius: 50%;
 		margin-left: 10px;
 	}
 
 	.nickname {
-		margin-left: 10px;
+		margin-left: 15px;
 		width: calc(100vw - 120px);
 	}
 
@@ -189,7 +263,7 @@
 		color: #999999;
 		align-items: center;
 		justify-content: center;
-		margin-right: 10px;
+		margin-right: 50px;
 	}
 
 	.copy-img {
@@ -205,10 +279,14 @@
 			height: 100%;
 		}
 	}
-
+	
+	.description{
+		margin-top: 10px;
+	}
 	.scroll-page {
-		padding: 10px;
-		width: calc(100% - 20px);
+		padding: 15px;
+		width: calc(100% - 30px);
 		line-height: 30px;
+		font-size: 15px;
 	}
 </style>
