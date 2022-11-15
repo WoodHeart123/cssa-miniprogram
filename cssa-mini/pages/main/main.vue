@@ -84,9 +84,10 @@
 				leaderInfo: list,
 				popupLeader: {},
 				images:[
-					"https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-main/cssa1.png",
-					"https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-main/cssa3.png",
-					"https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-main/cssa4.png",
+					"https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-main/cssa3.png"
+				],
+				detailImages:[
+					"https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-main/cssa1-detail.jpg"
 				],
 				current:0,
 				timer:"",
@@ -153,10 +154,10 @@
 				// })
 			},
 			toPreview:function(){
-				uni.previewImage({
-					current:this.current,
-					urls:this.images
-				})
+				wx.previewImage({
+					current:this.detailImages[this.current],
+					urls:this.detailImages
+				});
 			}
 		}
 	}
