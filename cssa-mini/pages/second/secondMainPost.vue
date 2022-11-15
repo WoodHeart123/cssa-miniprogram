@@ -1,6 +1,6 @@
 <template>
 	<view id="second-post">
-		<uni-section title="选择图片">
+		<uni-section>
 			<view class="image_upload">
 				<uni-file-picker limit="5"></uni-file-picker>
 			</view>
@@ -49,7 +49,7 @@
 			</uni-group>
 			<uni-group mode="card">
 				<view class="uni-form-item uni-column row_view">
-					<span class="span_margin">价格 $</span>
+					<span class="span_margin">$</span>
 					<input class="uni-input" type="number" @blur="bindTextAreaBlur" maxlength="10" placeholder="请填写价格"  placeholder-style="font-size:14px"/>
 				</view>
 			</uni-group>
@@ -90,7 +90,7 @@
 			},
 			bindPickerChange: function(e) {
 				console.log('picker发送选择改变，携带值为', e.detail.value)
-				this.index = e.detail.value
+				this.item_type_idx = e.detail.value;
 			},
 		}
 	}

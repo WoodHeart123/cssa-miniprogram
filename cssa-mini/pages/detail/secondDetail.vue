@@ -8,14 +8,13 @@
 		<view class="basic">
 			<view class="price-box">
 				<view class="row-container" style="align-items: center;">
-					<view class="iconfont icon">&#xe70b;</view>
+					<view class="iconfont" id="dollar-icon">&#xe70b;</view>
 					<view class="price"><text>1200</text></view>
 					<view class="row-container tag"><text>全新</text></view>
 					<view class="row-container tag"><text>自取</text></view>
 				</view>
 				<view class="shoucang-box">
-					<text>收藏</text>
-					<img class="shoucang" :src="shoucang" @click="changeShouCang" />
+					<text class="iconfont save-icon" :class="{'save-icon-selected' : isSaved}" @click="onClickSave()">&#xe6c9;</text>
 				</view>
 			</view>
 			<view class="second-name"><text>{{secondItem.name}}</text></view>
@@ -46,8 +45,7 @@
 	export default {
 		data() {
 			return {
-				shoucang: "/static/weishoucang.png",
-				shoucangle: 1,
+				isSaved: false,
 				secondItem: {
 					name: "Macbook Pro 2022 1TB M2 非海南免税版",
 					imageList: ["/static/renwu.jpeg", "/static/renwu.jpeg", "/static/renwu.jpeg"],
@@ -99,59 +97,30 @@
 			}
 		},
 		methods: {
-			async checkShoucang(){
-				/*
-				const res = await wx.cloud.callContainer({
-				  config: {
-				    env: 'prod-9go38k3y9fee3b2e', // 微信云托管的环境ID
-				  },
-				  path: '/activity/checksignup?actID=' + this.actDetail.actID +'&date=0',
-				  method: 'GET', // 按照自己的业务开发，选择对应的方法
-				  header: {
-				    'X-WX-SERVICE': 'springboot-f8i8',
-				  }
-				});
-			   this.userInfo = res.data.data;
-			   */
-			   this.shoucangle = 0;
+			onClickSave:function(){
+				this.isSaved = !this.isSaved;
 			},
-			
-			async setShoucang(){
-				this.shoucangle = 1;
-				/*
-				const res = await wx.cloud.callContainer({
-				  config: {
-				    env: 'prod-9go38k3y9fee3b2e', // 微信云托管的环境ID
-				  },
-				  path: '/activity/checksignup?actID=' + this.actDetail.actID +'&date=0',
-				  method: 'POST', // 按照自己的业务开发，选择对应的方法
-				  header: {
-				    'X-WX-SERVICE': 'springboot-f8i8',
-				  }
-				});
-			   this.userInfo = res.data.data;
-			   */
-			},
-			
 			setClipboardData: function() {
 				uni.setClipboardData({
-					data: " 微信号: " + this.secondItem.contact[0],
-					success: function() {
-						console.log('success');
-					}
+					data: " 微信号: " + this.secondItem.contact[0]
 				});
 			},
-			changeShouCang: function() {
-				if (this.shoucang == "/static/weishoucang.png") {
-					this.shoucang = "/static/shoucang.png";
-					//setShoucang();
-				}
-			}
 		}
 	}
 </script>
 
 <style lang="scss">
+	#dollar-icon{
+		font-size:28px;
+		color: darkblue;
+	}
+	.save-icon{
+		font-size: 25px;
+		transition: all 0.5s;
+	}
+	.save-icon-selected{
+		color:#FFDE03;
+	}
 	.weixin {
 		margin: 10px 0 10vw 40px;
 		color: dimgray;
@@ -179,19 +148,13 @@
 
 	.iconfont {
 		font-size: 30px;
-		font-weight: 600;
-		color: darkblue;
 	}
 
 	.price {
-		font-size: 25px;
+		font-size: 24px;
+		line-height: 30px;
 		font-weight: bold;
 		color: darkblue;
-	}
-
-	.shoucang {
-		height: 8vw;
-		width: 7vw;
 	}
 	
 	.shoucang-box {

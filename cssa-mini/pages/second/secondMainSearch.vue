@@ -8,7 +8,7 @@
 		<view class="history-section" v-show="historyList.length!=0&&!searching&&!showResult">
 			<view class="row-container history-text">
 				<text id="history">历史搜索</text>
-				<text id="clear" v-show="historyList.length!=0">清除</text>
+				<text id="clear" v-show="historyList.length!=0" @click="clearHistoryList">清除</text>
 			</view>
 			<view class="row-container history-box-container">
 				<view class="history-box" v-for="(history,index) in historyList" @click="onClickHistory(index)">
@@ -71,6 +71,9 @@
 			onClickHistory:function(index){
 				this.searchValue = this.historyList[index];
 				this.showResult = true;
+			},
+			clearHistoryList:function(index){
+				
 			}
 		}
 	}
