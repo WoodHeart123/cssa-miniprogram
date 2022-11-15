@@ -2,7 +2,7 @@
 	<view id="second-post">
 		<uni-section>
 			<view class="image_upload">
-				<uni-file-picker limit="5"></uni-file-picker>
+				<uni-file-picker limit="5" fileMediatype="image" :auto-upload="false" @select="onSelectImage" @delete="onDeleteImage"></uni-file-picker>
 			</view>
 			<uni-group mode="card">
 				<view class="uni-form-item uni-column">
@@ -77,6 +77,7 @@
 			return {
 				item_type_idx: 0,
 				item_types: ["电子产品","交通工具","家具家电","虚拟卡券","日常用品","美妆服饰","书籍教具","宠物用品","其他"],
+				imageList:[]
 			}
 		},
 		methods: {
@@ -92,6 +93,18 @@
 				console.log('picker发送选择改变，携带值为', e.detail.value)
 				this.item_type_idx = e.detail.value;
 			},
+			onSelectImage:function(e){
+				for(let i = 0;i < e.tempFilePaths.length && i < e.tempFiles.length;i++){
+					this.imageList.push({
+						filename: e.tempFiles[i].name,
+						filepath:e.tempFilePaths[i]});
+				}
+				console.log(this.imageList);
+			},
+			onDeleteImage:function(e){
+				console.log(e);
+				console.log(this.imageList);
+			}
 		}
 	}
 </script>
