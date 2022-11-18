@@ -53,25 +53,25 @@
 					this.refresh();
 				}
 			},
-			refresh: function() {
-				this.triggered = true;
+			refresh:function(){
 				this.limit = 20;
-				setTimeout(() => {
-					this.getProductList();
-				},2000);
-				
-			},
-			onScrollLower: function() {
-				this.status = "loading";
+				this.offset = 0;
 				this.getProductList();
-				this.status = "more";
 			},
-			getProductList:function(){
-				this.limit *= 2;
+			getProductList:async function(){
+				const res = await wx.cloud.callContainer({
+					config: {
+						env: 'prod-9go38k3y9fee3b2e',
+					},
+					path: `/secondhand/getProductList?productType=${this.productTypeList[this.currentIndex].type}&limit=${this.limit}&offset=${this.offset}`,
+					method: 'GET',
+					header: {
+						'X-WX-SERVICE': 'springboot-f8i8',
+					},
+				});
 				this.$nextTick(() => {
 					this.triggered = false;
 				});
-				
 			},
 			toPostProduct: function(index) {
 				uni.navigateTo({
