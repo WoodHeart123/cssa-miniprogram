@@ -78,16 +78,14 @@
 				searchValue: '',
 				searching: false,
 				showMenu: false,
-				startX: 0,
-				startY: 0,
-				key: 0,
+				key: 1,
 				triggered: false,
 				status: "more",
 				sort: ["SORT_BY_COURSE_NUM", "SORT_BY_COMMENT_COUNT", "SORT_BY_AVG_DIFFICULTY_ASC",
 					"SORT_BY_AVG_DIFFICULTY_DESC", "SORT_BY_AVG_PREFER_DESC", "SORT_BY_AVG_PREFER_ASC"
 				],
-				courseCount: 0,
-				sortIndex: 0,
+				courseCount: 1,
+				sortIndex: 1,
 				departmentList: [],
 				departmentDict: [],
 				courseList: [],
@@ -225,7 +223,7 @@
 					return;
 				}
 				this.courseList = [];
-				this.courseCount = 0;
+				this.courseCount = 1;
 				this.getCourseList()
 			},
 			async getCourseList() {
