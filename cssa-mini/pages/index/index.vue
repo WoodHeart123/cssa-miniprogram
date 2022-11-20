@@ -66,7 +66,6 @@
 		onLoad() {
 			wx.cloud.init();
 			this.getUserProfile();
-			this.preLoadAvatar();
 		},
 		onShow() {
 			uni.getStorage({
@@ -84,14 +83,19 @@
 		onHide(){
 			this.$refs.welcome.close();
 		},
+		onShareAppMessage(res) {
+			return {
+				title: "麦屯小助手",
+				path: '/pages/main/main'
+			}
+		},
+		onShareTimeline(res) {
+			return {
+				title: "麦屯小助手",
+				path: '/pages/main/main'
+			}
+		},
 		methods: {
-			preLoadAvatar:function(){
-				for(let i = 1;i <= 12;i++){
-					// uni.getImageInfo({
-					// 	src:'https://cssa-mini.oss-cn-shanghai.aliyuncs.com/cssa-mini-avatar/' + i.toString() + '.png'
-					// })
-				}
-			},
 			getUserProfile: function() {
 				uni.getUserProfile({
 					desc: "获取用户昵称",
@@ -99,14 +103,6 @@
 						this.login(userProfile.userInfo.nickName);
 					},
 				});
-			},
-			jump:function(num){
-				if(num == 2){
-					uni.navigateTo({
-						url: "/pages/myComment/myComment"
-					});
-				}
-				
 			},
 			toUserInfo: function() {
 				uni.navigateTo({

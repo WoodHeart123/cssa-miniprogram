@@ -20,15 +20,9 @@
 					<uni-data-picker v-model="comment.courseTime" :localdata="range"></uni-data-picker>
 				</uni-forms-item>
 				<view class="blank"></view>
-				<uni-forms-item name="comment" label="评论" label-position="top">
+				<uni-forms-item name="comment" label-position="top">
 					<uni-easyinput class="input" autoHeight :clearable="false" type="textarea" v-model="comment.comment"
-						placeholder="请输入评论" maxlength="400" />
-				</uni-forms-item>
-			</uni-forms>
-			<uni-forms ref="form" :model="comment" label-align="left" :rules="rules" v-else>
-				<uni-forms-item name="comment" label="评论" label-position="top">
-					<uni-easyinput class="input" autoHeight :clearable="false" type="textarea" v-model="comment.comment"
-						placeholder="请输入评论" maxlength="400" />
+						placeholder="可以从课程内容，作业量，需要的前置知识等方面进行评价" maxlength="400" />
 				</uni-forms-item>
 			</uni-forms>
 			<button class="button" type="default" @click="submit">提交</button>
@@ -59,7 +53,8 @@
 					},
 
 				},
-				path:"/course/postcomment"
+				path:"/course/postcomment",
+				course: {},
 
 			}
 		},
@@ -73,7 +68,7 @@
 			}
 			if (!this.edit) {
 				this.initTimePicker();
-				let course = JSON.parse(decodeURIComponent(options.course));
+				this.course = JSON.parse(decodeURIComponent(options.course));
 				this.rules["professor"] = {
 					rules: [{
 						required: true,
@@ -98,8 +93,8 @@
 						errorMessage: '请选择推荐度',
 					}]
 				};
-				this.comment.courseID = course.courseID;
-				this.comment.courseName = course.courseName;
+				this.comment.courseID = this.course.courseID;
+				this.comment.courseName = this.course.courseName;
 				this.comment.userAvatar = uni.getStorageSync("userInfo").avatar;
 			}else{
 				this.comment = JSON.parse(decodeURIComponent(options.comment));
@@ -187,10 +182,14 @@
 						this.commentMap[this.comment.courseID] += 1;
 					}
 					uni.setStorageSync("commentMap", this.commentMap);
+					this.course.avgPrefer = (this.course.avgPrefer * this.course.commentCount + this.comment.prefer) / (this.course.commentCount + 1);
+					this.course.avgDifficulty = (this.course.avgDifficulty * this.course.commentCount + this.comment.difficulty) / (this.course.commentCount + 1);
+					this.course.commentCount+=1;
 				}
 				uni.hideLoading();
+				uni.$emit("updateCourse",{course:this.course});
+				this.$emit("refreshPage");
 				uni.navigateBack();
-
 			},
 			submit: function() {	
 				this.$refs["form"].validate().then(res => {
@@ -237,7 +236,7 @@
 	}
 
 	.input {
-		height: 200px;
+		min-height: 200px;
 	}
 
 	.blank {

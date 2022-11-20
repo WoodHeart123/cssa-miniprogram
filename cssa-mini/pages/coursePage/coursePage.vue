@@ -72,6 +72,22 @@
 					contentnomore:"没有更多评论了"
 				},
 				commentMap:{},
+				sharing:false,
+			}
+		},
+		onShareAppMessage(res) {
+			this.sharing = true;
+			return {
+				title: this.course.departmentAbrev + " " + String(this.course.courseNum) + "-" + this.course.courseName,
+				path: '/pages/coursePage/coursePage?course=' + encodeURIComponent(JSON.stringify(this.course)),
+				imageUrl: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-share/forum.png"
+			}
+		},
+		onShareTimeline(res) {
+			this.sharing = true;
+			return {
+				title: this.course.courseName,
+				path: '/pages/coursePage/coursePage?course=' + encodeURIComponent(JSON.stringify(this.course)),	
 			}
 		},
 		methods: {
@@ -166,21 +182,9 @@
 					});
 					return;
 				}
-				// if (!this.isStudent) {
-				// 	uni.showModal({
-				// 		title: "请先认证学生身份",
-				// 		content: "我们希望以此能过滤一些代写，谢谢配合",
-				// 		confirmText: "前往认证",
-				// 		success: (res) => {
-				// 			if (res.confirm) {
-				// 				uni.navigateTo({
-				// 					url: "/pages/index/userInfo",
-				// 				});
-				// 			}
-				// 		},
-				// 	});
-				// 	return;
-				// }
+				uni.$once("updateCourse", data => {
+					this.course = data.course;
+				})
 				uni.navigateTo({
 					url: "/pages/postComment/postComment?course=" + encodeURIComponent(JSON.stringify(this.course)) + "&edit=false",
 				});
@@ -192,12 +196,15 @@
 				title: this.course.departmentAbrev + " " + String(this.course.courseNum)
 			});	
 		},
-		onHide() {
-			this.status = "more";
-			this.offset = 0;
-			this.commentList = [];
+		onHide(){
+			if(!this.sharing){
+				this.status = "more";
+				this.offset = 0;
+				this.commentList = [];
+			}	
 		},
 		onShow() {
+			this.sharing = false;
 			uni.getStorage({
 				key: "commentMap",
 				success: (res) => {

@@ -1,7 +1,7 @@
 <template>
 	<view id="second-main">
 		<view class="menu row-container">
-			<view class="search-box">
+			<view class="search-box" @click="toSearch">
 				<uni-icons type="search" size="30"></uni-icons>
 			</view>
 			<view class="menu-box row-container">
@@ -13,22 +13,16 @@
 			</view>
 		</view>
 		<scroll-view scroll-y="true" show-scrollbar="true" refresher-enabled="true"
-			class="column-container comment-container" @scrolltolower="">
+			class="column-container comment-container" refresher-background="white" @refresherrefresh="refresh"
+			enable-back-to-top="true" :refresher-triggered="triggered" @scrolltolower="onScrollLower">
 			<view class="box">
-				<productBoxVue></productBoxVue>
-				<productBoxVue></productBoxVue>
-				<productBoxVue></productBoxVue>
-				<productBoxVue></productBoxVue>
-				<productBoxVue></productBoxVue>
-				<productBoxVue></productBoxVue>
-				<productBoxVue></productBoxVue>
-				<productBoxVue></productBoxVue>
-				<productBoxVue></productBoxVue>
-				<productBoxVue></productBoxVue>
-				<productBoxVue></productBoxVue>
+				<view v-for="(,index) in limit" :key="index">
+					<productBoxVue></productBoxVue>
+				</view>
 			</view>
-			<uni-load-more status="more"></uni-load-more>
+			<uni-load-more :status="status"></uni-load-more>
 		</scroll-view>
+		<uni-fab :pattern="pattern" horizontal="right" vertical="bottom" popMene="false" @fabClick="toPostProduct" />
 	</view>
 </template>
 
@@ -39,37 +33,84 @@
 		},
 		data() {
 			return {
+				limit: 20,
 				productTypeList: productTypeList,
 				currentIndex: 0,
+				pattern: {
+					buttonColor: "#1684FC"
+				},
+				triggered: false,
+				status: "loading"
 			}
+		},
+		onShow() {
+			this.refresh();
 		},
 		methods: {
 			onClickMenu: function(index) {
-				this.currentIndex = index;
+				if (this.currentIndex != index) {
+					this.currentIndex = index;
+					this.refresh();
+				}
 			},
+			refresh:function(){
+				this.limit = 20;
+				this.offset = 0;
+				this.getProductList();
+			},
+			getProductList:async function(){
+				const res = await wx.cloud.callContainer({
+					config: {
+						env: 'prod-9go38k3y9fee3b2e',
+					},
+					path: `/secondhand/getProductList?productType=${this.productTypeList[this.currentIndex].type}&limit=${this.limit}&offset=${this.offset}`,
+					method: 'GET',
+					header: {
+						'X-WX-SERVICE': 'springboot-f8i8',
+					},
+				});
+				this.$nextTick(() => {
+					this.triggered = false;
+				});
+			},
+			toPostProduct: function(index) {
+				uni.navigateTo({
+					url: "/pages/second/secondMainPost"
+				})
+			},
+			toSearch: function() {
+				uni.navigateTo({
+					url: "/pages/second/secondMainSearch",
+					animationType: "pop-in"
+				})
+			},
+
 		}
 	}
 	import productTypeList from './secondMain.js';
 	import productBoxVue from '@/components/product-box/product-box.vue';
+import { nextTick } from 'process';
 </script>
 
 <style>
-	#second-main{
-		position:absolute;
+	#second-main {
+		position: absolute;
 		width: 100vw;
 		height: 100vh;
-		top:0;
+		top: 0;
 	}
+
 	.column-container {
 		display: flex;
 	}
 
-	.comment-container{
-		margin-top:55px;
+	.comment-container {
+		margin-top: 55px;
 		height: calc(100vh - 55px);
 		width: 100vw;
 		background-color: white;
 	}
+
 	.row-container {
 		display: flex;
 		flex-direction: row;
@@ -117,6 +158,7 @@
 		font-size: 15px;
 		color: #aaa;
 		margin-right: 10px;
+		transition: all 0.3s;
 	}
 
 	.selected {
@@ -138,7 +180,6 @@
 
 	.box {
 		display: flex;
-		display: -webkit-flex;
 		justify-content: left;
 		flex-direction: row;
 		flex-wrap: wrap;
