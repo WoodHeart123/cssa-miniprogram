@@ -111,7 +111,8 @@
 			"path": "pages/second/secondMainPost",
 			"style": {
 				"navigationBarTitleText": "发布二手",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"disableScroll": true
 			}
 		}, {
 			"path": "pages/changeAvatar/changeAvatar",

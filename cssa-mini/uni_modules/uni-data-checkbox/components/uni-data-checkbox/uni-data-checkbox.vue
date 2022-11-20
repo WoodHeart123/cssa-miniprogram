@@ -503,7 +503,7 @@
 					align-items: center;
 					justify-content: space-between;
 					.checklist-text {
-						font-size: 14px;
+						font-size: 15px;
 						color: #666;
 						margin-left: 5px;
 						line-height: 14px;
@@ -571,17 +571,17 @@
 					justify-content: center;
 					align-items: center;
 					position: relative;
-					width: 16px;
-					height: 16px;
+					width: 20px;
+					height: 20px;
 					border: 1px solid $border-color;
-					border-radius: 16px;
+					border-radius: 20px;
 					background-color: #fff;
 					z-index: 1;
 
 					.radio__inner-icon {
-						width: 8px;
-						height: 8px;
-						border-radius: 10px;
+						width: 12px;
+						height: 12px;
+						border-radius: 12px;
 						opacity: 0;
 					}
 				}
