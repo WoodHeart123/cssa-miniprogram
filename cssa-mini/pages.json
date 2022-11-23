@@ -173,6 +173,10 @@
 			},{
 				"name":"secondSearch",
 				"path":"pages/second/secondMainSearch"
+			},
+			{
+				"name":"houseDetail",
+				"path":"pages/detail/houseDetail"
 			}
 		]
 	},

@@ -8,16 +8,22 @@
 		<view class="basic">
 			<view class="price-box">
 				<view class="row-container" style="align-items: center;">
-					<view class="iconfont" id="dollar-icon">&#xe70b;</view>
-					<view class="price"><text>{{houseInfo.price}}/m</text></view>
-					<view class="row-container tag"><text>{{houseInfo.type}}</text></view>
-					<view class="row-container tag"><text>{{houseInfo.way}}</text></view>
+					<view class="row-container tag"><text>{{houseInfo.time}}</text></view>
+					<view class="row-container tag"><text>{{houseInfo.condition}}</text></view>
 				</view>
 				<view class="shoucang-box">
 					<text class="iconfont save-icon" :class="{'save-icon-selected' : isSaved}" @click="onClickSave()">&#xe6c9;</text>
 				</view>
 			</view>
+			<view class="row-container" style="margin-top: 5px; margin-left: 4px;">
+				<view class="iconfont" id="dollar-icon">&#xe70b;</view>
+				<view class="price"><text>{{houseInfo.price}}/m</text></view>
+			</view>
 			<view class="house-name"><text>{{houseInfo.name}}</text></view>
+		</view>
+		<view class="row-container">
+			<view class="info-box"><text>女</text></view>
+			<view class="info-box"><text>2B1B</text></view>
 		</view>
 		<view class="contact">
 			<view class="contact-box">
@@ -48,10 +54,11 @@
 				isSaved: false,
 				houseInfo: {
 					price:1300,
+					time:"2011.08-2012.12",
 					name: "London Luxury Apartment",
 					imageList: ["/static/housing.jpg", "/static/housing.jpg", "/static/housing.jpg"],
 					type:"1B1B",
-					way:"可面谈",
+					condition:"有现房",
 					contact: ["123456"],
 					quantity: "几乎全新",
 					content: "Beech Townhomes隶属于东兰辛当地大型公寓商DTN旗下。Beech Townhomes位于密歇根州的东兰辛，密歇根州立大学附近，拥有全新的一卧室和两卧室联排别墅。 公寓距离东兰辛市中心，夜生活场所，餐馆和购物场所仅有几个街区，步行即可抵达斯巴达体育场，布雷斯林中心和伊莱和艾迪斯博物馆。 别墅内有洗衣机和烘干机，生活便利。临近学校，可步行上课。"
@@ -186,7 +193,7 @@
 	}
 
 	.basic {
-		margin-bottom: 2vh;
+		//margin-bottom: 2vh;
 		margin-top: 1vh;
 	}
 	
@@ -253,5 +260,14 @@
 		width: calc(100% - 30px);
 		line-height: 30px;
 		font-size: 15px;
+	}
+	.info-box{
+		padding-top: 10px;
+		padding-bottom: 10px;
+		width: 50vw;
+		//background-color: #FFDE03;
+		text-align: center;
+		margin-bottom: 15px;
+		border: 1px solid #ACACAC;
 	}
 </style>
