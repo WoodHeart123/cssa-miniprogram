@@ -32,8 +32,8 @@
 		onLoad() {
 			wx.cloud.init();
 			uni.getStorage({
-				key: "userInfo",
-				success: (res) => {
+				key: "userInfo-2",
+				success: (res)=> {
 					this.likedComment = res.data.likedComment;
 				},
 			});

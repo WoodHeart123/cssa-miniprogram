@@ -112,7 +112,7 @@
 					method: 'GET',
 					header: {
 						'X-WX-SERVICE': 'springboot-f8i8',
-					}
+					},
 				});
 				if (res.data.data.length < this.limit) {
 					this.status = 'noMore';
@@ -153,7 +153,7 @@
 				this.isLogin = true;
 				this.isStudent = res.data.data.isStudent;
 				uni.setStorage({
-					key: "userInfo",
+					key: "userInfo-2",
 					data: res.data.data
 				});
 				uni.hideLoading();
@@ -220,7 +220,7 @@
 			})
 			this.getCommentList();
 			uni.getStorage({
-				key: "userInfo",
+				key: "userInfo-2",
 				success: (res) => {
 					this.isStudent = res.data.isStudent;
 					this.likedComment = res.data.likedComment;

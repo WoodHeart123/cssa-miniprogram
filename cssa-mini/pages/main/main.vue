@@ -97,7 +97,7 @@
 			wx.cloud.init();
 			uni.$on("openPopUp", (index) => this.openLeaderPop(index));
 			uni.getStorage({
-				key:"userInfo",
+				key:"userInfo-2",
 				fail: () => {
 					uni.switchTab({
 						url:"/pages/index/index"

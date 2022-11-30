@@ -46,10 +46,8 @@
 					});
 					if(res.data.status == 100){
 						this.userInfo.email = this.email;
-						console.log(this.userInfo);
-						
 						uni.setStorage({
-							key:"userInfo",
+							key:"userInfo-2",
 							data: this.userInfo
 						});
 						uni.navigateBack({
@@ -57,7 +55,6 @@
 						})
 					}
 				}else{
-					console.log(this.email);
 					uni.showToast({
 						title:"邮箱格式不正确",
 						icon:"error"
