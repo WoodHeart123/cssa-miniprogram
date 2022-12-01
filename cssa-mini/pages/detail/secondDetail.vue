@@ -46,6 +46,23 @@
 		data() {
 			return {
 				isSaved: false,
+				/*
+				secondItem: {
+					productID,
+					userID,
+					sellerAvatar,
+					sellerNickname,
+					productTitle,
+					productDescription,
+					price,
+					productType,
+					condition,
+					time,
+					contact;
+					images;
+					delivery;
+				},
+				*/
 				secondItem: {
 					name: "Macbook Pro 2022 1TB M2 非海南免税版",
 					imageList: ["/static/renwu.jpeg", "/static/renwu.jpeg", "/static/renwu.jpeg"],
@@ -62,10 +79,6 @@
 			
 			this.secondItem = JSON.parse(decodeURIComponent(options.secondItem));
 			console.log(this.secondItem);
-			
-		   if(this.shoucangle == -1){
-			   checkShoucang();
-		   }	
 		   
 		   if (this.shoucangle == 1) {
 			this.shoucang = "/static/shoucang.png";
@@ -99,12 +112,30 @@
 		methods: {
 			onClickSave:function(){
 				this.isSaved = !this.isSaved;
+				this.save();
 			},
+			
 			setClipboardData: function() {
 				uni.setClipboardData({
 					data: " 微信号: " + this.secondItem.contact[0]
 				});
 			},
+			
+			async save(){
+				console.log('success');
+				/*
+				const res = await wx.cloud.callContainer({
+					config: {
+						env: 'prod-9go38k3y9fee3b2e', // 微信云托管的环境ID
+					},
+					path: '/secondhand/collect?productID='+this.secondItem.productID,
+					method: 'GET', 
+					header: {
+						'X-WX-SERVICE': 'springboot-f8i8',
+					}
+				});
+				*/
+			}
 		}
 	}
 </script>
