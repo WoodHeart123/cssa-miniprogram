@@ -42,7 +42,7 @@
 
 			<view class="card label_group">
 				<uni-forms-item name="condition">
-					<uni-data-checkbox v-model="product.condition" :localdata="conditionOption"></uni-data-checkbox>
+					<uni-data-checkbox v-model="product.productCondition" :localdata="conditionOption"></uni-data-checkbox>
 				</uni-forms-item>
 			</view>
 
