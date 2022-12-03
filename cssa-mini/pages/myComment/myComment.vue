@@ -14,11 +14,7 @@
 			wx.cloud.init();
 			uni.getStorage({
 				key: "userInfo-2",
-<<<<<<< HEAD
-				success: (res) => {
-=======
 				success: (res)=> {
->>>>>>> production
 					this.likedComment = res.data.likedComment;
 				},
 			});

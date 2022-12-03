@@ -42,9 +42,10 @@
 				triggered: false,
 				status: "loading"
 			}
-		},
+		},S
 		onShow() {
 			this.refresh();
+			uni.$on("uploadSuccess")
 		},
 		methods: {
 			onClickMenu: function(index) {

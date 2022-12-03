@@ -78,18 +78,11 @@
 				current: 0,
 				leaderInfo: list,
 				popupLeader: {},
-<<<<<<< HEAD
-				images: [
-					"https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-main/cssa1.png",
-					"https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-main/cssa3.png",
-					"https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-main/cssa4.png",
-=======
 				images:[
 					"https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-main/cssa3.png"
 				],
 				detailImages:[
 					"https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-main/cssa1-detail.jpg"
->>>>>>> production
 				],
 				current: 0,
 				timer: "",
@@ -99,11 +92,7 @@
 			wx.cloud.init();
 			uni.$on("openPopUp", (index) => this.openLeaderPop(index));
 			uni.getStorage({
-<<<<<<< HEAD
-				key: "userInfo",
-=======
 				key:"userInfo-2",
->>>>>>> production
 				fail: () => {
 					uni.switchTab({
 						url: "/pages/index/index"
@@ -155,19 +144,11 @@
 					url:"/pages/second/secondMain",
 				})
 			},
-<<<<<<< HEAD
-			toPreview: function() {
-				uni.previewImage({
-					current: this.current,
-					urls: this.images
-				})
-=======
 			toPreview:function(){
 				wx.previewImage({
 					current:this.detailImages[this.current],
 					urls:this.detailImages
 				});
->>>>>>> production
 			}
 		}
 	}
