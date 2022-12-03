@@ -16,8 +16,8 @@
 			class="column-container comment-container" refresher-background="white" @refresherrefresh="refresh"
 			enable-back-to-top="true" :refresher-triggered="triggered" @scrolltolower="onScrollLower">
 			<view class="box">
-				<view v-for="(,index) in limit" :key="index">
-					<productBoxVue></productBoxVue>
+				<view v-for="(product,index) in productList" :key="index">
+					<productBoxVue :product="product"></productBoxVue>
 				</view>
 			</view>
 			<uni-load-more :status="status"></uni-load-more>
@@ -33,6 +33,7 @@
 		},
 		data() {
 			return {
+				offset:1,
 				limit: 20,
 				productTypeList: productTypeList,
 				currentIndex: 0,
@@ -40,14 +41,24 @@
 					buttonColor: "#1684FC"
 				},
 				triggered: false,
-				status: "loading"
+				status: "loading",
+				productList:[],
 			}
-		},S
-		onShow() {
+		},
+		onLoad(){
+			wx.cloud.init();
 			this.refresh();
-			uni.$on("uploadSuccess")
+		},
+		onShow() {
+			uni.$on("uploadSuccess",this.uploadSuccess);
 		},
 		methods: {
+			uploadSuccess:function(){
+				this.refresh();
+				uni.showToast({
+					title: "上传成功",
+				});
+			},
 			onClickMenu: function(index) {
 				if (this.currentIndex != index) {
 					this.currentIndex = index;
@@ -55,11 +66,19 @@
 				}
 			},
 			refresh:function(){
-				this.limit = 20;
-				this.offset = 0;
-				this.getProductList();
+				if (!this.triggered) {
+					this.triggered = true;
+					this.limit = 20;
+					this.offset = 1;
+					this.productList = [];
+					this.status = "loading"
+					this.getProductList();
+				}
 			},
 			getProductList:async function(){
+				if(this.status == "noMore"){
+					return;
+				}
 				const res = await wx.cloud.callContainer({
 					config: {
 						env: 'prod-9go38k3y9fee3b2e',
@@ -70,6 +89,15 @@
 						'X-WX-SERVICE': 'springboot-f8i8',
 					},
 				});
+				if(res.data.status == 100){
+					this.productList = this.productList.concat(res.data.data);
+				}
+				this.offset += res.data.data.length;
+				if(res.data.data.length != this.limit){
+					this.status = "noMore";
+				}else{
+					this.status = "more";
+				}
 				this.$nextTick(() => {
 					this.triggered = false;
 				});

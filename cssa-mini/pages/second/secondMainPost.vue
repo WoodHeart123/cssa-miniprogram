@@ -7,16 +7,16 @@
 			</view>
 
 			<view class="card uni-form-item uni-column">
-				<uni-forms-item name="productName">
-					<input class="uni-input" v-model="product.productName" maxlength="22" placeholder="请填写商品名称"
+				<uni-forms-item name="productTitle">
+					<input class="uni-input" v-model="product.productTitle" maxlength="22" placeholder="请填写商品名称"
 						placeholder-style="font-size:14px;color:gray" />
 				</uni-forms-item>
 			</view>
 
 
 			<view class="card uni-textarea textbox">
-				<uni-forms-item name="description">
-					<uni-easyinput type="textarea" v-model="product.description" placeholder="请输入商品描述信息" maxlength="400"
+				<uni-forms-item name="productDescription">
+					<uni-easyinput type="textarea" v-model="product.productDescription" placeholder="请输入商品描述信息" maxlength="400"
 						placeholderStyle="font-size:14px;color:gray" :clearable="clearable"> </uni-easyinput>
 				</uni-forms-item>
 
@@ -41,7 +41,7 @@
 
 
 			<view class="card label_group">
-				<uni-forms-item name="condition">
+				<uni-forms-item name="productCondition">
 					<uni-data-checkbox v-model="product.productCondition" :localdata="conditionOption"></uni-data-checkbox>
 				</uni-forms-item>
 			</view>
@@ -65,9 +65,9 @@
 					<view class="uni-column row-view">
 						<span class="span_margin">微信号</span>
 						<input class="uni-input" v-model="product.contact" maxlength="22" placeholder="请填写微信号以便联系"
-							placeholder-style="font-size:14px;color:gray" />
+							placeholder-style="font-size:14px;color:gray" @input="showCheckBox"/>
 					</view>
-					<view class="checkbox check_message">
+					<view class="checkbox check_message" v-if="!hasID">
 						<checkbox-group @change="checkBoxChange">
 							<checkbox value="save_contact" :checked="save" color="#1E90FF"
 								style="transform:scale(0.8);" />
@@ -95,15 +95,17 @@
 	export default {
 		data() {
 			return {
+				hasID:false,
 				save: true,
 				upLoadFail: false,
 				uploadCount: 0,
 				clearable: false,
 				product: {
 					imageList: [],
-					description: "",
-					productName: ""
+					productDescription: "",
+					productTitle: ""
 				},
+				images:[],
 				item_types: [{
 					text: "电子产品",
 					value: "ELECTRONIC"
@@ -156,7 +158,7 @@
 					value: 'IMPAIRED'
 				}],
 				rules: {
-					productName: {
+					productTitle: {
 						rules: [{
 								required: true,
 								errorMessage: '请填写商品名称',
@@ -168,7 +170,7 @@
 							}
 						]
 					},
-					description: {
+					productDescription: {
 						rules: [{
 								required: true,
 								errorMessage: '请填写商品描述',
@@ -192,7 +194,7 @@
 							errorMessage: '请选择配送方式',
 						}]
 					},
-					condition: {
+					productCondition: {
 						rules: [{
 							required: true,
 							errorMessage: '请选择商品成色',
@@ -216,8 +218,20 @@
 		},
 		onShow(){
 			 wx.cloud.init();
+			 let userInfo = uni.getStorageSync("userInfo-2");
+			 this.product.sellerAvatar = userInfo.avatar;
+			 this.product.sellerNickname = userInfo.nickname;
+			 if(userInfo.wechatID != null){
+				 this.product.contact = userInfo.wechatID;
+				 this.save = false;
+				 this.hasID = true;
+			 }
 		},
 		methods: {
+			showCheckBox:function(){
+				this.save = true;
+				this.hasID = false;
+			},
 			radioChange: function(evt) {
 				for (let i = 0; i < this.items.length; i++) {
 					if (this.items[i].value === evt.detail.value) {
@@ -256,6 +270,7 @@
 				this.$refs[ref].validate().then(res => {
 					this.uploadCount = 0;
 					this.uploadFail = false;
+					this.images = [];
 					uni.showLoading({
 						title: "请耐心等待信息上传"
 					});
@@ -293,8 +308,10 @@
 								this.uploadFail = true;
 							}else{
 								this.uploadCount++;
+								this.images.push("http://cssa-mini-na.oss-us-west-1.aliyuncs.com" + "/cssa-secondhand/" + this.product.imageList[i].filename)
 							}
 							if (this.uploadCount == this.product.imageList.length) {
+								this.product.images = this.images,
 								this.postProduct();
 							}
 						},
@@ -309,7 +326,7 @@
 				}
 			},
 			postProduct: async function() {
-				const res = wx.cloud.callContainer({
+				const res = await wx.cloud.callContainer({
 					config: {
 						env: 'prod-9go38k3y9fee3b2e',
 					},
@@ -321,7 +338,8 @@
 					data: this.product
 				});
 				uni.hideLoading();
-				if (res.data.status == 200) {
+				if (res.data.status == 100) {
+					uni.$emit("uploadSuccess");
 					uni.navigateBack();
 				} else {
 					uni.showToast({
