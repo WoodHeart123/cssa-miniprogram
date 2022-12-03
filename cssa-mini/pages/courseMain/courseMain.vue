@@ -84,7 +84,11 @@
 				sort: ["SORT_BY_COURSE_NUM", "SORT_BY_COMMENT_COUNT", "SORT_BY_AVG_DIFFICULTY_ASC",
 					"SORT_BY_AVG_DIFFICULTY_DESC", "SORT_BY_AVG_PREFER_DESC", "SORT_BY_AVG_PREFER_ASC"
 				],
+<<<<<<< HEAD
 				courseCount: 0,
+=======
+				courseCount: 1,
+>>>>>>> production
 				sortIndex: 1,
 				departmentList: [],
 				departmentDict: [],
@@ -223,7 +227,7 @@
 					return;
 				}
 				this.courseList = [];
-				this.courseCount = 0;
+				this.courseCount = 1;
 				this.getCourseList()
 			},
 			async getCourseList() {

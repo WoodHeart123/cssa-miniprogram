@@ -11,6 +11,7 @@
 		<view class="box" @click="toName">
 			<view class="key">昵称</view>
 			<view class="value">{{this.userInfo.nickname}}</view>
+			<view class="arrow"><span class="iconfont">&#xe62d;</span></view>
 		</view>
 		<view class="box" @click="toEmail">
 			<view class="key">邮箱</view>
@@ -34,7 +35,7 @@
 		},
 		onShow(){
 			uni.getStorage({
-				key: 'userInfo',
+				key: 'userInfo-2',
 				success: (res) => {
 					this.userInfo = res.data;
 				},
@@ -49,6 +50,11 @@
 			toStudentAuth:function(){
 				uni.navigateTo({
 					url: "/pages/studentAuth/studentAuth"
+				})
+			},
+			toName:function(){
+				uni.navigateTo({
+					url: "./updateName"
 				})
 			}
 			

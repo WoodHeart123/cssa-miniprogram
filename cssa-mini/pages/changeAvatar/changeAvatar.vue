@@ -47,11 +47,10 @@
 						'X-WX-SERVICE': 'springboot-f8i8',
 					},
 				});
-				console.log(res);
 				if(res.data.status == 100){
-					let userInfo = uni.getStorageSync("userInfo");
+					let userInfo = uni.getStorageSync("userInfo-2");
 					userInfo.avatar = this.currentAvatar;
-					uni.setStorageSync("userInfo",userInfo);
+					uni.setStorageSync("userInfo-2",userInfo);
 					uni.navigateBack();
 				}
 			}

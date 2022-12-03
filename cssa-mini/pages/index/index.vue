@@ -65,19 +65,19 @@
 		},
 		onLoad() {
 			wx.cloud.init();
-			this.getUserProfile();
 		},
 		onShow() {
 			uni.getStorage({
-				key: 'userInfo',
+				key: 'userInfo-2',
 				success: (res) => {
 					this.userInfo = res.data;
-					this.login(res.data.nickName!=undefined?res.data.nickName:res.data.nickname);
+					this.login(res.data.nickname);	
 				},
 				fail: () => {
 					this.isLogin = false;
 				},
 			});
+			
 			
 		},
 		onHide(){
@@ -107,6 +107,7 @@
 				uni.getUserProfile({
 					desc: "获取用户昵称",
 					success: (userProfile) => {
+						this.userInfo.nickname = userProfile.userInfo.nickName;
 						this.login(userProfile.userInfo.nickName);
 					},
 				});
@@ -129,10 +130,7 @@
 				});
 				this.userInfo = res.data.data;
 				this.isLogin = true;
-				uni.setStorageSync("userInfo",res.data.data);
-				if (res.data.status == 103) {
-					this.$refs.welcome.open();
-				}
+				uni.setStorageSync("userInfo-2",res.data.data);
 				
 			},
 			toChangeAvatar: function() {
