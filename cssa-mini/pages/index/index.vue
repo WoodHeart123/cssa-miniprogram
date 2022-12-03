@@ -96,6 +96,13 @@
 			}
 		},
 		methods: {
+			jump: function(index){
+				if(index == 2){
+					uni.navigateTo({
+						url: "/pages/myComment/myComment"
+					})
+				}
+			},
 			getUserProfile: function() {
 				uni.getUserProfile({
 					desc: "获取用户昵称",

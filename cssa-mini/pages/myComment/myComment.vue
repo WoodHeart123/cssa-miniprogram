@@ -1,28 +1,9 @@
 <template>
 	<view class="my-comment">
-		<view class="hint">向左划可修改或删除评论</view>
-		<uni-swipe-action>
-			<uni-swipe-action-item v-for="(comment, index) in myComment" :key="index">
-				<view class="box">
-					<view class="left-bar">
-						<commentBoxVue :comment="comment" user="true"></commentBoxVue>
-					</view>
-					<view class="right-bar"><span class="iconfont icon">&#xe66d;</span></view>
-				</view>
-				<template v-slot:right>
-					<view class="slot">
-						<view class="slot-button" @click="bindClick({key:0,index:index})">
-							<uni-icons type="gear" size="20" color="#007aff"></uni-icons>
-							<text class="slot-button-text" >修改</text>
-						</view>
-						<view class="slot-button" @click="bindClick({key:1,index:index})">
-							<uni-icons type="trash" size="20" color="#F56C6C"></uni-icons>
-							<text class="slot-button-text">删除</text>
-						</view>
-					</view>
-				</template>
-			</uni-swipe-action-item>
-		</uni-swipe-action>
+		<!-- <view class="hint">向左划可修改或删除评论</view> -->
+		<view class="box" v-for="(comment, index) in myComment" :key="index">
+				<commentBoxVue :comment="comment" user="true"></commentBoxVue>
+		</view>
 		<uni-load-more :status="status" :contentText="contentText"></uni-load-more>
 	</view>
 </template>
@@ -32,16 +13,16 @@
 		onLoad() {
 			wx.cloud.init();
 			uni.getStorage({
-				key: "userInfo",
+				key: "userInfo-2",
 				success: (res) => {
 					this.likedComment = res.data.likedComment;
 				},
 			});
 		},
-		onShow(){
+		onShow() {
 			this.getMyComment();
 		},
-		onHide(){
+		onHide() {
 			this.status = "more";
 			this.offset = 0;
 			this.myComment = [];
@@ -100,7 +81,7 @@
 				}
 				this.myComment = this.myComment.concat(res.data.data);
 			},
-			deleteComment: async function(index,commentID){
+			deleteComment: async function(index, commentID) {
 				const res = await wx.cloud.callContainer({
 					config: {
 						env: 'prod-9go38k3y9fee3b2e',
@@ -110,26 +91,27 @@
 					header: {
 						'X-WX-SERVICE': 'springboot-f8i8',
 					},
-					data:commentID
+					data: commentID
 				});
-				if(res.data.status == 100){
-					this.myComment.splice(index,1);
+				if (res.data.status == 100) {
+					this.myComment.splice(index, 1);
 					uni.showToast({
-						title:"成功删除",
+						title: "成功删除",
 					});
-				}else{
+				} else {
 					uni.showToast({
-						title:"删除失败",
-						icon:"error"
+						title: "删除失败",
+						icon: "error"
 					});
 				}
 			},
 			bindClick: function(e) {
-				if(e.key == 0){
+				if (e.key == 0) {
 					uni.navigateTo({
-						url: "/pages/postComment/postComment?comment=" + encodeURIComponent(JSON.stringify(this.myComment[e.index])) + "&edit=true",
+						url: "/pages/postComment/postComment?comment=" + encodeURIComponent(JSON.stringify(this
+							.myComment[e.index])) + "&edit=true",
 					});
-				}else{
+				} else {
 					uni.showModal({
 						title: "删除吐槽",
 						content: "是否删除吐槽？删除后将无法恢复",
@@ -137,11 +119,11 @@
 						success: function(res) {
 							var that = this;
 							if (res.confirm) {
-								this.deleteComment(e.index,this.myComment[e.index].commentID);
-								
+								this.deleteComment(e.index, this.myComment[e.index].commentID);
+
 							}
 						}.bind(this)
-					});	
+					});
 				}
 			}
 		},
@@ -156,9 +138,8 @@
 	@import '@/static/iconfont/iconfont.css';
 
 	.my-comment {
-		margin-top: 30px;
 		width: 100vw;
-		height: calc(100vh - 30px);
+		height: 100vh;
 		overflow-y: scroll;
 		transition: all 3s ease;
 	}
@@ -167,7 +148,7 @@
 		width: 100vw;
 		display: flex;
 		flex-direction: row;
-		
+		margin-bottom: 5px;
 	}
 
 	.right-bar {
@@ -186,9 +167,10 @@
 		font-size: 15px;
 		color: #ccc;
 	}
-	.hint{
+
+	.hint {
 		position: fixed;
-		top:0;
+		top: 0;
 		width: 100%;
 		background-color: white;
 		height: 30px;
@@ -196,24 +178,27 @@
 		align-items: center;
 		justify-content: center;
 		font-size: 12px;
-		color:#ccc;
+		color: #ccc;
 	}
+
 	.uni-swipe {
 		margin-bottom: 10px;
 	}
-	.slot{
+
+	.slot {
 		width: 20vw;
 		display: flex;
 		flex-direction: column;
 		height: 100%;
 		background-color: white;
 	}
-	.slot-button{
+
+	.slot-button {
 		height: 50%;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-		color:#777;
+		color: #777;
 	}
 </style>

@@ -114,7 +114,7 @@
 
 	.comment-box {
 		background-color: white;
-		width: 100%;
+		width: 100vw;
 
 	}
 	.course-title{
