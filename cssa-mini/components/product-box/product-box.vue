@@ -15,7 +15,7 @@
 			<view class='condition'><text>{{this.condition[product.productCondition]}}</text></view>
 		</view>
 		<view class='seller row-container'>
-			<image class='avatar' src="../../static/index/maomao.jpg"></image>
+			<image class='avatar' :src="'https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/' + this.product.sellerAvatar + '.jpg'"></image>
 			<view class='seller-name'><text>{{product.sellerNickname}}</text></view>
 			<view class='time'><text>3小时前</text></view>
 		</view>
