@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<swiper class="swiper" indicator-dots>
-			<swiper-item v-for="(image, index) in secondItem.imageList">
+			<swiper-item v-for="(image, index) in product.images">
 				<image :src="image"></image>
 			</swiper-item>
 		</swiper>
@@ -9,32 +9,32 @@
 			<view class="price-box">
 				<view class="row-container" style="align-items: center;">
 					<view class="iconfont" id="dollar-icon">&#xe70b;</view>
-					<view class="price"><text>1200</text></view>
-					<view class="row-container tag"><text>全新</text></view>
-					<view class="row-container tag"><text>自取</text></view>
+					<view class="price"><text>{{product.price}}</text></view>
+					<view class="row-container tag"><text>{{product.condition}}</text></view>
+					<view class="row-container tag"><text>{{product.delivery}}</text></view>
 				</view>
 				<view class="shoucang-box">
 					<text class="iconfont save-icon" :class="{'save-icon-selected' : isSaved}" @click="onClickSave()">&#xe6c9;</text>
 				</view>
 			</view>
-			<view class="second-name"><text>{{secondItem.name}}</text></view>
+			<view class="second-name"><text>{{product.productTitle}}</text></view>
 		</view>
 		<view class="contact">
 			<view class="contact-box">
 				<img class="avatar"
-					:src="'https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/' + 1 + '.jpg'">
-				<text class="nickname">小红豆</text>
+					:src="'https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/' + userInfo.avatar + '.jpg'">
+				<text class="nickname">{{userInfo.nickname}}</text>
 				<view class="copy-box">
 					<text>复制</text>
 					<img class="copy-img" src="/static/fuzhi.png" @click="setClipboardData">
 				</view>
 			</view>
-			<view class="weixin">微信号：{{secondItem.contact[0]}}</view>
+			<view class="weixin">微信号：{{product.contact}}</view>
 		</view>
 		<view class="description">
 			<view class="scroll-page">
 				<rich-text>
-					{{secondItem.content + secondItem.content + secondItem.content + secondItem.content}}
+					{{product.productDescription}}
 				</rich-text>
 			</view>
 		</view>
@@ -47,7 +47,7 @@
 			return {
 				isSaved: false,
 				/*
-				secondItem: {
+				product: {
 					productID,
 					userID,
 					sellerAvatar,
@@ -63,37 +63,57 @@
 					delivery;
 				},
 				*/
-				secondItem: {
-					name: "Macbook Pro 2022 1TB M2 非海南免税版",
-					imageList: ["/static/renwu.jpeg", "/static/renwu.jpeg", "/static/renwu.jpeg"],
-					contact: ["123456"],
-					types: ["电子产品", "学习用品"],
-					quantity: "几乎全新",
-					content: "全新 M2 芯片现身，13 英寸 MacBook Pro 实力大涨。同样的紧凑设计之下，电池续航最长达 20 小时1，并以主动散热系统让强悍性能持续迸发。还有绚丽的视网膜显示屏、FaceTime 高清摄像头和录音棚级麦克风也全部到位，一台超机动的专业级笔记本电脑整装待发。"
+				product: {
+					productTitle: "Macbook Pro 2022 1TB M2 非海南免税版",
+					images: ["/static/renwu.jpeg", "/static/renwu.jpeg", "/static/renwu.jpeg"],
+					contact: "123456",
+					productType: "电子产品",
+					condition: "几乎全新",
+					price: 1200,
+					delivery:'自取',
+					productDescription: "全新 M2 芯片现身，13 英寸 MacBook Pro 实力大涨。同样的紧凑设计之下，电池续航最长达 20 小时1，并以主动散热系统让强悍性能持续迸发。还有绚丽的视网膜显示屏、FaceTime 高清摄像头和录音棚级麦克风也全部到位，一台超机动的专业级笔记本电脑整装待发。"
 				},
+				userInfo:{
+					nickname:'小红豆',
+					avatar:1,
+				},
+				
 			}
 		},
 		
 		/*
 		onLoad(options){
-			
-			this.secondItem = JSON.parse(decodeURIComponent(options.secondItem));
-			console.log(this.secondItem);
-		   
-		   if (this.shoucangle == 1) {
-			this.shoucang = "/static/shoucang.png";
-		   } else {
-		   	this.shoucang = "/static/weishoucang.png";
-		   }
+			wx.cloud.init();
+			this.product = JSON.parse(decodeURIComponent(options.product));
+			console.log(this.product);
+			save();
+			if (this.isSaved == True) {
+				this.shoucang = "/static/shoucang.png";
+			} else {
+				this.shoucang = "/static/weishoucang.png";
+			}
 		},
 		*/
-
-		
+	   
+	   /*
+		onShow() {
+			uni.getStorage({
+				key: 'userInfo-2',
+				success: (res) => {
+					this.userInfo = res.data;
+				},
+				fail: () => {
+					console.log("fail");
+				},
+			});
+		},
+		*/
+	   
 		onShareTimeline() {
 			return {
-				title: this.secondItem.name,
-				imageUrl: "/static/renwu.jpeg",
-				path: '/pages/detail/secondDetail?secondItem=' + encodeURIComponent(JSON.stringify(this.secondItem))
+				title: this.product.productTitle,
+				imageUrl: this.product.images[0],
+				path: '/pages/detail/secondDetail?product=' + encodeURIComponent(JSON.stringify(this.product))
 			}
 		},
 
@@ -102,22 +122,23 @@
 				console.log(res.target)
 			}
 			return {
-				title: this.secondItem.name + ": $" + 1200,
+				title: this.product.productTitle + ": $" + this.product.price,
 				desc: "CSSA二手交易平台",
-				content: "very happy",
-				imageUrl: "/static/renwu.jpeg",
-				path: '/pages/detail/secondDetail?secondItem=' + encodeURIComponent(JSON.stringify(this.secondItem))
+				content: this.product.productType,
+				imageUrl: this.product.images[0],
+				path: '/pages/detail/secondDetail?product=' + encodeURIComponent(JSON.stringify(this.product))
 			}
 		},
 		methods: {
 			onClickSave:function(){
-				this.isSaved = !this.isSaved;
-				this.save();
+				if(!this.isSaved){
+					this.save();
+				}
 			},
 			
 			setClipboardData: function() {
 				uni.setClipboardData({
-					data: " 微信号: " + this.secondItem.contact[0]
+					data: " 微信号: " + this.product.contact
 				});
 			},
 			
@@ -128,12 +149,15 @@
 					config: {
 						env: 'prod-9go38k3y9fee3b2e', // 微信云托管的环境ID
 					},
-					path: '/secondhand/collect?productID='+this.secondItem.productID,
+					path: '/secondhand/collect?productID='+this.product.productID,
 					method: 'GET', 
 					header: {
 						'X-WX-SERVICE': 'springboot-f8i8',
 					}
 				});
+				if(res.status == "101"){
+					this.isSaved = True;
+				}
 				*/
 			}
 		}
