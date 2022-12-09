@@ -39,7 +39,7 @@
 		methods: {
 			toSecondDetail: function() {
 				uni.navigateTo({
-					url: '/pages/detail/secondDetail',
+					url: '/pages/detail/secondDetail?product=' + encodeURIComponent(JSON.stringify(this.product)),
 				});
 			}
 		}

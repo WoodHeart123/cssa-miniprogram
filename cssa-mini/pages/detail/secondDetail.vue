@@ -10,8 +10,8 @@
 				<view class="row-container" style="align-items: center;">
 					<view class="iconfont" id="dollar-icon">&#xe70b;</view>
 					<view class="price"><text>{{product.price}}</text></view>
-					<view class="row-container tag"><text>{{product.condition}}</text></view>
-					<view class="row-container tag"><text>{{product.delivery}}</text></view>
+					<view class="row-container tag"><text>{{this.condition[product.productCondition]}}</text></view>
+					<view class="row-container tag"><text>{{this.delivery[product.delivery]}}</text></view>
 				</view>
 				<view class="shoucang-box">
 					<text class="iconfont save-icon" :class="{'save-icon-selected' : isSaved}" @click="onClickSave()">&#xe6c9;</text>
@@ -22,8 +22,8 @@
 		<view class="contact">
 			<view class="contact-box">
 				<img class="avatar"
-					:src="'https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/' + userInfo.avatar + '.jpg'">
-				<text class="nickname">{{userInfo.nickname}}</text>
+					:src="'https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/' + product.sellerAvatar + '.jpg'">
+				<text class="nickname">{{product.sellerNickname}}</text>
 				<view class="copy-box">
 					<text>复制</text>
 					<img class="copy-img" src="/static/fuzhi.png" @click="setClipboardData">
@@ -46,43 +46,22 @@
 		data() {
 			return {
 				isSaved: false,
-				/*
-				product: {
-					productID,
-					userID,
-					sellerAvatar,
-					sellerNickname,
-					productTitle,
-					productDescription,
-					price,
-					productType,
-					condition,
-					time,
-					contact;
-					images;
-					delivery;
-				},
-				*/
-				product: {
-					productTitle: "Macbook Pro 2022 1TB M2 非海南免税版",
-					images: ["/static/renwu.jpeg", "/static/renwu.jpeg", "/static/renwu.jpeg"],
-					contact: "123456",
-					productType: "电子产品",
-					condition: "几乎全新",
-					price: 1200,
-					delivery:'自取',
-					productDescription: "全新 M2 芯片现身，13 英寸 MacBook Pro 实力大涨。同样的紧凑设计之下，电池续航最长达 20 小时1，并以主动散热系统让强悍性能持续迸发。还有绚丽的视网膜显示屏、FaceTime 高清摄像头和录音棚级麦克风也全部到位，一台超机动的专业级笔记本电脑整装待发。"
-				},
+				product: {},
 				userInfo:{
 					nickname:'小红豆',
 					avatar:1,
 				},
+				condition: ['全新','几乎全新', '明显使用痕迹','部分损毁' ],
+				delivery: {
+					'pickup': '自取',
+					'deliver': '送货',
+					'all': '送/取',
+				},
 				
 			}
-		},
-		
-		/*
+		},	
 		onLoad(options){
+			console.log(options);
 			wx.cloud.init();
 			this.product = JSON.parse(decodeURIComponent(options.product));
 			console.log(this.product);
@@ -93,7 +72,7 @@
 				this.shoucang = "/static/weishoucang.png";
 			}
 		},
-		*/
+		
 	   
 	   /*
 		onShow() {
