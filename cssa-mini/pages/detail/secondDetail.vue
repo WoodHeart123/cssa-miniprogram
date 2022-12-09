@@ -47,16 +47,13 @@
 			return {
 				isSaved: false,
 				product: {},
-				userInfo:{
-					nickname:'小红豆',
-					avatar:1,
-				},
 				condition: ['全新','几乎全新', '明显使用痕迹','部分损毁' ],
 				delivery: {
 					'pickup': '自取',
 					'deliver': '送货',
 					'all': '送/取',
 				},
+				userInfo:{},
 				
 			}
 		},	
@@ -72,9 +69,7 @@
 				this.shoucang = "/static/weishoucang.png";
 			}
 		},
-		
 	   
-	   /*
 		onShow() {
 			uni.getStorage({
 				key: 'userInfo-2',
@@ -86,7 +81,7 @@
 				},
 			});
 		},
-		*/
+		
 	   
 		onShareTimeline() {
 			return {
@@ -158,6 +153,7 @@
 	.weixin {
 		margin: 10px 0 10vw 40px;
 		color: dimgray;
+		user-select: text;
 	}
 
 	.row-container {
@@ -220,6 +216,7 @@
 	.basic {
 		margin-bottom: 2vh;
 		margin-top: 1vh;
+		user-select: text;
 	}
 	
 	.contact{
