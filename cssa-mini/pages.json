@@ -141,6 +141,12 @@
 				"disableScroll": true
 			}
 
+		},{
+			"path": "pages/detail/houseDetail",
+			"style": {
+				"navigationBarTitleText": "转租页面",
+				"backgroundColor": "#F5F5F5"
+			}
 		}
 	],
 	"condition": {
@@ -167,6 +173,10 @@
 			},{
 				"name":"secondSearch",
 				"path":"pages/second/secondMainSearch"
+			},
+			{
+				"name":"houseDetail",
+				"path":"pages/detail/houseDetail"
 			}
 		]
 	},
