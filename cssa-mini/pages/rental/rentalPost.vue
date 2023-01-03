@@ -1,51 +1,45 @@
 <template>
-	<view id="second-post">
-		<uni-forms ref="productForm" :model="product" :rules="rules">
+	<view id="rent-post">
+		<uni-forms ref="rentalForm" :model="rental" :rules="rules">
 			<view class="image_upload">
 				<uni-file-picker limit="5" fileMediatype="image" :auto-upload="false" @select="onSelectImage"
 					@delete="onDeleteImage"></uni-file-picker>
 			</view>
 
 			<view class="card uni-form-item uni-column">
-				<uni-forms-item name="productTitle">
-					<input class="uni-input" v-model="product.productTitle" maxlength="22" placeholder="请填写商品名称"
+				<uni-forms-item name="rentalTitle">
+					<input class="uni-input" v-model="rental.rentalTitle" maxlength="22" placeholder="请填写房屋信息"
 						placeholder-style="font-size:14px;color:gray" />
 				</uni-forms-item>
 			</view>
 
 
 			<view class="card uni-textarea textbox">
-				<uni-forms-item name="productDescription">
-					<uni-easyinput type="textarea" v-model="product.productDescription" placeholder="请输入商品描述信息" maxlength="400"
+				<uni-forms-item name="rentalDescription">
+					<uni-easyinput type="textarea" v-model="rental.rentalDescription" placeholder="请描述房屋详情,如户型 地点 具体租期等" maxlength="400"
 						placeholderStyle="font-size:14px;color:gray" :clearable="clearable"> </uni-easyinput>
 				</uni-forms-item>
 
 			</view>
-
-			<view class="card">
-				<uni-forms-item name="delivery">
-					<uni-data-checkbox v-model="product.delivery" :localdata="deliveryOption"></uni-data-checkbox>
-				</uni-forms-item>
-			</view>
-
-
-
-			<view class="card uni-list">
-				<uni-forms-item name="productType">
-					<uni-data-picker placeholder="请选择商品类型" popup-title="请选择商品类型" :localdata="item_types"
-						v-model="product.productType">
-					</uni-data-picker>
-				</uni-forms-item>
-			</view>
-
-
+			
 
 			<view class="card label_group">
-				<uni-forms-item name="productCondition">
-					<uni-data-checkbox v-model="product.productCondition" :localdata="conditionOption"></uni-data-checkbox>
+				<uni-forms-item name="furnitureType">
+					<uni-data-checkbox v-model="rental.furnitureType" :localdata="furnitureOption"></uni-data-checkbox>
 				</uni-forms-item>
 			</view>
-
+			
+			<view class="card label_group">
+				<uni-forms-item name="floorplan">
+					<uni-data-checkbox v-model="rental.floorplan" :localdata="floorplanOption"></uni-data-checkbox>
+				</uni-forms-item>
+			</view>
+			
+			<view class="card label_group">
+				<uni-forms-item name="leasePeriod">
+					<uni-data-checkbox v-model="rental.leasePeriod" :localdata="leaseOption"></uni-data-checkbox>
+				</uni-forms-item>
+			</view>
 
 
 			<view class="card">
@@ -100,110 +94,104 @@
 				upLoadFail: false,
 				uploadCount: 0,
 				clearable: false,
-				product: {
+				rental: {
 					imageList: [],
-					productDescription: "",
-					productTitle: ""
+					rentalDescription: "",
+					rentalTitle: ""
 				},
 				images:[],
-				item_types: [{
-					text: "电子产品",
-					value: "ELECTRONIC"
+				furnitureOption: [{
+					text: "家具齐全",
+					value: "FULLYFURNISHED"
 				}, {
-					text: "交通工具",
-					value: "TRANSPORT"
+					text: "部分家具",
+					value: "SOMEFURNITURE"
 				}, {
-					text: "家具家电",
-					value: "FURNITURE"
-				}, {
-					text: "虚拟卡券",
-					value: "DIGITAL"
-				}, {
-					text: "日常用品",
-					value: "DAILY"
-				}, {
-					text: "美妆服饰",
-					value: "MAKEUP"
-				}, {
-					text: "书籍教具",
-					value: "EDU"
-				}, {
-					text: "宠物用品",
-					value: "PET"
-				}, {
-					text: "其他",
-					value: "OTHERS"
+					text: "无家具",
+					value: "NOFURNITURE"
 				}],
-				deliveryOption: [{
-					text: '自取',
-					value: 'pickup'
+				floorplanOption: [{
+					text: 'studio',
+					value: 'STUDIO'
 				}, {
-					text: '送货',
-					value: 'deliver'
+					text: '一室',
+					value: 'ONEBEDROOM'
 				}, {
-					text: '皆可',
-					value: 'all'
+					text: '二室',
+					value: 'TWOBEDROOMS'
+				}, {
+					text: '三室',
+					value: 'THREEBEDROOMS'
+				}, {
+					text: '四室+',
+					value: 'FOURPLUSBEDROOMS'
 				}],
-				conditionOption: [{
-					text: '全新',
-					value: 'NEW'
+				leaseOption: [{
+					text: '暑假',
+					value: 'SUMMER'
 				}, {
-					text: '几乎全新',
-					value: 'ALMOST_NEW'
+					text: '秋季学期',
+					value: 'FALL'
 				}, {
-					text: '明显使用痕迹',
-					value: 'USED'
+					text: '寒假',
+					value: 'Winter'
 				}, {
-					text: '部分损毁',
-					value: 'IMPAIRED'
+					text: '春季学期',
+					value: 'Spring'
+				}, {
+					text: '全年',
+					value: 'ALLYEAR'
+				}, {
+					text: '短租',
+					value: 'SHORTTERM'
 				}],
 				rules: {
-					productTitle: {
+					rentalTitle: {
 						rules: [{
 								required: true,
-								errorMessage: '请填写商品名称',
+								errorMessage: '请填写房屋信息',
 							},
 							{
 								minLength: 1,
 								maxLength: 22,
-								errorMessage: '商品名称长度在 1 到 22 个字符之间',
+								errorMessage: '房屋信息长度在 1 到 22 个字符之间',
 							}
 						]
 					},
-					productDescription: {
+					rentalDescription: {
 						rules: [{
 								required: true,
-								errorMessage: '请填写商品描述',
+								errorMessage: '请填写房屋详情',
 							},
 							{
 								minLength: 1,
 								maxLength: 400,
-								errorMessage: '商品名称长度在 1 到 400 个字符之间',
+								errorMessage: '房屋详情长度在 1 到 400 个字符之间',
 							}
 						]
 					},
-					productType: {
+					furnitureType: {
 						rules: [{
 							required: true,
-							errorMessage: '请选择商品类型',
+							errorMessage: '请选择家具',
 						}]
 					},
-					delivery: {
+					floorplanType: {
 						rules: [{
 							required: true,
-							errorMessage: '请选择配送方式',
+							errorMessage: '请选择户型',
 						}]
 					},
-					productCondition: {
+					leasePeriod: {
 						rules: [{
 							required: true,
-							errorMessage: '请选择商品成色',
+							errorMessage: '请选择租期',
 						}]
 					},
 					price: {
 						rules: [{
 							required: true,
-							errorMessage: '请输入商品价格',
+							errorMessage: '请输入转租价格',
 						}]
 					},
 					contact: {
@@ -219,10 +207,10 @@
 		onShow(){
 			 wx.cloud.init();
 			 let userInfo = uni.getStorageSync("userInfo-2");
-			 this.product.sellerAvatar = userInfo.avatar;
-			 this.product.sellerNickname = userInfo.nickname;
+			 this.rental.sellerAvatar = userInfo.avatar;
+			 this.rental.sellerNickname = userInfo.nickname;
 			 if(userInfo.wechatID != null){
-				 this.product.contact = userInfo.wechatID;
+				 this.rental.contact = userInfo.wechatID;
 				 this.save = false;
 				 this.hasID = true;
 			 }
@@ -290,7 +278,7 @@
 						fileType: 'image',
 						name: 'file',
 						formData: {
-							key: "cssa-secondhand/" + this.product.imageList[i].filename,
+							key: "cssa-rental/" + this.rental.imageList[i].filename,
 							region: 'oss-us-west-1',
 							accessKeyId: 'LTAI5tG4Jt4WD77C1XSDTJAj',
 							accessKeySecret: 'HsXwO3QW67PBzpIV2CeE1uM6bU4sd7',
@@ -330,12 +318,12 @@
 					config: {
 						env: 'prod-9go38k3y9fee3b2e',
 					},
-					path: `/secondhand/saveProduct?save=${this.save}`,
+					path: `/rental/saveRental?save=${this.save}`,
 					method: 'POST',
 					header: {
 						'X-WX-SERVICE': 'springboot-f8i8',
 					},
-					data: this.product
+					data: this.rental
 				});
 				uni.hideLoading();
 				if (res.data.status == 100) {

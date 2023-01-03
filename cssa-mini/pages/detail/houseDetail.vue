@@ -1,40 +1,46 @@
 <template>
 	<view>
 		<swiper class="swiper" indicator-dots>
-			<swiper-item v-for="(image, index) in product.images">
+			<swiper-item v-for="(image, index) in houseInfo.imageList">
 				<image :src="image"></image>
 			</swiper-item>
 		</swiper>
 		<view class="basic">
 			<view class="price-box">
 				<view class="row-container" style="align-items: center;">
-					<view class="iconfont" id="dollar-icon">&#xe70b;</view>
-					<view class="price"><text>{{product.price}}</text></view>
-					<view class="row-container tag"><text>{{this.condition[product.productCondition]}}</text></view>
-					<view class="row-container tag"><text>{{this.delivery[product.delivery]}}</text></view>
+					<view class="row-container tag"><text>{{houseInfo.time}}</text></view>
+					<view class="row-container tag"><text>{{houseInfo.condition}}</text></view>
 				</view>
 				<view class="shoucang-box">
 					<text class="iconfont save-icon" :class="{'save-icon-selected' : isSaved}" @click="onClickSave()">&#xe6c9;</text>
 				</view>
 			</view>
-			<view class="second-name"><text>{{product.productTitle}}</text></view>
+			<view class="row-container" style="margin-top: 5px; margin-left: 4px;">
+				<view class="iconfont" id="dollar-icon">&#xe70b;</view>
+				<view class="price"><text>{{houseInfo.price}}/m</text></view>
+			</view>
+			<view class="house-name"><text>{{houseInfo.name}}</text></view>
+		</view>
+		<view class="row-container">
+			<view class="info-box"><text>女</text></view>
+			<view class="info-box"><text>2B1B</text></view>
 		</view>
 		<view class="contact">
 			<view class="contact-box">
 				<img class="avatar"
-					:src="'https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/' + product.sellerAvatar + '.jpg'">
-				<text class="nickname">{{product.sellerNickname}}</text>
+					:src="'https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/' + 1 + '.jpg'">
+				<text class="nickname">小红豆</text>
 				<view class="copy-box">
 					<text>复制</text>
 					<img class="copy-img" src="/static/fuzhi.png" @click="setClipboardData">
 				</view>
 			</view>
-			<view class="weixin">微信号：{{product.contact}}</view>
+			<view class="weixin">微信号：{{houseInfo.contact[0]}}</view>
 		</view>
 		<view class="description">
 			<view class="scroll-page">
 				<rich-text>
-					{{product.productDescription}}
+					{{houseInfo.content}}
 				</rich-text>
 			</view>
 		</view>
@@ -46,53 +52,44 @@
 		data() {
 			return {
 				isSaved: false,
-				product: {},
-				userInfo:{
-					nickname:'小红豆',
-					avatar:1,
+				houseInfo: {
+					price:1300,
+					time:"2011.08-2012.12",
+					name: "London Luxury Apartment",
+					imageList: ["/static/housing.jpg", "/static/housing.jpg", "/static/housing.jpg"],
+					type:"1B1B",
+					condition:"有现房",
+					contact: ["123456"],
+					quantity: "几乎全新",
+					content: "Beech Townhomes隶属于东兰辛当地大型公寓商DTN旗下。Beech Townhomes位于密歇根州的东兰辛，密歇根州立大学附近，拥有全新的一卧室和两卧室联排别墅。 公寓距离东兰辛市中心，夜生活场所，餐馆和购物场所仅有几个街区，步行即可抵达斯巴达体育场，布雷斯林中心和伊莱和艾迪斯博物馆。 别墅内有洗衣机和烘干机，生活便利。临近学校，可步行上课。"
 				},
-				condition: ['全新','几乎全新', '明显使用痕迹','部分损毁' ],
-				delivery: {
-					'pickup': '自取',
-					'deliver': '送货',
-					'all': '送/取',
-				},
-				
-			}
-		},	
-		onLoad(options){
-			console.log(options);
-			wx.cloud.init();
-			this.product = JSON.parse(decodeURIComponent(options.product));
-			console.log(this.product);
-			save();
-			if (this.isSaved == True) {
-				this.shoucang = "/static/shoucang.png";
-			} else {
-				this.shoucang = "/static/weishoucang.png";
 			}
 		},
 		
-	   
-	   /*
-		onShow() {
-			uni.getStorage({
-				key: 'userInfo-2',
-				success: (res) => {
-					this.userInfo = res.data;
-				},
-				fail: () => {
-					console.log("fail");
-				},
-			});
+		/*
+		onLoad(options){
+			
+			this.secondItem = JSON.parse(decodeURIComponent(options.secondItem));
+			console.log(this.secondItem);
+			
+		   if(this.shoucangle == -1){
+			   checkShoucang();
+		   }	
+		   
+		   if (this.shoucangle == 1) {
+			this.shoucang = "/static/shoucang.png";
+		   } else {
+		   	this.shoucang = "/static/weishoucang.png";
+		   }
 		},
 		*/
-	   
+
+		
 		onShareTimeline() {
 			return {
-				title: this.product.productTitle,
-				imageUrl: this.product.images[0],
-				path: '/pages/detail/secondDetail?product=' + encodeURIComponent(JSON.stringify(this.product))
+				title: this.houseInfo.name,
+				imageUrl: "/static/renwu.jpeg",
+				path: '/pages/detail/houseDetail?houseInfo=' + encodeURIComponent(JSON.stringify(this.houseInfo))
 			}
 		},
 
@@ -101,44 +98,22 @@
 				console.log(res.target)
 			}
 			return {
-				title: this.product.productTitle + ": $" + this.product.price,
+				title: this.houseInfo.name + ": $" + 1200,
 				desc: "CSSA二手交易平台",
-				content: this.product.productType,
-				imageUrl: this.product.images[0],
-				path: '/pages/detail/secondDetail?product=' + encodeURIComponent(JSON.stringify(this.product))
+				content: "very happy",
+				imageUrl: "/static/renwu.jpeg",
+				path: '/pages/detail/housedDetail?houseInfo=' + encodeURIComponent(JSON.stringify(this.houseInfo))
 			}
 		},
 		methods: {
 			onClickSave:function(){
-				if(!this.isSaved){
-					this.save();
-				}
+				this.isSaved = !this.isSaved;
 			},
-			
 			setClipboardData: function() {
 				uni.setClipboardData({
-					data: " 微信号: " + this.product.contact
+					data: " 微信号: " + this.houseInfo.contact[0]
 				});
 			},
-			
-			async save(){
-				console.log('success');
-				/*
-				const res = await wx.cloud.callContainer({
-					config: {
-						env: 'prod-9go38k3y9fee3b2e', // 微信云托管的环境ID
-					},
-					path: '/secondhand/collect?productID='+this.product.productID,
-					method: 'GET', 
-					header: {
-						'X-WX-SERVICE': 'springboot-f8i8',
-					}
-				});
-				if(res.status == "101"){
-					this.isSaved = True;
-				}
-				*/
-			}
 		}
 	}
 </script>
@@ -211,14 +186,14 @@
 		height: 40px;
 	}
 
-	.second-name {
+	.house-name {
 		padding: 10px;
 		font-size: 18px;
 		font-weight: 700;
 	}
 
 	.basic {
-		margin-bottom: 2vh;
+		//margin-bottom: 2vh;
 		margin-top: 1vh;
 	}
 	
@@ -285,5 +260,14 @@
 		width: calc(100% - 30px);
 		line-height: 30px;
 		font-size: 15px;
+	}
+	.info-box{
+		padding-top: 10px;
+		padding-bottom: 10px;
+		width: 50vw;
+		//background-color: #FFDE03;
+		text-align: center;
+		margin-bottom: 15px;
+		border: 1px solid #ACACAC;
 	}
 </style>

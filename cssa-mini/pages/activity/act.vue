@@ -40,7 +40,7 @@
 		onLoad() {
 			wx.cloud.init();
 			uni.getStorage({
-				key: 'userInfo',
+				key: 'userInfo-2',
 				success: (res) => {
 					this.userInfo = res.data;
 				}

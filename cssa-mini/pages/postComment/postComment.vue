@@ -95,7 +95,7 @@
 				};
 				this.comment.courseID = this.course.courseID;
 				this.comment.courseName = this.course.courseName;
-				this.comment.userAvatar = uni.getStorageSync("userInfo").avatar;
+				this.comment.userAvatar = uni.getStorageSync("userInfo-2").avatar;
 			}else{
 				this.comment = JSON.parse(decodeURIComponent(options.comment));
 			}		

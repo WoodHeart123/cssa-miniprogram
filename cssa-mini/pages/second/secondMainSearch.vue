@@ -32,15 +32,15 @@
 <script>
 	export default {
 		components: {
-				productBoxVue,
+			productBoxVue,
 		},
 		data() {
 			return {
 				searchValue: "",
-				historyList: ["", ""],
+				historyList: [],
 				searching: false,
 				showResult: false,
-				suggestList:["吹风机", "笔记本"]
+				suggestList: []
 			}
 		},
 		onLoad() {
@@ -48,11 +48,9 @@
 			if (!this.historyList) {
 				uni.setStorageSync("historyList", []);
 			}
-			console.log(this.historyList);
-			this.historyList = ["吹风机", "笔记本"];
 		},
 		methods: {
-			onFocus: function(){
+			onFocus: function() {
 				this.showResult = false;
 			},
 			onCancel: function() {
@@ -65,15 +63,23 @@
 					this.searching = true;
 				}
 			},
-			onConfirm:function(){
+			onConfirm: function() {
 				this.showResult = true;
 			},
-			onClickHistory:function(index){
+			onClickHistory: function(index) {
 				this.searchValue = this.historyList[index];
 				this.showResult = true;
 			},
-			clearHistoryList:function(index){
-				
+			clearHistoryList: function(index) {
+				uni.showModal({
+					content: "是否确认删除历史信息，数据不可恢复",
+					success: function(res) {
+						if (res.confirm) {
+							this.historyList = [];
+							uni.setStorageSync("historyList", []);
+						} 
+					}
+				})
 			}
 		}
 	}
@@ -136,20 +142,19 @@
 		color: #333;
 		margin: 8px;
 	}
-	
-	.suggest-item{
-		height:40px;
+
+	.suggest-item {
+		height: 40px;
 		font-size: 14px;
 		width: 95vw;
 		padding-left: 5vw;
 		line-height: 40px;
 		border-bottom: 1px solid #f1f1f1;
 	}
-	
-	.suggest-section{
-		
-	}
-	.result-section{
+
+	.suggest-section {}
+
+	.result-section {
 		display: flex;
 		justify-content: left;
 		flex-direction: row;
