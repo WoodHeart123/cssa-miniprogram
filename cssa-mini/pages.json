@@ -141,7 +141,19 @@
 				"disableScroll": true
 			}
 
-		}
+		},{
+			"path": "pages/detail/houseDetail",
+			"style": {
+				"navigationBarTitleText": "转租页面",
+				"backgroundColor": "#F5F5F5"
+			}
+		}, {
+			"path": "pages/rental/rentalPost",
+			"style": {
+				"navigationBarTitleText": "发布转租",
+				"enablePullDownRefresh": false,
+				"disableScroll": true
+			}
 	],
 	"condition": {
 		"current": 0,
@@ -164,9 +176,18 @@
 			{
 				"name": "secondPost",
 				"path": "pages/second/secondMainPost"
-			},{
+			},
+			{
 				"name":"secondSearch",
 				"path":"pages/second/secondMainSearch"
+			},
+			{
+				"name":"houseDetail",
+				"path":"pages/detail/houseDetail"
+			},
+			{
+				"name":"rental",
+				"path":"pages/rental/rentalPost"
 			}
 		]
 	},
