@@ -68,21 +68,27 @@
 		
 		/*
 		onLoad(options){
-			
-			this.secondItem = JSON.parse(decodeURIComponent(options.secondItem));
-			console.log(this.secondItem);
-			
-		   if(this.shoucangle == -1){
-			   checkShoucang();
-		   }	
-		   
-		   if (this.shoucangle == 1) {
-			this.shoucang = "/static/shoucang.png";
-		   } else {
-		   	this.shoucang = "/static/weishoucang.png";
-		   }
+			console.log(options);
+			wx.cloud.init();
+			this.houseInfo = JSON.parse(decodeURIComponent(options.houseInfo));
+			console.log(this.houseInfo);
+			save();
 		},
 		*/
+	   
+	   /*
+	   	onShow() {
+	   		uni.getStorage({
+	   			key: 'userInfo-2',
+				success: (res) => {
+   					this.userInfo = res.data;
+				},
+	   			fail: () => {
+	   				console.log("fail");
+	   			},
+	   		});
+	   	},
+	   		*/
 
 		
 		onShareTimeline() {
@@ -107,13 +113,35 @@
 		},
 		methods: {
 			onClickSave:function(){
-				this.isSaved = !this.isSaved;
+				if(!this.isSaved){
+					this.save();
+				}
 			},
+			
 			setClipboardData: function() {
 				uni.setClipboardData({
 					data: " 微信号: " + this.houseInfo.contact[0]
 				});
 			},
+			
+			async save(){
+				console.log('success');
+				/*
+				const res = await wx.cloud.callContainer({
+					config: {
+						env: 'prod-9go38k3y9fee3b2e', // 微信云托管的环境ID
+					},
+					path: '/secondhand/collect?productID='+this.product.productID,
+					method: 'GET', 
+					header: {
+						'X-WX-SERVICE': 'springboot-f8i8',
+					}
+				});
+				if(res.status == "101"){
+					this.isSaved = True;
+				}
+				*/
+			}
 		}
 	}
 </script>

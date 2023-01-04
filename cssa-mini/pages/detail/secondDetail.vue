@@ -66,11 +66,6 @@
 			this.product = JSON.parse(decodeURIComponent(options.product));
 			console.log(this.product);
 			save();
-			if (this.isSaved == True) {
-				this.shoucang = "/static/shoucang.png";
-			} else {
-				this.shoucang = "/static/weishoucang.png";
-			}
 		},
 		
 	   
