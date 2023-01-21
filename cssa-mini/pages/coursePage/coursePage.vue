@@ -96,6 +96,7 @@
 					this.offset = 0;
 					this.key = num;
 					this.getCommentList();
+					
 				}
 			},
 			async getCommentList() {
@@ -105,7 +106,7 @@
 				this.status = "loading"
 				const res = await wx.cloud.callContainer({
 					config: {
-						env: 'prod-9go38k3y9fee3b2e',
+						env: 'prod-9gip97mx4bfa32a3',
 					},
 					path: "/course/getCommentList?courseID=" + this.course.courseID + "&offset=" + this
 						.offset + "&limit=" + this.limit + "&order=" + this.orderType[this.key],
@@ -142,7 +143,7 @@
 				uni.showLoading();
 				const res = await wx.cloud.callContainer({
 					config: {
-						env: 'prod-9go38k3y9fee3b2e',
+						env: 'prod-9gip97mx4bfa32a3',
 					},
 					path: "/user/login?nickname=" + encodeURI(this.userInfo.nickName),
 					method: 'GET',

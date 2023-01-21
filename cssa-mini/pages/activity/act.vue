@@ -74,12 +74,12 @@
 			async getActivityList() {
 				const res = await wx.cloud.callContainer({
 					config: {
-						env: 'prod-9go38k3y9fee3b2e', // 微信云托管的环境ID
+						env: 'prod-9gip97mx4bfa32a3', // 微信云托管的环境ID
 					},
 					path: "/activity/activityList?current=" + Date.now(),
 					method: 'GET', // 按照自己的业务开发，选择对应的方法
 					header: {
-						'X-WX-SERVICE': 'springboot-f8i8',
+						'X-WX-SERVICE': 'springboot-ds71',
 					}
 				});
 				this.actDetailList = res.data.data;
@@ -89,12 +89,12 @@
 			async getRegisterList() {
 				const res = await wx.cloud.callContainer({
 					config: {
-						env: 'prod-9go38k3y9fee3b2e',
+						env: 'prod-9gip97mx4bfa32a3',
 					},
 					path: "/activity/registerList",
 					method: 'GET',
 					header: {
-						'X-WX-SERVICE': 'springboot-f8i8',
+						'X-WX-SERVICE': 'springboot-ds71',
 					}
 				});
 				this.registerList = res.data.data;

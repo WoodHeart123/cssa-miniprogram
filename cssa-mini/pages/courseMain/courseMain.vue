@@ -144,12 +144,12 @@
 				this.searchStatus = "loading";
 				const res = await wx.cloud.callContainer({
 					config: {
-						env: 'prod-9go38k3y9fee3b2e',
+						env: 'prod-9gip97mx4bfa32a3',
 					},
 					path: "/course/search?value=" + value,
 					method: 'GET',
 					header: {
-						'X-WX-SERVICE': 'springboot-f8i8',
+						'X-WX-SERVICE': 'springboot-ds71',
 					}
 				});
 				this.suggestList = res.data.data;
@@ -229,12 +229,12 @@
 			async getCourseList() {
 				const res = await wx.cloud.callContainer({
 					config: {
-						env: 'prod-9go38k3y9fee3b2e',
+						env: this.wxEnv,
 					},
 					path: `/course/courselist?departmentID=${this.departmentID}&limit=20&offset=${this.courseCount}&orderType=${this.sort[this.sortIndex]}`,
 					method: 'GET',
 					header: {
-						'X-WX-SERVICE': 'springboot-f8i8',
+						'X-WX-SERVICE': 'springboot-ds71',
 					}
 				});
 				if (res.data.status == 100) {
@@ -254,12 +254,12 @@
 			async getDepartmentList() {
 				const res = await wx.cloud.callContainer({
 					config: {
-						env: 'prod-9go38k3y9fee3b2e',
+						env: 'prod-9gip97mx4bfa32a3',
 					},
 					path: "/course/departmentlist",
 					method: 'GET',
 					header: {
-						'X-WX-SERVICE': 'springboot-f8i8',
+						'X-WX-SERVICE': 'springboot-ds71',
 					}
 				});
 				let tempList = res.data.data;

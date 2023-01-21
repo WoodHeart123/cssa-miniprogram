@@ -144,12 +144,12 @@
 				});
 				const res = await wx.cloud.callContainer({
 					config: {
-						env: 'prod-9go38k3y9fee3b2e',
+						env: 'prod-9gip97mx4bfa32a3',
 					},
 					path: this.path,
 					method: 'POST',
 					header: {
-						'X-WX-SERVICE': 'springboot-f8i8',
+						'X-WX-SERVICE': 'springboot-ds71',
 					},
 					data: this.comment,
 				});
