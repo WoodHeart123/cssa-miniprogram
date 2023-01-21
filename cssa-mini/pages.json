@@ -144,7 +144,7 @@
 		},{
 			"path": "pages/detail/houseDetail",
 			"style": {
-				"navigationBarTitleText": "转租页面",
+				"navigationBarTitleText": "转租详情",
 				"backgroundColor": "#F5F5F5"
 			}
 		}
