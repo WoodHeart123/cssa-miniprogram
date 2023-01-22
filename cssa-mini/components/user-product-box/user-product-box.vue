@@ -1,14 +1,7 @@
 <template>
-	<view>
-		<view class="product-box">
-			<view class="product-image"></view>
-			<view class="product-info">
-				<view class="product-title"></view>
-				<view class="product-price"></view>
-			</view>
-		</view>
-		<view class="function-box">
-			
+	<view id="user-prodcut-box">
+		<view class="title-box">
+			<text>{{product.title}}</text>
 		</view>
 	</view>
 </template>
@@ -26,5 +19,9 @@
 </script>
 
 <style>
+	#user-product-box{
+		width: 100%;
+		height: 100%;
+	}
 
 </style>
