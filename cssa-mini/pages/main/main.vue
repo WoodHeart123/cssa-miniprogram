@@ -22,17 +22,16 @@
 				<img class="image" src="../../static/ebay.svg" />
 			</view>
 		</view>
-<!-- 		<view class="row-container function-box disabled">
+		<view class="row-container function-box disabled">
 			<view class="row-container function-button">
-				<view class="row-container function-button">
+				<view class="row-container function-button" @click="toRental">
 					<view class="column-container function-text">
 						<text>公寓转租</text>
-						<text style="font-size: 10px;">（待开发）</text>
 					</view>
 					<img class="image" src="../../static/apartment.svg" />
 				</view>
 			</view>
-			<view class="row-container function-button disabled">
+			<!-- <view class="row-container function-button disabled">
 				<view class="row-container function-button">
 					<view class="column-container function-text">
 						<text>生活手册</text>
@@ -40,8 +39,8 @@
 					</view>
 					<img class="image" src="../../static/handbook.svg" />
 				</view>
-			</view>
-		</view> -->
+			</view> -->
+		</view>
 		<!-- 		<view class="leader-list">
 			<text class="cssa-intro-text">CSSA介绍</text>
 			<scroll-view class="row-container leader-intro" :scroll-x="true">

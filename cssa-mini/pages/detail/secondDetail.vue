@@ -47,13 +47,16 @@
 			return {
 				isSaved: false,
 				product: {},
+				userInfo:{
+					nickname:'小红豆',
+					avatar:1,
+				},
 				condition: ['全新','几乎全新', '明显使用痕迹','部分损毁' ],
 				delivery: {
 					'pickup': '自取',
 					'deliver': '送货',
 					'all': '送/取',
 				},
-				userInfo:{},
 				
 			}
 		},	
@@ -63,8 +66,13 @@
 			this.product = JSON.parse(decodeURIComponent(options.product));
 			console.log(this.product);
 			save();
+			if (this.isSaved == True) {
+				this.shoucang = "/static/shoucang.png";
+			} else {
+				this.shoucang = "/static/weishoucang.png";
+			}
 		},
-	   
+	
 		onShow() {
 			uni.getStorage({
 				key: 'userInfo-2',
@@ -76,7 +84,6 @@
 				},
 			});
 		},
-		
 	   
 		onShareTimeline() {
 			return {
@@ -116,7 +123,11 @@
 				/*
 				const res = await wx.cloud.callContainer({
 					config: {
+<<<<<<< HEAD
 						env: 'prod-9gip97mx4bfa32a3', // 微信云托管的环境ID
+=======
+						env: 'prod-9go38k3y9fee3b2e', // 微信云托管的环境ID
+>>>>>>> xyy
 					},
 					path: '/secondhand/collect?productID='+this.product.productID,
 					method: 'GET', 

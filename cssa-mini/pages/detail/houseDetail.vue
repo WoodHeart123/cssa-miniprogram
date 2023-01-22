@@ -76,7 +76,6 @@
 		},
 		*/
 	   
-	   /*
 	   	onShow() {
 	   		uni.getStorage({
 	   			key: 'userInfo-2',
@@ -88,9 +87,6 @@
 	   			},
 	   		});
 	   	},
-	   		*/
-
-		
 		onShareTimeline() {
 			return {
 				title: this.houseInfo.name,
@@ -116,14 +112,12 @@
 				if(!this.isSaved){
 					this.save();
 				}
-			},
-			
+			},		
 			setClipboardData: function() {
 				uni.setClipboardData({
 					data: " 微信号: " + this.houseInfo.contact[0]
 				});
 			},
-			
 			async save(){
 				console.log('success');
 				/*
