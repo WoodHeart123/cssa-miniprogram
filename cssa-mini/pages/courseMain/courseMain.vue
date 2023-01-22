@@ -229,7 +229,7 @@
 			async getCourseList() {
 				const res = await wx.cloud.callContainer({
 					config: {
-						env: this.wxEnv,
+						env: 'prod-9gip97mx4bfa32a3',
 					},
 					path: `/course/courselist?departmentID=${this.departmentID}&limit=20&offset=${this.courseCount}&orderType=${this.sort[this.sortIndex]}`,
 					method: 'GET',
