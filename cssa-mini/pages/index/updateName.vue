@@ -11,9 +11,6 @@
 </template>
 
 <script>
-	import {
-		encode
-	} from 'querystring';
 	export default {
 		data() {
 			return {

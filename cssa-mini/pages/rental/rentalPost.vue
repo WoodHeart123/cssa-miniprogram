@@ -83,9 +83,6 @@
 </template>
 
 <script>
-	import {
-		time
-	} from 'console';
 	export default {
 		data() {
 			return {

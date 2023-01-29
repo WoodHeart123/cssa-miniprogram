@@ -22,7 +22,7 @@
 				<img class="image" src="../../static/ebay.svg" />
 			</view>
 		</view>
-		<view class="row-container function-box disabled">
+		<view class="row-container function-box">
 			<view class="row-container function-button">
 				<view class="row-container function-button" @click="toRental">
 					<view class="column-container function-text">
@@ -148,7 +148,12 @@
 					current:this.detailImages[this.current],
 					urls:this.detailImages
 				});
-			}
+			},
+			toRental:function(){
+				uni.navigateTo({
+					url:"/pages/rentalMain/rentalMain",
+				})
+			},
 		}
 	}
 	import actBoxVue from '@/components/act-box/act-box.vue';
