@@ -19,14 +19,14 @@
 
 			<view id="price-filter-item" class="row-container filter-item" @click="popFilter('price')">
 				<view class="filter-tag">价格：</view>
-				<view class="filter-value">{{this.filter.priceLimit==10000?"无上限":"0 - " + this.filter.priceLimit}}
+				<view class="filter-value">{{this.filter.priceLimit==5000?"无上限":"0 - " + this.filter.priceLimit}}
 				</view>
 			</view>
-			<view class="row-container filter-item">
+			<view class="row-container filter-item" @click="popFilter('price')">
 				<view class="filter-tag">时间：</view>
-				<view class="filter-value">{{this.filter.startTime==-1?"不限":this.priceLimit}}</view>
+				<view class="filter-value">{{this.filter.time[0]==-1?"不限":this.filter.time[0] + ' - ' + this.filter.time[1]}}</view>
 			</view>
-			<view class="row-container filter-item">
+			<view class="row-container filter-item" @click="popFilter('price')">
 				<view class="filter-tag">户型：</view>
 				<view class="filter-value">
 					{{this.selectedFloorplan.length==this.floorplanList.length?"不限":this.selectedFloorplan.join("；")}}
@@ -38,15 +38,12 @@
 			enable-back-to-top="true" :refresher-triggered="triggered" @scrolltolower="onScrollLower">
 		</scroll-view>
 		<uni-fab :pattern="pattern" horizontal="right" vertical="bottom" popMene="false" @fabClick="toPostRental" />
-		<uni-popup ref="filter" type="bottom" background-color="#fff">
+		<uni-popup ref="filter" type="bottom" background-color="#fff" :safeArea="safeArea" @maskClick="maskClick" :is-mask-click="safeArea">
 			<view class="column-container filter-popup">
-				<view class="top-bar">
-					<view class="close-text">关闭</view>
-				</view>
 				<view class="pop-sub-title">价格</view>
 				<view class="row-container price-filter-pop">
 					<view class="price-slider">
-						<slider :value="this.filter.priceLimit" min="0" max="10000" step="100" block-size="15"
+						<slider :value="this.filter.priceLimit" min="0" max="5000" step="100" block-size="15"
 							@change="priceLimitChange" @changing="priceLimitChange" />
 					</view>
 					<view class="price-input">
@@ -56,11 +53,11 @@
 				</view>
 				<view class="pop-sub-title">时间</view>
 				<view class="time-picker">
-					<view>
-						<text>开启时间筛选</text>
+					<view style="margin-bottom: 5px;">
+						<text style="margin-right: 5px;">开启时间筛选</text>
 						<switch @change="switchTimePicker" style="transform:scale(0.7)"/>
 					</view>
-					<uni-datetime-picker v-model="this.filter.time" type="daterange" :start="start" :end="end"
+					<uni-datetime-picker v-show="this.timeFilter" v-model="this.filter.time" type="daterange" :start="start" :end="end"
 						:clear-icon=false />
 				</view>
 				<view class="pop-sub-title">户型</view>
@@ -77,7 +74,9 @@
 						{{this.selectedFloorplan.length==0?"选中全部":"取消全部"}}
 					</view>
 				</view>
-
+				<view class="pop-button-box">
+					<button class="pop-button">搜索</button>
+				</view>
 			</view>
 		</uni-popup>
 	</view>
@@ -89,8 +88,8 @@
 			return {
 				menuIndex: 0,
 				filter: {
-					priceLimit: 10000,
-					time: [Date.now(), Date.now() + 2592000],
+					priceLimit: 5000,
+					time: [-1, -1],
 					floorplan: "none",
 				},
 				floorplanList: ['Studio', '1B1B', '2B1B', '2B2B', '3B2B', '3B3B', '4B2B', "4B3B", "其他"],
@@ -98,6 +97,7 @@
 				start: Date.now(),
 				end: Date.now() + 10000000000,
 				timeFilter:false,
+				safeArea:false,
 			}
 		},
 		methods: {
@@ -129,9 +129,30 @@
 			},
 			select: function(floorplan) {
 				this.selectedFloorplan.push(floorplan);
+			},
+			switchTimePicker:function(e){
+				if(e.detail.value){
+					this.filter.time = [moment().format("YYYY-MM-DD"), moment().add(1,"M").format("YYYY-MM-DD")];	
+				}else{
+					this.filter.time = [-1,-1];
+				}
+				this.timeFilter = e.detail.value;			
+			},
+			maskClick:function(){
+				if(this.selectedFloorplan.length == 0){
+					uni.showToast({
+						title: '请至少选择一个户型',
+						duration: 2000,
+						icon:"none"
+					});
+					return;
+				}
+				this.$refs.filter.close();
 			}
 		}
 	}
+	import moment from "moment/min/moment-with-locales";
+	import 'moment/locale/zh-cn';
 </script>
 
 <style>
@@ -245,13 +266,8 @@
 
 	.filter-popup {
 		width: 100vw;
-		height: 80vh;
-	}
-
-	.top-bar {
-		height: 10vh;
-		margin: 10px 0 0 70vw;
-
+		min-height: 60vh;
+		position:relative;
 	}
 
 	.price-filter-pop {
@@ -276,8 +292,7 @@
 	.pop-sub-title {
 		font-weight: 600;
 		font-size: 15px;
-		margin-left: 5vw;
-		margin-bottom: 20px;
+		margin: 10px 0 10px 5vw;
 	}
 
 	.floorplan-tag {
@@ -299,5 +314,15 @@
 		color: blue;
 		line-height: 25px;
 		margin-left: 2px;
+	}
+	.pop-button{
+		margin-top: 20px;
+		width: 100vw;
+		height: 60px;
+	}
+	.pop-button-box{
+		position:absolute;
+		bottom:0;
+		
 	}
 </style>
