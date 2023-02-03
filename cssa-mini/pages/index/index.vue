@@ -27,7 +27,7 @@
 					<img class="image" src="../../static/index/community.svg" />
 					<text class="text-box">我的帖子</text>
 				</view>
-				<view class="button-box disabled">
+				<view class="button-box" @click="jump(1)">
 					<img class="image" src="../../static/index/zan.svg" />
 					<text class="text-box">赞/收藏</text>
 				</view>
@@ -35,7 +35,7 @@
 					<img class="image" src="../../static/index/comment.svg" />
 					<text class="text-box">我的评论</text>
 				</view>
-				<view class="button-box disabled">
+				<view class="button-box" @click="jump(3)">
 					<img class="image" src="../../static/index/ebay.svg" />
 					<text class="text-box">我的二手</text>
 				</view>
@@ -97,11 +97,17 @@
 		},
 		methods: {
 			jump: function(index){
-				if(index == 2){
-					uni.navigateTo({
-						url: "/pages/myComment/myComment"
-					})
+				let directURL = "";
+				if(index == 1){
+					directURL = "/pages/mySave/mySave";
+				}if(index == 2){
+					directURL = "/pages/myComment/myComment";
+				}if(index == 3){
+					directURL = "/pages/mySecondhand/mySecondhand";
 				}
+				uni.navigateTo({
+					url: directURL
+				})
 			},
 			getUserProfile: function() {
 				uni.getUserProfile({
@@ -120,12 +126,12 @@
 			async login(nickname) {
 				const res = await wx.cloud.callContainer({
 					config: {
-						env: 'prod-9go38k3y9fee3b2e',
+						env: 'prod-9gip97mx4bfa32a3',
 					},
 					path: "/user/login?nickname=" + encodeURI(nickname),
 					method: 'GET',
 					header: {
-						'X-WX-SERVICE': 'springboot-f8i8',
+						'X-WX-SERVICE': 'springboot-ds71',
 					}
 				});
 				this.userInfo = res.data.data;

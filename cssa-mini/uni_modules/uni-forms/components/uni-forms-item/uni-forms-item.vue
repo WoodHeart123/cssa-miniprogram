@@ -469,7 +469,7 @@
 		padding-bottom: 22px;
 		/* #endif */
 		/* #ifndef APP-NVUE */
-		margin-bottom: 22px;
+		margin-bottom: 0;
 		/* #endif */
 		flex-direction: row;
 
@@ -480,7 +480,7 @@
 			text-align: left;
 			font-size: 14px;
 			color: #606266;
-			height: 36px;
+			height: 28px;
 			padding: 0 12px 0 0;
 			/* #ifndef APP-NVUE */
 			vertical-align: middle;

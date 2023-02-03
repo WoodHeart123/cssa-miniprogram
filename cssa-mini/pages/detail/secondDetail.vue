@@ -72,9 +72,7 @@
 				this.shoucang = "/static/weishoucang.png";
 			}
 		},
-		
-	   
-	   /*
+	
 		onShow() {
 			uni.getStorage({
 				key: 'userInfo-2',
@@ -86,7 +84,6 @@
 				},
 			});
 		},
-		*/
 	   
 		onShareTimeline() {
 			return {
@@ -126,7 +123,11 @@
 				/*
 				const res = await wx.cloud.callContainer({
 					config: {
+<<<<<<< HEAD
+						env: 'prod-9gip97mx4bfa32a3', // 微信云托管的环境ID
+=======
 						env: 'prod-9go38k3y9fee3b2e', // 微信云托管的环境ID
+>>>>>>> xyy
 					},
 					path: '/secondhand/collect?productID='+this.product.productID,
 					method: 'GET', 
@@ -158,6 +159,7 @@
 	.weixin {
 		margin: 10px 0 10vw 40px;
 		color: dimgray;
+		user-select: text;
 	}
 
 	.row-container {
@@ -220,6 +222,7 @@
 	.basic {
 		margin-bottom: 2vh;
 		margin-top: 1vh;
+		user-select: text;
 	}
 	
 	.contact{

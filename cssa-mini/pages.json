@@ -10,7 +10,7 @@
 		}, {
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "用户",
+				// "navigationBarTitleText": "用户",
 				"backgroundColor": "#F5F5F5"
 			}
 		}, {
@@ -91,7 +91,7 @@
 				"enablePullDownRefresh": false
 			}
 
-		}, 
+		},
 		{
 			"path": "pages/community/com-main",
 			"style": {
@@ -120,13 +120,13 @@
 				"navigationBarTitleText": "头像",
 				"enablePullDownRefresh": false
 			}
-		},{
+		}, {
 			"path": "pages/detail/secondDetail",
 			"style": {
 				"navigationBarTitleText": "二手页面",
 				"backgroundColor": "#F5F5F5"
 			}
-		}, 
+		},
 		{
 			"path": "pages/second/secondMainSearch",
 			"style": {
@@ -141,12 +141,26 @@
 				"disableScroll": true
 			}
 
-		},{
+		}, {
 			"path": "pages/detail/houseDetail",
 			"style": {
-				"navigationBarTitleText": "转租页面",
+				"navigationBarTitleText": "转租详情",
 				"backgroundColor": "#F5F5F5"
 			}
+		}, {
+			"path": "pages/mySecondhand/mySecondhand",
+			"style": {
+				"navigationBarTitleText": "我的二手",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/mySave/mySave",
+			"style": {
+				"navigationBarTitleText": "我的收藏",
+				"enablePullDownRefresh": false
+			}
+
 		}, {
 			"path": "pages/rental/rentalPost",
 			"style": {
@@ -154,77 +168,91 @@
 				"enablePullDownRefresh": false,
 				"disableScroll": true
 			}
-	],
-	"condition": {
-		"current": 0,
-		"list": [{
-				"name": "avatar",
-				"path": "pages/changeAvatar/changeAvatar"
-			},
-			{
-				"name": "second",
-				"path": "pages/second/secondMain"
-			},
-			{
-				"name": "secondDetail",
-				"path": "pages/detail/secondDetail"
-			},
-			{
-				"name": "myComment",
-				"path": "pages/myComment/myComment"
-			},
-			{
-				"name": "secondPost",
-				"path": "pages/second/secondMainPost"
-			},
-			{
-				"name":"secondSearch",
-				"path":"pages/second/secondMainSearch"
-			},
-			{
-				"name":"houseDetail",
-				"path":"pages/detail/houseDetail"
-			},
-			{
-				"name":"rental",
-				"path":"pages/rental/rentalPost"
-			}
-		]
-	},
-	"globalStyle": {
-		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "uni-app",
-		"navigationBarBackgroundColor": "#ffffff"
-	},
-	"tabBar": {
-		"color": "#666666",
-		"selectedColor": "#1684FC",
-		"borderStyle": "black",
-		"backgroundColor": "#ffffff",
-		"fontSize": "14px",
-		"spacing": "3px",
-		"list": [{
-			"pagePath": "pages/main/main",
-			"text": "主页",
-			"iconPath": "./static/home.png",
-			"selectedIconPath": "./static/home-selected.png"
-		},{
-			"pagePath": "pages/activity/act",
-			"text": "活动",
-			"iconPath": "./static/act.png",
-			"selectedIconPath": "./static/act-selected.png"
-		}, 
-		{
-			"pagePath": "pages/community/com-main",
-			"text": "社区广场",
-			"iconPath": "./static/community.png",
-			"selectedIconPath": "./static/community-selected.png"
+		}    ,{
+            "path" : "pages/rentalMain/rentalMain",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
+		"condition": {
+			"current": 0,
+			"list": [{
+					"name": "avatar",
+					"path": "pages/changeAvatar/changeAvatar"
+				},
+				{
+					"name": "second",
+					"path": "pages/second/secondMain"
+				},
+				{
+					"name": "secondDetail",
+					"path": "pages/detail/secondDetail"
+				},
+				{
+					"name": "myComment",
+					"path": "pages/myComment/myComment"
+				},
+				{
+					"name": "secondPost",
+					"path": "pages/second/secondMainPost"
+				},
+				{
+					"name": "secondSearch",
+					"path": "pages/second/secondMainSearch"
+				},
+				{
+					"name": "houseDetail",
+					"path": "pages/detail/houseDetail"
+				},
+				{
+					"name": "rentalPost",
+					"path": "pages/rental/rentalPost"
+				},
+				{
+					"name" : "rentalMain",
+				    "path" : "pages/rentalMain/rentalMain"
+				}
+			]
 		},
-		{
-			"pagePath": "pages/index/index",
-			"text": "用户",
-			"iconPath": "./static/user.png",
-			"selectedIconPath": "./static/user-selected.png"
-		}]
+		"globalStyle": {
+			"navigationBarTextStyle": "black",
+			"navigationBarTitleText": "uni-app",
+			"navigationBarBackgroundColor": "#ffffff"
+		},
+		"tabBar": {
+			"color": "#666666",
+			"selectedColor": "#1684FC",
+			"borderStyle": "black",
+			"backgroundColor": "#ffffff",
+			"fontSize": "14px",
+			"spacing": "3px",
+			"list": [{
+					"pagePath": "pages/main/main",
+					"text": "主页",
+					"iconPath": "./static/home.png",
+					"selectedIconPath": "./static/home-selected.png"
+				}, {
+					"pagePath": "pages/activity/act",
+					"text": "活动",
+					"iconPath": "./static/act.png",
+					"selectedIconPath": "./static/act-selected.png"
+				},
+				{
+					"pagePath": "pages/community/com-main",
+					"text": "社区广场",
+					"iconPath": "./static/community.png",
+					"selectedIconPath": "./static/community-selected.png"
+				},
+				{
+					"pagePath": "pages/index/index",
+					"text": "用户",
+					"iconPath": "./static/user.png",
+					"selectedIconPath": "./static/user-selected.png"
+				}
+			]
+		}
 	}
-}

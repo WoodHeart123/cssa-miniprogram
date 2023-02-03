@@ -1,21 +1,22 @@
 <template>
 	<view class='product-box' @click="toSecondDetail">
-		<image class='photo' src="../../static/index/maomao.jpg" mode='aspectFill'></image>
+		<image class='photo' :src="product.images[0]" mode='aspectFill'></image>
 		<view class='row-container product-name-box'>
 			<view class='row-container delivery'>
-				<text>邮寄</text>
+				<text>{{this.delivery[product.delivery]}}</text>
 			</view>
 			<view class="product-name">
-				<text>一只猫一只猫一只猫一只猫一只猫一只猫一只猫一只猫一只猫</text>
+				<text>{{product.productTitle}}</text>
 			</view>
 		</view>
-		<view class='row-container' style='justify-content: space-between;height: 10%;align-items: center;margin-top: 3px;'>
-			<text class='price'>$89.7</text>
-			<view class='condition'><text>完好如初</text></view>
+		<view class='row-container'
+			style='justify-content: space-between;height: 10%;align-items: center;margin-top: 3px;'>
+			<text class='price'>{{'$' + product.price}}</text>
+			<view class='condition'><text>{{this.condition[product.productCondition]}}</text></view>
 		</view>
 		<view class='seller row-container'>
-			<image class='avatar' src="../../static/index/maomao.jpg"></image>
-			<view class='seller-name'><text>路人甲jia甲乙丙丁戊己庚辛</text></view>
+			<image class='avatar' :src="'https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/' + this.product.sellerAvatar + '.jpg'"></image>
+			<view class='seller-name'><text>{{product.sellerNickname}}</text></view>
 			<view class='time'><text>3小时前</text></view>
 		</view>
 	</view>
@@ -23,17 +24,22 @@
 
 <script>
 	export default {
-		props: ["course"],
+		props: ["product"],
 		name: "product-box",
 		data() {
 			return {
-
+				condition: ['全新','几乎全新', '明显使用痕迹','部分损毁' ],
+				delivery: {
+					'pickup': '自取',
+					'deliver': '送货',
+					'all': '送/取',
+				},
 			}
 		},
 		methods: {
 			toSecondDetail: function() {
 				uni.navigateTo({
-					url: '/pages/detail/secondDetail',
+					url: '/pages/detail/secondDetail?product=' + encodeURIComponent(JSON.stringify(this.product)),
 				});
 			}
 		}
@@ -82,7 +88,8 @@
 		-webkit-line-clamp: 2;
 		-webkit-box-orient: vertical;
 	}
-	.product-name::before{
+
+	.product-name::before {
 		margin-left: 45px;
 		content: '';
 	}

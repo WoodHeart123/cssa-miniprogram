@@ -1,5 +1,5 @@
 <template>
-	<view id="rent-post">
+	<view id="rental-post">
 		<uni-forms ref="rentalForm" :model="rental" :rules="rules">
 			<view class="image_upload">
 				<uni-file-picker limit="5" fileMediatype="image" :auto-upload="false" @select="onSelectImage"
@@ -16,7 +16,7 @@
 
 			<view class="card uni-textarea textbox">
 				<uni-forms-item name="rentalDescription">
-					<uni-easyinput type="textarea" v-model="rental.rentalDescription" placeholder="请描述房屋详情,如户型 地点 具体租期等" maxlength="400"
+					<uni-easyinput type="textarea" v-model="rental.rentalDescription" placeholder="请描述房屋详情,如户型/地点/具体租期等" maxlength="400"
 						placeholderStyle="font-size:14px;color:gray" :clearable="clearable"> </uni-easyinput>
 				</uni-forms-item>
 
@@ -46,7 +46,7 @@
 				<uni-forms-item name="price">
 					<view class="uni-column row-view">
 						<span class="span_margin">$</span>
-						<uni-easyinput type="number" v-model="product.price" placeholder="请填写价格"
+						<uni-easyinput type="number" v-model="rental.price" placeholder="请填写价格"
 							placeholder-style="font-size:14px;color:gray" :clearable="clearable" />
 					</view>
 				</uni-forms-item>
@@ -58,7 +58,7 @@
 				<uni-forms-item name="contact">
 					<view class="uni-column row-view">
 						<span class="span_margin">微信号</span>
-						<input class="uni-input" v-model="product.contact" maxlength="22" placeholder="请填写微信号以便联系"
+						<input class="uni-input" v-model="rental.contact" maxlength="22" placeholder="请填写微信号以便联系"
 							placeholder-style="font-size:14px;color:gray" @input="showCheckBox"/>
 					</view>
 					<view class="checkbox check_message" v-if="!hasID">
@@ -76,16 +76,13 @@
 
 			<view class="uni-padding-wrap uni-common-mt confirm-button">
 				<button type="default" style="background-color: #1E90FF; color: #ffffff;" plain="true"
-					@click="submit('productForm')">发布</button>
+					@click="submit('rentalForm')">发布</button>
 			</view>
 		</uni-forms>
 	</view>
 </template>
 
 <script>
-	import {
-		time
-	} from 'console';
 	export default {
 		data() {
 			return {
@@ -237,21 +234,21 @@
 			},
 			onSelectImage: function(e) {
 				for (let i = 0; i < e.tempFilePaths.length && i < e.tempFiles.length; i++) {
-					this.product.imageList.push({
+					this.rental.imageList.push({
 						filename: e.tempFiles[i].name,
 						filepath: e.tempFilePaths[i]
 					});
 				}
-				console.log(this.product.imageList);
+				console.log(this.rental.imageList);
 			},
 			onDeleteImage: function(e) {
-				for (let i = 0; i < this.product.imageList.length; i++) {
-					if (this.product.imageList[i].filename == e.tempFile.name) {
-						this.product.imageList.splice(i, 1);
+				for (let i = 0; i < this.rental.imageList.length; i++) {
+					if (this.rental.imageList[i].filename == e.tempFile.name) {
+						this.rental.imageList.splice(i, 1);
 						return;
 					}
 				}
-				console.log(this.product.imageList);
+				console.log(this.rental.imageList);
 			},
 			submit(ref) {
 				console.log(this.save);
@@ -271,10 +268,10 @@
 				uni.showLoading({
 					title: "正在上传内容"
 				});
-				for (let i = 0; i < this.product.imageList.length; i++) {
+				for (let i = 0; i < this.rental.imageList.length; i++) {
 					uni.uploadFile({
 						url: "http://cssa-mini-na.oss-us-west-1.aliyuncs.com",
-						filePath: this.product.imageList[i].filepath,
+						filePath: this.rental.imageList[i].filepath,
 						fileType: 'image',
 						name: 'file',
 						formData: {
@@ -296,11 +293,11 @@
 								this.uploadFail = true;
 							}else{
 								this.uploadCount++;
-								this.images.push("http://cssa-mini-na.oss-us-west-1.aliyuncs.com" + "/cssa-secondhand/" + this.product.imageList[i].filename)
+								this.images.push("http://cssa-mini-na.oss-us-west-1.aliyuncs.com" + "/cssa-secondhand/" + this.rental.imageList[i].filename)
 							}
-							if (this.uploadCount == this.product.imageList.length) {
-								this.product.images = this.images,
-								this.postProduct();
+							if (this.uploadCount == this.rental.imageList.length) {
+								this.rental.images = this.images,
+								this.postRental();
 							}
 						},
 						fail: res => {
@@ -313,7 +310,7 @@
 					});
 				}
 			},
-			postProduct: async function() {
+			postRental: async function() {
 				const res = await wx.cloud.callContainer({
 					config: {
 						env: 'prod-9go38k3y9fee3b2e',
@@ -341,7 +338,7 @@
 </script>
 
 <style>
-	#second-post {
+	#rental-post {
 		position: absolute;
 		width: 94vw;
 		height: 100vh;

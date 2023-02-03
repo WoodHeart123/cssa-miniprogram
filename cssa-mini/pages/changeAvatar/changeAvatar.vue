@@ -39,12 +39,12 @@
 			async changeAvatar(){
 				const res = await wx.cloud.callContainer({
 					config: {
-						env: 'prod-9go38k3y9fee3b2e',
+						env: 'prod-9gip97mx4bfa32a3',
 					},
 					path: "/user/updateAvatar?avatar=" + this.currentAvatar.toString(),
 					method: 'GET',
 					header: {
-						'X-WX-SERVICE': 'springboot-f8i8',
+						'X-WX-SERVICE': 'springboot-ds71',
 					},
 				});
 				if(res.data.status == 100){
