@@ -22,7 +22,7 @@
 			<view class="house-name"><text>{{houseInfo.name}}</text></view>
 		</view>
 		<view class="row-container">
-			<view class="info-box"><text>女性</text></view>
+			<view class="info-box"><text>女住客</text></view>
 			<view class="info-box"><text>2B1B</text></view>
 		</view>
 		<view class="contact">
