@@ -209,7 +209,7 @@
 					"path": "pages/detail/houseDetail"
 				},
 				{
-					"name": "rental",
+					"name": "rentalPost",
 					"path": "pages/rental/rentalPost"
 				},
 				{
