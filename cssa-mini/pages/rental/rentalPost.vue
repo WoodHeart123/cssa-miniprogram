@@ -39,19 +39,27 @@
 			<view class="card label_group">
 				<view class="uni-list">
 					<view class="uni-list-cell row-view">
-						<view class="uni-list-cell-left">
+						<view class="uni-list-cell-left margin-right1">
 							选择日期
 						</view>
-						<view class="uni-list-cell-db">
-							<picker mode="date" :value="date" :start="startDate" :end="endDate"
+						<view class="uni-list-cell-db row-view">
+							<picker mode="date" :value="date1" :start="startDate" :end="endDate"
 								@change="bindDateChange">
-								<view class="uni-input">{{date}}</view>
+								<view class="uni-input margin-right2">{{date1}}</view>
+							</picker>
+							<view class="uni-input margin-right2"> to </view>
+							<picker mode="date" :value="date2" :start="startDate" :end="endDate"
+								@change="bindDateChange">
+								<view class="uni-input">{{date2}}</view>
 							</picker>
 						</view>
 					</view>
 				</view>
 			</view>
-
+				
+				
+				
+				
 			<view class="card">
 				<uni-forms-item name="price">
 					<view class="uni-column row-view">
@@ -104,7 +112,8 @@
 				upLoadFail: false,
 				uploadCount: 0,
 				clearable: false,
-				date: currentDate,
+				date1: currentDate,
+				date2: currentDate,
 				rental: {
 					imageList: [],
 					rentalDescription: "",
@@ -430,6 +439,14 @@
 		flex-direction: row;
 		line-height: 30px;
 		align-items: center;
+	}
+	
+	.margin-right1 {
+		margin-right: 20px;
+	}
+	
+	.margin-right2 {
+		margin-right: 10px;
 	}
 	
 	.span_margin {
