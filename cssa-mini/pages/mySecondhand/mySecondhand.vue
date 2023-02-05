@@ -1,36 +1,39 @@
 <template>
 	<view class="my-secondhand">
 		<view class="hint">向左划可修改或删除二手商品</view>
-			<uni-swipe-action>
-				<uni-swipe-action-item v-for="(product, index) in mySecondHand" :key="index">
-					<view class="box">
-						<view class="left-bar">
-							<productBoxVue :product="product" user="true"></productBoxVue>
-						</view>
-						<view class="right-bar"><span class="iconfont icon">&#xe66d;</span></view>
+		<uni-swipe-action>
+			<uni-swipe-action-item v-for="(product, index) in mySecondHand" :key="index">
+				<view class="box">
+					<view class="left-bar">
+						<productBoxVue :product="product" user="true"></productBoxVue>
 					</view>
-					<template v-slot:right>
-						<view class="slot">
-							<view class="slot-button" @click="bindClick({key:0,index:index})">
-								<uni-icons type="gear" size="20" color="#007aff"></uni-icons>
-								<text class="slot-button-text" >修改</text>
-							</view>
-							<view class="slot-button" @click="bindClick({key:1,index:index})">
-								<uni-icons type="trash" size="20" color="#F56C6C"></uni-icons>
-								<text class="slot-button-text">删除</text>
-							</view>
+					<view class="right-bar"><span class="iconfont icon">&#xe66d;</span></view>
+				</view>
+				<template v-slot:right>
+					<view class="slot">
+						<view class="slot-button" @click="bindClick({key:0,index:index})">
+							<uni-icons type="gear" size="20" color="#007aff"></uni-icons>
+							<text class="slot-button-text">修改</text>
 						</view>
-					</template>
-				</uni-swipe-action-item>
-			</uni-swipe-action>
-			<uni-load-more :status="status" :contentText="contentText"></uni-load-more>
-		</view>
+						<view class="slot-button" @click="bindClick({key:1,index:index})">
+							<uni-icons type="trash" size="20" color="#F56C6C"></uni-icons>
+							<text class="slot-button-text">删除</text>
+						</view>
+						<view class="slot-button" @click="bindClick({key:2,index:index})">
+							<uni-icons type="trash" size="20" color="#F56C6C"></uni-icons>
+							<text class="slot-button-text">擦一擦</text>
+						</view>
+					</view>
+				</template>
+			</uni-swipe-action-item>
+		</uni-swipe-action>
+		<uni-load-more :status="status" :contentText="contentText"></uni-load-more>
+	</view>
 </template>
 
 <script>
 	export default {
-		onLoad() {
-		},
+		onLoad() {},
 		onShow() {
 			this.getMySecondhand();
 		},
@@ -45,7 +48,7 @@
 					contentrefresh: "正在加载...",
 					contentnomore: "没有更多了"
 				},
-				
+
 			}
 		},
 		methods: {
@@ -96,12 +99,37 @@
 					});
 				}
 			},
-			bindClick: function(e) {
-				if(e.key == 0){
-					uni.navigateTo({
-						url: "/pages/postSecondHand/postSecondHand?product=" + encodeURIComponent(JSON.stringify(this.myProduct[e.index])) + "&edit=true",
+			polishMySecondhand: async function(index, productID) {
+				mySecondhand.time = moment.now();
+				const res = await wx.cloud.callContainer({
+					config: {
+						env: 'prod-9gip97mx4bfa32a3',
+					},
+					path: `/user/updateProduct?product=${this.mySecondhand}`,
+					method: 'POST',
+					header: {
+						'X-WX-SERVICE': 'springboot-ds71',
+					},
+					data: this.mySecondhand
+				});
+				uni.hideLoading();
+				if (res.data.status == 100) {
+					uni.$emit("uploadSuccess");
+					uni.navigateBack();
+				} else {
+					uni.showToast({
+						title: "擦亮失败",
+						icon: "error"
 					});
-				}else{
+				}
+			},
+			bindClick: function(e) {
+				if (e.key == 0) {
+					uni.navigateTo({
+						url: "/user/postSecondHand/postSecondHand?product=" + encodeURIComponent(JSON
+							.stringify(this.myProduct[e.index])) + "&edit=true",
+					});
+				} else if (e.key == 1) {
 					uni.showModal({
 						title: "删除商品",
 						content: "是否删除商品？删除后将无法恢复",
@@ -109,11 +137,13 @@
 						success: function(res) {
 							var that = this;
 							if (res.confirm) {
-								this.deleteMySecondhand(e.index,this.mySecondhand[e.index].productID);
-								
+								this.deleteMySecondhand(e.index, this.mySecondhand[e.index].productID);
+
 							}
 						}.bind(this)
-					});	
+					});
+				} else if (e.key == 2) {
+
 				}
 			}
 		},
@@ -126,16 +156,17 @@
 
 <style>
 	@import '@/static/iconfont/iconfont.css';
+
 	.my-secondhand {
 		width: 100vw;
 		height: 100vh;
 		overflow-y: scroll;
 		transition: all 3s ease;
 	}
-	
-	.hint{
+
+	.hint {
 		position: fixed;
-		top:0;
+		top: 0;
 		width: 100%;
 		background-color: white;
 		height: 30px;
@@ -143,15 +174,16 @@
 		align-items: center;
 		justify-content: center;
 		font-size: 12px;
-		color:#ccc;
+		color: #ccc;
 	}
+
 	.box {
 		width: 100vw;
 		display: flex;
 		flex-direction: row;
-		
+
 	}
-	
+
 	.right-bar {
 		width: 8vw;
 		background-color: white;
@@ -159,25 +191,25 @@
 		align-items: center;
 		justify-content: center;
 	}
-	
+
 	.left-bar {
 		width: 92vw;
 	}
-	
-	.slot{
+
+	.slot {
 		width: 20vw;
 		display: flex;
 		flex-direction: column;
 		height: 100%;
 		background-color: white;
 	}
-	.slot-button{
+
+	.slot-button {
 		height: 50%;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-		color:#777;
+		color: #777;
 	}
-	
 </style>
