@@ -1,9 +1,9 @@
 <template>
 	<view id="second-main">
 		<view class="menu row-container">
-			<view class="search-box" @click="toSearch">
+			<!-- <view class="search-box" @click="toSearch">
 				<uni-icons type="search" size="30"></uni-icons>
-			</view>
+			</view> -->
 			<view class="menu-box row-container">
 				<view class="row-container product-type-item" v-for="(productType, index) in productTypeList"
 					:key="index" @click="onClickMenu(index)">
