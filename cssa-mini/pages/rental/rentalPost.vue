@@ -16,32 +16,50 @@
 
 			<view class="card uni-textarea textbox">
 				<uni-forms-item name="rentalDescription">
-					<uni-easyinput type="textarea" v-model="rental.rentalDescription" placeholder="请描述房屋详情,如户型/地点/具体租期等" maxlength="400"
-						placeholderStyle="font-size:14px;color:gray" :clearable="clearable"> </uni-easyinput>
+					<uni-easyinput type="textarea" v-model="rental.rentalDescription" placeholder="请描述房屋详情,如户型/地点/具体租期等"
+						maxlength="400" placeholderStyle="font-size:14px;color:gray" :clearable="clearable">
+					</uni-easyinput>
 				</uni-forms-item>
 
 			</view>
-			
+
 
 			<view class="card label_group">
 				<uni-forms-item name="furnitureType">
 					<uni-data-checkbox v-model="rental.furnitureType" :localdata="furnitureOption"></uni-data-checkbox>
 				</uni-forms-item>
 			</view>
-			
+
 			<view class="card label_group">
 				<uni-forms-item name="floorplan">
 					<uni-data-checkbox v-model="rental.floorplan" :localdata="floorplanOption"></uni-data-checkbox>
 				</uni-forms-item>
 			</view>
-			
+
 			<view class="card label_group">
-				<uni-forms-item name="leasePeriod">
-					<uni-data-checkbox v-model="rental.leasePeriod" :localdata="leaseOption"></uni-data-checkbox>
-				</uni-forms-item>
+				<view class="uni-list">
+					<view class="uni-list-cell row-view">
+						<view class="uni-list-cell-left margin-right1">
+							选择日期
+						</view>
+						<view class="uni-list-cell-db row-view">
+							<picker mode="date" :value="date1" :start="startDate" :end="endDate"
+								@change="bindDateChange">
+								<view class="uni-input margin-right2">{{date1}}</view>
+							</picker>
+							<view class="uni-input margin-right2"> to </view>
+							<picker mode="date" :value="date2" :start="startDate" :end="endDate"
+								@change="bindDateChange">
+								<view class="uni-input">{{date2}}</view>
+							</picker>
+						</view>
+					</view>
+				</view>
 			</view>
-
-
+				
+				
+				
+				
 			<view class="card">
 				<uni-forms-item name="price">
 					<view class="uni-column row-view">
@@ -59,7 +77,7 @@
 					<view class="uni-column row-view">
 						<span class="span_margin">微信号</span>
 						<input class="uni-input" v-model="rental.contact" maxlength="22" placeholder="请填写微信号以便联系"
-							placeholder-style="font-size:14px;color:gray" @input="showCheckBox"/>
+							placeholder-style="font-size:14px;color:gray" @input="showCheckBox" />
 					</view>
 					<view class="checkbox check_message" v-if="!hasID">
 						<checkbox-group @change="checkBoxChange">
@@ -85,18 +103,23 @@
 <script>
 	export default {
 		data() {
+			const currentDate = this.getDate({
+				format: true
+			})
 			return {
-				hasID:false,
+				hasID: false,
 				save: true,
 				upLoadFail: false,
 				uploadCount: 0,
 				clearable: false,
+				date1: currentDate,
+				date2: currentDate,
 				rental: {
 					imageList: [],
 					rentalDescription: "",
 					rentalTitle: ""
 				},
-				images:[],
+				images: [],
 				furnitureOption: [{
 					text: "家具齐全",
 					value: "FULLYFURNISHED"
@@ -108,20 +131,32 @@
 					value: "NOFURNITURE"
 				}],
 				floorplanOption: [{
-					text: 'studio',
+					text: 'Studio',
 					value: 'STUDIO'
 				}, {
-					text: '一室',
-					value: 'ONEBEDROOM'
+					text: '1B1B',
+					value: '1B1B'
 				}, {
-					text: '二室',
-					value: 'TWOBEDROOMS'
+					text: '2B1B',
+					value: '2B1B'
 				}, {
-					text: '三室',
-					value: 'THREEBEDROOMS'
+					text: '2B2B',
+					value: '2B2B'
 				}, {
-					text: '四室+',
-					value: 'FOURPLUSBEDROOMS'
+					text: '3B2B',
+					value: '3B2B'
+				}, {
+					text: '3B3B',
+					value: '3B3B'
+				}, {
+					text: '4B2B',
+					value: '4B2B'
+				}, {
+					text: '4B3B',
+					value: '4B3B'
+				}, {
+					text: '其他',
+					value: 'others'
 				}],
 				leaseOption: [{
 					text: '暑假',
@@ -201,19 +236,45 @@
 				},
 			}
 		},
-		onShow(){
-			 wx.cloud.init();
-			 let userInfo = uni.getStorageSync("userInfo-2");
-			 this.rental.sellerAvatar = userInfo.avatar;
-			 this.rental.sellerNickname = userInfo.nickname;
-			 if(userInfo.wechatID != null){
-				 this.rental.contact = userInfo.wechatID;
-				 this.save = false;
-				 this.hasID = true;
-			 }
+		onShow() {
+			wx.cloud.init();
+			let userInfo = uni.getStorageSync("userInfo-2");
+			this.rental.sellerAvatar = userInfo.avatar;
+			this.rental.sellerNickname = userInfo.nickname;
+			if (userInfo.wechatID != null) {
+				this.rental.contact = userInfo.wechatID;
+				this.save = false;
+				this.hasID = true;
+			}
+		},
+		computed: {
+			startDate() {
+				return this.getDate('start');
+			},
+			endDate() {
+				return this.getDate('end');
+			}
 		},
 		methods: {
-			showCheckBox:function(){
+			bindDateChange: function(e) {
+				this.date = e.detail.value
+			},
+			getDate(type) {
+				const date = new Date();
+				let year = date.getFullYear();
+				let month = date.getMonth() + 1;
+				let day = date.getDate();
+
+				if (type === 'start') {
+					year = year - 60;
+				} else if (type === 'end') {
+					year = year + 2;
+				}
+				month = month > 9 ? month : '0' + month;
+				day = day > 9 ? day : '0' + day;
+				return `${year}-${month}-${day}`;
+			},
+			showCheckBox: function() {
 				this.save = true;
 				this.hasID = false;
 			},
@@ -280,7 +341,7 @@
 							accessKeyId: 'LTAI5tG4Jt4WD77C1XSDTJAj',
 							accessKeySecret: 'HsXwO3QW67PBzpIV2CeE1uM6bU4sd7',
 							bucket: 'cssa-mini-na',
-							success_action_status:200,
+							success_action_status: 200,
 						},
 						success: res => {
 							console.log(res);
@@ -291,13 +352,14 @@
 									icon: "error"
 								});
 								this.uploadFail = true;
-							}else{
+							} else {
 								this.uploadCount++;
-								this.images.push("http://cssa-mini-na.oss-us-west-1.aliyuncs.com" + "/cssa-secondhand/" + this.rental.imageList[i].filename)
+								this.images.push("http://cssa-mini-na.oss-us-west-1.aliyuncs.com" +
+									"/cssa-secondhand/" + this.rental.imageList[i].filename)
 							}
 							if (this.uploadCount == this.rental.imageList.length) {
 								this.rental.images = this.images,
-								this.postRental();
+									this.postRental();
 							}
 						},
 						fail: res => {
@@ -378,7 +440,15 @@
 		line-height: 30px;
 		align-items: center;
 	}
-
+	
+	.margin-right1 {
+		margin-right: 20px;
+	}
+	
+	.margin-right2 {
+		margin-right: 10px;
+	}
+	
 	.span_margin {
 		margin-right: 10px;
 		font-size: 16px;
@@ -435,4 +505,5 @@
 		padding: 0 !important;
 		height: 150px !important;
 	}
+	
 </style>
