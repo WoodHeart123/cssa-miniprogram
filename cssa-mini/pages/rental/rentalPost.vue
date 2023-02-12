@@ -5,6 +5,15 @@
 				<uni-file-picker limit="5" fileMediatype="image" :auto-upload="false" @select="onSelectImage"
 					@delete="onDeleteImage"></uni-file-picker>
 			</view>
+			
+			
+			<view class="card label_group">
+				<text style="margin-left: -5px; margin-right: 10px; padding: 10px;">接受性别</text>
+				<uni-forms-item name="gender">
+					<uni-data-checkbox v-model="rental.gender" :localdata="gender"></uni-data-checkbox>
+				</uni-forms-item>
+			</view>
+			
 
 			<view class="card uni-form-item uni-column">
 				<uni-forms-item name="rentalTitle">
@@ -22,13 +31,7 @@
 				</uni-forms-item>
 
 			</view>
-
-
-			<view class="card label_group">
-				<uni-forms-item name="furnitureType">
-					<uni-data-checkbox v-model="rental.furnitureType" :localdata="furnitureOption"></uni-data-checkbox>
-				</uni-forms-item>
-			</view>
+			
 
 			<view class="card label_group">
 				<uni-forms-item name="floorplan">
@@ -97,15 +100,15 @@
 					rentalTitle: ""
 				},
 				images: [],
-				furnitureOption: [{
-					text: "家具齐全",
-					value: "FULLYFURNISHED"
+				gender: [{
+					text: "男",
+					value: "MALE"
 				}, {
-					text: "部分家具",
-					value: "SOMEFURNITURE"
+					text: "女",
+					value: "FEMALE"
 				}, {
-					text: "无家具",
-					value: "NOFURNITURE"
+					text: "不限",
+					value: "BOTH"
 				}],
 				floorplanOption: [{
 					text: 'Studio',
