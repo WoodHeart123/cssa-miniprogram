@@ -45,7 +45,7 @@
 					<img class="image" src="../../static/index/mem.svg" />
 					<text class="text-box">活动回忆</text>
 				</view>
-				<view class="button-box disabled">
+				<view class="button-box" @click="jump(4)">
 					<img class="image" src="../../static/index/join.svg" />
 					<text class="text-box">加入CSSA</text>
 				</view>
@@ -104,6 +104,8 @@
 					directURL = "/pages/myComment/myComment";
 				}if(index == 3){
 					directURL = "/pages/mySecondhand/mySecondhand";
+				}if (index == 4){
+					directURL = "/pages/aboutCSSA/aboutCSSA";
 				}
 				uni.navigateTo({
 					url: directURL
