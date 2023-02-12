@@ -13,13 +13,13 @@
 				<view class="column-container function-text">
 					<text>课程吐槽</text>
 				</view>
-				<img class="image" src="../../static/forum.svg" />
+				<img class="image" src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-icon/forum.svg" />
 			</view>
 			<view class="row-container function-button" @click="toSecond">
 				<view class="column-container function-text">
 					<text>二手商品</text>
 				</view>
-				<img class="image" src="../../static/ebay.svg" />
+				<img class="image" src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-icon/ebay.svg" />
 			</view>
 		</view>
 		<view class="row-container function-box">
@@ -28,7 +28,7 @@
 					<view class="column-container function-text">
 						<text>公寓转租</text>
 					</view>
-					<img class="image" src="../../static/apartment.svg" />
+					<img class="image" src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-icon/apartment.svg" />
 				</view>
 			</view>
 			<!-- <view class="row-container function-button disabled">
@@ -161,7 +161,6 @@
 	import list from '@/pages/main/main.js'
 </script>
 
-Login
 <style>
 	@import '@/static/iconfont/iconfont.css';
 

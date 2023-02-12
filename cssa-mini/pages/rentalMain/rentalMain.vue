@@ -7,8 +7,8 @@
 			<view class="menu-box row-container">
 				<view class="row-container rental-selection">
 					<text @click="clickMenu(0)" :class="{selected:menuIndex==0}">转租</text>
-					<text>/</text>
-					<text @click="clickMenu(1)" :class="{selected:menuIndex==1}">找室友</text>
+<!-- 					<text>/</text>
+					<text @click="clickMenu(1)" :class="{selected:menuIndex==1}">找室友</text> -->
 				</view>
 			</view>
 		</view>
@@ -34,8 +34,12 @@
 			</view>
 		</view>
 		<scroll-view scroll-y="true" show-scrollbar="true" refresher-enabled="true"
-			class="column-container comment-container" refresher-background="white" @refresherrefresh="refresh"
+			class="column-container rental-scroll" refresher-background="white" @refresherrefresh="refresh"
 			enable-back-to-top="true" :refresher-triggered="triggered" @scrolltolower="onScrollLower">
+			<view class="rental-box-container" v-for="(rentalInfo,index) in rentalList" :key="index">
+				<rentalBoxVue :rentalInfo="rentalInfo"></rentalBoxVue>
+			</view>
+			<uni-load-more style="padding-bottom: 50px;" :status="status"></uni-load-more>
 		</scroll-view>
 		<uni-fab :pattern="pattern" horizontal="right" vertical="bottom" popMene="false" @fabClick="toPostRental" />
 		<uni-popup ref="filter" type="bottom" background-color="#fff" :safeArea="safeArea" @maskClick="maskClick" :is-mask-click="safeArea">
@@ -84,21 +88,33 @@
 
 <script>
 	export default {
+		components:{
+			rentalBoxVue
+		},
 		data() {
 			return {
 				menuIndex: 0,
 				filter: {
 					priceLimit: 5000,
-					time: [-1, -1],
-					floorplan: "none",
+					time: [0, 0],
 				},
 				floorplanList: ['Studio', '1B1B', '2B1B', '2B2B', '3B2B', '3B3B', '4B2B', "4B3B", "其他"],
 				selectedFloorplan: ['Studio', '1B1B', '2B1B', '2B2B', '3B2B', '3B3B', '4B2B', "4B3B", "其他"],
 				start: Date.now(),
 				end: Date.now() + 10000000000,
 				timeFilter:false,
+				status:"loading",
 				safeArea:false,
+				limit:20,
+				offset:0,
+				rentalList:[],
+				triggered:false,
+				
 			}
+		},
+		onLoad(){
+			wx.cloud.init();
+			this.refresh();
 		},
 		methods: {
 			clickMenu: function(e) {
@@ -134,7 +150,7 @@
 				if(e.detail.value){
 					this.filter.time = [moment().format("YYYY-MM-DD"), moment().add(1,"M").format("YYYY-MM-DD")];	
 				}else{
-					this.filter.time = [-1,-1];
+					this.filter.time = [0,0];
 				}
 				this.timeFilter = e.detail.value;			
 			},
@@ -148,11 +164,57 @@
 					return;
 				}
 				this.$refs.filter.close();
+			},
+			refresh:function(){
+				if (!this.triggered) {
+					this.triggered = true;
+					this.limit = 20;
+					this.offset = 1;
+					this.rentalList = [];
+					this.status = "loading"
+					this.getRentalList();
+				}
+			},
+			getRentalList:async function(){
+				if(this.status == "noMore"){
+					return;
+				}
+				let temp = [0,0];
+				if(this.filter.time[0] != 0){
+					temp = [moment(this.filter.time[0],"YYYY-MM-DD").valueOf(),moment(this.filter.time[1],"YYYY-MM-DD").valueOf()]
+				}
+				const res = await wx.cloud.callContainer({
+					config: {
+						env: 'prod-9gip97mx4bfa32a3',
+					},
+					path: `/rental/getRentalList?limit=${this.limit}&offset=${this.offset}&floorPlanList=${this.selectedFloorplan}&priceLimit=${this.filter.priceLimit}&time=${temp}`,
+					method: 'GET',
+					header: {
+						'X-WX-SERVICE': 'springboot-ds71',
+					},
+				});
+				if(res.data.status == 100){
+					this.rentalList = this.rentalList.concat(res.data.data);
+				}
+				this.offset += res.data.data.length;
+				if(res.data.data.length != this.limit){
+					this.status = "noMore";
+				}else{
+					this.status = "more";
+				}
+				this.$nextTick(() => {
+					this.triggered = false;
+				});
+			},
+			onScrollLower:function(){
+				this.status = "loading";
+				this.getRentalList();
 			}
 		}
 	}
 	import moment from "moment/min/moment-with-locales";
 	import 'moment/locale/zh-cn';
+	import rentalBoxVue from "@/components/rental-box/rental-box.vue"
 </script>
 
 <style>
@@ -161,6 +223,8 @@
 		width: 100vw;
 		height: 100vh;
 		top: 0;
+		background-color: white;
+		scroll-y: false;
 	}
 
 	.column-container {
@@ -324,5 +388,17 @@
 		position:absolute;
 		bottom:0;
 		
+	}
+	.rental-box-container{
+		width: 100vw;
+		height: 200px;
+		margin-bottom: 10px;
+	}
+	.rental-scroll{
+		height: calc(100vh - 92px);
+		width: 100%;
+		overflow: hidden;
+		background-color: white;
+		overflow-y:scroll ;
 	}
 </style>

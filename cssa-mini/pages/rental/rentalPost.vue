@@ -1,5 +1,5 @@
 <template>
-	<view id="rent-post">
+	<view id="rental-post">
 		<uni-forms ref="rentalForm" :model="rental" :rules="rules">
 			<view class="image_upload">
 				<uni-file-picker limit="5" fileMediatype="image" :auto-upload="false" @select="onSelectImage"
@@ -16,37 +16,55 @@
 
 			<view class="card uni-textarea textbox">
 				<uni-forms-item name="rentalDescription">
-					<uni-easyinput type="textarea" v-model="rental.rentalDescription" placeholder="请描述房屋详情,如户型 地点 具体租期等" maxlength="400"
-						placeholderStyle="font-size:14px;color:gray" :clearable="clearable"> </uni-easyinput>
+					<uni-easyinput type="textarea" v-model="rental.rentalDescription" placeholder="请描述房屋详情,如户型/地点/具体租期等"
+						maxlength="400" placeholderStyle="font-size:14px;color:gray" :clearable="clearable">
+					</uni-easyinput>
 				</uni-forms-item>
 
 			</view>
-			
+
 
 			<view class="card label_group">
 				<uni-forms-item name="furnitureType">
 					<uni-data-checkbox v-model="rental.furnitureType" :localdata="furnitureOption"></uni-data-checkbox>
 				</uni-forms-item>
 			</view>
-			
+
 			<view class="card label_group">
 				<uni-forms-item name="floorplan">
 					<uni-data-checkbox v-model="rental.floorplan" :localdata="floorplanOption"></uni-data-checkbox>
 				</uni-forms-item>
 			</view>
-			
+
 			<view class="card label_group">
-				<uni-forms-item name="leasePeriod">
-					<uni-data-checkbox v-model="rental.leasePeriod" :localdata="leaseOption"></uni-data-checkbox>
-				</uni-forms-item>
+				<view class="uni-list">
+					<view class="uni-list-cell row-view">
+						<view class="uni-list-cell-left margin-right1">
+							选择日期
+						</view>
+						<view class="uni-list-cell-db row-view">
+							<picker mode="date" :value="date1" :start="startDate" :end="endDate"
+								@change="bindDateChange">
+								<view class="uni-input margin-right2">{{date1}}</view>
+							</picker>
+							<view class="uni-input margin-right2"> to </view>
+							<picker mode="date" :value="date2" :start="startDate" :end="endDate"
+								@change="bindDateChange">
+								<view class="uni-input">{{date2}}</view>
+							</picker>
+						</view>
+					</view>
+				</view>
 			</view>
-
-
+				
+				
+				
+				
 			<view class="card">
 				<uni-forms-item name="price">
 					<view class="uni-column row-view">
 						<span class="span_margin">$</span>
-						<uni-easyinput type="number" v-model="product.price" placeholder="请填写价格"
+						<uni-easyinput type="number" v-model="rental.price" placeholder="请填写价格"
 							placeholder-style="font-size:14px;color:gray" :clearable="clearable" />
 					</view>
 				</uni-forms-item>
@@ -58,8 +76,8 @@
 				<uni-forms-item name="contact">
 					<view class="uni-column row-view">
 						<span class="span_margin">微信号</span>
-						<input class="uni-input" v-model="product.contact" maxlength="22" placeholder="请填写微信号以便联系"
-							placeholder-style="font-size:14px;color:gray" @input="showCheckBox"/>
+						<input class="uni-input" v-model="rental.contact" maxlength="22" placeholder="请填写微信号以便联系"
+							placeholder-style="font-size:14px;color:gray" @input="showCheckBox" />
 					</view>
 					<view class="checkbox check_message" v-if="!hasID">
 						<checkbox-group @change="checkBoxChange">
@@ -76,7 +94,7 @@
 
 			<view class="uni-padding-wrap uni-common-mt confirm-button">
 				<button type="default" style="background-color: #1E90FF; color: #ffffff;" plain="true"
-					@click="submit('productForm')">发布</button>
+					@click="submit('rentalForm')">发布</button>
 			</view>
 		</uni-forms>
 	</view>
@@ -85,18 +103,23 @@
 <script>
 	export default {
 		data() {
+			const currentDate = this.getDate({
+				format: true
+			})
 			return {
-				hasID:false,
+				hasID: false,
 				save: true,
 				upLoadFail: false,
 				uploadCount: 0,
 				clearable: false,
+				date1: currentDate,
+				date2: currentDate,
 				rental: {
 					imageList: [],
 					rentalDescription: "",
 					rentalTitle: ""
 				},
-				images:[],
+				images: [],
 				furnitureOption: [{
 					text: "家具齐全",
 					value: "FULLYFURNISHED"
@@ -108,20 +131,32 @@
 					value: "NOFURNITURE"
 				}],
 				floorplanOption: [{
-					text: 'studio',
+					text: 'Studio',
 					value: 'STUDIO'
 				}, {
-					text: '一室',
-					value: 'ONEBEDROOM'
+					text: '1B1B',
+					value: '1B1B'
 				}, {
-					text: '二室',
-					value: 'TWOBEDROOMS'
+					text: '2B1B',
+					value: '2B1B'
 				}, {
-					text: '三室',
-					value: 'THREEBEDROOMS'
+					text: '2B2B',
+					value: '2B2B'
 				}, {
-					text: '四室+',
-					value: 'FOURPLUSBEDROOMS'
+					text: '3B2B',
+					value: '3B2B'
+				}, {
+					text: '3B3B',
+					value: '3B3B'
+				}, {
+					text: '4B2B',
+					value: '4B2B'
+				}, {
+					text: '4B3B',
+					value: '4B3B'
+				}, {
+					text: '其他',
+					value: 'others'
 				}],
 				leaseOption: [{
 					text: '暑假',
@@ -201,19 +236,45 @@
 				},
 			}
 		},
-		onShow(){
-			 wx.cloud.init();
-			 let userInfo = uni.getStorageSync("userInfo-2");
-			 this.rental.sellerAvatar = userInfo.avatar;
-			 this.rental.sellerNickname = userInfo.nickname;
-			 if(userInfo.wechatID != null){
-				 this.rental.contact = userInfo.wechatID;
-				 this.save = false;
-				 this.hasID = true;
-			 }
+		onShow() {
+			wx.cloud.init();
+			let userInfo = uni.getStorageSync("userInfo-2");
+			this.rental.sellerAvatar = userInfo.avatar;
+			this.rental.sellerNickname = userInfo.nickname;
+			if (userInfo.wechatID != null) {
+				this.rental.contact = userInfo.wechatID;
+				this.save = false;
+				this.hasID = true;
+			}
+		},
+		computed: {
+			startDate() {
+				return this.getDate('start');
+			},
+			endDate() {
+				return this.getDate('end');
+			}
 		},
 		methods: {
-			showCheckBox:function(){
+			bindDateChange: function(e) {
+				this.date = e.detail.value
+			},
+			getDate(type) {
+				const date = new Date();
+				let year = date.getFullYear();
+				let month = date.getMonth() + 1;
+				let day = date.getDate();
+
+				if (type === 'start') {
+					year = year - 60;
+				} else if (type === 'end') {
+					year = year + 2;
+				}
+				month = month > 9 ? month : '0' + month;
+				day = day > 9 ? day : '0' + day;
+				return `${year}-${month}-${day}`;
+			},
+			showCheckBox: function() {
 				this.save = true;
 				this.hasID = false;
 			},
@@ -234,21 +295,21 @@
 			},
 			onSelectImage: function(e) {
 				for (let i = 0; i < e.tempFilePaths.length && i < e.tempFiles.length; i++) {
-					this.product.imageList.push({
+					this.rental.imageList.push({
 						filename: e.tempFiles[i].name,
 						filepath: e.tempFilePaths[i]
 					});
 				}
-				console.log(this.product.imageList);
+				console.log(this.rental.imageList);
 			},
 			onDeleteImage: function(e) {
-				for (let i = 0; i < this.product.imageList.length; i++) {
-					if (this.product.imageList[i].filename == e.tempFile.name) {
-						this.product.imageList.splice(i, 1);
+				for (let i = 0; i < this.rental.imageList.length; i++) {
+					if (this.rental.imageList[i].filename == e.tempFile.name) {
+						this.rental.imageList.splice(i, 1);
 						return;
 					}
 				}
-				console.log(this.product.imageList);
+				console.log(this.rental.imageList);
 			},
 			submit(ref) {
 				console.log(this.save);
@@ -268,10 +329,10 @@
 				uni.showLoading({
 					title: "正在上传内容"
 				});
-				for (let i = 0; i < this.product.imageList.length; i++) {
+				for (let i = 0; i < this.rental.imageList.length; i++) {
 					uni.uploadFile({
 						url: "http://cssa-mini-na.oss-us-west-1.aliyuncs.com",
-						filePath: this.product.imageList[i].filepath,
+						filePath: this.rental.imageList[i].filepath,
 						fileType: 'image',
 						name: 'file',
 						formData: {
@@ -280,7 +341,7 @@
 							accessKeyId: 'LTAI5tG4Jt4WD77C1XSDTJAj',
 							accessKeySecret: 'HsXwO3QW67PBzpIV2CeE1uM6bU4sd7',
 							bucket: 'cssa-mini-na',
-							success_action_status:200,
+							success_action_status: 200,
 						},
 						success: res => {
 							console.log(res);
@@ -291,13 +352,14 @@
 									icon: "error"
 								});
 								this.uploadFail = true;
-							}else{
+							} else {
 								this.uploadCount++;
-								this.images.push("http://cssa-mini-na.oss-us-west-1.aliyuncs.com" + "/cssa-secondhand/" + this.product.imageList[i].filename)
+								this.images.push("http://cssa-mini-na.oss-us-west-1.aliyuncs.com" +
+									"/cssa-secondhand/" + this.rental.imageList[i].filename)
 							}
-							if (this.uploadCount == this.product.imageList.length) {
-								this.product.images = this.images,
-								this.postProduct();
+							if (this.uploadCount == this.rental.imageList.length) {
+								this.rental.images = this.images,
+									this.postRental();
 							}
 						},
 						fail: res => {
@@ -310,7 +372,7 @@
 					});
 				}
 			},
-			postProduct: async function() {
+			postRental: async function() {
 				const res = await wx.cloud.callContainer({
 					config: {
 						env: 'prod-9go38k3y9fee3b2e',
@@ -338,7 +400,7 @@
 </script>
 
 <style>
-	#second-post {
+	#rental-post {
 		position: absolute;
 		width: 94vw;
 		height: 100vh;
@@ -378,7 +440,15 @@
 		line-height: 30px;
 		align-items: center;
 	}
-
+	
+	.margin-right1 {
+		margin-right: 20px;
+	}
+	
+	.margin-right2 {
+		margin-right: 10px;
+	}
+	
 	.span_margin {
 		margin-right: 10px;
 		font-size: 16px;
@@ -435,4 +505,5 @@
 		padding: 0 !important;
 		height: 150px !important;
 	}
+	
 </style>
