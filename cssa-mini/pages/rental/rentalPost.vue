@@ -36,30 +36,10 @@
 				</uni-forms-item>
 			</view>
 
-			<view class="card label_group">
-				<view class="uni-list">
-					<view class="uni-list-cell row-view">
-						<view class="uni-list-cell-left margin-right1">
-							选择日期
-						</view>
-						<view class="uni-list-cell-db row-view">
-							<picker mode="date" :value="date1" :start="startDate" :end="endDate"
-								@change="bindDateChange">
-								<view class="uni-input margin-right2">{{date1}}</view>
-							</picker>
-							<view class="uni-input margin-right2"> to </view>
-							<picker mode="date" :value="date2" :start="startDate" :end="endDate"
-								@change="bindDateChange">
-								<view class="uni-input">{{date2}}</view>
-							</picker>
-						</view>
-					</view>
-				</view>
+			<view class="card">
+				<uni-datetime-picker v-model="range" type="daterange" @maskClick="maskClick" />
 			</view>
-				
-				
-				
-				
+
 			<view class="card">
 				<uni-forms-item name="price">
 					<view class="uni-column row-view">
@@ -69,8 +49,6 @@
 					</view>
 				</uni-forms-item>
 			</view>
-
-
 
 			<view class="card">
 				<uni-forms-item name="contact">
@@ -112,8 +90,7 @@
 				upLoadFail: false,
 				uploadCount: 0,
 				clearable: false,
-				date1: currentDate,
-				date2: currentDate,
+				range: [currentDate,currentDate],
 				rental: {
 					imageList: [],
 					rentalDescription: "",
@@ -247,17 +224,14 @@
 				this.hasID = true;
 			}
 		},
-		computed: {
-			startDate() {
-				return this.getDate('start');
-			},
-			endDate() {
-				return this.getDate('end');
+		watch: {
+			range(newval) {
+				console.log('范围选:', this.range);
 			}
 		},
 		methods: {
-			bindDateChange: function(e) {
-				this.date = e.detail.value
+			maskClick(e) {
+				console.log('maskClick事件:', e);
 			},
 			getDate(type) {
 				const date = new Date();
@@ -440,15 +414,15 @@
 		line-height: 30px;
 		align-items: center;
 	}
-	
+
 	.margin-right1 {
 		margin-right: 20px;
 	}
-	
+
 	.margin-right2 {
 		margin-right: 10px;
 	}
-	
+
 	.span_margin {
 		margin-right: 10px;
 		font-size: 16px;
@@ -505,5 +479,4 @@
 		padding: 0 !important;
 		height: 150px !important;
 	}
-	
 </style>
