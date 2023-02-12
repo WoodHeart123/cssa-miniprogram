@@ -36,9 +36,10 @@
 		<scroll-view scroll-y="true" show-scrollbar="true" refresher-enabled="true"
 			class="column-container rental-scroll" refresher-background="white" @refresherrefresh="refresh"
 			enable-back-to-top="true" :refresher-triggered="triggered" @scrolltolower="onScrollLower">
-			<view class="rental-box-container" v-for="(,index) in 20" :key="index">
-				<rentalBoxVue></rentalBoxVue>
+			<view class="rental-box-container" v-for="(rentalInfo,index) in rentalList" :key="index">
+				<rentalBoxVue :rentalInfo="rentalInfo"></rentalBoxVue>
 			</view>
+			<uni-load-more style="padding-bottom: 50px;" :status="status"></uni-load-more>
 		</scroll-view>
 		<uni-fab :pattern="pattern" horizontal="right" vertical="bottom" popMene="false" @fabClick="toPostRental" />
 		<uni-popup ref="filter" type="bottom" background-color="#fff" :safeArea="safeArea" @maskClick="maskClick" :is-mask-click="safeArea">
@@ -95,17 +96,20 @@
 				menuIndex: 0,
 				filter: {
 					priceLimit: 5000,
-					time: [-1, -1],
+					time: [0, 0],
 				},
 				floorplanList: ['Studio', '1B1B', '2B1B', '2B2B', '3B2B', '3B3B', '4B2B', "4B3B", "其他"],
 				selectedFloorplan: ['Studio', '1B1B', '2B1B', '2B2B', '3B2B', '3B3B', '4B2B', "4B3B", "其他"],
 				start: Date.now(),
 				end: Date.now() + 10000000000,
 				timeFilter:false,
+				status:"loading",
 				safeArea:false,
 				limit:20,
 				offset:0,
 				rentalList:[],
+				triggered:false,
+				
 			}
 		},
 		onLoad(){
@@ -175,7 +179,10 @@
 				if(this.status == "noMore"){
 					return;
 				}
-				let temp = [moment(this.filter.time[0],"YYYY-MM-DD").valueOf(),moment(this.filter.time[1],"YYYY-MM-DD").valueOf()]
+				let temp = [0,0];
+				if(this.filter.time[0] != 0){
+					temp = [moment(this.filter.time[0],"YYYY-MM-DD").valueOf(),moment(this.filter.time[1],"YYYY-MM-DD").valueOf()]
+				}
 				const res = await wx.cloud.callContainer({
 					config: {
 						env: 'prod-9gip97mx4bfa32a3',

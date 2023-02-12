@@ -3,15 +3,16 @@
 		<view class="image-box">
 			<image mode="widthFix" class="image" :src="this.houseInfo.imageList[0]"/>
 		</view>
-		<view class="content-box">
+		<view class="column-container content-box">
 			<view class="row-container title-box">
-				<view class="row-container tag sex">{{this.houseInfo.sexConstraint}}</view>
-				<view class="row-container tag floorplan">{{this.houseInfo.floorplan}}</view>
-				<view class="rental-title">{{this.houseInfo.name}}</view>
+				<view class="row-container tag sex">{{sexContraintValue[this.rentalInfo.sexConstraint]}}</view>
+				<view class="row-container tag floorplan">{{this.rentalInfo.floorPlan}}</view>
+				<view class="rental-title">{{this.rentalInfo.location}}</view>
 			</view>
 			<view class="time-box">{{rentalTime}}</view>
-			<view class="price-box">${{this.houseInfo.price}}</view>
-			<view class="description-box">{{this.houseInfo.description}}</view>
+			<view class="price-box">${{this.rentalInfo.price}}</view>
+			<view class="description-box">{{this.rentalInfo.description}}</view>
+			<view class="publish-time-box">{{publishTime}}</view>
 		</view>
 	</view>
 </template>
@@ -21,34 +22,32 @@
 	import 'moment/locale/zh-cn';
 	export default {
 		name:"rental-box",
+		props:["rentalInfo"],
 		mounted(){
 			console.log(encodeURIComponent(JSON.stringify(this.houseInfo.contact)))
 		},
 		data() {
 			return {
+				sexContraintValue:["仅限男生","仅限女生","性别不限"],
 				houseInfo: {
-					price:1300,
-					rentalStartTime:1676155756000,
-					rentalEndTime:1976955756000,
-					name: "London Luxury Apartment London Luxury Apartment",
 					imageList: ["/static/housing.jpg", "/static/housing.jpg", "/static/housing.jpg"],
-					floorplan:"1B1B",
-					contact: [1530673838,1536030638],
-					description: "Beech Townhomes隶属于东兰辛当地大型公寓商DTN旗下。Beech Townhomes位于密歇根州的东兰辛，密歇根州立大学附近，拥有全新的一卧室和两卧室联排别墅。 公寓距离东兰辛市中心，夜生活场所，餐馆和购物场所仅有几个街区，步行即可抵达斯巴达体育场，布雷斯林中心和伊莱和艾迪斯博物馆。 别墅内有洗衣机和烘干机，生活便利。临近学校，可步行上课。",
-					sexConstraint: "仅限男生"
 				},
 			};
 		},
 		methods:{
 			toRentalDetail:function(){
 				uni.navigateTo({
-					url:"/pages/detail/houseDetail"
+					url:"/pages/detail/houseDetail?rentalInfo=" + encodeURIComponent(JSON.stringify(this.rentalInfo)),
 				})
 			}
 		},
 		computed:{
 			rentalTime(){
-				return moment(this.houseInfo.rentalStartTime).format("YYYY-MM-DD") + " 至 " + moment(this.houseInfo.rentalEndTime).format("YYYY-MM-DD")
+				return moment(this.rentalInfo.rentalStartTime).format("YYYY-MM-DD") + " 至 " + moment(this.rentalInfo.rentalEndTime).format("YYYY-MM-DD")
+			},
+			publishTime(){
+				moment.locale('zh-cn');
+				return moment(this.rentalInfo.publishedTime).fromNow(); 
 			}
 		}
 	}
@@ -60,6 +59,11 @@
 	}
 	.floorplan{
 		margin-left: 65px;
+		
+	}
+	.column-container{
+		display: flex;
+		flex-direction: column;
 	}
 	.row-container {
 		display: flex;
@@ -86,6 +90,8 @@
 		width: 68%;
 		height: 98%;
 		margin: 2% 0 0 2%;
+		position: relative;
+		justify-content: space-between;
 	}
 	.image{
 		width:95%;
@@ -104,7 +110,8 @@
 		margin-right: 5px;
 	}
 	.rental-title {	
-		height: 40px;
+		min-height: 20px;
+		max-height: 40px;
 		font-size: 15px;
 		font-weight: 600;
 		line-height: 20px;
@@ -126,20 +133,28 @@
 		margin-top:5px;
 		font-size: 20px;
 		font-weight: 600;
-		height: 10%;
+		height: 15%;
 		color: darkblue;
 	}
 	.description-box{
 		font-size: 10px;
 		color: rgba(132, 132,132, 0.6);
-		margin-top:10px;
-		height: 80px;
+		margin-top:2px;
+		height: 60px;
 		line-height: 20px;
 		white-space: normal;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		display: -webkit-box;
-		-webkit-line-clamp: 4;
+		-webkit-line-clamp: 3;
 		-webkit-box-orient: vertical;
+	}
+	.publish-time-box{
+		height: 15px;
+		width: 95%;
+		margin-right:5%;
+		font-size:10px;
+		text-align: right;
+		margin-bottom:10px;
 	}
 </style>
