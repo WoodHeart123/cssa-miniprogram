@@ -8,7 +8,7 @@
 			
 			
 			<view class="card label_group">
-				<text style="margin-left: -5px; margin-right: 10px; padding: 10px;">接受性别</text>
+				<text style="margin-left: -10px; margin-right: 10px; padding: 10px;">接受性别</text>
 				<uni-forms-item name="gender">
 					<uni-data-checkbox v-model="rental.gender" :localdata="gender"></uni-data-checkbox>
 				</uni-forms-item>
@@ -39,8 +39,8 @@
 				</uni-forms-item>
 			</view>
 
-			<view class="card">
-				<uni-datetime-picker v-model="range" type="daterange" @maskClick="maskClick" />
+			<view class="card" style="padding: 5px">
+				<uni-datetime-picker v-model="range" type="daterange" :clear-icon="false" :border="false" @maskClick="maskClick" />
 			</view>
 
 			<view class="card">
