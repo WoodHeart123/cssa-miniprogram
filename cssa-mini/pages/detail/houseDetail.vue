@@ -1,15 +1,14 @@
 <template>
 	<view>
 		<swiper class="swiper" indicator-dots>
-			<swiper-item v-for="(image, index) in houseInfo.imageList">
+			<swiper-item v-for="(image, index) in imageList">
 				<image :src="image" @click="getImageIndex(index)"></image>
 			</swiper-item>
 		</swiper>
 		<view class="basic">
 			<view class="price-box">
 				<view class="row-container" style="align-items: center;">
-					<view class="row-container tag"><text>{{houseInfo.time}}</text></view>
-					<view class="row-container tag"><text>{{houseInfo.condition}}</text></view>
+					<view class="row-container tag"><text>{{rentalTime}}</text></view>
 				</view>
 				<view class="shoucang-box">
 					<text class="iconfont save-icon" :class="{'save-icon-selected' : isSaved}" @click="onClickSave()">&#xe6c9;</text>
@@ -19,28 +18,28 @@
 				<view class="iconfont" id="dollar-icon">&#xe70b;</view>
 				<view class="price"><text>{{houseInfo.price}}/m</text></view>
 			</view>
-			<view class="house-name"><text>{{houseInfo.name}}</text></view>
+			<view class="house-name"><text>{{houseInfo.location}}</text></view>
 		</view>
 		<view class="row-container">
-			<view class="info-box"><text>女住客</text></view>
-			<view class="info-box"><text>2B1B</text></view>
+			<view class="info-box"><text>{{sexContraintValue[this.houseInfo.sexConstraint]}}</text></view>
+			<view class="info-box"><text>{{houseInfo.floorPlan}}</text></view>
 		</view>
 		<view class="contact">
 			<view class="contact-box">
 				<img class="avatar"
-					:src="'https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/' + 1 + '.jpg'">
-				<text class="nickname">小红豆</text>
+					:src="'https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/'+houseInfo.sellerAvatar+'.jpg'">
+				<text class="nickname">{{houseInfo.sellerNickname}}</text>
 				<view class="copy-box">
 					<text>复制</text>
 					<img class="copy-img" src="/static/fuzhi.png" @click="setClipboardData">
 				</view>
 			</view>
-			<view class="weixin">微信号：{{houseInfo.contact[0]}}</view>
+			<view class="weixin">微信号：{{houseInfo.contact}}</view>
 		</view>
 		<view class="description">
 			<view class="scroll-page">
 				<rich-text>
-					{{houseInfo.content}}
+					{{houseInfo.description}}
 				</rich-text>
 			</view>
 		</view>
@@ -48,37 +47,27 @@
 </template>
 
 <script>
-import { title } from 'process';
+	import { title } from 'process';
+	import moment from "moment/min/moment-with-locales";
+	import 'moment/locale/zh-cn';
 	export default {
 		data() {
 			return {
 				isSaved: false,
-				houseInfo: {
-					price:1300,
-					time:"2011.08-2012.12",
-					name: "London Luxury Apartment",
-					imageList: ["https://gonglue.us/wp-content/uploads/2019/01/single-house.jpg", 
-					"https://www.ireis.co.uk/wp-content/uploads/2019/12/interior-design-of-a-house-1571460-1024x658.jpg", 
-					"https://www.ireis.co.uk/wp-content/uploads/2019/12/Bathwick_Hill_Bath_Somerset_UK_-_Diliff-1-1024x719.jpg"],
-					type:"1B1B",
-					condition:"立刻入住",
-					contact: ["123456"],
-					quantity: "几乎全新",
-					content: "Beech Townhomes隶属于东兰辛当地大型公寓商DTN旗下。Beech Townhomes位于密歇根州的东兰辛，密歇根州立大学附近，拥有全新的一卧室和两卧室联排别墅。 公寓距离东兰辛市中心，夜生活场所，餐馆和购物场所仅有几个街区，步行即可抵达斯巴达体育场，布雷斯林中心和伊莱和艾迪斯博物馆。 别墅内有洗衣机和烘干机，生活便利。临近学校，可步行上课。"
-				},
+				sexContraintValue:["仅限男生","仅限女生","性别不限"],
+				imageList: ["/static/housing.jpg", "/static/housing.jpg", "/static/housing.jpg"],
+				houseInfo: {},
 			}
 		},
 		
-		/*
 		onLoad(options){
 			console.log(options);
 			wx.cloud.init();
-			this.houseInfo = JSON.parse(decodeURIComponent(options.houseInfo));
+			this.houseInfo = JSON.parse(decodeURIComponent(options.rentalInfo));
 			console.log(this.houseInfo);
-			save();
+			this.isSaved = true;
 		},
-		*/
-	   
+
 	   	onShow() {
 	   		uni.getStorage({
 	   			key: 'userInfo-2',
@@ -90,6 +79,7 @@ import { title } from 'process';
 	   			},
 	   		});
 	   	},
+
 		onShareTimeline() {
 			return {
 				title: this.houseInfo.name,
@@ -159,6 +149,11 @@ import { title } from 'process';
 			async unsave(){
 				console.log('success');
 				this.isSaved = false;
+			}
+		},
+		computed: {
+			rentalTime(){
+				return moment(this.houseInfo.rentalStartTime).format("YYYY-MM-DD") + " 至 " + moment(this.houseInfo.rentalEndTime).format("YYYY-MM-DD")
 			}
 		}
 	}
