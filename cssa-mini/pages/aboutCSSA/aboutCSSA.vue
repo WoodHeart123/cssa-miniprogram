@@ -55,7 +55,7 @@
 			},
 			durationChange(e) {
 				this.duration = e.target.value
-			}
+			},
 		
 			// scoller downwards
 			upper: function(e) {

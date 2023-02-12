@@ -45,13 +45,8 @@
 					<img class="image" src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-icon/index/mem.svg" />
 					<text class="text-box">活动回忆</text>
 				</view>
-<<<<<<< HEAD
 				<view class="button-box" @click="jump(4)">
-					<img class="image" src="../../static/index/join.svg" />
-=======
-				<view class="button-box disabled">
 					<img class="image" src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-icon/index/join.svg" />
->>>>>>> 78eb7751d57f74c0cc32dd4fde591b61faa6eb9f
 					<text class="text-box">加入CSSA</text>
 				</view>
 			</view>
