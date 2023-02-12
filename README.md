@@ -4,16 +4,14 @@
 
 
 ## 运行条件
-> 列出运行该项目所必须的条件和相关依赖  
-* HBuilderX
-* 微信开发者工具
+* 下载HBuilderX （https://www.dcloud.io/hbuilderx.html）
+* 微信开发者工具 （https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html)
 
 
 
 ## 运行说明
-> 说明如何运行和使用你的项目，建议给出具体的步骤说明
-* HBuilderX打开项目目录
-* 运行 -> 运行至小程序模拟器
+* 使用HBuilderX打开项目目录， 第一次打开时HBuilder会自动
+* 运行 -> 运行至小程序模拟器（如无法运行右键项目，点击重新识别项目类型）
 * 第一次可能需要微信扫码登陆
 
 

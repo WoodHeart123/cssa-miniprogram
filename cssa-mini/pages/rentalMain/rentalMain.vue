@@ -7,8 +7,8 @@
 			<view class="menu-box row-container">
 				<view class="row-container rental-selection">
 					<text @click="clickMenu(0)" :class="{selected:menuIndex==0}">转租</text>
-					<text>/</text>
-					<text @click="clickMenu(1)" :class="{selected:menuIndex==1}">找室友</text>
+<!-- 					<text>/</text>
+					<text @click="clickMenu(1)" :class="{selected:menuIndex==1}">找室友</text> -->
 				</view>
 			</view>
 		</view>
@@ -34,8 +34,11 @@
 			</view>
 		</view>
 		<scroll-view scroll-y="true" show-scrollbar="true" refresher-enabled="true"
-			class="column-container comment-container" refresher-background="white" @refresherrefresh="refresh"
+			class="column-container rental-scroll" refresher-background="white" @refresherrefresh="refresh"
 			enable-back-to-top="true" :refresher-triggered="triggered" @scrolltolower="onScrollLower">
+			<view class="rental-box-container" v-for="(,index) in 20" :key="index">
+				<rentalBoxVue></rentalBoxVue>
+			</view>
 		</scroll-view>
 		<uni-fab :pattern="pattern" horizontal="right" vertical="bottom" popMene="false" @fabClick="toPostRental" />
 		<uni-popup ref="filter" type="bottom" background-color="#fff" :safeArea="safeArea" @maskClick="maskClick" :is-mask-click="safeArea">
@@ -84,6 +87,9 @@
 
 <script>
 	export default {
+		components:{
+			rentalBoxVue
+		},
 		data() {
 			return {
 				menuIndex: 0,
@@ -148,11 +154,53 @@
 					return;
 				}
 				this.$refs.filter.close();
+			},
+			refresh:function(){
+				if (!this.triggered) {
+					this.triggered = true;
+					this.limit = 20;
+					this.offset = 1;
+					this.productList = [];
+					this.status = "loading"
+					this.getRentalList();
+				}
+			},
+			getRentalList:async function(){
+				if(this.status == "noMore"){
+					return;
+				}
+				// const res = await wx.cloud.callContainer({
+				// 	config: {
+				// 		env: 'prod-9gip97mx4bfa32a3',
+				// 	},
+				// 	path: `/secondhand/getProductList?productType=${this.productTypeList[this.currentIndex].type}&limit=${this.limit}&offset=${this.offset}`,
+				// 	method: 'GET',
+				// 	header: {
+				// 		'X-WX-SERVICE': 'springboot-ds71',
+				// 	},
+				// });
+				if(res.data.status == 100){
+					this.productList = this.productList.concat(res.data.data);
+				}
+				this.offset += res.data.data.length;
+				if(res.data.data.length != this.limit){
+					this.status = "noMore";
+				}else{
+					this.status = "more";
+				}
+				this.$nextTick(() => {
+					this.triggered = false;
+				});
+			},
+			onScrollLower:function(){
+				this.status = "loading";
+				this.getRentalList();
 			}
 		}
 	}
 	import moment from "moment/min/moment-with-locales";
 	import 'moment/locale/zh-cn';
+	import rentalBoxVue from "@/components/rental-box/rental-box.vue"
 </script>
 
 <style>
@@ -161,6 +209,8 @@
 		width: 100vw;
 		height: 100vh;
 		top: 0;
+		background-color: white;
+		scroll-y: false;
 	}
 
 	.column-container {
@@ -324,5 +374,17 @@
 		position:absolute;
 		bottom:0;
 		
+	}
+	.rental-box-container{
+		width: 100vw;
+		height: 200px;
+		margin-bottom: 10px;
+	}
+	.rental-scroll{
+		height: calc(100vh - 92px);
+		width: 100%;
+		overflow: hidden;
+		background-color: white;
+		overflow-y:scroll ;
 	}
 </style>

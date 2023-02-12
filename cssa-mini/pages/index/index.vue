@@ -24,29 +24,34 @@
 		<view class="function-box">
 			<view class="function-sub-box">
 				<view class="button-box disabled">
-					<img class="image" src="../../static/index/community.svg" />
+					<img class="image" src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-icon/index/community.svg" />
 					<text class="text-box">我的帖子</text>
 				</view>
 				<view class="button-box" @click="jump(1)">
-					<img class="image" src="../../static/index/zan.svg" />
+					<img class="image" src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-icon/index/zan.svg" />
 					<text class="text-box">赞/收藏</text>
 				</view>
 				<view class="button-box" @click="jump(2)">
-					<img class="image" src="../../static/index/comment.svg" />
+					<img class="image" src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-icon/index/comment.svg" />
 					<text class="text-box">我的评论</text>
 				</view>
 				<view class="button-box" @click="jump(3)">
-					<img class="image" src="../../static/index/ebay.svg" />
+					<img class="image" src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-icon/index/ebay.svg" />
 					<text class="text-box">我的二手</text>
 				</view>
 			</view>
 			<view class="function-sub-box">
 				<view class="button-box disabled">
-					<img class="image" src="../../static/index/mem.svg" />
+					<img class="image" src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-icon/index/mem.svg" />
 					<text class="text-box">活动回忆</text>
 				</view>
+<<<<<<< HEAD
 				<view class="button-box" @click="jump(4)">
 					<img class="image" src="../../static/index/join.svg" />
+=======
+				<view class="button-box disabled">
+					<img class="image" src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-icon/index/join.svg" />
+>>>>>>> 78eb7751d57f74c0cc32dd4fde591b61faa6eb9f
 					<text class="text-box">加入CSSA</text>
 				</view>
 			</view>
