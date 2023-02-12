@@ -9,23 +9,23 @@
 			
 			<view class="card label_group">
 				<text style="margin-left: -10px; margin-right: 10px; padding: 10px;">接受性别</text>
-				<uni-forms-item name="gender">
-					<uni-data-checkbox v-model="rental.gender" :localdata="gender"></uni-data-checkbox>
+				<uni-forms-item name="sexConstraint">
+					<uni-data-checkbox v-model="rental.gender" :localdata="sexConstraint"></uni-data-checkbox>
 				</uni-forms-item>
 			</view>
 			
 
 			<view class="card uni-form-item uni-column">
-				<uni-forms-item name="rentalTitle">
-					<input class="uni-input" v-model="rental.rentalTitle" maxlength="22" placeholder="请填写房屋信息"
+				<uni-forms-item name="location">
+					<input class="uni-input" v-model="rental.location" maxlength="22" placeholder="请填写房屋信息"
 						placeholder-style="font-size:14px;color:gray" />
 				</uni-forms-item>
 			</view>
 
 
 			<view class="card uni-textarea textbox">
-				<uni-forms-item name="rentalDescription">
-					<uni-easyinput type="textarea" v-model="rental.rentalDescription" placeholder="请描述房屋详情,如户型/地点/具体租期等"
+				<uni-forms-item name="description">
+					<uni-easyinput type="textarea" v-model="rental.description" placeholder="请描述房屋详情,如户型/地点/具体租期等"
 						maxlength="400" placeholderStyle="font-size:14px;color:gray" :clearable="clearable">
 					</uni-easyinput>
 				</uni-forms-item>
@@ -34,13 +34,13 @@
 			
 
 			<view class="card label_group">
-				<uni-forms-item name="floorplan">
-					<uni-data-checkbox v-model="rental.floorplan" :localdata="floorplanOption"></uni-data-checkbox>
+				<uni-forms-item name="floorPlan">
+					<uni-data-checkbox v-model="rental.floorPlan" :localdata="floorPlan"></uni-data-checkbox>
 				</uni-forms-item>
 			</view>
 
 			<view class="card" style="padding: 5px">
-				<uni-datetime-picker v-model="range" type="daterange" :clear-icon="false" :border="false" @maskClick="maskClick" />
+				<uni-datetime-picker v-model="rental.time" type="daterange" :start="start" :end="end" :clear-icon="false" :border="false" @maskClick="maskClick" />
 			</view>
 
 			<view class="card">
@@ -58,11 +58,11 @@
 					<view class="uni-column row-view">
 						<span class="span_margin">微信号</span>
 						<input class="uni-input" v-model="rental.contact" maxlength="22" placeholder="请填写微信号以便联系"
-							placeholder-style="font-size:14px;color:gray" @input="showCheckBox" />
+							placeholder-style="font-size:14px;color:gray"/>
 					</view>
 					<view class="checkbox check_message" v-if="!hasID">
 						<checkbox-group @change="checkBoxChange">
-							<checkbox value="save_contact" :checked="save" color="#1E90FF"
+							<checkbox value="save_contact" :checked="save" color="#9b0000"
 								style="transform:scale(0.8);" />
 
 							保存联系方式，方便后续使用
@@ -74,7 +74,7 @@
 
 
 			<view class="uni-padding-wrap uni-common-mt confirm-button">
-				<button type="default" style="background-color: #1E90FF; color: #ffffff;" plain="true"
+				<button type="default" style="background-color: #9b0000; color: #ffffff;" plain="true"
 					@click="submit('rentalForm')">发布</button>
 			</view>
 		</uni-forms>
@@ -84,33 +84,32 @@
 <script>
 	export default {
 		data() {
-			const currentDate = this.getDate({
-				format: true
-			})
 			return {
 				hasID: false,
 				save: true,
 				upLoadFail: false,
 				uploadCount: 0,
 				clearable: false,
-				range: [currentDate,currentDate],
+				start: Date.now(),
+				end: Date.now() + 10000000000,
 				rental: {
 					imageList: [],
-					rentalDescription: "",
-					rentalTitle: ""
+					description: "",
+					location: "",
+					time:[0,0]
 				},
 				images: [],
-				gender: [{
+				sexConstraint: [{
 					text: "男",
-					value: "MALE"
+					value: 0
 				}, {
 					text: "女",
-					value: "FEMALE"
+					value: 1
 				}, {
 					text: "不限",
-					value: "BOTH"
+					value: 2
 				}],
-				floorplanOption: [{
+				floorPlan: [{
 					text: 'Studio',
 					value: 'STUDIO'
 				}, {
@@ -138,27 +137,8 @@
 					text: '其他',
 					value: 'others'
 				}],
-				leaseOption: [{
-					text: '暑假',
-					value: 'SUMMER'
-				}, {
-					text: '秋季学期',
-					value: 'FALL'
-				}, {
-					text: '寒假',
-					value: 'Winter'
-				}, {
-					text: '春季学期',
-					value: 'Spring'
-				}, {
-					text: '全年',
-					value: 'ALLYEAR'
-				}, {
-					text: '短租',
-					value: 'SHORTTERM'
-				}],
 				rules: {
-					rentalTitle: {
+					location: {
 						rules: [{
 								required: true,
 								errorMessage: '请填写房屋信息',
@@ -170,7 +150,7 @@
 							}
 						]
 					},
-					rentalDescription: {
+					description: {
 						rules: [{
 								required: true,
 								errorMessage: '请填写房屋详情',
@@ -188,7 +168,7 @@
 							errorMessage: '请选择家具',
 						}]
 					},
-					floorplanType: {
+					floorPlan: {
 						rules: [{
 							required: true,
 							errorMessage: '请选择户型',
@@ -290,6 +270,7 @@
 			},
 			submit(ref) {
 				console.log(this.save);
+				console.log(this.rental);
 				this.$refs[ref].validate().then(res => {
 					this.uploadCount = 0;
 					this.uploadFail = false;
