@@ -237,7 +237,7 @@
 		},
 		"tabBar": {
 			"color": "#666666",
-			"selectedColor": "#1684FC",
+			"selectedColor": "#9b0000",
 			"borderStyle": "black",
 			"backgroundColor": "#ffffff",
 			"fontSize": "14px",
@@ -252,12 +252,6 @@
 					"text": "活动",
 					"iconPath": "./static/act.png",
 					"selectedIconPath": "./static/act-selected.png"
-				},
-				{
-					"pagePath": "pages/community/com-main",
-					"text": "社区广场",
-					"iconPath": "./static/community.png",
-					"selectedIconPath": "./static/community-selected.png"
 				},
 				{
 					"pagePath": "pages/index/index",

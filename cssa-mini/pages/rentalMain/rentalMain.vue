@@ -267,14 +267,14 @@
 		justify-content: space-around;
 		flex-shrink: 0;
 		font-size: 20px;
-		color: rgba(22, 132, 253, 0.4);
+		color: rgba(, 132, 253, 0.4);
 	}
 
 	.selected {
 		font-size: 21px;
 		transition: all 0.5s;
 		font-weight: 700;
-		color: #1684FC;
+		color: #9b0000;
 	}
 
 	.filter-box {

@@ -38,7 +38,7 @@
 				productTypeList: productTypeList,
 				currentIndex: 0,
 				pattern: {
-					buttonColor: "#1684FC"
+					buttonColor: "#9b0000"
 				},
 				triggered: false,
 				status: "loading",
