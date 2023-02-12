@@ -2,7 +2,7 @@
 	<view>
 		<swiper class="swiper" indicator-dots>
 			<swiper-item v-for="(image, index) in houseInfo.imageList">
-				<image :src="image"></image>
+				<image :src="image" @click="getImageIndex(index)"></image>
 			</swiper-item>
 		</swiper>
 		<view class="basic">
@@ -22,7 +22,7 @@
 			<view class="house-name"><text>{{houseInfo.name}}</text></view>
 		</view>
 		<view class="row-container">
-			<view class="info-box"><text>女</text></view>
+			<view class="info-box"><text>女住客</text></view>
 			<view class="info-box"><text>2B1B</text></view>
 		</view>
 		<view class="contact">
@@ -48,6 +48,7 @@
 </template>
 
 <script>
+import { title } from 'process';
 	export default {
 		data() {
 			return {
@@ -56,9 +57,11 @@
 					price:1300,
 					time:"2011.08-2012.12",
 					name: "London Luxury Apartment",
-					imageList: ["/static/housing.jpg", "/static/housing.jpg", "/static/housing.jpg"],
+					imageList: ["https://gonglue.us/wp-content/uploads/2019/01/single-house.jpg", 
+					"https://www.ireis.co.uk/wp-content/uploads/2019/12/interior-design-of-a-house-1571460-1024x658.jpg", 
+					"https://www.ireis.co.uk/wp-content/uploads/2019/12/Bathwick_Hill_Bath_Somerset_UK_-_Diliff-1-1024x719.jpg"],
 					type:"1B1B",
-					condition:"有现房",
+					condition:"立刻入住",
 					contact: ["123456"],
 					quantity: "几乎全新",
 					content: "Beech Townhomes隶属于东兰辛当地大型公寓商DTN旗下。Beech Townhomes位于密歇根州的东兰辛，密歇根州立大学附近，拥有全新的一卧室和两卧室联排别墅。 公寓距离东兰辛市中心，夜生活场所，餐馆和购物场所仅有几个街区，步行即可抵达斯巴达体育场，布雷斯林中心和伊莱和艾迪斯博物馆。 别墅内有洗衣机和烘干机，生活便利。临近学校，可步行上课。"
@@ -111,15 +114,32 @@
 			onClickSave:function(){
 				if(!this.isSaved){
 					this.save();
+				}else{
+					this.unsave();
 				}
-			},		
+			},
+			getImageIndex(index){
+				console.log(index);
+				uni.previewImage({
+					current:this.houseInfo.imageList[index],
+					urls:this.houseInfo.imageList,
+				})
+			},
+			
 			setClipboardData: function() {
 				uni.setClipboardData({
-					data: " 微信号: " + this.houseInfo.contact[0]
+					data: this.houseInfo.contact[0],
+					success: (res) => {
+						uni.showToast({
+							icon:'none',
+							title:'微信号复制成功'
+						})
+					}
 				});
 			},
 			async save(){
 				console.log('success');
+				this.isSaved = true;
 				/*
 				const res = await wx.cloud.callContainer({
 					config: {
@@ -135,6 +155,10 @@
 					this.isSaved = True;
 				}
 				*/
+			},
+			async unsave(){
+				console.log('success');
+				this.isSaved = false;
 			}
 		}
 	}
@@ -278,7 +302,9 @@
 		margin-top: 10px;
 	}
 	.scroll-page {
-		padding: 15px;
+		padding-left: 15px;
+		padding-top: 10px;
+		padding-bottom: 15px;
 		width: calc(100% - 30px);
 		line-height: 30px;
 		font-size: 15px;
