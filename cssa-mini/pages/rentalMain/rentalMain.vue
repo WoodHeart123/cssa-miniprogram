@@ -96,7 +96,6 @@
 				filter: {
 					priceLimit: 5000,
 					time: [-1, -1],
-					floorplan: "none",
 				},
 				floorplanList: ['Studio', '1B1B', '2B1B', '2B2B', '3B2B', '3B3B', '4B2B', "4B3B", "其他"],
 				selectedFloorplan: ['Studio', '1B1B', '2B1B', '2B2B', '3B2B', '3B3B', '4B2B', "4B3B", "其他"],
@@ -104,7 +103,14 @@
 				end: Date.now() + 10000000000,
 				timeFilter:false,
 				safeArea:false,
+				limit:20,
+				offset:0,
+				rentalList:[],
 			}
+		},
+		onLoad(){
+			wx.cloud.init();
+			this.refresh();
 		},
 		methods: {
 			clickMenu: function(e) {
@@ -140,7 +146,7 @@
 				if(e.detail.value){
 					this.filter.time = [moment().format("YYYY-MM-DD"), moment().add(1,"M").format("YYYY-MM-DD")];	
 				}else{
-					this.filter.time = [-1,-1];
+					this.filter.time = [0,0];
 				}
 				this.timeFilter = e.detail.value;			
 			},
@@ -160,7 +166,7 @@
 					this.triggered = true;
 					this.limit = 20;
 					this.offset = 1;
-					this.productList = [];
+					this.rentalList = [];
 					this.status = "loading"
 					this.getRentalList();
 				}
@@ -169,18 +175,19 @@
 				if(this.status == "noMore"){
 					return;
 				}
-				// const res = await wx.cloud.callContainer({
-				// 	config: {
-				// 		env: 'prod-9gip97mx4bfa32a3',
-				// 	},
-				// 	path: `/secondhand/getProductList?productType=${this.productTypeList[this.currentIndex].type}&limit=${this.limit}&offset=${this.offset}`,
-				// 	method: 'GET',
-				// 	header: {
-				// 		'X-WX-SERVICE': 'springboot-ds71',
-				// 	},
-				// });
+				let temp = [moment(this.filter.time[0],"YYYY-MM-DD").valueOf(),moment(this.filter.time[1],"YYYY-MM-DD").valueOf()]
+				const res = await wx.cloud.callContainer({
+					config: {
+						env: 'prod-9gip97mx4bfa32a3',
+					},
+					path: `/rental/getRentalList?limit=${this.limit}&offset=${this.offset}&floorPlanList=${this.selectedFloorplan}&priceLimit=${this.filter.priceLimit}&time=${temp}`,
+					method: 'GET',
+					header: {
+						'X-WX-SERVICE': 'springboot-ds71',
+					},
+				});
 				if(res.data.status == 100){
-					this.productList = this.productList.concat(res.data.data);
+					this.rentalList = this.rentalList.concat(res.data.data);
 				}
 				this.offset += res.data.data.length;
 				if(res.data.data.length != this.limit){

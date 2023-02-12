@@ -21,6 +21,9 @@
 	import 'moment/locale/zh-cn';
 	export default {
 		name:"rental-box",
+		mounted(){
+			console.log(encodeURIComponent(JSON.stringify(this.houseInfo.contact)))
+		},
 		data() {
 			return {
 				houseInfo: {
@@ -30,7 +33,7 @@
 					name: "London Luxury Apartment London Luxury Apartment",
 					imageList: ["/static/housing.jpg", "/static/housing.jpg", "/static/housing.jpg"],
 					floorplan:"1B1B",
-					contact: ["123456"],
+					contact: [1530673838,1536030638],
 					description: "Beech Townhomes隶属于东兰辛当地大型公寓商DTN旗下。Beech Townhomes位于密歇根州的东兰辛，密歇根州立大学附近，拥有全新的一卧室和两卧室联排别墅。 公寓距离东兰辛市中心，夜生活场所，餐馆和购物场所仅有几个街区，步行即可抵达斯巴达体育场，布雷斯林中心和伊莱和艾迪斯博物馆。 别墅内有洗衣机和烘干机，生活便利。临近学校，可步行上课。",
 					sexConstraint: "仅限男生"
 				},
