@@ -24,7 +24,7 @@
 			</view>
 			<view class="row-container filter-item" @click="popFilter('price')">
 				<view class="filter-tag">时间：</view>
-				<view class="filter-value">{{this.filter.time[0]==-1?"不限":this.filter.time[0] + ' - ' + this.filter.time[1]}}</view>
+				<view class="filter-value">{{this.filter.time[0]==0?"不限":this.filter.time[0] + ' - ' + this.filter.time[1]}}</view>
 			</view>
 			<view class="row-container filter-item" @click="popFilter('price')">
 				<view class="filter-tag">户型：</view>
