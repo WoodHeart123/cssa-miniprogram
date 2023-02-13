@@ -101,7 +101,7 @@
 		position: absolute;
 		justify-content: center;
 		align-items: center;
-		background-color: #4169E1;
+		background-color: #9b0000;
 		color: white;
 		border-radius: 5px;
 		font-size: 12px;
@@ -134,7 +134,7 @@
 		font-size: 20px;
 		font-weight: 600;
 		height: 15%;
-		color: darkblue;
+		color: #9b0000;
 	}
 	.description-box{
 		font-size: 10px;

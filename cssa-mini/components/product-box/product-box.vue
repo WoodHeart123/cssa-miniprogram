@@ -97,7 +97,7 @@
 	.price {
 		font-weight: 600;
 		height: 10%;
-		color: darkblue;
+		color: #9b0000;
 	}
 
 	.time {
@@ -116,9 +116,9 @@
 		padding-right: 3%;
 		text-align: center;
 		font-size: 10px;
-		color: #1E90FF;
+		color: #9b0000;
 		border-radius: 5px;
-		border-color: #1E90FF;
+		border-color: #9b0000;
 		border-style: solid;
 		border-width: 1pt;
 	}
@@ -151,7 +151,7 @@
 		position: absolute;
 		justify-content: center;
 		align-items: center;
-		background-color: #4169E1;
+		background-color: #9b0000;
 		color: white;
 		border-radius: 5px;
 		font-size: 12px;
