@@ -229,6 +229,7 @@
 	.button {
 		background-color: #1684FC !important;
 		color: white !important;
+		margin-top: 10px;
 	}
 
 	.box {
@@ -240,6 +241,7 @@
 	}
 
 	.blank {
+		margin-top:20px;
 		height: 1px;
 		background-color: #f5f5f5;
 		margin-bottom: 22px;

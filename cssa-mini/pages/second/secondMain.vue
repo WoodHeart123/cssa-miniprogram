@@ -33,7 +33,7 @@
 		},
 		data() {
 			return {
-				offset:1,
+				offset:0,
 				limit: 20,
 				productTypeList: productTypeList,
 				currentIndex: 0,
@@ -118,7 +118,6 @@
 	}
 	import productTypeList from './secondMain.js';
 	import productBoxVue from '@/components/product-box/product-box.vue';
-import { nextTick } from 'process';
 </script>
 
 <style>

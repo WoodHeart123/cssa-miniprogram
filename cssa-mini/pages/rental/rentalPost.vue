@@ -26,7 +26,7 @@
 
 			<view class="card label_group">
 				<uni-forms-item name="furnitureType">
-					<uni-data-checkbox v-model="rental.furnitureType" :localdata="furnitureOption"></uni-data-checkbox>
+					<uni-data-checkbox v-model="rental.furnitureType" :localdata="sexOption"></uni-data-checkbox>
 				</uni-forms-item>
 			</view>
 
@@ -120,15 +120,15 @@
 					rentalTitle: ""
 				},
 				images: [],
-				furnitureOption: [{
-					text: "家具齐全",
-					value: "FULLYFURNISHED"
+				sexOption: [{
+					text: "限男生",
+					value: 0
 				}, {
-					text: "部分家具",
-					value: "SOMEFURNITURE"
+					text: "限女生",
+					value: 1
 				}, {
-					text: "无家具",
-					value: "NOFURNITURE"
+					text: "不限",
+					value: 2
 				}],
 				floorplanOption: [{
 					text: 'Studio',
@@ -157,25 +157,6 @@
 				}, {
 					text: '其他',
 					value: 'others'
-				}],
-				leaseOption: [{
-					text: '暑假',
-					value: 'SUMMER'
-				}, {
-					text: '秋季学期',
-					value: 'FALL'
-				}, {
-					text: '寒假',
-					value: 'Winter'
-				}, {
-					text: '春季学期',
-					value: 'Spring'
-				}, {
-					text: '全年',
-					value: 'ALLYEAR'
-				}, {
-					text: '短租',
-					value: 'SHORTTERM'
 				}],
 				rules: {
 					rentalTitle: {
