@@ -1,9 +1,13 @@
 <template>
 	<view id="second-post">
 		<uni-forms ref="productForm" :model="product" :rules="rules">
-			<view class="image_upload">
-				<uni-file-picker limit="5" fileMediatype="image" :auto-upload="false" @select="onSelectImage"
-					@delete="onDeleteImage"></uni-file-picker>
+			<view class="card uni-form-item uni-column">
+				<uni-forms-item name="imageList">	
+					<view class="image_upload">
+						<uni-file-picker limit="5" fileMediatype="image" :auto-upload="false" @select="onSelectImage"
+							@delete="onDeleteImage"></uni-file-picker>
+					</view>
+				</uni-forms-item>
 			</view>
 
 			<view class="card uni-form-item uni-column">
@@ -155,6 +159,18 @@
 					value: 'IMPAIRED'
 				}],
 				rules: {
+					imageList: {
+						rules: [{
+								required: true,
+								errorMessage: '请上传图片',
+							},
+							{
+								minLength: 1,
+								maxLength: 5,
+								errorMessage: '最多只能上传五张图片',
+							}
+						]
+					},
 					productTitle: {
 						rules: [{
 								required: true,
@@ -273,6 +289,10 @@
 					});
 					this.uploadImage();
 				}).catch(err => {
+					uni.showToast({
+						title: err[0].errorMessage,
+						icon:"error"
+					})
 					console.log('err', err);
 				})
 			},

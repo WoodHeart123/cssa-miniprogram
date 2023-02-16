@@ -1,89 +1,78 @@
 <template>
 	<view id="rental-post">
 		<uni-forms ref="rentalForm" :model="rental" :rules="rules">
-			<view class="image_upload">
-				<uni-file-picker limit="5" fileMediatype="image" :auto-upload="false" @select="onSelectImage"
-					@delete="onDeleteImage"></uni-file-picker>
+			<view class="card uni-form-item uni-column">
+				<uni-forms-item name="imageList">	
+					<view class="image_upload">
+						<uni-file-picker limit="5" fileMediatype="image" :auto-upload="false" @select="onSelectImage"
+							@delete="onDeleteImage"></uni-file-picker>
+					</view>
+				</uni-forms-item>
+			</view>
+			
+
+			<view class="card label_group">
+				<uni-forms-item name="floorPlan">
+					<view class="row-view">
+						<span class="span_margin">户型</span>
+						<uni-data-picker placeholder="请选择户型" v-model="rental.floorPlan" :localdata="floorPlan" popup-title="请选择户型" :clear-icon=false />
+					</view>
+				</uni-forms-item>
+			</view>
+			
+			<view class="card label_group">
+				<uni-forms-item name="sexConstraint">
+					<uni-data-checkbox selectedColor="#9b0000" v-model="rental.sexConstraint"
+						:localdata="sexConstraint"></uni-data-checkbox>
+				</uni-forms-item>
 			</view>
 
+
 			<view class="card uni-form-item uni-column">
-				<uni-forms-item name="rentalTitle">
-					<input class="uni-input" v-model="rental.rentalTitle" maxlength="22" placeholder="请填写房屋信息"
+				<uni-forms-item name="location">
+					<input class="uni-input" v-model="rental.location" maxlength="22" placeholder="请填写房屋信息"
 						placeholder-style="font-size:14px;color:gray" />
 				</uni-forms-item>
 			</view>
 
 
 			<view class="card uni-textarea textbox">
-				<uni-forms-item name="rentalDescription">
-					<uni-easyinput type="textarea" v-model="rental.rentalDescription" placeholder="请描述房屋详情,如户型/地点/具体租期等"
-						maxlength="400" placeholderStyle="font-size:14px;color:gray" :clearable="clearable">
+				<uni-forms-item name="description">
+					<uni-easyinput type="textarea" v-model="rental.description"
+						placeholder="请描述房屋详情,如户型/地点/具体租期,请包括整间转租还是单个卧室转租等" maxlength="400"
+						placeholderStyle="font-size:14px;color:gray" :clearable="clearable">
 					</uni-easyinput>
 				</uni-forms-item>
-
 			</view>
 
 
-			<view class="card label_group">
-				<uni-forms-item name="furnitureType">
-					<uni-data-checkbox v-model="rental.furnitureType" :localdata="sexOption"></uni-data-checkbox>
-				</uni-forms-item>
+			<view class="card" style="padding: 5px">
+				<uni-datetime-picker v-model="rental.time" type="daterange" :start="start" :end="end"
+					:clear-icon="false" :border="false" @maskClick="maskClick" />
 			</view>
 
-			<view class="card label_group">
-				<uni-forms-item name="floorplan">
-					<uni-data-checkbox v-model="rental.floorplan" :localdata="floorplanOption"></uni-data-checkbox>
-				</uni-forms-item>
-			</view>
-
-			<view class="card label_group">
-				<view class="uni-list">
-					<view class="uni-list-cell row-view">
-						<view class="uni-list-cell-left margin-right1">
-							选择日期
-						</view>
-						<view class="uni-list-cell-db row-view">
-							<picker mode="date" :value="date1" :start="startDate" :end="endDate"
-								@change="bindDateChange">
-								<view class="uni-input margin-right2">{{date1}}</view>
-							</picker>
-							<view class="uni-input margin-right2"> to </view>
-							<picker mode="date" :value="date2" :start="startDate" :end="endDate"
-								@change="bindDateChange">
-								<view class="uni-input">{{date2}}</view>
-							</picker>
-						</view>
-					</view>
-				</view>
-			</view>
-				
-				
-				
-				
 			<view class="card">
 				<uni-forms-item name="price">
 					<view class="uni-column row-view">
 						<span class="span_margin">$</span>
 						<uni-easyinput type="number" v-model="rental.price" placeholder="请填写价格"
 							placeholder-style="font-size:14px;color:gray" :clearable="clearable" />
+						<span>{{"/ 月"}}</span>
 					</view>
 				</uni-forms-item>
 			</view>
-
-
 
 			<view class="card">
 				<uni-forms-item name="contact">
 					<view class="uni-column row-view">
 						<span class="span_margin">微信号</span>
 						<input class="uni-input" v-model="rental.contact" maxlength="22" placeholder="请填写微信号以便联系"
-							placeholder-style="font-size:14px;color:gray" @input="showCheckBox" />
+							placeholder-style="font-size:14px;color:gray" />
 					</view>
 					<view class="checkbox check_message" v-if="!hasID">
 						<checkbox-group @change="checkBoxChange">
-							<checkbox value="save_contact" :checked="save" color="#1E90FF"
+							<checkbox value="save_contact" :checked="save" color="#9b0000"
 								style="transform:scale(0.8);" />
-
 							保存联系方式，方便后续使用
 						</checkbox-group>
 					</view>
@@ -93,7 +82,7 @@
 
 
 			<view class="uni-padding-wrap uni-common-mt confirm-button">
-				<button type="default" style="background-color: #1E90FF; color: #ffffff;" plain="true"
+				<button type="default" style="background-color: #9b0000; color: #ffffff;" plain="true"
 					@click="submit('rentalForm')">发布</button>
 			</view>
 		</uni-forms>
@@ -101,65 +90,39 @@
 </template>
 
 <script>
+	import floorPlan from './rentalPost.js'
 	export default {
 		data() {
-			const currentDate = this.getDate({
-				format: true
-			})
 			return {
 				hasID: false,
 				save: true,
 				upLoadFail: false,
 				uploadCount: 0,
 				clearable: false,
-				date1: currentDate,
-				date2: currentDate,
+				start: Date.now(),
+				end: Date.now() + 10000000000,
 				rental: {
 					imageList: [],
-					rentalDescription: "",
-					rentalTitle: ""
+					description: "",
+					location: "",
+					time: [0, 0],
+					sexConstraint: -1,
+					floorPlan: ""
 				},
 				images: [],
-				sexOption: [{
-					text: "限男生",
+				sexConstraint: [{
+					text: "限男",
 					value: 0
 				}, {
-					text: "限女生",
+					text: "限女",
 					value: 1
 				}, {
-					text: "不限",
+					text: "性别不限",
 					value: 2
 				}],
-				floorplanOption: [{
-					text: 'Studio',
-					value: 'STUDIO'
-				}, {
-					text: '1B1B',
-					value: '1B1B'
-				}, {
-					text: '2B1B',
-					value: '2B1B'
-				}, {
-					text: '2B2B',
-					value: '2B2B'
-				}, {
-					text: '3B2B',
-					value: '3B2B'
-				}, {
-					text: '3B3B',
-					value: '3B3B'
-				}, {
-					text: '4B2B',
-					value: '4B2B'
-				}, {
-					text: '4B3B',
-					value: '4B3B'
-				}, {
-					text: '其他',
-					value: 'others'
-				}],
+				floorPlan: floorPlan,
 				rules: {
-					rentalTitle: {
+					location: {
 						rules: [{
 								required: true,
 								errorMessage: '请填写房屋信息',
@@ -171,7 +134,7 @@
 							}
 						]
 					},
-					rentalDescription: {
+					description: {
 						rules: [{
 								required: true,
 								errorMessage: '请填写房屋详情',
@@ -189,7 +152,7 @@
 							errorMessage: '请选择家具',
 						}]
 					},
-					floorplanType: {
+					floorPlan: {
 						rules: [{
 							required: true,
 							errorMessage: '请选择户型',
@@ -215,30 +178,26 @@
 					}
 
 				},
+				userInfo:{}
 			}
 		},
 		onShow() {
 			wx.cloud.init();
-			let userInfo = uni.getStorageSync("userInfo-2");
-			this.rental.sellerAvatar = userInfo.avatar;
-			this.rental.sellerNickname = userInfo.nickname;
-			if (userInfo.wechatID != null) {
-				this.rental.contact = userInfo.wechatID;
+			this.userInfo = uni.getStorageSync("userInfo-2");
+			if (this.userInfo.wechatID != null) {
+				this.rental.contact = this.userInfo.wechatID;
 				this.save = false;
 				this.hasID = true;
 			}
 		},
-		computed: {
-			startDate() {
-				return this.getDate('start');
-			},
-			endDate() {
-				return this.getDate('end');
+		watch: {
+			range(newval) {
+				console.log('范围选:', this.range);
 			}
 		},
 		methods: {
-			bindDateChange: function(e) {
-				this.date = e.detail.value
+			maskClick(e) {
+				console.log('maskClick事件:', e);
 			},
 			getDate(type) {
 				const date = new Date();
@@ -293,7 +252,8 @@
 				console.log(this.rental.imageList);
 			},
 			submit(ref) {
-				console.log(this.save);
+				this.rental.rentalStartTime = moment(this.rental.time[0],"YYYY-MM-DD").valueOf()
+				this.rental.rentalEndTime = moment(this.rental.time[1],"YYYY-MM-DD").valueOf()
 				this.$refs[ref].validate().then(res => {
 					this.uploadCount = 0;
 					this.uploadFail = false;
@@ -303,7 +263,10 @@
 					});
 					this.uploadImage();
 				}).catch(err => {
-					console.log('err', err);
+					uni.showToast({
+						title: err[0].errorMessage,
+						icon:"error"
+					})
 				})
 			},
 			uploadImage: async function() {
@@ -325,7 +288,6 @@
 							success_action_status: 200,
 						},
 						success: res => {
-							console.log(res);
 							if (res.statusCode != 200) {
 								uni.hideLoading();
 								uni.showToast({
@@ -355,19 +317,23 @@
 			},
 			postRental: async function() {
 				const res = await wx.cloud.callContainer({
-					config: {
-						env: 'prod-9go38k3y9fee3b2e',
+					config:{
+						env: 'prod-9gip97mx4bfa32a3',
 					},
-					path: `/rental/saveRental?save=${this.save}`,
+					path: `/rental/postRentalInfo?save=${this.save}`,
 					method: 'POST',
 					header: {
-						'X-WX-SERVICE': 'springboot-f8i8',
+						'X-WX-SERVICE': 'springboot-ds71',
 					},
 					data: this.rental
 				});
 				uni.hideLoading();
 				if (res.data.status == 100) {
 					uni.$emit("uploadSuccess");
+					if(this.rental.save = true){
+						this.userInfo.wechatID = this.rental.contact;
+					}
+					uni.setStorageSync("userInfo-2",this.userInfo)
 					uni.navigateBack();
 				} else {
 					uni.showToast({
@@ -378,6 +344,8 @@
 			},
 		}
 	}
+	import moment from "moment/min/moment-with-locales";
+	import 'moment/locale/zh-cn';
 </script>
 
 <style>
@@ -421,15 +389,15 @@
 		line-height: 30px;
 		align-items: center;
 	}
-	
+
 	.margin-right1 {
 		margin-right: 20px;
 	}
-	
+
 	.margin-right2 {
 		margin-right: 10px;
 	}
-	
+
 	.span_margin {
 		margin-right: 10px;
 		font-size: 16px;
@@ -486,5 +454,4 @@
 		padding: 0 !important;
 		height: 150px !important;
 	}
-	
 </style>
