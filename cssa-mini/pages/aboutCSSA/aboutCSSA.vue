@@ -33,10 +33,13 @@
 			</view>
 			<view>
 				<image class="app_content_top" src="./../static/bg.png"></image>
-				<view class="app_content_medium">CSSA详情</view>
+				<view class="app_content_medium">CSSA详情介绍</view>
 			</view>
-			
-			<view id="demo2" class="scroll-view-item uni-bg-green">B</view>
+			<view class = "gapbig"></view>
+			<view id="demo2" class="scroll-view-item uni-bg-green">
+				<view class = "zxt">CSSA主席团</view>
+				<image class="zhuxituan" src="../../static/zhuxituan.png"></image>
+			</view>
 			<view id="demo3" class="scroll-view-item uni-bg-blue">C</view>
 		</scroll-view>
 		
@@ -227,6 +230,9 @@
 	.gap {
 		height: 50rpx;
 	}
+	.gapbig {
+		height: 300rpx;
+	}
 	.app_content_top {
 		z-index: -1;
 		width: 50%;
@@ -239,5 +245,14 @@
 		text-align: center;
 		font-size: 50rpx;
 		font-weight: 150;
+	}
+	.zhuxituan {
+		height: 300rpx;
+	}
+	.zxt {
+		font-size: 60rpx;
+		font-weight: 300;
+		text-align: left;
+		line-height: 100rpx;
 	}
 </style>
