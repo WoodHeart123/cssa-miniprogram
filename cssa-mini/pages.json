@@ -5,6 +5,7 @@
 				"navigationBarTitleText": "主页",
 				"enablePullDownRefresh": false,
 				"disableScroll": true
+				
 			}
 
 		}, {
@@ -233,7 +234,7 @@
 		"globalStyle": {
 			"navigationBarTextStyle": "black",
 			"navigationBarTitleText": "uni-app",
-			"navigationBarBackgroundColor": "#ffffff"
+			"navigationBarBackgroundColor":"#ffdede"
 		},
 		"tabBar": {
 			"color": "#666666",

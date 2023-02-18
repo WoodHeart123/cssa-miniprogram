@@ -94,6 +94,7 @@
 	export default {
 		data() {
 			return {
+				unloading: false,
 				hasID: false,
 				save: true,
 				upLoadFail: false,
@@ -252,6 +253,10 @@
 				console.log(this.rental.imageList);
 			},
 			submit(ref) {
+				if(this.uploading){
+					return;
+				}
+				this.uploading = true;
 				this.rental.rentalStartTime = moment(this.rental.time[0],"YYYY-MM-DD").valueOf()
 				this.rental.rentalEndTime = moment(this.rental.time[1],"YYYY-MM-DD").valueOf()
 				this.$refs[ref].validate().then(res => {
@@ -275,7 +280,7 @@
 				});
 				for (let i = 0; i < this.rental.imageList.length; i++) {
 					uni.uploadFile({
-						url: "http://cssa-mini-na.oss-us-west-1.aliyuncs.com",
+						url: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com",
 						filePath: this.rental.imageList[i].filepath,
 						fileType: 'image',
 						name: 'file',
@@ -294,11 +299,12 @@
 									title: "上传图片失败",
 									icon: "error"
 								});
+								console.log(res)
 								this.uploadFail = true;
 							} else {
 								this.uploadCount++;
-								this.images.push("http://cssa-mini-na.oss-us-west-1.aliyuncs.com" +
-									"/cssa-secondhand/" + this.rental.imageList[i].filename)
+								this.images.push("https://cssa-mini-na.oss-us-west-1.aliyuncs.com" +
+									"/cssa-rental/" + this.rental.imageList[i].filename)
 							}
 							if (this.uploadCount == this.rental.imageList.length) {
 								this.rental.images = this.images,
@@ -329,11 +335,11 @@
 				});
 				uni.hideLoading();
 				if (res.data.status == 100) {
-					uni.$emit("uploadSuccess");
 					if(this.rental.save = true){
 						this.userInfo.wechatID = this.rental.contact;
 					}
 					uni.setStorageSync("userInfo-2",this.userInfo)
+					uni.$emit("uploadRentalSuccess");
 					uni.navigateBack();
 				} else {
 					uni.showToast({

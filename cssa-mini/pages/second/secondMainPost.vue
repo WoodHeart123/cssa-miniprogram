@@ -28,7 +28,7 @@
 
 			<view class="card">
 				<uni-forms-item name="delivery">
-					<uni-data-checkbox v-model="product.delivery" :localdata="deliveryOption"></uni-data-checkbox>
+					<uni-data-checkbox selectedColor="#9B0000" v-model="product.delivery" :localdata="deliveryOption"></uni-data-checkbox>
 				</uni-forms-item>
 			</view>
 
@@ -46,7 +46,7 @@
 
 			<view class="card label_group">
 				<uni-forms-item name="productCondition">
-					<uni-data-checkbox v-model="product.productCondition" :localdata="conditionOption"></uni-data-checkbox>
+					<uni-data-checkbox selectedColor="#9B0000" v-model="product.productCondition" :localdata="conditionOption"></uni-data-checkbox>
 				</uni-forms-item>
 			</view>
 
@@ -73,7 +73,7 @@
 					</view>
 					<view class="checkbox check_message" v-if="!hasID">
 						<checkbox-group @change="checkBoxChange">
-							<checkbox value="save_contact" :checked="save" color="#1E90FF"
+							<checkbox value="save_contact" :checked="save" color="#9B0000"
 								style="transform:scale(0.8);" />
 
 							保存联系方式，方便后续使用
@@ -85,7 +85,7 @@
 
 
 			<view class="uni-padding-wrap uni-common-mt confirm-button">
-				<button type="default" style="background-color: #1E90FF; color: #ffffff;" plain="true"
+				<button type="default" style="background-color: #9B0000; color: #ffffff;" plain="true"
 					@click="submit('productForm')">发布</button>
 			</view>
 		</uni-forms>
@@ -293,7 +293,6 @@
 						title: err[0].errorMessage,
 						icon:"error"
 					})
-					console.log('err', err);
 				})
 			},
 			uploadImage: async function() {
@@ -302,7 +301,7 @@
 				});
 				for (let i = 0; i < this.product.imageList.length; i++) {
 					uni.uploadFile({
-						url: "http://cssa-mini-na.oss-us-west-1.aliyuncs.com",
+						url: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com",
 						filePath: this.product.imageList[i].filepath,
 						fileType: 'image',
 						name: 'file',
@@ -325,7 +324,7 @@
 								this.uploadFail = true;
 							}else{
 								this.uploadCount++;
-								this.images.push("http://cssa-mini-na.oss-us-west-1.aliyuncs.com" + "/cssa-secondhand/" + this.product.imageList[i].filename)
+								this.images.push("https://cssa-mini-na.oss-us-west-1.aliyuncs.com" + "/cssa-secondhand/" + this.product.imageList[i].filename)
 							}
 							if (this.uploadCount == this.product.imageList.length) {
 								this.product.images = this.images,
