@@ -1,9 +1,9 @@
 <template>
-	<view>
+	<view class="about-page">
 		<swiper class="swiper" circular :autoplay="autoplay" :interval="interval"
 			:duration="duration">
 			<swiper-item>
-				<image src="../../static/2020members.jpg"></image>
+				<image class="image" src="../../static/2020members.jpg"></image>
 			</swiper-item>
 			<swiper-item>
 				<image src="../../static/yanhua.jpg"></image>
@@ -12,9 +12,6 @@
 				<image src="../../static/chunwan-min.jpg"></image>
 			</swiper-item>
 		</swiper>
-	</view>
-	
-	<view>
 		<scroll-view :scroll-top="scrollTop" scroll-y="true" class="scroll-Y" @scrolltoupper="upper"
 			@scrolltolower="lower" @scroll="scroll">
 			<view class="box">
@@ -32,17 +29,18 @@
 			<view id="demo1" class="intro">&nbsp&nbsp&nbsp&nbspCSSA是中国学生学者联合会，是由在海外的留学生自发成立的，如今在全球各地的高校中都不乏其身影的中国学生组织。仅在美国，超过百所高校的中国留学生成立了CSSA。 CSSA在全球发展中日渐成熟，为在美中国学生学者包含本科生、研究生、硕士生、博士生、访问学者以及教授等在内的华人群体提供生活服务，学术支持，以及社交平台。借着二十年以来的基础，CSSA是UW-Madison十分活跃也极具影响力的华人学生组织，致力于文化之间的交流和校园的多元化。一直以来以建立华人学生学者之间的交流为目标，同时也积极的作为对中华文化有兴趣的人的桥梁。 CSSA一直以来着重于推广中华文化和传统，例如每年最重要的春节晚会，秉持着免费对在校学生和人员开放的原则，准备了各式各样的节目，包含传统舞蹈，歌唱表演，脱口秀和其他精彩的表演。每年在 Memorial Union举办的春晚二十年来不只吸引了华人学生和华人家庭，也有越来越多美国当地的家庭出席甚至参与演出。这些活动不只为学生们带来了生活乐趣和归属感，在推广中华文化的同时也为麦迪逊带来了不一样的文化气息。当然这些成绩不是一个力量下的成果，而是集结了各个学生以及组织，还有很多人的一份心力。
 			</view>
 			<view>
-				<image class="app_content_top" src="./../static/bg.png"></image>
 				<view class="app_content_medium">CSSA详情介绍</view>
 			</view>
 			<view class = "gapbig"></view>
 			<view id="demo2" class="scroll-view-item uni-bg-green">
 				<view class = "zxt">CSSA主席团</view>
-				<image class="zhuxituan" src="../../static/zhuxituan.png"></image>
+				<image mode="aspectFit" class="zhuxituan" src="../../static/zhuxituan.png"></image>
+				<text>扬天林</text>
+				<view></view>
+				<text></text>
 			</view>
 			<view id="demo3" class="scroll-view-item uni-bg-blue">C</view>
 		</scroll-view>
-		
 	</view>
 	<view @tap="goTop" class="uni-link uni-center uni-common-mt">
 					点击这里返回顶部
@@ -129,6 +127,11 @@
 
 
 <style lang="scss">
+	.about-page{
+		width: 100vw;
+		height: 100vh;
+		overflow: hidden;
+	}
 	.box {
 		width: 96%;
 		height: 22vw;
@@ -167,6 +170,7 @@
 	}
 	.swiper {
 		height: 500rpx;
+		width: 100%;
 	}
 	.swiper-item {
 		display: block;
@@ -176,7 +180,7 @@
 	}
 	
 	.scroll-Y {
-			height: auto;
+			height: 50vh;
 	}
 	.scroll-view_H {
 			white-space: nowrap;
@@ -234,7 +238,7 @@
 		height: 300rpx;
 	}
 	.app_content_top {
-		z-index: -1;
+		z-index: 1;
 		width: 50%;
 		height: 100rpx;
 		display: block;
@@ -245,6 +249,7 @@
 		text-align: center;
 		font-size: 50rpx;
 		font-weight: 150;
+		background-image: url("@/static/bg.png");
 	}
 	.zhuxituan {
 		height: 300rpx;
@@ -254,5 +259,9 @@
 		font-weight: 300;
 		text-align: left;
 		line-height: 100rpx;
+	}
+	.image{
+		width: 100%;
+		height: 100%;
 	}
 </style>
