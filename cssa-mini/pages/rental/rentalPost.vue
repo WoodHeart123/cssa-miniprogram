@@ -357,7 +357,7 @@
 <style>
 	#rental-post {
 		position: absolute;
-		width: 94vw;
+		min-width: 100vw;
 		height: 100vh;
 		padding: 0 3vw 0 3vw;
 		background-color: white;
