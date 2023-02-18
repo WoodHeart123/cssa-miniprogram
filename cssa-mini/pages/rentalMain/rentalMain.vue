@@ -79,7 +79,7 @@
 					</view>
 				</view>
 				<view class="pop-button-box">
-					<button class="pop-button">搜索</button>
+					<button class="pop-button" @click="search">搜索</button>
 				</view>
 			</view>
 		</uni-popup>
@@ -109,6 +109,9 @@
 				offset:0,
 				rentalList:[],
 				triggered:false,
+				pattern: {
+					buttonColor: "#9b0000"
+				},
 				
 			}
 		},
@@ -116,9 +119,19 @@
 			wx.cloud.init();
 			this.refresh();
 		},
+		onShow(){
+			uni.$on("uploadRentalSuccess",this.uploadSuccess);
+		},
 		methods: {
 			clickMenu: function(e) {
 				this.menuIndex = e;
+			},
+			uploadSuccess:function(){
+				this.refresh();
+				uni.showToast({
+					title: "上传成功",
+					duration: 5000,
+				});
 			},
 			toPostRental: function() {
 				uni.navigateTo({
@@ -165,11 +178,15 @@
 				}
 				this.$refs.filter.close();
 			},
+			search:function(){
+				
+				this.refresh();
+			},
 			refresh:function(){
 				if (!this.triggered) {
 					this.triggered = true;
 					this.limit = 20;
-					this.offset = 1;
+					this.offset = 0;
 					this.rentalList = [];
 					this.status = "loading"
 					this.getRentalList();

@@ -44,7 +44,7 @@
 		methods:{
 			toEmail:function(){
 				uni.navigateTo({
-					url:"./updateEmail"
+					url:"/pages/index/updateEmail"
 				})
 			},
 			toStudentAuth:function(){
