@@ -4,27 +4,11 @@
 		<uni-swipe-action>
 			<uni-swipe-action-item v-for="(product, index) in mySecondHand" :key="index">
 				<view class="box">
-					<view class="left-bar">
+					<view>
 						<productBoxVue :product="product" user="true"></productBoxVue>
 					</view>
 					<view class="right-bar"><span class="iconfont icon">&#xe66d;</span></view>
 				</view>
-				<template v-slot:right>
-					<view class="slot">
-						<view class="slot-button" @click="bindClick({key:0,index:index})">
-							<uni-icons type="gear" size="20" color="#007aff"></uni-icons>
-							<text class="slot-button-text">修改</text>
-						</view>
-						<view class="slot-button" @click="bindClick({key:1,index:index})">
-							<uni-icons type="trash" size="20" color="#F56C6C"></uni-icons>
-							<text class="slot-button-text">删除</text>
-						</view>
-						<view class="slot-button" @click="bindClick({key:2,index:index})">
-							<uni-icons type="trash" size="20" color="#F56C6C"></uni-icons>
-							<text class="slot-button-text">擦一擦</text>
-						</view>
-					</view>
-				</template>
 			</uni-swipe-action-item>
 		</uni-swipe-action>
 		<uni-load-more :status="status" :contentText="contentText"></uni-load-more>
@@ -48,11 +32,10 @@
 					contentrefresh: "正在加载...",
 					contentnomore: "没有更多了"
 				},
-
 			}
 		},
 		methods: {
-			async getMySecondhand() {
+			getMySecondhand:async function(){
 				if (this.status == "noMore") {
 					return;
 				}
@@ -61,7 +44,7 @@
 					config: {
 						env: 'prod-9gip97mx4bfa32a3',
 					},
-					path: `/user/getMySecondhand?limit=${this.limit}&offset=${this.offset}`,
+					path: '/user/getMySecondhand?limit=${this.limit}&offset=${this.offset}',
 					method: 'GET',
 					header: {
 						'X-WX-SERVICE': 'springboot-ds71',
@@ -80,12 +63,12 @@
 					config: {
 						env: 'prod-9gip97mx4bfa32a3',
 					},
-					path: `/user/deleteMySecondhand`,
+					path: '/user/deleteMySecondhand?productID=${this.productID}',
 					method: 'POST',
 					header: {
 						'X-WX-SERVICE': 'springboot-ds71',
 					},
-					data: productID
+					data: this.productID
 				});
 				if (res.data.status == 100) {
 					this.mySecondhand.splice(index, 1);
@@ -123,29 +106,30 @@
 					});
 				}
 			},
-			bindClick: function(e) {
-				if (e.key == 0) {
-					uni.navigateTo({
-						url: "/user/postSecondHand/postSecondHand?product=" + encodeURIComponent(JSON
-							.stringify(this.myProduct[e.index])) + "&edit=true",
+			takeoffMySecondhand: async function(index, productID) {
+				mySecondhand.time = moment(0);
+				const res = await wx.cloud.callContainer({
+					config: {
+						env: 'prod-9gip97mx4bfa32a3',
+					},
+					path: `/user/updateProduct?product=${this.mySecondhand}`,
+					method: 'POST',
+					header: {
+						'X-WX-SERVICE': 'springboot-ds71',
+					},
+					data: this.mySecondhand
+				});
+				uni.hideLoading();
+				if (res.data.status == 100) {
+					uni.$emit("uploadSuccess");
+					uni.navigateBack();
+				} else {
+					uni.showToast({
+						title: "下架失败",
+						icon: "error"
 					});
-				} else if (e.key == 1) {
-					uni.showModal({
-						title: "删除商品",
-						content: "是否删除商品？删除后将无法恢复",
-						confirmColor: "#1684FC",
-						success: function(res) {
-							var that = this;
-							if (res.confirm) {
-								this.deleteMySecondhand(e.index, this.mySecondhand[e.index].productID);
-
-							}
-						}.bind(this)
-					});
-				} else if (e.key == 2) {
-
 				}
-			}
+			},
 		},
 		components: {
 			productBoxVue
