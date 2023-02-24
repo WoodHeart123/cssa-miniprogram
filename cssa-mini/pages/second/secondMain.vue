@@ -50,7 +50,8 @@
 				},
 			}
 		},
-		onLoad(){
+		onLoad(options){
+			console.log(options)
 			wx.cloud.init();
 			this.refresh();
 		},

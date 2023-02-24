@@ -89,7 +89,7 @@
 					uni.showModal({
 						title: '提示',
 						content: '是否删除',
-						success: this.deleteMySecondhand(this.mySecondhand.productID),
+						success: () => {this.deleteMySecondhand(this.mySecondhand[index].productID)},
 					});
 				} else if (content.text === '下架'){//takeoffMySecondhand
 					uni.showModal({
@@ -104,7 +104,7 @@
 						success: this.polishMySecondhand(this.mySecondhand),
 					});
 				} else if (content.text === '编辑'){//editMySecondhand
-					this.editMySecondhand(this.mySecondhand)
+					this.editMySecondhand(index)
 				}
 			},
 			getMySecondhand: async function() {
@@ -206,9 +206,9 @@
 					});
 				}
 			},
-			editMySecondhand: async function(product) {
+			editMySecondhand: async function(index) {
 				uni.navigateTo({
-					url: "../second/secondEdit?product="+ encodeURIComponent(JSON.stringify(product))
+					url: "../second/secondMainPost?product="+ encodeURIComponent(JSON.stringify(this.mySecondhand[index]))
 				})
 			},
 		},
