@@ -1,7 +1,24 @@
 <template>
 	<view class="my-secondhand">
-		<view class="hint">左划编辑/擦亮，右划删除/下架</view>
-		<uni-swipe-action ref="swipeAction">
+<!-- 		<view class="hint">左划编辑/擦亮，右划删除/下架</view> -->
+		<view class="my-product-box">
+			<view class= "row-container">
+				<view class="photo">
+					<image src="../../static/aboutCSSA-p2.png"></image>
+				</view>
+				<view class="product-info">
+					<view class="product-name">一只仓鼠</view>
+					<view class="product-price">$35</view>
+				</view>
+			</view>
+			<view class="button row-container">
+				<view class="edit">编辑</view>
+				<view class="polish">擦亮</view>
+				<view class="takeoff">下架</view>
+				<view class="delete">删除</view>
+			</view>
+		</view>
+<!-- 		<uni-swipe-action ref="swipeAction">
 			<uni-swipe-action-item :left-options="options1" :right-options="options2" :show="(isOpened,index)"
 				:auto-close="false" @change="change" @click="swipeClick($event, index)" v-for="(product, index) in mySecondhand"
 				:key="index">
@@ -10,7 +27,7 @@
 					<text>{{'$' + product.price}}</text>
 				</view>
 			</uni-swipe-action-item>
-		</uni-swipe-action>
+		</uni-swipe-action> -->
 		<uni-load-more :status="status" :contentText="contentText"></uni-load-more>
 	</view>
 </template>
@@ -243,58 +260,61 @@ import { now } from 'moment';
 		color: #ccc;
 	}
 
-	.box {
-		width: 100vw;
-		display: flex;
-		flex-direction: row;
-
-	}
-
-	.right-bar {
-		width: 8vw;
-		background-color: white;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
-
-	.left-bar {
-		width: 92vw;
-	}
-
-	.slot {
-		width: 20vw;
-		display: flex;
-		flex-direction: column;
-		height: 100%;
-		background-color: white;
-	}
-
-	.slot-button {
-		height: 50%;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		color: #777;
-	}
-
-	.content-box {
-
-		justify-content: center;
-		height: 44px;
-		line-height: 44px;
-		padding: 0 15px;
-		position: relative;
-		background-color: #fff;
-		border-bottom-color: #f5f5f5;
-		border-bottom-width: 1px;
-		border-bottom-style: solid;
-	}
-	
 	.row-container {
 		display: flex;
 		flex-direction: row;
+	}
 	
+	.my-product-box{
+		padding: 5%;
+		background-color: white;
+		width: 100%;
+		height: 120px;
+		margin: 10px 10px 10px 10px;
+	}
+	
+	.photo{
+		width: 80px;
+		height: 80px;
+		overflow: hidden;
+	}
+	.product-info{
+		padding:5%;
+	}
+	
+	.product-name{
+		font-size: 20pt;
+		font-weight: 600;
+		
+	}
+	.product-price{
+		font-size: 20pt;
+	}
+	.button{
+		height: 40px;
+	}
+	.edit{
+		padding:2%;
+		width: 20%;
+		margin: 5px 5px 5px 5px;
+		background-color: royalblue;
+	}
+	.polish{
+		padding:2%;
+		width: 20%;
+		margin: 5px 5px 5px 5px;
+		background-color: greenyellow;
+	}
+	.takeoff{
+		padding:2%;
+		width: 20%;
+		margin: 5px 5px 5px 5px;
+		background-color: grey;
+	}
+	.delete{
+		padding:2%;
+		width: 20%;
+		margin: 5px 5px 5px 5px;
+		background-color: darkred;
 	}
 </style>
