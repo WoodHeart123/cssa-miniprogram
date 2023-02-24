@@ -1,7 +1,6 @@
 <template>
 	<view class="my-secondhand">
-<!-- 		<view class="hint">左划编辑/擦亮，右划删除/下架</view> -->
-		<view class="my-product-box">
+		<!-- <view class="my-product-box">
 			<view class= "row-container">
 				<view class="photo">
 					<image src="../../static/aboutCSSA-p2.png"></image>
@@ -17,7 +16,38 @@
 				<view class="takeoff">下架</view>
 				<view class="delete">删除</view>
 			</view>
+		</view> -->
+		
+		<view class="my-product-box">
+			<view class="content-box row-container">
+				<view class="image-box">
+					<image src="../../static/bg.png"></image>
+				</view>
+				<view class="content">
+					<view class="product-title">你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好</view>
+					<view class="row-container price">￥123</view>
+				</view>
+			</view>
+			<view class="row-container button-box">
+				<view class="button">
+					<view class="icon"></view>
+					<view class="button-text"></view>
+				</view>
+				<view class="button">
+					<view class="icon"></view>
+					<view class="button-text"></view>
+				</view>
+				<view class="button">
+					<view class="icon"></view>
+					<view class="button-text"></view>
+				</view>
+				<view class="button">
+					<view class="icon"></view>
+					<view class="button-text"></view>
+				</view>
+			</view>
 		</view>
+<!-- 		<view class="hint">左划编辑/擦亮，右划删除/下架</view> -->
 <!-- 		<uni-swipe-action ref="swipeAction">
 			<uni-swipe-action-item :left-options="options1" :right-options="options2" :show="(isOpened,index)"
 				:auto-close="false" @change="change" @click="swipeClick($event, index)" v-for="(product, index) in mySecondhand"
@@ -244,20 +274,6 @@ import { now } from 'moment';
 		width: 100vw;
 		height: 100vh;
 		overflow-y: scroll;
-		transition: all 3s ease;
-	}
-
-	.hint {
-		position: fixed;
-		top: 0;
-		width: 100%;
-		background-color: white;
-		height: 30px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		font-size: 12px;
-		color: #ccc;
 	}
 
 	.row-container {
@@ -266,55 +282,50 @@ import { now } from 'moment';
 	}
 	
 	.my-product-box{
-		padding: 5%;
-		background-color: white;
-		width: 100%;
-		height: 120px;
-		margin: 10px 10px 10px 10px;
+		border: 1px solid #ccc;
+		width: 96vw;
+		height: 180px;
+		margin: 10px 2vw;
 	}
 	
-	.photo{
-		width: 80px;
-		height: 80px;
+	.button-box{
+		height: 40%;
+		width: 100%;
+	}
+	.content-box{
+		width: 100%;
+		height: 60%;
+	}
+	.image-box{
+		width: 30%;
+		height: 100%;
+	}
+	image{
+		width: 100%;
+		height: 100%;
+	}
+	.content{
+		width: 70%;
+		height: 100%;
+	}
+	.product-title{
+		line-height: 20px;
+		margin: 5px 10px;
+		font-size: 18px;
+		width: calc(100% - 20px);
+		height: 40px;
 		overflow: hidden;
 	}
-	.product-info{
-		padding:5%;
-	}
-	
-	.product-name{
-		font-size: 20pt;
-		font-weight: 600;
-		
-	}
-	.product-price{
-		font-size: 20pt;
+	.price{
+		margin-top:10px;
+		height: calc(100% - 50px);
+		width: 30%;
+		font-size: 20px;
+		margin-left: 10%;
 	}
 	.button{
-		height: 40px;
-	}
-	.edit{
-		padding:2%;
+		height: 100%;
 		width: 20%;
-		margin: 5px 5px 5px 5px;
-		background-color: royalblue;
-	}
-	.polish{
-		padding:2%;
-		width: 20%;
-		margin: 5px 5px 5px 5px;
-		background-color: greenyellow;
-	}
-	.takeoff{
-		padding:2%;
-		width: 20%;
-		margin: 5px 5px 5px 5px;
-		background-color: grey;
-	}
-	.delete{
-		padding:2%;
-		width: 20%;
-		margin: 5px 5px 5px 5px;
-		background-color: darkred;
+		margin: 0 2.5% 0 2.5%;
 	}
 </style>
