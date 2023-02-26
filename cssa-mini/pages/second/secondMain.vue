@@ -1,9 +1,9 @@
 <template>
 	<view id="second-main">
 		<view class="menu row-container">
-			<!-- <view class="search-box" @click="toSearch">
+			<view class="search-box" @click="toSearch">
 				<uni-icons type="search" size="30"></uni-icons>
-			</view> -->
+			</view>
 			<view class="menu-box row-container">
 				<view class="row-container product-type-item" v-for="(productType, index) in productTypeList"
 					:key="index" @click="onClickMenu(index)">
@@ -20,7 +20,7 @@
 					<productBoxVue :product="product"></productBoxVue>
 				</view>
 			</view>
-			<uni-load-more :status="status"></uni-load-more>
+			<uni-load-more :contentText="contentText" :status="status"></uni-load-more>
 		</scroll-view>
 		<uni-fab :pattern="pattern" horizontal="right" vertical="bottom" popMene="false" @fabClick="toPostProduct" />
 	</view>
@@ -43,6 +43,11 @@
 				triggered: false,
 				status: "loading",
 				productList:[],
+				contentText:{
+					contentdown:"上拉显示更多",
+					contentrefresh:"正在加载...",
+					contentnomore:"没有更多商品了"
+				},
 			}
 		},
 		onLoad(){
@@ -192,7 +197,7 @@
 	.selected {
 		font-size: 18px;
 		font-weight: 700;
-		color: black;
+		color: #9b0000;
 	}
 
 	.menu-box::-webkit-scrollbar {
