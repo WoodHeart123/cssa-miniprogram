@@ -25,9 +25,11 @@
 			wx.cloud.init();
 			this.userInfo = uni.getStorageSync("userInfo-2");
 			if (this.userInfo.email != null) {
-				this.save = false;
 				this.hasEmail = true;
 				this.email = this.userInfo.email
+			}
+			if (this.userInfo.subscribe != null) {
+				this.save = this.userInfo.subscribe
 			}
 		},
 		methods:{
@@ -55,6 +57,7 @@
 					});
 					if(res.data.status == 100){
 						this.userInfo.email = this.email;
+						this.userInfo.subscribe = this.save;
 						uni.setStorage({
 							key:"userInfo-2",
 							data: this.userInfo

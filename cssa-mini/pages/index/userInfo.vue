@@ -13,6 +13,11 @@
 			<view class="value">{{this.userInfo.nickname}}</view>
 			<view class="arrow"><span class="iconfont">&#xe62d;</span></view>
 		</view>
+		<view class="box" @click="toID">
+			<view class="key">微信号</view>
+			<view class="value">{{this.userInfo.wechatID?this.userInfo.wechatID:"无"}}</view>
+			<view class="arrow"><span class="iconfont">&#xe62d;</span></view>
+		</view>
 		<view class="box" @click="toEmail">
 			<view class="key">邮箱</view>
 			<view class="value">{{this.userInfo.email?this.userInfo.email:"无"}}</view>
@@ -50,6 +55,11 @@
 			toStudentAuth:function(){
 				uni.navigateTo({
 					url: "/pages/studentAuth/studentAuth"
+				})
+			},
+			toID:function(){
+				uni.navigateTo({
+					url: "./updateID"
 				})
 			},
 			toName:function(){

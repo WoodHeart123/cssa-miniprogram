@@ -1,10 +1,7 @@
 <template>
-	<view class="name-page">
-		<view class="title">更新昵称</view>
-		<view class="name-input">
-			<uni-easyinput :styles="nameinput" v-model="nickname" placeholder="请输入昵称" :clearable=false maxlength="20" placeholderStyle="color:#999;font-size:14px">
-			</uni-easyinput>
-		</view>
+	<view class="id-page">
+		<view class="title">更新微信号</view>
+		<input class="id-input" v-model="wechatID" placeholder="请输入微信号" @input="onIDInput" />
 
 		<button class="confirm-button" style="background-color: #9b0000; color: #ffffff;" @click="confirm">确定</button>
 	</view>
@@ -15,27 +12,28 @@
 		data() {
 			return {
 				userInfo: {},
-				nickname: "",
-				nameinput: {
-					borderColor:"#ffffff"
-				}
+				wechatID: "",
+				hasID: false,
 			}
 		},
 		onShow() {
 			wx.cloud.init();
 			this.userInfo = uni.getStorageSync("userInfo-2");
 			console.log(this.userInfo)
-			this.nickname = this.userInfo.nickname;
+			if (this.userInfo.wechatID != null) {
+				this.hasID = true;
+				this.wechatID = this.userInfo.wechatID;
+			}
 		},
 		methods: {
-			onEmailInput(event) {
-				this.email = event.detail.value;
+			onIDInput(event) {
+				this.wechatID = event.detail.value;
 			},
 			async confirm() {
-				if (this.nickname.length == 0) {
+				if (this.wechatID.length == 0) {
 					uni.showToast({
 						icon: "none",
-						title: "昵称不应为空"
+						title: "微信号不应为空"
 					})
 				}
 				const res = await wx.cloud.callContainer({
@@ -49,7 +47,7 @@
 					},
 				});
 				if (res.data.status == 100) {
-					this.userInfo.nickname = this.nickname;
+					this.userInfo.wechatID = this.wechatID;
 					uni.setStorageSync("userInfo-2", this.userInfo);
 					uni.navigateBack({
 						delta: 1
@@ -57,7 +55,7 @@
 				} else {
 					uni.showToast({
 						icon: 'error',
-						title: "暂时无法修改昵称，请稍后再尝试"
+						title: "暂时无法修改微信号，请稍后再尝试"
 					})
 				}
 			}
@@ -80,7 +78,7 @@
 		margin-bottom: 50px;
 	}
 
-	.name-input {
+	.id-input {
 		width: 80%;
 		border-bottom: 1px solid #CCC;
 		padding-bottom: 2px;
