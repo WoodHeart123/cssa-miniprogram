@@ -73,7 +73,7 @@
 					</view>
 					<view class="checkbox check_message" v-if="!hasID">
 						<checkbox-group @change="checkBoxChange">
-							<checkbox value="save_contact" :checked="save" color="#9B0000"
+							<checkbox value="save_contact" :checked="save" color="#9b0000"
 								style="transform:scale(0.8);" />
 
 							保存联系方式，方便后续使用
@@ -85,7 +85,7 @@
 
 
 			<view class="uni-padding-wrap uni-common-mt confirm-button">
-				<button type="default" style="background-color: #9B0000; color: #ffffff;" plain="true"
+				<button type="default" style="background-color: #9b0000; color: #ffffff;" plain="true"
 					@click="submit('productForm')">发布</button>
 			</view>
 		</uni-forms>
@@ -371,7 +371,6 @@
 <style>
 	#second-post {
 		position: absolute;
-		width: 94vw;
 		height: 100vh;
 		padding: 0 3vw 0 3vw;
 		background-color: white;
