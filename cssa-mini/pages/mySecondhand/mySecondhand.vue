@@ -11,23 +11,25 @@
 						<view class="price">￥123</view>
 						<view class="time">一个月前</view>
 					</view>
+					
+					<!-- <view class="is-takeoff">已下架</view> -->
 				</view>
 			</view>
 			<view class="row-container button-box">
-				<view class="button row-container" @click= "">
-					<view class="icon"></view>
+				<view class="button row-container">
+					<view class="iconfont icon">&#xe646</view>
 					<view class="button-text">编辑</view>
 				</view>
 				<view class="button row-container">
-					<view class="icon"></view>
+					<view class="iconfont icon">&#xe76f</view>
 					<view class="button-text">擦亮</view>
 				</view>
 				<view class="button row-container">
-					<view class="icon"></view>
+					<view class="iconfont icon">&#xe620</view>
 					<view class="button-text">下架</view>
 				</view>
 				<view class="button row-container">
-					<view class="icon"></view>
+					<view class="iconfont icon">&#xe74b</view>
 					<view class="button-text">删除</view>
 				</view>
 			</view>
@@ -264,7 +266,7 @@
 	.price-time{
 		margin-top:10px;
 		width: calc(100% - 20px);
-		height: calc(100% - 60px);
+		height: calc(100% - 80px);
 		margin-left: 15px;
 	}
 	.price{
@@ -281,27 +283,38 @@
 	}
 	
 	.button{
-		height: 100%;
+		height: 50%;
 		width: 20%;
 		margin: 0 2.5% 0 2.5%;
-	}
-
-	.button-text{
-		padding: 0 5% 0 5%;
 		border-radius: 10px;
 		border: 2px solid #9b0000;
 		box-shadow: 0 2px 2px 0 #9b0000;
+	}
+
+	.button-text{
 		text-align: center;
 		color: #505050;
 		font-weight: 550;
 		height:55%;
 		font-size: 100%;
 		width: 100%;
+		height: 100%;
 	}
 	
 	.icon {
-		font-size: 100%;
-	
+		margin: 2px;
+		font-size: 16px;
+	}
+	.is-takeoff{
+		position: fixed;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: 0;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(34,34,34,0.5);
+		
 	}
 	
 
