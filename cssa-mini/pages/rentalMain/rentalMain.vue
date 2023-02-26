@@ -98,8 +98,8 @@
 					priceLimit: 5000,
 					time: [0, 0],
 				},
-				floorplanList: ['Studio', '1B1B', '2B1B', '2B2B', '3B2B', '3B3B', '4B2B', "4B3B", "其他"],
-				selectedFloorplan: ['Studio', '1B1B', '2B1B', '2B2B', '3B2B', '3B3B', '4B2B', "4B3B", "其他"],
+				floorplanList: ['Studio', '1B1B', '2B1B', '2B2B', '3B1B', '3B2B', '3B3B', '4B1B', '4B2B', "4B3B", "其他"],
+				selectedFloorplan: ['Studio', '1B1B', '2B1B', '2B2B', '3B1B', '3B2B', '3B3B', '4B1B', '4B2B', "4B3B", "其他"],
 				start: Date.now(),
 				end: Date.now() + 10000000000,
 				timeFilter:false,
@@ -115,6 +115,7 @@
 		onLoad(){
 			wx.cloud.init();
 			this.refresh();
+			console.log("init")
 		},
 		methods: {
 			clickMenu: function(e) {

@@ -143,11 +143,17 @@
 					text: '2B2B',
 					value: '2B2B'
 				}, {
+					text: '3B1B',
+					value: '3B1B'
+				}, {
 					text: '3B2B',
 					value: '3B2B'
 				}, {
 					text: '3B3B',
 					value: '3B3B'
+				}, {
+					text: '4B1B',
+					value: '4B1B'
 				}, {
 					text: '4B2B',
 					value: '4B2B'

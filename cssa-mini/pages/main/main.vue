@@ -41,6 +41,17 @@
 				</view>
 			</view> -->
 		</view>
+		<!--重新开始一行，里面有顺风车模块-->
+		<view class="row-container function-box">
+			<view class="row-container function-button">
+				<view class="row-container function-button" @click="toRide">
+					<view class="column-container function-text">
+						<text>顺风车</text>
+					</view>
+					<!-- <img class="image" src="" /> （补一个顺风车的图片） -->
+				</view>
+			</view>
+		</view>
 		<!-- 		<view class="leader-list">
 			<text class="cssa-intro-text">CSSA介绍</text>
 			<scroll-view class="row-container leader-intro" :scroll-x="true">
@@ -154,6 +165,11 @@
 					url:"/pages/rentalMain/rentalMain",
 				})
 			},
+			toRide: function(){
+				uni.navigateTo({
+					url:"/pages/rideMain/rideMain",
+				})
+			}
 		}
 	}
 	import actBoxVue from '@/components/act-box/act-box.vue';
