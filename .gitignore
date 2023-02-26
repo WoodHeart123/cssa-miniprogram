@@ -12,3 +12,4 @@ buildNumber.properties
 /cssa-mini/.hbuilderx/
 /cssa-mini/.vite/
 /cssa-mini/unpackage/
+.DS_Store
