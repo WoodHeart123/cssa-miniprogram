@@ -1,9 +1,10 @@
 @font-face {
   font-family: "iconfont"; /* Project id 3406119 */
-  src: url('iconfont.woff2?t=1668457430689') format('woff2'),
-       url('iconfont.woff?t=1668457430689') format('woff'),
-       url('iconfont.ttf?t=1668457430689') format('truetype');
+  src: url('iconfont.woff2?t=1666241413068') format('woff2'),
+       url('iconfont.woff?t=1666241413068') format('woff'),
+       url('iconfont.ttf?t=1666241413068') format('truetype');
 }
+
 
 .iconfont {
   font-family: "iconfont" !important;
@@ -140,4 +141,5 @@
 .icon-user-blue:before {
   content: "\ed53";
 }
+
 

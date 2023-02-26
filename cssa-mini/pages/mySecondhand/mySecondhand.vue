@@ -1,23 +1,5 @@
 <template>
-	<view class="my-secondhand">
-		<!-- <view class="my-product-box">
-			<view class= "row-container">
-				<view class="photo">
-					<image src="../../static/aboutCSSA-p2.png"></image>
-				</view>
-				<view class="product-info">
-					<view class="product-name">一只仓鼠</view>
-					<view class="product-price">$35</view>
-				</view>
-			</view>
-			<view class="button row-container">
-				<view class="edit">编辑</view>
-				<view class="polish">擦亮</view>
-				<view class="takeoff">下架</view>
-				<view class="delete">删除</view>
-			</view>
-		</view> -->
-		
+	<view class="my-secondhand">		
 		<view class="my-product-box">
 			<view class="content-box row-container">
 				<view class="image-box">
@@ -25,39 +7,63 @@
 				</view>
 				<view class="content">
 					<view class="product-title">你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好</view>
-					<view class="row-container price">￥123</view>
+					<view class="row-container price-time">
+						<view class="price">￥123</view>
+						<view class="time">一个月前</view>
+					</view>
 				</view>
 			</view>
 			<view class="row-container button-box">
-				<view class="button">
+				<view class="button row-container" @click= "">
 					<view class="icon"></view>
-					<view class="button-text"></view>
+					<view class="button-text">编辑</view>
 				</view>
-				<view class="button">
+				<view class="button row-container">
 					<view class="icon"></view>
-					<view class="button-text"></view>
+					<view class="button-text">擦亮</view>
 				</view>
-				<view class="button">
+				<view class="button row-container">
 					<view class="icon"></view>
-					<view class="button-text"></view>
+					<view class="button-text">下架</view>
 				</view>
-				<view class="button">
+				<view class="button row-container">
 					<view class="icon"></view>
-					<view class="button-text"></view>
+					<view class="button-text">删除</view>
 				</view>
 			</view>
 		</view>
-<!-- 		<view class="hint">左划编辑/擦亮，右划删除/下架</view> -->
-<!-- 		<uni-swipe-action ref="swipeAction">
-			<uni-swipe-action-item :left-options="options1" :right-options="options2" :show="(isOpened,index)"
-				:auto-close="false" @change="change" @click="swipeClick($event, index)" v-for="(product, index) in mySecondhand"
-				:key="index">
-				<view class="content-box">
-					<text>{{product.productTitle}}</text>
-					<text>{{'$' + product.price}}</text>
+		<view class="my-product-box" v-for="(product, index) in mySecondhand" :key="index">
+			<view class="content-box row-container">
+				<view class="image-box">
+					<image :src="product.images[0]"></image>
 				</view>
-			</uni-swipe-action-item>
-		</uni-swipe-action> -->
+				<view class="content">
+					<view class="product-title">{{product.productTitle}}</view>
+					<view class="row-container price-time">
+						<view class="price">{{'$' + product.price}}</view>
+						<view class="time">{{computeProductTime}}</view>
+					</view>
+				</view>
+			</view>
+			<view class="row-container button-box">
+				<view class="button row-container" @click= "editMySecondhand(this.index)">
+					<view class="icon"></view>
+					<view class="button-text">编辑</view>
+				</view>
+				<view class="button row-container" @click= "polishMySecondhand(this.index)">
+					<view class="icon"></view>
+					<view class="button-text">擦亮</view>
+				</view>
+				<view class="button row-container" @click= "takeoffMySecondhand(this.index)">
+					<view class="icon"></view>
+					<view class="button-text">下架</view>
+				</view>
+				<view class="button row-container" @click= "deleteMySecondhand(this.product.productID)">
+					<view class="icon"></view>
+					<view class="button-text">删除</view>
+				</view>
+			</view>
+		</view>
 		<uni-load-more :status="status" :contentText="contentText"></uni-load-more>
 	</view>
 </template>
@@ -71,33 +77,6 @@
 		data() {
 			return {
 				show: false,
-				isOpened: 'none',
-				options1: [{
-						text: '编辑',
-						style: {
-							backgroundColor: '#007aff'
-						}
-					},
-					{
-						text: '擦亮',
-						style: {
-							backgroundColor: '#F56C6C'
-						}
-					}
-				],
-				options2: [{
-						text: '删除',
-						style: {
-							backgroundColor: '#007aff'
-						}
-					},
-					{
-						text: '下架',
-						style: {
-							backgroundColor: '#F56C6C'
-						}
-					}
-				],
 				offset: 0,
 				limit: 20,
 				status: "more",
@@ -110,50 +89,6 @@
 			}
 		},
 		methods: {
-			change(e) {
-				this.isOpened = e;
-				console.log('返回：', e);
-			},
-			setOpened() {
-				if (this.isOpened === 'none') {
-					this.isOpened = 'left';
-					return;
-				}
-				if (this.isOpened === 'left') {
-					this.isOpened = 'right';
-					return;
-				}
-				if (this.isOpened === 'right') {
-					this.isOpened = 'none';
-					return;
-				}
-			},
-			swipeClick(e, index) {
-				let {
-					content
-				} = e;
-				if (content.text === '删除') {//deleteMySecondhand
-					uni.showModal({
-						title: '提示',
-						content: '是否删除',
-						success: () => {this.deleteMySecondhand(this.mySecondhand[index].productID)},
-					});
-				} else if (content.text === '下架'){//takeoffMySecondhand
-					uni.showModal({
-						title: '提示',
-						content: '是否下架',
-						success: this.takeoffMySecondhand(this.mySecondhand),
-					});
-				} else if (content.text === '擦亮'){//polishMySecondhand
-					uni.showModal({
-						title: '提示',
-						content: '是否擦亮',
-						success: this.polishMySecondhand(this.mySecondhand),
-					});
-				} else if (content.text === '编辑'){//editMySecondhand
-					this.editMySecondhand(index)
-				}
-			},
 			getMySecondhand: async function() {
 				if (this.status == "noMore") {
 					return;
@@ -201,8 +136,7 @@
 					});
 				}
 			},
-			polishMySecondhand: async function(mySecondhand) {
-				// this.mySecondhand.time = moment(now());
+			polishMySecondhand: async function(index) {
 				const res = await wx.cloud.callContainer({
 					config: {
 						env: 'prod-9gip97mx4bfa32a3',
@@ -212,7 +146,7 @@
 					header: {
 						'X-WX-SERVICE': 'springboot-ds71',
 					},
-					data: this.mySecondhand
+					data: this.mySecondhand[index]
 				});
 				uni.hideLoading();
 				if (res.data.status == 100) {
@@ -227,8 +161,8 @@
 					});
 				}
 			},
-			takeoffMySecondhand: async function(mySecondhand) {
-				this.mySecondhand.time = moment(0);
+			takeoffMySecondhand: async function(index) {
+				this.mySecondhand[index].time = moment(0);
 				const res = await wx.cloud.callContainer({
 					config: {
 						env: 'prod-9gip97mx4bfa32a3',
@@ -259,12 +193,13 @@
 				})
 			},
 		},
-		components: {
-			productBoxVue
+		computed: {
+			computeProductTime() {
+				moment.locale('zh-cn');
+				return Date.now() - this.mySecondhand.time > 86400000 * 7 ? moment(this.mySecondhand.time).format("MM-DD") : moment(this.mySecondhand.time).fromNow();
+			}
 		}
 	}
-	import productBoxVue from '@/components/product-box/product-box.vue'
-import { now } from 'moment';
 </script>
 
 <style>
@@ -274,6 +209,7 @@ import { now } from 'moment';
 		width: 100vw;
 		height: 100vh;
 		overflow-y: scroll;
+		background-color: #e4e4e4;
 	}
 
 	.row-container {
@@ -282,23 +218,31 @@ import { now } from 'moment';
 	}
 	
 	.my-product-box{
-		border: 1px solid #ccc;
+		border: 1px solid white;
+		box-shadow: 0 3px 3px 0 #cbcbcb;
 		width: 96vw;
 		height: 180px;
 		margin: 10px 2vw;
+		border-radius: 10px;
+		padding: 15px 10px 10px 10px;
+		background-color: white;
+		
 	}
 	
 	.button-box{
-		height: 40%;
+		height: 30%;
 		width: 100%;
+		margin:5% 0 0 0;
 	}
 	.content-box{
 		width: 100%;
-		height: 60%;
+		height: 70%;
 	}
 	.image-box{
 		width: 30%;
 		height: 100%;
+		box-shadow: 0 3px 3px 0 #9b0000;
+		
 	}
 	image{
 		width: 100%;
@@ -310,22 +254,55 @@ import { now } from 'moment';
 	}
 	.product-title{
 		line-height: 20px;
-		margin: 5px 10px;
+		margin: 0px 15px 10px 15px;
 		font-size: 18px;
 		width: calc(100% - 20px);
 		height: 40px;
 		overflow: hidden;
+		color: #505050;
+	}
+	.price-time{
+		margin-top:10px;
+		width: calc(100% - 20px);
+		height: calc(100% - 60px);
+		margin-left: 15px;
 	}
 	.price{
-		margin-top:10px;
-		height: calc(100% - 50px);
 		width: 30%;
 		font-size: 20px;
-		margin-left: 10%;
+		color: #505050;
 	}
+	.time{
+		width: 70%;
+		text-align: right;
+		vertical-align: bottom;
+		margin: 5px 0px 0px 0px;
+		color: #7f7f7f;
+	}
+	
 	.button{
 		height: 100%;
 		width: 20%;
 		margin: 0 2.5% 0 2.5%;
 	}
+
+	.button-text{
+		padding: 0 5% 0 5%;
+		border-radius: 10px;
+		border: 2px solid #9b0000;
+		box-shadow: 0 2px 2px 0 #9b0000;
+		text-align: center;
+		color: #505050;
+		font-weight: 550;
+		height:55%;
+		font-size: 100%;
+		width: 100%;
+	}
+	
+	.icon {
+		font-size: 100%;
+	
+	}
+	
+
 </style>
