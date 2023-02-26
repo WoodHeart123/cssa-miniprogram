@@ -112,7 +112,7 @@
 						.offset + "&limit=" + this.limit + "&order=" + this.orderType[this.key],
 					method: 'GET',
 					header: {
-						'X-WX-SERVICE': 'springboot-f8i8',
+						'X-WX-SERVICE': 'springboot-ds71',
 					},
 				});
 				if (res.data.data.length < this.limit) {
@@ -148,7 +148,7 @@
 					path: "/user/login?nickname=" + encodeURI(this.userInfo.nickName),
 					method: 'GET',
 					header: {
-						'X-WX-SERVICE': 'springboot-f8i8',
+						'X-WX-SERVICE': 'springboot-ds71',
 					}
 				});
 				this.isLogin = true;

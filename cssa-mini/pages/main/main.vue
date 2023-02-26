@@ -1,6 +1,6 @@
 <template>
 	<view id="main" class="column-container">
-		<uni-swiper-dot class="uni-swiper-dot-box" @clickItem="clickItem" :info="images" :current="current" mode="dot"
+		<uni-swiper-dot class="uni-swiper-dot-box" @clickItem="clickItem" v-bind:info="images" :current="current" mode="dot"
 			field="content">
 			<swiper class="swiper-box" @change="change" :current="current">
 				<swiper-item v-for="(image, index) in images" :key="index">
@@ -40,17 +40,6 @@
 					<img class="image" src="../../static/handbook.svg" />
 				</view>
 			</view> -->
-		</view>
-		<!--重新开始一行，里面有顺风车模块-->
-		<view class="row-container function-box">
-			<view class="row-container function-button">
-				<view class="row-container function-button" @click="toRide">
-					<view class="column-container function-text">
-						<text>顺风车</text>
-					</view>
-					<!-- <img class="image" src="" /> （补一个顺风车的图片） -->
-				</view>
-			</view>
 		</view>
 		<!-- 		<view class="leader-list">
 			<text class="cssa-intro-text">CSSA介绍</text>
@@ -165,11 +154,6 @@
 					url:"/pages/rentalMain/rentalMain",
 				})
 			},
-			toRide: function(){
-				uni.navigateTo({
-					url:"/pages/rideMain/rideMain",
-				})
-			}
 		}
 	}
 	import actBoxVue from '@/components/act-box/act-box.vue';

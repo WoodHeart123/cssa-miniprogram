@@ -38,7 +38,7 @@
 			<scroll-view scroll-y="true" show-scrollbar="true" refresher-enabled="true"
 				class="column-container course-list-box" refresher-background="white" @refresherrefresh="refresh"
 				enable-back-to-top="true" :refresher-triggered="triggered" @refresherabort="refreshRestore"
-				@scrolltolower="onScrollLower">
+				@scrolltolower="onScrollLower" @upload="upload">
 				
 				<view class="row-container filter-box">
 					<view :class="key==0?'filter-selected filter':'filter'" class="row-container" @click="changeKey(0)">
@@ -52,7 +52,7 @@
 						<text class="iconfont" v-show="key==4&&sortIndex==4">&#xed58;</text>
 						<text class="iconfont" v-show="key==4&&sortIndex==5">&#xed59;</text>
 					</view>
-					<view :class="key==2?'filter-selected filter':'filter'" class="row-container" @click="changeKey(2)">
+					<view v-bind:class="key==2?'filter-selected filter':'filter'" class="row-container" @click="changeKey(2)">
 						<text>难度</text>
 						<text class="iconfont" v-show="key==2&&sortIndex==3">&#xed58;</text>
 						<text class="iconfont" v-show="key==2&&sortIndex==2">&#xed59;</text>
@@ -84,7 +84,7 @@
 				sort: ["SORT_BY_COURSE_NUM", "SORT_BY_COMMENT_COUNT", "SORT_BY_AVG_DIFFICULTY_ASC",
 					"SORT_BY_AVG_DIFFICULTY_DESC", "SORT_BY_AVG_PREFER_DESC", "SORT_BY_AVG_PREFER_ASC"
 				],
-				courseCount: 1,
+				courseCount: 0,
 				sortIndex: 1,
 				departmentList: [],
 				departmentDict: [],
@@ -129,6 +129,9 @@
 			}
 		},
 		methods: {
+			upload: function(index){
+				
+			},
 			onSearch:function(){
 				this.searching = true;
 			},
@@ -150,7 +153,7 @@
 					method: 'GET',
 					header: {
 						'X-WX-SERVICE': 'springboot-ds71',
-					}
+					},
 				});
 				this.suggestList = res.data.data;
 				if(res.data.status == 100){
@@ -223,7 +226,7 @@
 					return;
 				}
 				this.courseList = [];
-				this.courseCount = 1;
+				this.courseCount = 0;
 				this.getCourseList()
 			},
 			async getCourseList() {

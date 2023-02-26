@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<swiper class="swiper" indicator-dots>
-			<swiper-item v-for="(image, index) in imageList">
+			<swiper-item v-for="(image, index) in houseInfo.images">
 				<image :src="image" @click="getImageIndex(index)"></image>
 			</swiper-item>
 		</swiper>
@@ -47,7 +47,6 @@
 </template>
 
 <script>
-	import { title } from 'process';
 	import moment from "moment/min/moment-with-locales";
 	import 'moment/locale/zh-cn';
 	export default {
@@ -162,7 +161,7 @@
 <style lang="scss">
 	#dollar-icon{
 		font-size:28px;
-		color: darkblue;
+		color: #9b0000;
 	}
 	.save-icon{
 		font-size: 25px;
@@ -185,7 +184,7 @@
 		padding: 2px 10px 2px 10px;
 		font-size: 13px;
 		margin-left: 10px;
-		background-color: #1e90ff;
+		background-color: #9b0000;
 		height: 25px;
 		border-radius: 5px;
 		color: #f5f5f5;
@@ -204,7 +203,7 @@
 		font-size: 24px;
 		line-height: 30px;
 		font-weight: bold;
-		color: darkblue;
+		color: #9b0000;
 	}
 	
 	.shoucang-box {

@@ -1,7 +1,7 @@
 <template>
 	<view class="rental-box row-container" @click="toRentalDetail">
 		<view class="image-box">
-			<image mode="widthFix" class="image" :src="this.houseInfo.imageList[0]"/>
+			<image mode="widthFix" class="image" :src="this.rentalInfo.images[0]"/>
 		</view>
 		<view class="column-container content-box">
 			<view class="row-container title-box">

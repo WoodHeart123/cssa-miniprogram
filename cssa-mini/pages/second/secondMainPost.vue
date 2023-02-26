@@ -1,9 +1,13 @@
 <template>
 	<view id="second-post">
 		<uni-forms ref="productForm" :model="product" :rules="rules">
-			<view class="image_upload">
-				<uni-file-picker limit="5" fileMediatype="image" :auto-upload="false" @select="onSelectImage"
-					@delete="onDeleteImage"></uni-file-picker>
+			<view class="card uni-form-item uni-column">
+				<uni-forms-item name="imageList">	
+					<view class="image_upload">
+						<uni-file-picker limit="5" fileMediatype="image" :auto-upload="false" @select="onSelectImage"
+							@delete="onDeleteImage"></uni-file-picker>
+					</view>
+				</uni-forms-item>
 			</view>
 
 			<view class="card uni-form-item uni-column">
@@ -24,7 +28,7 @@
 
 			<view class="card">
 				<uni-forms-item name="delivery">
-					<uni-data-checkbox v-model="product.delivery" :localdata="deliveryOption"></uni-data-checkbox>
+					<uni-data-checkbox selectedColor="#9B0000" v-model="product.delivery" :localdata="deliveryOption"></uni-data-checkbox>
 				</uni-forms-item>
 			</view>
 
@@ -42,7 +46,7 @@
 
 			<view class="card label_group">
 				<uni-forms-item name="productCondition">
-					<uni-data-checkbox v-model="product.productCondition" :localdata="conditionOption"></uni-data-checkbox>
+					<uni-data-checkbox selectedColor="#9B0000" v-model="product.productCondition" :localdata="conditionOption"></uni-data-checkbox>
 				</uni-forms-item>
 			</view>
 
@@ -69,7 +73,7 @@
 					</view>
 					<view class="checkbox check_message" v-if="!hasID">
 						<checkbox-group @change="checkBoxChange">
-							<checkbox value="save_contact" :checked="save" color="#1E90FF"
+							<checkbox value="save_contact" :checked="save" color="#9b0000"
 								style="transform:scale(0.8);" />
 
 							保存联系方式，方便后续使用
@@ -81,7 +85,7 @@
 
 
 			<view class="uni-padding-wrap uni-common-mt confirm-button">
-				<button type="default" style="background-color: #1E90FF; color: #ffffff;" plain="true"
+				<button type="default" style="background-color: #9b0000; color: #ffffff;" plain="true"
 					@click="submit('productForm')">发布</button>
 			</view>
 		</uni-forms>
@@ -155,6 +159,18 @@
 					value: 'IMPAIRED'
 				}],
 				rules: {
+					imageList: {
+						rules: [{
+								required: true,
+								errorMessage: '请上传图片',
+							},
+							{
+								minLength: 1,
+								maxLength: 5,
+								errorMessage: '最多只能上传五张图片',
+							}
+						]
+					},
 					productTitle: {
 						rules: [{
 								required: true,
@@ -273,7 +289,10 @@
 					});
 					this.uploadImage();
 				}).catch(err => {
-					console.log('err', err);
+					uni.showToast({
+						title: err[0].errorMessage,
+						icon:"error"
+					})
 				})
 			},
 			uploadImage: async function() {
@@ -282,7 +301,7 @@
 				});
 				for (let i = 0; i < this.product.imageList.length; i++) {
 					uni.uploadFile({
-						url: "http://cssa-mini-na.oss-us-west-1.aliyuncs.com",
+						url: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com",
 						filePath: this.product.imageList[i].filepath,
 						fileType: 'image',
 						name: 'file',
@@ -305,7 +324,7 @@
 								this.uploadFail = true;
 							}else{
 								this.uploadCount++;
-								this.images.push("http://cssa-mini-na.oss-us-west-1.aliyuncs.com" + "/cssa-secondhand/" + this.product.imageList[i].filename)
+								this.images.push("https://cssa-mini-na.oss-us-west-1.aliyuncs.com" + "/cssa-secondhand/" + this.product.imageList[i].filename)
 							}
 							if (this.uploadCount == this.product.imageList.length) {
 								this.product.images = this.images,
@@ -352,7 +371,6 @@
 <style>
 	#second-post {
 		position: absolute;
-		width: 94vw;
 		height: 100vh;
 		padding: 0 3vw 0 3vw;
 		background-color: white;

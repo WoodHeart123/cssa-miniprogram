@@ -5,6 +5,7 @@
 				"navigationBarTitleText": "主页",
 				"enablePullDownRefresh": false,
 				"disableScroll": true
+
 			}
 
 		}, {
@@ -169,23 +170,24 @@
 				"disableScroll": true
 			}
 		}, {
+			"path": "pages/rideMain/rideMain",
+			"style": {
+				"navigationBarTitleText": "顺风车",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
 			"path": "pages/rentalMain/rentalMain",
 			"style": {
 				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false
 			}
 
-		}, {
+		},
+		{
 			"path": "pages/aboutCSSA/aboutCSSA",
 			"style": {
 				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
-			}
-
-		}, {
-			"path": "pages/rideMain/rideMain",
-			"style": {
-				"navigationBarTitleText": "顺风车",
 				"enablePullDownRefresh": false
 			}
 
@@ -231,16 +233,13 @@
 			}, {
 				"name": "aboutCSSA",
 				"path": "pages/aboutCSSA/aboutCSSA"
-			}, {
-				"name": "rideMain",
-				"path": "pages/rideMain/rideMain"
 			}
 		]
 	},
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
-		"navigationBarBackgroundColor": "#ffffff"
+		"navigationBarBackgroundColor": "#ffdede"
 	},
 	"tabBar": {
 		"color": "#666666",
@@ -250,22 +249,22 @@
 		"fontSize": "14px",
 		"spacing": "3px",
 		"list": [{
-				"pagePath": "pages/main/main",
-				"text": "主页",
-				"iconPath": "./static/home.png",
-				"selectedIconPath": "./static/home-selected.png"
-			}, {
-				"pagePath": "pages/activity/act",
-				"text": "活动",
-				"iconPath": "./static/act.png",
-				"selectedIconPath": "./static/act-selected.png"
-			},
-			{
-				"pagePath": "pages/index/index",
-				"text": "用户",
-				"iconPath": "./static/user.png",
-				"selectedIconPath": "./static/user-selected.png"
-			}
-		]
+					"pagePath": "pages/main/main",
+					"text": "主页",
+					"iconPath": "./static/home.png",
+					"selectedIconPath": "./static/home-selected.png"
+				}, {
+					"pagePath": "pages/activity/act",
+					"text": "活动",
+					"iconPath": "./static/act.png",
+					"selectedIconPath": "./static/act-selected.png"
+				},
+				{
+					"pagePath": "pages/index/index",
+					"text": "用户",
+					"iconPath": "./static/user.png",
+					"selectedIconPath": "./static/user-selected.png"
+				}
+			]
 	}
 }
