@@ -309,8 +309,28 @@
 					})
 				})
 			},
-			updateProduct(){
-				console.log(1)
+			updateProduct: async function(){
+				const res = await wx.cloud.callContainer({
+					config: {
+						env: 'prod-9gip97mx4bfa32a3',
+					},
+					path: `/user/updateSecondHand`,
+					method: 'POST',
+					header: {
+						'X-WX-SERVICE': 'springboot-ds71',
+					},
+					data: this.product
+				});
+				uni.hideLoading();
+				if (res.data.status == 100) {
+					uni.$emit("uploadSuccess");
+					uni.navigateBack();
+				} else {
+					uni.showToast({
+						title: "更新信息失败",
+						icon: "error"
+					});
+				}
 			},
 			uploadImage: async function() {
 				uni.showLoading({
