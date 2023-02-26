@@ -85,6 +85,13 @@
 			}
 
 		}, {
+			"path": "pages/index/updateID",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
 			"path": "pages/postComment/postComment",
 			"style": {
 				"navigationBarTitleText": "发布评论",
