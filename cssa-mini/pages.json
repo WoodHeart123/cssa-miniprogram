@@ -196,7 +196,7 @@
         }
     ],
 		"condition": {
-			"current": 0,
+			"current": 5,
 			"list": [{
 					"name": "avatar",
 					"path": "pages/changeAvatar/changeAvatar"
@@ -212,29 +212,12 @@
 				{
 					"name": "myComment",
 					"path": "pages/myComment/myComment"
-				},
-				{
-					"name": "secondPost",
-					"path": "pages/second/secondMainPost"
-				},
-				{
-					"name": "secondSearch",
-					"path": "pages/second/secondMainSearch"
-				},
-				{
-					"name": "houseDetail",
-					"path": "pages/detail/houseDetail"
-				},
-				{
-					"name": "rental",
-					"path": "pages/rental/rentalPost"
-				},
-				{
-					"name" : "rentalMain",
-				    "path" : "pages/rentalMain/rentalMain"
 				},{
 					"name":"aboutCSSA",
 					"path":"pages/aboutCSSA/aboutCSSA"
+				},{
+					"name":"mySecond",
+					"path":"pages/mySecondhand/mySecondhand"
 				}
 			]
 		},
