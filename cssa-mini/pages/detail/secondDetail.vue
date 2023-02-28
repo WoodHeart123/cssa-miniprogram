@@ -120,25 +120,35 @@
 			
 			async save(){
 				console.log('success');
-				/*
 				const res = await wx.cloud.callContainer({
 					config: {
-<<<<<<< HEAD
 						env: 'prod-9gip97mx4bfa32a3', // 微信云托管的环境ID
-=======
-						env: 'prod-9go38k3y9fee3b2e', // 微信云托管的环境ID
->>>>>>> xyy
 					},
-					path: '/secondhand/collect?productID='+this.product.productID,
+					path: `/secondhand/collect?productID=${this.product.productID}&save=${true}`,
 					method: 'GET', 
 					header: {
-						'X-WX-SERVICE': 'springboot-f8i8',
+						'X-WX-SERVICE': 'springboot-ds71',
 					}
 				});
 				if(res.status == "101"){
 					this.isSaved = True;
 				}
-				*/
+			},
+			async unsave(){
+				console.log('success');
+				const res = await wx.cloud.callContainer({
+					config: {
+						env: 'prod-9gip97mx4bfa32a3', // 微信云托管的环境ID
+					},
+					path: `/secondhand/collect?productID=${this.product.productID}&save=${false}`,
+					method: 'GET', 
+					header: {
+						'X-WX-SERVICE': 'springboot-ds71',
+					}
+				});
+				if(res.status == "101"){
+					this.isSaved = True;
+				}
 			}
 		}
 	}
