@@ -67,7 +67,6 @@
 }
 .avatar-container{
 	width: 100vw;
-	height: 45vh;
 	display: flex;
 	flex-flow: row wrap;
 	justify-content: space-around;

@@ -7,8 +7,7 @@
 
 			<view class="overlay" v-show="showMenu"></view>
 			<view class="column-container suggest-list" v-if="searching">
-				<uni-load-more v-show="searchStatus!='more'" :status="searchStatus" :contentText="searchContentText">
-				</uni-load-more>
+				<uni-load-more v-show="searchStatus!='more'" :status="searchStatus" :contentText="searchContentText" />
 				<view class="row-container suggest-box" v-for="(course, index) in suggestList" :key="index"
 					@click="toCourse(course)">
 					<view class="suggest-box-course-num">
@@ -291,7 +290,6 @@
 				});
 			},
 			toCourse: function(course) {
-				console.log(course);
 				uni.navigateTo({
 					url: '/pages/coursePage/coursePage?course=' + encodeURIComponent(JSON.stringify(course)),
 				});
