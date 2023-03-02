@@ -132,18 +132,17 @@
 					config: {
 						env: 'prod-9gip97mx4bfa32a3',
 					},
-					path: `/user/deleteMySecondHand`,
+					path: `/user/deleteMySecondHand?productID=${productID}`,
 					method: 'POST',
 					header: {
 						'X-WX-SERVICE': 'springboot-ds71',
 					},
-					data: this.productID
 				});
 				if (res.data.status == 100) {
-					this.mySecondhand.splice(index, 1);
 					uni.showToast({
 						title: "成功删除",
 					});
+					this.refresh();
 				} else {
 					uni.showToast({
 						title: "删除失败",
