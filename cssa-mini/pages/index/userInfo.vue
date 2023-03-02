@@ -1,12 +1,6 @@
 <template>
 	<script src="@/static/iconfont/iconfont.js"></script>
 	<view>
-		<!-- <view class="section-title">认证</view> -->
-<!-- 		<view class="box" @click="toStudentAuth">
-			<view class="key">学生认证</view>
-			<view class="value">{{this.userInfo.isStudent?"已认证":"暂无认证"}}</view>
-			<view class="arrow" v-if="!this.userInfo.isStudent"><span class="iconfont">&#xe62d;</span></view>
-		</view> -->
 		<view class="section-title">头像</view>
 		<view class="avatar-box" @click="toChangeAvatar">
 			<view class="avatar-container">
@@ -14,6 +8,12 @@
 					:src="'https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/' + this.userInfo.avatar + '.jpg'">
 			</view>
 			<view class="arrow"><span class="iconfont">&#xe62d;</span></view>
+		</view>
+		<view class="section-title">认证</view>
+		<view class="box" @click="toStudentAuth">
+			<view class="key">学生认证</view>
+			<view class="value">{{this.userInfo.isStudent?"已认证√":"暂无认证"}}</view>
+			<view class="arrow" v-if="!this.userInfo.isStudent"><span class="iconfont">&#xe62d;</span></view>
 		</view>
 		<view class="section-title">个人信息</view>
 		<view class="box" @click="toName">
@@ -62,6 +62,9 @@
 				})
 			},
 			toStudentAuth:function(){
+				if(this.userInfo.isStudent){
+					return;
+				}
 				uni.navigateTo({
 					url: "/pages/studentAuth/studentAuth"
 				})

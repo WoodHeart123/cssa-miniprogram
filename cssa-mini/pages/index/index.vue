@@ -27,10 +27,10 @@
 					<img class="image" src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-icon/index/community.svg" />
 					<text class="text-box">我的帖子</text>
 				</view> -->
-				<view class="button-box" @click="jump(1)">
+<!-- 				<view class="button-box" @click="jump(1)">
 					<img class="image" src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-icon/index/zan.svg" />
 					<text class="text-box">赞/收藏</text>
-				</view>
+				</view> -->
 				<view class="button-box" @click="jump(2)">
 					<img class="image" src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-icon/index/comment.svg" />
 					<text class="text-box">我的评论</text>
@@ -77,9 +77,7 @@
 				fail: () => {
 					this.isLogin = false;
 				},
-			});
-			
-			
+			});	
 		},
 		onHide(){
 			this.$refs.welcome.close();

@@ -2,10 +2,10 @@
 	<view id="studentAuth">
 		<view class="title">学生认证</view>
 		<view class="email-box">
-			<input class="email-input" placeholder="请输入以wisc.edu结尾的邮箱" @input="onEmailInput" />
+			<input class="email-input" placeholder="请输入以wisc.edu域名结尾的邮箱" @input="onEmailInput" />
 			
 		</view>
-		<text class="sub-text">注：该邮箱不会作为联络邮箱使用</text>
+		<text class="sub-text">注：我们不会储存任何关于验证邮箱的信息</text>
 		<view class="email-box">
 			<input v-model="authCode" class="auth-code-input" placeholder="请输入验证码" @input="onAuthCodeInput" type="number" maxlength="6"/>
 			<button class="button" v-show="!showTime" plain="true" @click="getAuthCode" >获取验证码</button>
@@ -29,7 +29,16 @@
 				showTime: false,
 				timeCounter: {},
 				showButton: false,
+				userInfo:{}
 			}
+		},
+		onLoad(){
+			uni.getStorage({
+				key:"userInfo-2",
+				success:(res) => {
+					this.userInfo = res.data;
+				}
+			});
 		},
 		methods: {
 			onEmailInput(event) {
@@ -52,6 +61,33 @@
 						icon: "error"
 					});
 					return;
+				}
+				const res = await wx.cloud.callContainer({
+					config: {
+						env: 'prod-9gip97mx4bfa32a3', 
+					},
+					path: '/user/verifyAuthCode?authCode' + authCode,
+					method: 'GET', 
+					header: {
+						'X-WX-SERVICE': 'springboot-ds71',
+					},
+				});
+				if(res.data.status && res.data.status == 100){
+					this.userInfo.isStudent == true;
+					uni.setStorageSync("userInfo-2",this.userInfo);
+					uni.navigateBack({
+						delta:1
+					})
+				}else if (res.data.status && res.data.status == 106){
+					uni.showToast({
+						title:"验证码错误",
+						icon:"error"
+					})
+				}else{
+					uni.showToast({
+						title:"服务出现错误",
+						icon:"error"
+					})
 				}
 			},
 			async getAuthCode(){

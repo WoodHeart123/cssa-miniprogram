@@ -166,7 +166,7 @@
 			"path": "pages/mySave/mySave",
 			"style": {
 				"navigationBarTitleText": "我的收藏",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": true
 			}
 
 		}, {
