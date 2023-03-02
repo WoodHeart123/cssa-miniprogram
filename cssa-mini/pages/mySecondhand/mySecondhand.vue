@@ -1,6 +1,6 @@
 <template>
 	<view class="my-secondhand">
-			<view class="my-product-box">
+			<!-- <view class="my-product-box">
 					<view class="content-box row-container">
 						<view class="image-box">
 							<image src="../../static/bg.png"></image>
@@ -32,7 +32,7 @@
 							<view class="button-text">删除</view>
 						</view>
 					</view>
-				</view>
+				</view> -->
 		<view class="my-product-box" v-for="(product, index) in mySecondhand" :key="index">
 			<view class="content-box row-container">
 				<view class="image-box">
@@ -48,19 +48,23 @@
 				</view>
 			</view>
 			<view class="row-container button-box">
-				<view class="button row-container" @click= "editMySecondhand(index)" v-if="product.time != 0">
+				<view class="button row-container" @click= "editMySecondhand(index)">
 					<view class="icon iconfont">&#xe646</view>
 					<view class="button-text">编辑</view>
 				</view>
-				<view class="button row-container" @click= "polishMySecondhand(index)" v-if="product.time != 0">
+				<view class="button row-container" @click= "polishMySecondhand(index, 1)" >
 					<view class="icon iconfont">&#xe76f</view>
 					<view class="button-text">擦亮</view>
 				</view>
-				<view class="button row-container" @click= "takeoffMySecondhand(index)">
+				<view class="button row-container" @click= "takeoffMySecondhand(index)"  v-if="product.time != 0">
 					<view class="icon iconfont">&#xe620</view>
 					<view class="button-text">下架</view>
 				</view>
-				<view class="button row-container" @click= "deleteMySecondhand(product.productID)">
+				<view class="button row-container" @click= "polishMySecondhand(index, 2)"  v-if="product.time == 0">
+					<view class="icon iconfont">&#xe64b</view>
+					<view class="button-text">上架</view>
+				</view>
+				<view class="button row-container" @click= "deleteMySecondhand(product.productID)" v-if="product.time != 0">
 					<view class="icon iconfont">&#xe74b</view>
 					<view class="button-text">删除</view>
 				</view>
@@ -75,6 +79,7 @@
 		onLoad() {},
 		onShow() {
 			this.getMySecondhand();
+			uni.$on("uploadSecondSuccess",this.uploadSecondSuccess);
 		},
 		data() {
 			return {
@@ -83,6 +88,7 @@
 				limit: 20,
 				status: "more",
 				mySecondhand: [],
+				product: [],
 				contentText: {
 					contentdown: "上拉显示更多",
 					contentrefresh: "正在加载...",
@@ -91,6 +97,13 @@
 			}
 		},
 		methods: {
+			uploadSecondSuccess:function(){
+					this.refresh();
+					uni.showToast({
+						title: "更新成功",
+						duration: 5000,
+					});
+				},
 			getMySecondhand: async function() {
 				if (this.status == "noMore") {
 					return;
@@ -138,7 +151,7 @@
 					});
 				}
 			},
-			polishMySecondhand: async function(index) {
+			polishMySecondhand: async function(index, para) {
 				this.mySecondhand[index].time = Date.now();
 				const res = await wx.cloud.callContainer({
 					config: {
@@ -153,10 +166,17 @@
 				});
 				uni.hideLoading();
 				if (res.data.status == 100) {
-					uni.showToast({
-						title: "擦亮成功",
-						icon: "success"
-					});
+					if(para == 1){
+						uni.showToast({
+							title: "擦亮成功",
+							icon: "success"
+						})
+					} else if(para == 2){
+						uni.showToast({
+							title: "上架成功",
+							icon: "success"
+						})
+					};
 				} else {
 					uni.showToast({
 						title: "擦亮失败",
@@ -175,7 +195,7 @@
 					header: {
 						'X-WX-SERVICE': 'springboot-ds71',
 					},
-					data: this.mySecondhand
+					data: this.mySecondhand[index]
 				});
 				uni.hideLoading();
 				if (res.data.status == 100) {
@@ -316,12 +336,12 @@
 		bottom: 0;
 		right: 0;
 		width: 100%;
-		height: 100%;
+		height: 75%;
 		background-color: rgba(34,34,34,0.5);
 		text-align: center;
 		font-size: 50px;
 		color: rgba(155,0,0,0.5);
-		border-radius: 10px;
+		border-radius: 10px 10px 0 0;
 		border: 5px rgba(34,34,34,0.5);
 	}
 	
