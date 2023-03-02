@@ -21,6 +21,7 @@
 				</view>
 			</view>
 			<uni-load-more :contentText="contentText" :status="status"></uni-load-more>
+			<view style="height: 100px;"></view>
 		</scroll-view>
 		<uni-fab :pattern="pattern" horizontal="right" vertical="bottom" popMene="false" @fabClick="toPostProduct" />
 	</view>
@@ -50,8 +51,7 @@
 				},
 			}
 		},
-		onLoad(options){
-			console.log(options)
+		onLoad(){
 			wx.cloud.init();
 			this.refresh();
 		},

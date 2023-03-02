@@ -19,7 +19,7 @@
 
 
 			<view class="card uni-textarea textbox">
-				<uni-forms-item name="productDescription">
+				<uni-forms-item name="productDescription"> 
 					<uni-easyinput type="textarea" v-model="product.productDescription" placeholder="请输入商品描述信息" maxlength="400"
 						placeholderStyle="font-size:14px;color:gray" :clearable="clearable"> </uni-easyinput>
 				</uni-forms-item>

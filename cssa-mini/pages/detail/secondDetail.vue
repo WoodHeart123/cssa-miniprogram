@@ -41,7 +41,6 @@
 </template>
 
 <script>
-import { unlink } from 'fs/promises';
 	export default {
 		data() {
 			return {

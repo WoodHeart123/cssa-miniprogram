@@ -13,7 +13,7 @@
 			</view>
 		</view>
 		<view class="row-container filter-box">
-			<view class="setting-icon">
+			<view class="setting-icon" @click="popFilter('price')">
 				<uni-icons type="settings-filled" size="30"></uni-icons>
 			</view>
 
@@ -39,7 +39,8 @@
 			<view class="rental-box-container" v-for="(rentalInfo,index) in rentalList" :key="index">
 				<rentalBoxVue :rentalInfo="rentalInfo"></rentalBoxVue>
 			</view>
-			<uni-load-more style="padding-bottom: 50px;" :status="status"></uni-load-more>
+			<uni-load-more  :status="status"></uni-load-more>
+			<view style="height: 100px;"></view>
 		</scroll-view>
 		<uni-fab :pattern="pattern" horizontal="right" vertical="bottom" popMene="false" @fabClick="toPostRental" />
 		<uni-popup ref="filter" type="bottom" background-color="#fff" :safeArea="safeArea" @maskClick="maskClick" :is-mask-click="safeArea">
