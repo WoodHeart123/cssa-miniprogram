@@ -323,7 +323,7 @@
 				});
 				uni.hideLoading();
 				if (res.data.status == 100) {
-					uni.$emit("uploadSuccess");
+					uni.$emit("updateSecondSuccess");
 					uni.navigateBack();
 				} else {
 					uni.showToast({
