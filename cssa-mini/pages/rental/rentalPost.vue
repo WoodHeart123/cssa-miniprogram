@@ -276,7 +276,8 @@
 			},
 			uploadImage: async function() {
 				uni.showLoading({
-					title: "正在上传内容"
+					title: "正在上传内容",
+					mask: true
 				});
 				for (let i = 0; i < this.rental.imageList.length; i++) {
 					uni.uploadFile({
@@ -445,6 +446,7 @@
 	}
 
 	.confirm-button {
+		margin-top: 20px;
 		margin-bottom: 20px;
 	}
 

@@ -100,15 +100,15 @@
 			}
 
 		},
-		{
-			"path": "pages/community/com-main",
-			"style": {
-				"navigationBarTitleText": "社区广场",
-				"backgroundColor": "#F5F5F5",
-				"enablePullDownRefresh": true,
-				"onReachBottomDistance": 100
-			}
-		},
+		// {
+		// 	"path": "pages/community/com-main",
+		// 	"style": {
+		// 		"navigationBarTitleText": "社区广场",
+		// 		"backgroundColor": "#F5F5F5",
+		// 		"enablePullDownRefresh": true,
+		// 		"onReachBottomDistance": 100
+		// 	}
+		// },
 		{
 			"path": "pages/second/secondMain",
 			"style": {
@@ -159,17 +159,17 @@
 			"path": "pages/mySecondhand/mySecondhand",
 			"style": {
 				"navigationBarTitleText": "我的二手",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": true
 			}
 
-		}, {
+		},/* {
 			"path": "pages/mySave/mySave",
 			"style": {
 				"navigationBarTitleText": "我的收藏",
 				"enablePullDownRefresh": true
 			}
 
-		}, {
+		}, */ {
 			"path": "pages/rental/rentalPost",
 			"style": {
 				"navigationBarTitleText": "发布转租",

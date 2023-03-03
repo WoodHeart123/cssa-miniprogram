@@ -49,6 +49,7 @@
 					contentrefresh:"正在加载...",
 					contentnomore:"没有更多商品了"
 				},
+				isLogin: false,
 			}
 		},
 		onLoad(){
@@ -57,6 +58,12 @@
 		},
 		onShow() {
 			uni.$on("uploadSuccess",this.uploadSuccess);
+			uni.getStorage({
+				key: "userInfo-2",
+				success:() => {
+					this.isLogin = true;
+				}
+			});
 		},
 		methods: {
 			uploadSuccess:function(){
@@ -80,6 +87,28 @@
 					this.status = "loading"
 					this.getProductList();
 				}
+			},
+			async login(name) {
+				uni.showLoading({
+					mask:true
+				});
+				const res = await wx.cloud.callContainer({
+					config: {
+						env: 'prod-9gip97mx4bfa32a3',
+					},
+					path: "/user/login?nickname=" + encodeURI(name),
+					method: 'GET',
+					header: {
+						'X-WX-SERVICE': 'springboot-ds71',
+					}
+				});
+				this.isLogin = true;
+				uni.setStorage({
+					key: "userInfo-2",
+					data: res.data.data
+				});
+				uni.hideLoading();
+				this.toPostProduct();
 			},
 			getProductList:async function(){
 				if(this.status == "noMore"){
@@ -108,7 +137,26 @@
 					this.triggered = false;
 				});
 			},
-			toPostProduct: function(index) {
+			toPostProduct: function() {
+				if (!this.isLogin) {
+					uni.showToast({
+						title:"请先登录",
+						icon:"none"
+					});
+					uni.getUserProfile({
+						desc: "获取用户信息",
+						success: (userProfile) => {
+							this.login(userProfile.userInfo.nickName);
+						},
+						fail: () => {
+							uni.showToast({
+								title: "请先登陆",
+								icon: "none"
+							});
+						}
+					});
+					return;
+				}
 				uni.navigateTo({
 					url: "/pages/second/secondMainPost"
 				})

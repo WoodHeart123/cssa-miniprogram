@@ -113,6 +113,7 @@
 				pattern: {
 					buttonColor: "#9b0000"
 				},
+				isLogin:false,
 				
 			}
 		},
@@ -122,6 +123,12 @@
 		},
 		onShow(){
 			uni.$on("uploadRentalSuccess",this.uploadSuccess);
+			uni.getStorage({
+				key: "userInfo-2",
+				success:() => {
+					this.isLogin = true;
+				}
+			});
 		},
 		methods: {
 			clickMenu: function(e) {
@@ -134,10 +141,51 @@
 					duration: 5000,
 				});
 			},
+			async login(name) {
+				uni.showLoading({
+					mask:true
+				});
+				const res = await wx.cloud.callContainer({
+					config: {
+						env: 'prod-9gip97mx4bfa32a3',
+					},
+					path: "/user/login?nickname=" + encodeURI(name),
+					method: 'GET',
+					header: {
+						'X-WX-SERVICE': 'springboot-ds71',
+					}
+				});
+				this.isLogin = true;
+				uni.setStorage({
+					key: "userInfo-2",
+					data: res.data.data
+				});
+				uni.hideLoading();
+				this.toPostRental();
+			},
 			toPostRental: function() {
+				if (!this.isLogin) {
+					uni.showToast({
+						title:"请先登录",
+						icon:"none"
+					});
+					uni.getUserProfile({
+						desc: "获取用户信息",
+						success: (userProfile) => {
+							this.login(userProfile.userInfo.nickName);
+						},
+						fail: () => {
+							uni.showToast({
+								title: "请先登陆",
+								icon: "none"
+							});
+						}
+					});
+					return;
+				}
 				uni.navigateTo({
 					url: "/pages/rental/rentalPost",
-				})
+				});
 			},
 			popFilter: function(e) {
 				if (e == 'price') {

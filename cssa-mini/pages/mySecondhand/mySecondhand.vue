@@ -12,6 +12,7 @@
 		onShow() {
 			uni.startPullDownRefresh();
 			uni.$on("uploadSecondSuccess",this.uploadSecondSuccess);
+			uni.$on("mySecondhandDelete", this.delete);
 		},
 		data() {
 			return {
@@ -32,14 +33,19 @@
 			userProductBoxVue
 		},
 		onPullDownRefresh(){
+			console.log(1)
 			this.limit = 20;
 			this.offset = 0;
+			this.status = "more";
 			this.mySecondhand = [];
 			this.getMySecondhand();
 		},
 		methods: {
+			delete:function(index){
+				this.mySecondhand.splice(index,1);
+			},
 			uploadSecondSuccess:function(){
-					uni.startPullDownRefresh(OBJECT);
+					uni.startPullDownRefresh();
 					uni.showToast({
 						title: "更新成功",
 						duration: 5000,
@@ -64,9 +70,10 @@
 					if (res.data.data.length < this.limit) {
 						this.status = "noMore";
 					}
-					this.offset += limit;
+					this.offset += this.limit;
 				}
 				this.mySecondhand = this.mySecondhand.concat(res.data.data);
+				uni.stopPullDownRefresh();
 			},
 			
 		},

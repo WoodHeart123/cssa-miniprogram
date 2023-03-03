@@ -8,13 +8,13 @@
 				<view class="product-title">{{product.productTitle}}</view>
 				<view class="row-container price-time">
 					<view class="price">{{'$' + product.price}}</view>
-					<view class="time">{{this.productPublishTime}}</view>
+					<view class="time" v-show="product.time!=0">{{this.productPublishTime}}</view>
 				</view>
 				<view class="is-takeoff" v-if="product.time == 0">已下架</view>
 			</view>
 		</view>
 		<view class="row-container button-box">
-			<view class="button row-container" @click="editMySecondhand()">
+			<view class="button row-container" @click="editMySecondhand()" v-if="product.time != 0">
 				<view class="icon iconfont">&#xe646</view>
 				<view class="button-text">编辑</view>
 			</view>
@@ -28,7 +28,7 @@
 			</view>
 			<view class="button row-container" @click="polishMySecondhand()" v-if="product.time == 0">
 				<view class="icon iconfont">&#xe64b</view>
-				<view class="button-text">重新上架</view>
+				<view class="button-text">上架</view>
 			</view>
 			<view class="button row-container" @click="deleteMySecondhand()" v-if="product.time != 0">
 				<view class="icon iconfont">&#xe74b</view>
@@ -42,7 +42,7 @@
 	import moment from "moment/min/moment-with-locales";
 	import 'moment/locale/zh-cn';
 	export default {
-		props: ["product"],
+		props: ["product","index"],
 		data() {
 			return {
 				productPublishTime:""
@@ -60,6 +60,9 @@
 		},
 		methods: {
 			deleteMySecondhand: async function(productID) {
+				uni.showLoading({
+					mask:true
+				})
 				const res = await wx.cloud.callContainer({
 					config: {
 						env: 'prod-9gip97mx4bfa32a3',
@@ -70,11 +73,12 @@
 						'X-WX-SERVICE': 'springboot-ds71',
 					},
 				});
+				uni.hideLoading()
 				if (res.data.status == 100) {
 					uni.showToast({
 						title: "成功删除",
 					});
-					this.refresh();
+					uni.$emit("mySecondhandDelete",this.index)
 				} else {
 					uni.showToast({
 						title: "删除失败",
@@ -83,7 +87,9 @@
 				}
 			},
 			polishMySecondhand: async function() {
-				uni.showLoading();
+				uni.showLoading({
+					mask:true
+				});
 				const res = await wx.cloud.callContainer({
 					config: {
 						env: 'prod-9gip97mx4bfa32a3',
@@ -108,6 +114,9 @@
 				}
 			},
 			takeoffMySecondhand: async function() {
+				uni.showLoading({
+					mask:true
+				});
 				const res = await wx.cloud.callContainer({
 					config: {
 						env: 'prod-9gip97mx4bfa32a3',
@@ -124,6 +133,7 @@
 						title: "下架成功",
 						icon: "success"
 					});
+					this.product.time = 0
 				} else {
 					uni.showToast({
 						title: "下架失败",
@@ -131,10 +141,9 @@
 					});
 				}
 			},
-			editMySecondhand: async function(index) {
+			editMySecondhand: async function() {
 				uni.navigateTo({
-					url: "../second/secondMainPost?product=" + encodeURIComponent(JSON.stringify(this
-						.mySecondhand[index]))
+					url: "../second/secondMainPost?product=" + encodeURIComponent(JSON.stringify(this.product))
 				})
 			},
 		}

@@ -48,6 +48,9 @@
 				this.authCode = event.detail.value;
 			},
 			async confirm(){
+				uni.showLoading({
+					mask:true
+				})
 				if(this.authCode.length == 0){
 					uni.showToast({
 						title: "请输入验证码",
@@ -79,11 +82,13 @@
 						delta:1
 					})
 				}else if (res.data.status && res.data.status == 106){
+					uni.hideLoading();
 					uni.showToast({
 						title:"验证码错误",
 						icon:"error"
 					})
 				}else{
+					uni.hideLoading();
 					uni.showToast({
 						title:"服务出现错误",
 						icon:"error"
