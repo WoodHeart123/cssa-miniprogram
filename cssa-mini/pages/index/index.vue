@@ -66,6 +66,7 @@
 		},
 		onLoad() {
 			wx.cloud.init();
+			uni.on("authSuccess",this.authSuccess)
 		},
 		onShow() {
 			uni.getStorage({
@@ -145,6 +146,9 @@
 					url: '/pages/changeAvatar/changeAvatar?avatar=' + encodeURIComponent(JSON.stringify(this
 						.userInfo.avatar)),
 				});
+			},
+			authSuccess: function(){
+				this.userInfo.isStudent = true;
 			}
 		}
 	}

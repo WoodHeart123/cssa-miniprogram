@@ -457,7 +457,7 @@
 	}
 	.rental-box-container{
 		width: 100vw;
-		height: 200px;
+		height: 160px;
 		margin-bottom: 10px;
 	}
 	.rental-scroll{

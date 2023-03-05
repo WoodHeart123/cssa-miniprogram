@@ -58,13 +58,6 @@
 					});
 					return;
 				}
-				if(this.authCode.length < 6){
-					uni.showToast({
-						title: "验证码错误",
-						icon: "error"
-					});
-					return;
-				}
 				const res = await wx.cloud.callContainer({
 					config: {
 						env: 'prod-9gip97mx4bfa32a3', 
@@ -78,6 +71,7 @@
 				if(res.data.status && res.data.status == 100){
 					this.userInfo.isStudent == true;
 					uni.setStorageSync("userInfo-2",this.userInfo);
+					uni.emit("authSuccess");
 					uni.navigateBack({
 						delta:1
 					})

@@ -88,6 +88,7 @@
 		align-items: center;
 		justify-content: center;
 		z-index: 10;
+		overflow:hidden;
 	}
 	.content-box{
 		width: 68%;
@@ -143,7 +144,7 @@
 		font-size: 10px;
 		color: rgba(132, 132,132, 0.6);
 		margin-top:2px;
-		height: 60px;
+		height: 40px;
 		line-height: 20px;
 		white-space: normal;
 		overflow: hidden;

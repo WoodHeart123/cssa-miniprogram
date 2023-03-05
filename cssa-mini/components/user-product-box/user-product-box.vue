@@ -2,7 +2,7 @@
 	<view class="user-product-box">
 		<view class="content-box row-container">
 			<view class="image-box">
-				<image class="photo" :src="product.images[0]"></image>
+				<image mode="aspectFill" class="photo" :src="product.images[0]"></image>
 			</view>
 			<view class="content">
 				<view class="product-title">{{product.productTitle}}</view>
@@ -227,6 +227,7 @@
 		width: 30%;
 		height: 100%;
 		box-shadow: 0 3px 3px 0 #9b0000;
+		overflow:hidden;
 
 	}
 
