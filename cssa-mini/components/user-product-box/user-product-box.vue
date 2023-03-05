@@ -63,7 +63,11 @@
 				uni.showModal({
 					title: '提示',
 					content: '是否删除?删除后不可恢复',
-					success: this.deleteMySecondhand(this.product.productID),
+					success: (res) => {
+						if(res.confirm){
+							this.deleteMySecondhand(this.product.productID);
+						}
+					}
 				});
 			},
 			deleteMySecondhand: async function(productID) {

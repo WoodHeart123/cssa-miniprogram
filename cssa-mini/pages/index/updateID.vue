@@ -40,7 +40,7 @@
 					config: {
 						env: 'prod-9gip97mx4bfa32a3', // 微信云托管的环境ID
 					},
-					path: '/user/updateNickname?nickname=' + encodeURI(this.nickname),
+					path: '/user/updateWechatID?wechatID=' + encodeURI(this.wechatID),
 					method: 'GET',
 					header: {
 						'X-WX-SERVICE': 'springboot-ds71',

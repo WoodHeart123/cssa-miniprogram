@@ -1,8 +1,8 @@
 <template>
 	<view class="house-detail">
 		<swiper class="swiper" indicator-dots>
-			<swiper-item v-for="(image, index) in houseInfo.images">
-				<image :src="image" @click="getImageIndex(index)"></image>
+			<swiper-item style="display:flex;align-items: center;justify-content: center;" v-for="(image, index) in houseInfo.images" @click="previewImage">
+				<image mode="heightFix" :src="image" @click="getImageIndex(index)"></image>
 			</swiper-item>
 		</swiper>
 		<view class="basic">
@@ -110,6 +110,12 @@
 							title:'微信号复制成功'
 						})
 					}
+				});
+			},
+			previewImage: function(){
+				wx.previewImage({
+					current:this.houseInfo.images[0],
+					urls:this.houseInfo.images
 				});
 			}
 		},

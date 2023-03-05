@@ -11,7 +11,7 @@
 		}, {
 			"path": "pages/index/index",
 			"style": {
-				// "navigationBarTitleText": "用户",
+				"navigationBarTitleText": "用户主页",
 				"backgroundColor": "#F5F5F5"
 			}
 		}, {
@@ -81,14 +81,14 @@
 		}, {
 			"path": "pages/index/updateName",
 			"style": {
-				"navigationBarTitleText": "",
+				"navigationBarTitleText": "更新昵称",
 				"enablePullDownRefresh": false
 			}
 
 		}, {
 			"path": "pages/index/updateID",
 			"style": {
-				"navigationBarTitleText": "",
+				"navigationBarTitleText": "更新微信号",
 				"enablePullDownRefresh": false
 			}
 

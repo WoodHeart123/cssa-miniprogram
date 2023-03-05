@@ -85,7 +85,7 @@
 
 .icon {
 	font-size: 30px;
-	color: #1684FC;
+	color: #9B0000;
 	transition: all 3s ease;
 }
 
@@ -125,7 +125,8 @@
 	z-index: 20;
 }
 .filter-selected {
-	background-color: #c9d4fc;
+	background-color: #9B0000;
+	color: white;
 }
 
 .department {

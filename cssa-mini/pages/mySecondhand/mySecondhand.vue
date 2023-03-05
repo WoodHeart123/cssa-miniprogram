@@ -77,7 +77,7 @@
 				uni.stopPullDownRefresh();
 			},
 			refresh: function(){
-				uni.onPullDownRefresh();
+				uni.startPullDownRefresh();
 			},
 		},
 	}

@@ -1,8 +1,8 @@
 <template>
 	<view class="second-detail">
 		<swiper class="swiper" indicator-dots>
-			<swiper-item v-for="(image, index) in product.images">
-				<image :src="image"></image>
+			<swiper-item  style="display:flex;align-items: center;justify-content: center;" v-for="(image, index) in product.images" @click="previewImage">
+				<image mode="heightFix" :src="image"></image>
 			</swiper-item>
 		</swiper>
 		<view class="basic">
@@ -162,7 +162,13 @@
 						data: this.collectProductList
 					})
 				}
-			},
+			},			
+			previewImage: function(){
+				wx.previewImage({
+					current:this.product.images[0],
+					urls:this.product.images
+				});
+			}
 		}
 	}
 </script>
