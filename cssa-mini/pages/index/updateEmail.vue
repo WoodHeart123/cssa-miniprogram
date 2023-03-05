@@ -49,7 +49,7 @@
 						config: {
 							env: 'prod-9gip97mx4bfa32a3', // 微信云托管的环境ID
 						},
-						path: '/user/updateEmail?email=' + this.email,
+						path: '/user/updateEmail?email=' + this.email + "&subscribe=" + this.save,
 						method: 'GET', 
 						header: {
 							'X-WX-SERVICE': 'springboot-ds71',
