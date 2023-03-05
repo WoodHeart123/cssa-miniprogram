@@ -13,6 +13,7 @@
 			uni.startPullDownRefresh();
 			uni.$on("uploadSecondSuccess",this.uploadSecondSuccess);
 			uni.$on("mySecondhandDelete", this.delete);
+			uni.$on("mySecondhandRefresh", this.refresh);
 		},
 		data() {
 			return {
@@ -75,7 +76,9 @@
 				this.mySecondhand = this.mySecondhand.concat(res.data.data);
 				uni.stopPullDownRefresh();
 			},
-			
+			refresh: function(){
+				uni.onPullDownRefresh();
+			},
 		},
 	}
 	import moment from "moment/min/moment-with-locales";

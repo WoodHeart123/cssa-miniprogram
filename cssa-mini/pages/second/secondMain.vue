@@ -82,7 +82,7 @@
 				if (!this.triggered) {
 					this.triggered = true;
 					this.limit = 20;
-					this.offset = 1;
+					this.offset = 0;
 					this.productList = [];
 					this.status = "loading"
 					this.getProductList();

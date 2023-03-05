@@ -18,7 +18,7 @@
 				<view class="icon iconfont">&#xe646</view>
 				<view class="button-text">编辑</view>
 			</view>
-			<view class="button row-container" @click="polishMySecondhand()" v-if="product.time != 0">
+			<view class="button row-container" @click="polishMySecondhand(1)" v-if="product.time != 0">
 				<view class="icon iconfont">&#xe76f</view>
 				<view class="button-text">擦亮</view>
 			</view>
@@ -26,11 +26,11 @@
 				<view class="icon iconfont">&#xe620</view>
 				<view class="button-text">下架</view>
 			</view>
-			<view class="button row-container" @click="polishMySecondhand()" v-if="product.time == 0">
+			<view class="button row-container" @click="polishMySecondhand(2)" v-if="product.time == 0">
 				<view class="icon iconfont">&#xe64b</view>
 				<view class="button-text">上架</view>
 			</view>
-			<view class="button row-container" @click="deleteMySecondhand()" v-if="product.time != 0">
+			<view class="button row-container" @click="delet()" v-if="product.time != 0">
 				<view class="icon iconfont">&#xe74b</view>
 				<view class="button-text">删除</view>
 			</view>
@@ -59,6 +59,13 @@
 			}
 		},
 		methods: {
+			delet:function(){
+				uni.showModal({
+					title: '提示',
+					content: '是否删除?删除后不可恢复',
+					success: this.deleteMySecondhand(this.product.productID),
+				});
+			},
 			deleteMySecondhand: async function(productID) {
 				uni.showLoading({
 					mask:true
@@ -86,7 +93,7 @@
 					});
 				}
 			},
-			polishMySecondhand: async function() {
+			polishMySecondhand: async function(index) {
 				uni.showLoading({
 					mask:true
 				});
@@ -101,16 +108,32 @@
 					},
 				});
 				uni.hideLoading();
-				if (res.data.status == 100) {
-					uni.showToast({
-						title: "擦亮成功",
-						icon: "success"
-					})
-				} else {
-					uni.showToast({
-						title: "擦亮失败",
-						icon: "error"
-					});
+				if(index == 1){
+					if (res.data.status == 100) {
+						uni.showToast({
+							title: "擦亮成功",
+							icon: "success"
+						})
+						uni.$emit("mySecondhandRefresh",this.index);
+					} else {
+						uni.showToast({
+							title: "擦亮失败",
+							icon: "error"
+						});
+				}}
+				if(index == 2){
+					if (res.data.status == 100) {
+						uni.showToast({
+							title: "上架成功",
+							icon: "success"
+						});
+						uni.$emit("mySecondhandRefresh",this.index);
+					} else {
+						uni.showToast({
+							title: "上架失败",
+							icon: "error"
+						});
+					}
 				}
 			},
 			takeoffMySecondhand: async function() {
