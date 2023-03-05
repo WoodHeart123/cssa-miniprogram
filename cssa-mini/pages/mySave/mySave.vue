@@ -1,8 +1,8 @@
 <template>
 	<view>
 		<view class="row-container">
-			<view class="info-box"><text>全部</text></view>
-			<view class="info-box"><text>收藏</text></view>
+			<view class="info-box"><text>二手收藏</text></view>
+			<view class="info-box"><text>租房收藏</text></view>
 			<view class="info-box"><text>点赞</text></view>
 		</view>
 		<scroll-view scroll-y="true" show-scrollbar="true" refresher-enabled="true"
@@ -46,8 +46,31 @@
 						productCondition:0,
 						sellerAvatar:1,
 						images: ["https://cssa-mini.oss-cn-shanghai.aliyuncs.com/cssa-community-image/renwu.jpeg"],
+					},
+					{
+						productID: 2,
+						productTitle: "lalalalasdsad",
+						productDescription: "Madison周围都有什么好玩的呢，有谁推荐一下吗，如果有推荐可以联系我：123456789. 大家可以一起玩，开心最重要了。",
+						delivery:'pickup',
+						price:100,
+						sellerNickname:"Peter",
+						productCondition:0,
+						sellerAvatar:1,
+						images: ["https://cssa-mini.oss-cn-shanghai.aliyuncs.com/cssa-community-image/renwu.jpeg"],
+					},
+					{
+						productID: 2,
+						productTitle: "lalalalasdsad",
+						productDescription: "Madison周围都有什么好玩的呢，有谁推荐一下吗，如果有推荐可以联系我：123456789. 大家可以一起玩，开心最重要了。",
+						delivery:'pickup',
+						price:100,
+						sellerNickname:"Peter",
+						productCondition:0,
+						sellerAvatar:1,
+						images: ["https://cssa-mini.oss-cn-shanghai.aliyuncs.com/cssa-community-image/renwu.jpeg"],
 					}
 				],
+				limit:10,
 				triggered:false,
 				status:"loading"
 			}
@@ -68,19 +91,32 @@
 			refresh:function(){
 				if (!this.triggered) {
 					this.triggered = true;
-					this.limit = 20;
-					this.offset = 1;
-					this.rentalList = [];
+					this.limit = 10;
+					//this.shoucangDetailList = [];
 					this.status = "loading"
-					//this.getRentalList();
+					//this.getProductList(limit);
 				}
+			},
+			
+			async getProductList(limit){
+				const res = await wx.cloud.callContainer({
+					config: {
+						env: 'prod-9gip97mx4bfa32a3', // 微信云托管的环境ID
+					},
+					path: `/user/getMyProductSave?limit=${limit}&offset=0`,
+					method: 'GET', 
+					header: {
+						'X-WX-SERVICE': 'springboot-ds71',
+					}
+				});
+				this.shoucangDetailList = res.data;
 			},
 			
 			onScrollLower:function(){
 				this.status = "loading";
-				this.status = "noMore";
 				console.log("success")
-				//this.getRentalList();
+				//this.getProduct();
+				this.status = "noMore";
 			}
 		}
 	}

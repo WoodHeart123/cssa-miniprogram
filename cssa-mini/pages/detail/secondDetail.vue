@@ -47,10 +47,7 @@
 			return {
 				isSaved: false,
 				product: {},
-				userInfo:{
-					nickname:'小红豆',
-					avatar:1,
-				},
+				userInfo:{},
 				condition: ['全新','几乎全新', '明显使用痕迹','部分损毁' ],
 				delivery: {
 					'pickup': '自取',
@@ -78,11 +75,16 @@
 				key: 'userInfo-2',
 				success: (res) => {
 					this.userInfo = res.data;
+					console.log(this.userInfo)
 				},
 				fail: () => {
 					console.log("fail");
 				},
 			});
+			
+			if(this.userInfo.savedProductJSON != null && this.userInfo.savedProductJSON.contains(this.product.productID)){
+				this.isSaved = true;
+			}
 		},
 	   
 		onShareTimeline() {
@@ -105,10 +107,28 @@
 				path: '/pages/detail/secondDetail?product=' + encodeURIComponent(JSON.stringify(this.product))
 			}
 		},
+		
+		beforeUnmount(){
+			console.log("Happy!")
+			uni.setStorageSync("userInfo-2",this.userInfo);
+			if(this.isSaved == true){
+				this.save();
+			}
+		},
+		
 		methods: {
 			onClickSave:function(){
 				if(!this.isSaved){
-					this.save();
+					if (this.userInfo.savedProductJSON == null){
+						this.userInfo.savedProductJSON = [];
+					}
+					this.userInfo.savedProductJSON = [...this.userInfo.savedProductJSON, this.product.productID]
+					this.isSaved = true;
+					console.log(this.userInfo)
+				} else {
+					this.userInfo.savedProductJSON = this.userInfo.savedProductJSON.filter(num=> num != this.product.productID);
+					this.isSaved = false;
+					console.log(this.userInfo)
 				}
 			},
 			
@@ -124,15 +144,13 @@
 					config: {
 						env: 'prod-9gip97mx4bfa32a3', // 微信云托管的环境ID
 					},
-					path: `/secondhand/collect?productID=${this.product.productID}&save=${true}`,
+					path: `/secondhand/collect?productID=${this.product.productID}`,
 					method: 'GET', 
 					header: {
 						'X-WX-SERVICE': 'springboot-ds71',
 					}
 				});
-				if(res.status == "101"){
-					this.isSaved = True;
-				}
+				this.isSaved = True;
 			},
 			async unsave(){
 				console.log('success');
@@ -140,7 +158,7 @@
 					config: {
 						env: 'prod-9gip97mx4bfa32a3', // 微信云托管的环境ID
 					},
-					path: `/secondhand/collect?productID=${this.product.productID}&save=${false}`,
+					path: `/secondhand/collect?productID=${this.product.productID}`,
 					method: 'GET', 
 					header: {
 						'X-WX-SERVICE': 'springboot-ds71',
