@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view class="house-detail">
 		<swiper class="swiper" indicator-dots>
 			<swiper-item v-for="(image, index) in houseInfo.images">
 				<image :src="image" @click="getImageIndex(index)"></image>
@@ -122,6 +122,11 @@
 </script>
 
 <style lang="scss">
+	.house-detail{
+		width: 100vw;
+		height: 100vh;
+		overflow-x:hidden;
+	}
 	#dollar-icon{
 		font-size:28px;
 		color: #9b0000;

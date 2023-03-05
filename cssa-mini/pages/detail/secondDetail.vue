@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view class="second-detail">
 		<swiper class="swiper" indicator-dots>
 			<swiper-item v-for="(image, index) in product.images">
 				<image :src="image"></image>
@@ -168,6 +168,11 @@
 </script>
 
 <style lang="scss">
+	.second-detail{
+		width: 100vw;
+		height: 100vh;
+		overflow-x: hidden;
+	}
 	#dollar-icon{
 		font-size:28px;
 		color: #9B0000;

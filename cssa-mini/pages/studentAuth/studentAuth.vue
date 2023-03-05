@@ -12,7 +12,7 @@
 			<button class="button disabled" v-show="showTime" plain="true" disabled="true">{{time}}秒后重新获取</button>
 		</view>
 
-		<button class="confirm-button"  v-show="showButton" @click="confirm">确定</button>
+		<button class="confirm-button" style="background-color: #9b0000; color: #ffffff;" v-show="showButton" @click="confirm">确定</button>
 		
 
 	</view>
