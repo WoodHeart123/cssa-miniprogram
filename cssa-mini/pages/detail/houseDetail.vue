@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view class="house-detail">
 		<swiper class="swiper" indicator-dots>
 			<swiper-item v-for="(image, index) in houseInfo.images">
 				<image :src="image" @click="getImageIndex(index)"></image>
@@ -9,9 +9,6 @@
 			<view class="price-box">
 				<view class="row-container" style="align-items: center;">
 					<view class="row-container tag"><text>{{rentalTime}}</text></view>
-				</view>
-				<view class="shoucang-box">
-					<text class="iconfont save-icon" :class="{'save-icon-selected' : isSaved}" @click="onClickSave()">&#xe6c9;</text>
 				</view>
 			</view>
 			<view class="row-container" style="margin-top: 5px; margin-left: 4px;">
@@ -52,7 +49,6 @@
 	export default {
 		data() {
 			return {
-				isSaved: false,
 				sexContraintValue:["仅限男生","仅限女生","性别不限"],
 				imageList: ["/static/housing.jpg", "/static/housing.jpg", "/static/housing.jpg"],
 				houseInfo: {},
@@ -60,11 +56,8 @@
 		},
 		
 		onLoad(options){
-			console.log(options);
 			wx.cloud.init();
 			this.houseInfo = JSON.parse(decodeURIComponent(options.rentalInfo));
-			console.log(this.houseInfo);
-			this.isSaved = true;
 		},
 
 	   	onShow() {
@@ -100,13 +93,6 @@
 			}
 		},
 		methods: {
-			onClickSave:function(){
-				if(!this.isSaved){
-					this.save();
-				}else{
-					this.unsave();
-				}
-			},
 			getImageIndex(index){
 				console.log(index);
 				uni.previewImage({
@@ -125,29 +111,6 @@
 						})
 					}
 				});
-			},
-			async save(){
-				console.log('success');
-				this.isSaved = true;
-				/*
-				const res = await wx.cloud.callContainer({
-					config: {
-						env: 'prod-9go38k3y9fee3b2e', // 微信云托管的环境ID
-					},
-					path: '/secondhand/collect?productID='+this.product.productID,
-					method: 'GET', 
-					header: {
-						'X-WX-SERVICE': 'springboot-f8i8',
-					}
-				});
-				if(res.status == "101"){
-					this.isSaved = True;
-				}
-				*/
-			},
-			async unsave(){
-				console.log('success');
-				this.isSaved = false;
 			}
 		},
 		computed: {
@@ -159,6 +122,11 @@
 </script>
 
 <style lang="scss">
+	.house-detail{
+		width: 100vw;
+		height: 100vh;
+		overflow-x:hidden;
+	}
 	#dollar-icon{
 		font-size:28px;
 		color: #9b0000;

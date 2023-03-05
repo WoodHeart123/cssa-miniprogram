@@ -1,7 +1,7 @@
 <template>
 	<view id="act">
 		<uni-segmented-control class="topBar" :current="current" :values="items" style-type="text"
-			active-color="#1684FC" @clickItem="onClickItem" />
+			active-color="#9b0000" @clickItem="onClickItem" />
 		<scroll-view class="scroll" scroll-top="0" scroll-y="true">
 			<view v-if="current == 0" v-for="(actDetail,index) in actDetailList" :key="index">
 				<act-box-vue @click="toDetail" class="act-box" :actDetail="actDetail" :ifJoined="false"></act-box-vue>
