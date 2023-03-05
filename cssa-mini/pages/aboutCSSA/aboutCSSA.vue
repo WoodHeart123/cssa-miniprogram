@@ -77,8 +77,6 @@
 				<view class = "gap"></view>
 				<view class = "gap"></view>
 				<view class = "gap"></view>
-				<view class = "gap"></view>
-				<view class = "gap"></view>
 				<view class = "zxt1">
 					<text style="font-weight: 100">感谢</text>
 					<text style="font-weight: 400">CSSA</text>
