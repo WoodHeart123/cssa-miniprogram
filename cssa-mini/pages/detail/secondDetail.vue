@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view class="second-detail">
 		<swiper class="swiper" indicator-dots>
 			<swiper-item v-for="(image, index) in product.images">
 				<image :src="image"></image>
@@ -8,14 +8,13 @@
 		<view class="basic">
 			<view class="price-box">
 				<view class="row-container" style="align-items: center;">
-					<view class="iconfont" id="dollar-icon">&#xe70b;</view>
-					<view class="price"><text>{{product.price}}</text></view>
+					<view class="price"><text>{{"$" + product.price}}</text></view>
 					<view class="row-container tag"><text>{{this.condition[product.productCondition]}}</text></view>
 					<view class="row-container tag"><text>{{this.delivery[product.delivery]}}</text></view>
 				</view>
-				<view class="shoucang-box">
-					<text class="iconfont save-icon" :class="{'save-icon-selected' : isSaved}" @click="onClickSave()">&#xe6c9;</text>
-				</view>
+<!-- 				<view class="shoucang-box">
+					<text class="iconfont save-icon" :class="{'save-icon-selected' : isSaved}" @click="save">&#xe6c9;</text>
+				</view> -->
 			</view>
 			<view class="second-name"><text>{{product.productTitle}}</text></view>
 		</view>
@@ -45,7 +44,7 @@
 	export default {
 		data() {
 			return {
-				isSaved: false,
+				isSaved:false,
 				product: {},
 				userInfo:{
 					nickname:'小红豆',
@@ -57,19 +56,20 @@
 					'deliver': '送货',
 					'all': '送/取',
 				},
+				collectProductList:[]
 				
 			}
 		},	
 		onLoad(options){
-			console.log(options);
 			wx.cloud.init();
 			this.product = JSON.parse(decodeURIComponent(options.product));
-			console.log(this.product);
-			save();
-			if (this.isSaved == True) {
-				this.shoucang = "/static/shoucang.png";
-			} else {
-				this.shoucang = "/static/weishoucang.png";
+			this.collectProductList = uni.getStorageSync("collectProductList");
+			if(!this.collectProductList){
+				this.getCollectList();
+			}else{
+				if(this.collectProductList.indexOf(this.product.productID) != -1){
+					this.isSaved = true;
+				}
 			}
 		},
 	
@@ -78,9 +78,6 @@
 				key: 'userInfo-2',
 				success: (res) => {
 					this.userInfo = res.data;
-				},
-				fail: () => {
-					console.log("fail");
 				},
 			});
 		},
@@ -106,48 +103,79 @@
 			}
 		},
 		methods: {
-			onClickSave:function(){
-				if(!this.isSaved){
-					this.save();
+			getCollectList:async function(){
+				const res = await wx.cloud.callContainer({
+					config: {
+						env: 'prod-9gip97mx4bfa32a3', // 微信云托管的环境ID
+					},
+					path: `/user/getCollectID?collectType=SECONDHAND`,
+					method: 'GET', 
+					header: {
+						'X-WX-SERVICE': 'springboot-ds71',
+					}
+				});
+				if(res.data.status && res.data.status == 100){
+					this.collectProductList = res.data.data;
+					uni.setStorage({
+						key:"collectProductList",
+						data: this.collectProductList
+					})
 				}
 			},
-			
 			setClipboardData: function() {
 				uni.setClipboardData({
 					data: " 微信号: " + this.product.contact
 				});
-			},
-			
+			},			
 			async save(){
-				console.log('success');
-				/*
 				const res = await wx.cloud.callContainer({
 					config: {
-<<<<<<< HEAD
 						env: 'prod-9gip97mx4bfa32a3', // 微信云托管的环境ID
-=======
-						env: 'prod-9go38k3y9fee3b2e', // 微信云托管的环境ID
->>>>>>> xyy
 					},
-					path: '/secondhand/collect?productID='+this.product.productID,
-					method: 'GET', 
+					path: `/user/collect?save=${!this.isSaved}`,
+					method: 'POST', 
 					header: {
-						'X-WX-SERVICE': 'springboot-f8i8',
+						'X-WX-SERVICE': 'springboot-ds71',
+					},
+					data:{
+						collectType:"SECONDHAND",
+						contentID: this.product.productID
 					}
 				});
-				if(res.status == "101"){
-					this.isSaved = True;
+				if(res.data.status == "100"){
+					this.isSaved = !this.isSaved;
+					if(this.isSaved){
+						this.collectProductList.push(this.product.productID)
+						uni.showToast({
+							mask:true,
+							title:"收藏成功"
+						})
+					}else{
+						this.collectProductList.splice(this.collectProductList.indexOf(this.product.productID), 1)
+						uni.showToast({
+							mask:true,
+							title:"取消收藏成功"
+						})
+					}
+					uni.setStorage({
+						key:"collectProductList",
+						data: this.collectProductList
+					})
 				}
-				*/
-			}
+			},
 		}
 	}
 </script>
 
 <style lang="scss">
+	.second-detail{
+		width: 100vw;
+		height: 100vh;
+		overflow-x: hidden;
+	}
 	#dollar-icon{
 		font-size:28px;
-		color: darkblue;
+		color: #9B0000;
 	}
 	.save-icon{
 		font-size: 25px;
@@ -171,7 +199,7 @@
 		padding: 2px 10px 2px 10px;
 		font-size: 13px;
 		margin-left: 10px;
-		background-color: #1e90ff;
+		background-color: #9B0000;
 		height: 25px;
 		border-radius: 5px;
 		color: #f5f5f5;
@@ -190,7 +218,8 @@
 		font-size: 24px;
 		line-height: 30px;
 		font-weight: bold;
-		color: darkblue;
+		color: #9B0000;
+		margin-left: 5px;
 	}
 	
 	.shoucang-box {

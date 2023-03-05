@@ -1,6 +1,6 @@
 <template>
 	<view class='product-box' @click="toSecondDetail">
-		<image class='photo' :src="product.images[0]" mode='aspectFill'></image>
+		<image class='photo' :src="product.images[0]" mode='aspectFill' lazy-load="true"></image>
 		<view class='row-container product-name-box'>
 			<view class='row-container delivery'>
 				<text>{{this.delivery[product.delivery]}}</text>
@@ -17,12 +17,14 @@
 		<view class='seller row-container'>
 			<image class='avatar' :src="'https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/' + this.product.sellerAvatar + '.jpg'"></image>
 			<view class='seller-name'><text>{{product.sellerNickname}}</text></view>
-			<view class='time'><text>3小时前</text></view>
+			<view class='time'><text>{{this.productPublishTime}}</text></view>
 		</view>
 	</view>
 </template>
 
 <script>
+	import moment from "moment/min/moment-with-locales";
+	import 'moment/locale/zh-cn';
 	export default {
 		props: ["product"],
 		name: "product-box",
@@ -34,6 +36,16 @@
 					'deliver': '送货',
 					'all': '送/取',
 				},
+				productPublishTime:""
+			}
+		},
+		mounted(){
+			if(moment().year() - moment.utc(this.product.UTCtime).year() > 0){
+				this.productPublishTime = moment.utc(this.product.UTCtime).format("YYYY-MM-DD");
+			}else if(Date.now() - moment.utc(this.product.UTCtime).valueOf() > 86400000 * 7){
+				this.productPublishTime = moment.utc(this.product.UTCtime).format("MM-DD");
+			}else{
+				this.productPublishTime = moment.utc(this.product.UTCtime).locale('zh-cn').fromNow();
 			}
 		},
 		methods: {
@@ -97,7 +109,7 @@
 	.price {
 		font-weight: 600;
 		height: 10%;
-		color: darkblue;
+		color: #9b0000;
 	}
 
 	.time {
@@ -116,9 +128,9 @@
 		padding-right: 3%;
 		text-align: center;
 		font-size: 10px;
-		color: #1E90FF;
+		color: #9b0000;
 		border-radius: 5px;
-		border-color: #1E90FF;
+		border-color: #9b0000;
 		border-style: solid;
 		border-width: 1pt;
 	}
@@ -141,7 +153,7 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
-		width: 101px;
+		width: 40px;
 		font-size: 10px;
 		color: darkgrey;
 		height: 12px;
@@ -151,7 +163,7 @@
 		position: absolute;
 		justify-content: center;
 		align-items: center;
-		background-color: #4169E1;
+		background-color: #9b0000;
 		color: white;
 		border-radius: 5px;
 		font-size: 12px;

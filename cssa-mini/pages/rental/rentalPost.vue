@@ -1,19 +1,32 @@
 <template>
 	<view id="rental-post">
 		<uni-forms ref="rentalForm" :model="rental" :rules="rules">
-			<view class="image_upload">
-				<uni-file-picker limit="5" fileMediatype="image" :auto-upload="false" @select="onSelectImage"
-					@delete="onDeleteImage"></uni-file-picker>
-			</view>
-			
-			
-			<view class="card label_group">
-				<text style="margin-left: -10px; margin-right: 10px; padding: 10px;">接受性别</text>
-				<uni-forms-item name="sexConstraint">
-					<uni-data-checkbox v-model="rental.gender" :localdata="sexConstraint"></uni-data-checkbox>
+			<view class="card uni-form-item uni-column">
+				<uni-forms-item name="imageList">	
+					<view class="image_upload">
+						<uni-file-picker limit="5" fileMediatype="image" :auto-upload="false" @select="onSelectImage"
+							@delete="onDeleteImage"></uni-file-picker>
+					</view>
 				</uni-forms-item>
 			</view>
 			
+
+			<view class="card label_group">
+				<uni-forms-item name="floorPlan">
+					<view class="row-view">
+						<span class="span_margin">户型</span>
+						<uni-data-picker placeholder="请选择户型" v-model="rental.floorPlan" :localdata="floorPlan" popup-title="请选择户型" :clear-icon=false />
+					</view>
+				</uni-forms-item>
+			</view>
+			
+			<view class="card label_group">
+				<uni-forms-item name="sexConstraint">
+					<uni-data-checkbox selectedColor="#9b0000" v-model="rental.sexConstraint"
+						:localdata="sexConstraint"></uni-data-checkbox>
+				</uni-forms-item>
+			</view>
+
 
 			<view class="card uni-form-item uni-column">
 				<uni-forms-item name="location">
@@ -25,22 +38,17 @@
 
 			<view class="card uni-textarea textbox">
 				<uni-forms-item name="description">
-					<uni-easyinput type="textarea" v-model="rental.description" placeholder="请描述房屋详情,如户型/地点/具体租期等"
-						maxlength="400" placeholderStyle="font-size:14px;color:gray" :clearable="clearable">
+					<uni-easyinput type="textarea" v-model="rental.description"
+						placeholder="请描述房屋详情,如户型/地点/具体租期,请包括整间转租还是单个卧室转租等" maxlength="400"
+						placeholderStyle="font-size:14px;color:gray" :clearable="clearable">
 					</uni-easyinput>
 				</uni-forms-item>
-
 			</view>
-			
 
-			<view class="card label_group">
-				<uni-forms-item name="floorPlan">
-					<uni-data-checkbox v-model="rental.floorPlan" :localdata="floorPlan"></uni-data-checkbox>
-				</uni-forms-item>
-			</view>
 
 			<view class="card" style="padding: 5px">
-				<uni-datetime-picker v-model="rental.time" type="daterange" :start="start" :end="end" :clear-icon="false" :border="false" @maskClick="maskClick" />
+				<uni-datetime-picker v-model="rental.time" type="daterange" :start="start" :end="end"
+					:clear-icon="false" :border="false" @maskClick="maskClick" />
 			</view>
 
 			<view class="card">
@@ -49,6 +57,7 @@
 						<span class="span_margin">$</span>
 						<uni-easyinput type="number" v-model="rental.price" placeholder="请填写价格"
 							placeholder-style="font-size:14px;color:gray" :clearable="clearable" />
+						<span>{{"/ 月"}}</span>
 					</view>
 				</uni-forms-item>
 			</view>
@@ -58,13 +67,12 @@
 					<view class="uni-column row-view">
 						<span class="span_margin">微信号</span>
 						<input class="uni-input" v-model="rental.contact" maxlength="22" placeholder="请填写微信号以便联系"
-							placeholder-style="font-size:14px;color:gray"/>
+							placeholder-style="font-size:14px;color:gray" />
 					</view>
 					<view class="checkbox check_message" v-if="!hasID">
 						<checkbox-group @change="checkBoxChange">
 							<checkbox value="save_contact" :checked="save" color="#9b0000"
 								style="transform:scale(0.8);" />
-
 							保存联系方式，方便后续使用
 						</checkbox-group>
 					</view>
@@ -82,9 +90,11 @@
 </template>
 
 <script>
+	import floorPlan from './rentalPost.js'
 	export default {
 		data() {
 			return {
+				unloading: false,
 				hasID: false,
 				save: true,
 				upLoadFail: false,
@@ -96,47 +106,22 @@
 					imageList: [],
 					description: "",
 					location: "",
-					time:[0,0]
+					time: [0, 0],
+					sexConstraint: -1,
+					floorPlan: ""
 				},
 				images: [],
 				sexConstraint: [{
-					text: "男",
+					text: "限男",
 					value: 0
 				}, {
-					text: "女",
+					text: "限女",
 					value: 1
 				}, {
-					text: "不限",
+					text: "性别不限",
 					value: 2
 				}],
-				floorPlan: [{
-					text: 'Studio',
-					value: 'STUDIO'
-				}, {
-					text: '1B1B',
-					value: '1B1B'
-				}, {
-					text: '2B1B',
-					value: '2B1B'
-				}, {
-					text: '2B2B',
-					value: '2B2B'
-				}, {
-					text: '3B2B',
-					value: '3B2B'
-				}, {
-					text: '3B3B',
-					value: '3B3B'
-				}, {
-					text: '4B2B',
-					value: '4B2B'
-				}, {
-					text: '4B3B',
-					value: '4B3B'
-				}, {
-					text: '其他',
-					value: 'others'
-				}],
+				floorPlan: floorPlan,
 				rules: {
 					location: {
 						rules: [{
@@ -194,15 +179,14 @@
 					}
 
 				},
+				userInfo:{}
 			}
 		},
 		onShow() {
 			wx.cloud.init();
-			let userInfo = uni.getStorageSync("userInfo-2");
-			this.rental.sellerAvatar = userInfo.avatar;
-			this.rental.sellerNickname = userInfo.nickname;
-			if (userInfo.wechatID != null) {
-				this.rental.contact = userInfo.wechatID;
+			this.userInfo = uni.getStorageSync("userInfo-2");
+			if (this.userInfo.wechatID != null) {
+				this.rental.contact = this.userInfo.wechatID;
 				this.save = false;
 				this.hasID = true;
 			}
@@ -269,8 +253,12 @@
 				console.log(this.rental.imageList);
 			},
 			submit(ref) {
-				console.log(this.save);
-				console.log(this.rental);
+				if(this.uploading){
+					return;
+				}
+				this.uploading = true;
+				this.rental.rentalStartTime = moment(this.rental.time[0],"YYYY-MM-DD").valueOf()
+				this.rental.rentalEndTime = moment(this.rental.time[1],"YYYY-MM-DD").valueOf()
 				this.$refs[ref].validate().then(res => {
 					this.uploadCount = 0;
 					this.uploadFail = false;
@@ -280,16 +268,20 @@
 					});
 					this.uploadImage();
 				}).catch(err => {
-					console.log('err', err);
+					uni.showToast({
+						title: err[0].errorMessage,
+						icon:"error"
+					})
 				})
 			},
 			uploadImage: async function() {
 				uni.showLoading({
-					title: "正在上传内容"
+					title: "正在上传内容",
+					mask: true
 				});
 				for (let i = 0; i < this.rental.imageList.length; i++) {
 					uni.uploadFile({
-						url: "http://cssa-mini-na.oss-us-west-1.aliyuncs.com",
+						url: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com",
 						filePath: this.rental.imageList[i].filepath,
 						fileType: 'image',
 						name: 'file',
@@ -302,18 +294,18 @@
 							success_action_status: 200,
 						},
 						success: res => {
-							console.log(res);
 							if (res.statusCode != 200) {
 								uni.hideLoading();
 								uni.showToast({
 									title: "上传图片失败",
 									icon: "error"
 								});
+								console.log(res)
 								this.uploadFail = true;
 							} else {
 								this.uploadCount++;
-								this.images.push("http://cssa-mini-na.oss-us-west-1.aliyuncs.com" +
-									"/cssa-secondhand/" + this.rental.imageList[i].filename)
+								this.images.push("https://cssa-mini-na.oss-us-west-1.aliyuncs.com" +
+									"/cssa-rental/" + this.rental.imageList[i].filename)
 							}
 							if (this.uploadCount == this.rental.imageList.length) {
 								this.rental.images = this.images,
@@ -332,19 +324,23 @@
 			},
 			postRental: async function() {
 				const res = await wx.cloud.callContainer({
-					config: {
-						env: 'prod-9go38k3y9fee3b2e',
+					config:{
+						env: 'prod-9gip97mx4bfa32a3',
 					},
-					path: `/rental/saveRental?save=${this.save}`,
+					path: `/rental/postRentalInfo?save=${this.save}`,
 					method: 'POST',
 					header: {
-						'X-WX-SERVICE': 'springboot-f8i8',
+						'X-WX-SERVICE': 'springboot-ds71',
 					},
 					data: this.rental
 				});
 				uni.hideLoading();
 				if (res.data.status == 100) {
-					uni.$emit("uploadSuccess");
+					if(this.rental.save = true){
+						this.userInfo.wechatID = this.rental.contact;
+					}
+					uni.setStorageSync("userInfo-2",this.userInfo)
+					uni.$emit("uploadRentalSuccess");
 					uni.navigateBack();
 				} else {
 					uni.showToast({
@@ -355,11 +351,14 @@
 			},
 		}
 	}
+	import moment from "moment/min/moment-with-locales";
+	import 'moment/locale/zh-cn';
 </script>
 
 <style>
 	#rental-post {
 		position: absolute;
+		min-width: 100vw;
 		height: 100vh;
 		padding: 0 3vw 0 3vw;
 		background-color: white;
@@ -447,6 +446,7 @@
 	}
 
 	.confirm-button {
+		margin-top: 20px;
 		margin-bottom: 20px;
 	}
 

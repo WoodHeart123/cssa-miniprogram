@@ -7,8 +7,7 @@
 
 			<view class="overlay" v-show="showMenu"></view>
 			<view class="column-container suggest-list" v-if="searching">
-				<uni-load-more v-show="searchStatus!='more'" :status="searchStatus" :contentText="searchContentText">
-				</uni-load-more>
+				<uni-load-more v-show="searchStatus!='more'" :status="searchStatus" :contentText="searchContentText" />
 				<view class="row-container suggest-box" v-for="(course, index) in suggestList" :key="index"
 					@click="toCourse(course)">
 					<view class="suggest-box-course-num">
@@ -84,7 +83,7 @@
 				sort: ["SORT_BY_COURSE_NUM", "SORT_BY_COMMENT_COUNT", "SORT_BY_AVG_DIFFICULTY_ASC",
 					"SORT_BY_AVG_DIFFICULTY_DESC", "SORT_BY_AVG_PREFER_DESC", "SORT_BY_AVG_PREFER_ASC"
 				],
-				courseCount: 1,
+				courseCount: 0,
 				sortIndex: 1,
 				departmentList: [],
 				departmentDict: [],
@@ -223,7 +222,7 @@
 					return;
 				}
 				this.courseList = [];
-				this.courseCount = 1;
+				this.courseCount = 0;
 				this.getCourseList()
 			},
 			async getCourseList() {
@@ -291,7 +290,6 @@
 				});
 			},
 			toCourse: function(course) {
-				console.log(course);
 				uni.navigateTo({
 					url: '/pages/coursePage/coursePage?course=' + encodeURIComponent(JSON.stringify(course)),
 				});

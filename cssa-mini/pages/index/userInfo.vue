@@ -1,12 +1,20 @@
 <template>
 	<script src="@/static/iconfont/iconfont.js"></script>
 	<view>
-		<!-- <view class="section-title">认证</view> -->
-<!-- 		<view class="box" @click="toStudentAuth">
+		<view class="section-title">头像</view>
+		<view class="avatar-box" @click="toChangeAvatar">
+			<view class="avatar-container">
+				<img class="avatar"
+					:src="'https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/' + this.userInfo.avatar + '.jpg'">
+			</view>
+			<view class="arrow"><span class="iconfont">&#xe62d;</span></view>
+		</view>
+		<view class="section-title">认证</view>
+		<view class="box" @click="toStudentAuth">
 			<view class="key">学生认证</view>
-			<view class="value">{{this.userInfo.isStudent?"已认证":"暂无认证"}}</view>
+			<view class="value">{{this.userInfo.isStudent?"已认证√":"暂无认证"}}</view>
 			<view class="arrow" v-if="!this.userInfo.isStudent"><span class="iconfont">&#xe62d;</span></view>
-		</view> -->
+		</view>
 		<view class="section-title">个人信息</view>
 		<view class="box" @click="toName">
 			<view class="key">昵称</view>
@@ -43,16 +51,20 @@
 				key: 'userInfo-2',
 				success: (res) => {
 					this.userInfo = res.data;
+					console.log(res.data)
 				},
 			});
 		},
 		methods:{
 			toEmail:function(){
 				uni.navigateTo({
-					url:"./updateEmail"
+					url:"/pages/index/updateEmail"
 				})
 			},
 			toStudentAuth:function(){
+				if(this.userInfo.isStudent){
+					return;
+				}
 				uni.navigateTo({
 					url: "/pages/studentAuth/studentAuth"
 				})
@@ -66,7 +78,13 @@
 				uni.navigateTo({
 					url: "./updateName"
 				})
-			}
+			},
+			toChangeAvatar:function(){
+				uni.navigateTo({
+					url: '/pages/changeAvatar/changeAvatar?avatar=' + encodeURIComponent(JSON.stringify(this
+						.userInfo.avatar)),
+				});
+			},
 			
 		}
 	}
@@ -80,6 +98,27 @@
 		color:#AAA;
 		margin-top:20px;
 		margin-bottom: 5px;
+	}
+	.avatar-box{
+		width:100%;
+		height:100px;
+		background-color: white;
+		display:flex;
+		flex-direction: row;
+		align-items: center;
+		line-height: 15px;
+	}
+	.avatar-container{
+		width: 80px;
+		height: 80px;
+		margin-left: 20px;
+		border-radius: 10px;
+		margin-right: calc(88% - 100px);
+	}
+	image{
+		width: 100%;
+		height: 100%;
+		border-radius: 10px;
 	}
 	.box{
 		width:100%;

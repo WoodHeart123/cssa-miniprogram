@@ -16,6 +16,7 @@
 				key: "userInfo-2",
 				success: (res)=> {
 					this.likedComment = res.data.likedComment;
+					this.avatar = res.data.avatar
 				},
 			});
 		},
@@ -38,6 +39,7 @@
 					contentrefresh: "正在加载...",
 					contentnomore: "没有更多了"
 				},
+				avatar: 2,
 				likedComment: [],
 				options1: [{
 						text: '修改评论',
@@ -73,13 +75,20 @@
 				if (res.data.status == 100) {
 					if (res.data.data.length < this.limit) {
 						this.status = "noMore";
+					}else{
+						this.status = "more";
 					}
 					for (let i = 0; i < res.data.data.length; i++) {
 						res.data.data[i].liked = (this.likedComment.indexOf(res.data.data[i].commentID) != -1)
+						res.data.data[i].userAvatar = this.avatar;
 					}
 					this.offset = res.data.data[res.data.data.length - 1].commentID;
+					this.myComment = this.myComment.concat(res.data.data);
+				}else{
+					this.status = "more";
 				}
-				this.myComment = this.myComment.concat(res.data.data);
+				
+				
 			},
 			deleteComment: async function(index, commentID) {
 				const res = await wx.cloud.callContainer({

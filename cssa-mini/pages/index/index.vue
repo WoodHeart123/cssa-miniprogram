@@ -4,12 +4,12 @@
 		<uni-popup ref="welcome" background-color="fff">
 			<welcome></welcome>
 		</uni-popup>
-		<view class="user-box" v-if="isLogin">
-			<view class="avatar-box" @click="toChangeAvatar">
+		<view class="user-box" v-if="isLogin"  @click="toUserInfo">
+			<view class="avatar-box">
 				<img class="avatar" 
 					:src="'https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/' + this.userInfo.avatar + '.jpg'">
 			</view>
-			<view class="name-box" @click="toUserInfo">
+			<view class="name-box">
 				<text class="nickname">{{userInfo.nickname}}</text>
 				<uni-tag class="tag" v-if="userInfo.isStudent" type="primary" :inverted="false" text="学生认证√" size="mini"
 					:circle="true" />
@@ -23,32 +23,33 @@
 		</view>
 		<view class="function-box">
 			<view class="function-sub-box">
-				<view class="button-box disabled">
-					<img class="image" src="../../static/index/community.svg" />
+				<!-- <view class="button-box disabled">
+					<img class="image" src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-icon/index/community.svg" />
 					<text class="text-box">我的帖子</text>
-				</view>
-				<view class="button-box" @click="jump(1)">
-					<img class="image" src="../../static/index/zan.svg" />
+				</view> -->
+<!-- 				<view class="button-box" @click="jump(1)">
+					<img class="image" src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-icon/index/zan.svg" />
 					<text class="text-box">赞/收藏</text>
-				</view>
+				</view> -->
 				<view class="button-box" @click="jump(2)">
-					<img class="image" src="../../static/index/comment.svg" />
+					<img class="image" src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-icon/index/comment.svg" />
 					<text class="text-box">我的评论</text>
 				</view>
 				<view class="button-box" @click="jump(3)">
-					<img class="image" src="../../static/index/ebay.svg" />
+					<img class="image" src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-icon/index/ebay.svg" />
 					<text class="text-box">我的二手</text>
+				</view>
+				<view class="button-box" @click="jump(4)">
+					<img class="image" src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-icon/index/join.svg" />
+					<text class="text-box">加入CSSA</text>
 				</view>
 			</view>
 			<view class="function-sub-box">
-				<view class="button-box disabled">
-					<img class="image" src="../../static/index/mem.svg" />
+				<!-- <view class="button-box disabled">
+					<img class="image" src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-icon/index/mem.svg" />
 					<text class="text-box">活动回忆</text>
-				</view>
-				<view class="button-box disabled">
-					<img class="image" src="../../static/index/join.svg" />
-					<text class="text-box">加入CSSA</text>
-				</view>
+				</view> -->
+				
 			</view>
 		</view>
 	</view>
@@ -76,9 +77,7 @@
 				fail: () => {
 					this.isLogin = false;
 				},
-			});
-			
-			
+			});	
 		},
 		onHide(){
 			this.$refs.welcome.close();
@@ -104,6 +103,8 @@
 					directURL = "/pages/myComment/myComment";
 				}if(index == 3){
 					directURL = "/pages/mySecondhand/mySecondhand";
+				}if (index == 4){
+					directURL = "/pages/aboutCSSA/aboutCSSA";
 				}
 				uni.navigateTo({
 					url: directURL
