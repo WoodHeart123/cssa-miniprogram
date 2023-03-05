@@ -186,7 +186,21 @@
                 "enablePullDownRefresh": false
             }
             
-        }
+        },
+		{
+			"path": "pages/aboutCSSA/ContactUs",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/aboutCSSA/Guanyu",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+		}
     ],
 		"condition": {
 			"current": 0,
@@ -228,6 +242,12 @@
 				},{
 					"name":"aboutCSSA",
 					"path":"pages/aboutCSSA/aboutCSSA"
+				},{
+					"name":"aboutCSSA",
+					"path":"pages/aboutCSSA/ContactUs"
+				},{
+					"name":"aboutCSSA",
+					"path":"pages/aboutCSSA/Guanyu"
 				}
 			]
 		},
