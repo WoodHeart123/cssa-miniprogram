@@ -69,7 +69,7 @@
 					config: {
 						env: 'prod-9gip97mx4bfa32a3', 
 					},
-					path: '/user/verifyAuthCode?authCode' + authCode,
+					path: '/user/verifyAuthCode?authCode' + this.authCode,
 					method: 'GET', 
 					header: {
 						'X-WX-SERVICE': 'springboot-ds71',
