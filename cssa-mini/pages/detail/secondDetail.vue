@@ -94,7 +94,7 @@
 
 		onShareTimeline() {
 			return {
-				title: this.product.productTitle,
+				title: "【出售】" + this.product.productTitle,
 				imageUrl: this.product.images[0],
 				path: '/pages/detail/secondDetail?product=' + encodeURIComponent(JSON.stringify(this.product))
 			}
@@ -105,7 +105,7 @@
 				console.log(res.target)
 			}
 			return {
-				title: this.product.productTitle + ": $" + this.product.price,
+				title: "【出售】" + this.product.productTitle,
 				desc: "CSSA二手交易平台",
 				content: this.product.productType,
 				imageUrl: this.product.images[0],

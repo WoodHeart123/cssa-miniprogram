@@ -78,9 +78,9 @@
 
 		onShareTimeline() {
 			return {
-				title: this.houseInfo.name,
-				imageUrl: "/static/renwu.jpeg",
-				path: '/pages/detail/houseDetail?houseInfo=' + encodeURIComponent(JSON.stringify(this.houseInfo))
+				title: "【转租】" + this.houseInfo.name,
+				imageUrl: this.houseInfo.images[0],
+				path: '/pages/detail/houseDetail?rentalInfo=' + encodeURIComponent(JSON.stringify(this.houseInfo))
 			}
 		},
 
@@ -89,11 +89,10 @@
 				console.log(res.target)
 			}
 			return {
-				title: this.houseInfo.name + ": $" + 1200,
-				desc: "CSSA二手交易平台",
-				content: "very happy",
-				imageUrl: "/static/renwu.jpeg",
-				path: '/pages/detail/housedDetail?houseInfo=' + encodeURIComponent(JSON.stringify(this.houseInfo))
+				title: "【转租】" + this.houseInfo.name,
+				desc: "CSSA转租分享平台",
+				imageUrl: this.houseInfo.images[0],
+				path: '/pages/detail/housedDetail?rentalInfo=' + encodeURIComponent(JSON.stringify(this.houseInfo))
 			}
 		},
 		methods: {
@@ -242,6 +241,7 @@
 	}
 	
 	.contact{
+		position: relative;
 		width: 90vw;
 		height: 110px;
 		margin-left: 5vw;

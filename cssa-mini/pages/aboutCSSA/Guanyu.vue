@@ -1,10 +1,9 @@
 <template>
 	<view class="topic-1">关于学联</view>
 	<view class="app_content_1">_______________________________________________</view>
-	<view class="middle-left">&nbsp&nbsp一封端庄的自我介绍————来自CSSA</view>
+	<view class="middle-left" style="text-align: center;">一封端庄的自我介绍信</view>
 	<view class = "gap"></view>
-	<scroll-view :scroll-top="scrollTop" scroll-y="true" class="scroll-Y" @scrolltoupper="upper"
-		@scrolltolower="lower" @scroll="scroll">
+	<view>
 		<view class="middle-text">&nbsp&nbsp&nbsp&nbspCSSA是中国学生学者联合会，是由在海外的留学生自发成立的，如今在全球各地的高校中都不乏其身影的中国学生组织。仅在美国，超过百所高校的中国留学生成立了CSSA。 CSSA在全球发展中日渐成熟，为在美中国学生学者包含本科生、研究生、硕士生、博士生、访问学者以及教授等在内的华人群体提供生活服务，学术支持，以及社交平台。
 		</view>
 		<view class = "gap"></view>
@@ -16,14 +15,13 @@
 		<view class = "gap"></view>
 		<view class="middle-text">这些活动不只为学生们带来了生活乐趣和归属感，在推广中华文化的同时也为麦迪逊带来了不一样的文化气息。当然这些成绩不是一个力量下的成果，而是集结了各个学生以及组织，还有很多人的一份心力。
 		</view>
-	</scroll-view>
+	</view>
 	<view class="app_content_1">_______________________________________________</view>
 	<view class = "gap"></view>
 	<view class="topic-2">学校介绍</view>
 	<image class="image" src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-main/badger.jpg"></image>
 	<view class="gap"></view>
-	<scroll-view :scroll-top="scrollTop" scroll-y="true" class="scroll-Y1" @scrolltoupper="upper"
-		@scrolltolower="lower" @scroll="scroll">
+	<view>
 		<view class="middle-text">
 			<text class="school-name">威斯康辛麦迪逊大学(UW-Madison)</text>
 			<text>是威斯康辛大学系统的旗帜性学校，建于1848年，是一所历史悠久，享有盛名的美国研究型公立高等学府，它经常被视为公立的常青藤名校之一， 按美国全国研究会（National Research Council）的研究结果，威斯康辛大学有70个科目排在全美前十名。
@@ -32,7 +30,7 @@
 			<text>我校在各个学科和领域均享有声誉，产生了21位诺贝尔奖获得者，12位美国国家科学奖章获得者，还拥有87位美国国家科学院院士，26位美国国家工程院院士，61位美国艺术与科学院院士，8位美国国家医学院院士。
 			</text>
 		</view>
-	</scroll-view>
+	</view>
 	<view class="app_content_1">_______________________________________________</view>
 	<view class="gap"></view>
 	<view class="middle-text">初来乍到，捏着发烫的offer，</view>

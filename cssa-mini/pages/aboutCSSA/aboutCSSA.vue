@@ -12,8 +12,7 @@
 				<image class="image" src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-main/chunwan-min.jpg"></image>
 			</swiper-item>
 		</swiper>
-		<scroll-view :scroll-top="scrollTop" scroll-y="true" class="scroll-Y" @scrolltoupper="upper"
-			@scrolltolower="lower" @scroll="scroll">
+		<view>
 			<view class="box">
 				<view class="label" v-for="(row,index) in orderTypeLise" :key="row.name" hover-class="hover" @click="toPage(index)">
 					<view class="icon">
@@ -87,7 +86,7 @@
 				<image class="sponsor" src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-main/sponsor2.jpeg"></image>
 				<image class="sponsor" src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-main/sponsor3.jpeg"></image>
 			</view>
-		</scroll-view>
+		</view>
 	</view>
 </template>
 
@@ -174,7 +173,7 @@
 	.about-page{
 		width: 100vw;
 		height: 100vh;
-		overflow: hidden;
+		overflow-y: scroll;
 	}
 	.box {
 		width: 96%;
