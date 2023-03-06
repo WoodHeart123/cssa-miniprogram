@@ -32,6 +32,10 @@
 				</view>
 			</view>
 			<view class="weixin">微信号：{{houseInfo.contact}}</view>
+			<view class="contact-overlay" v-show="!this.isLogin">
+				<button class="login-button" plain="true"
+					@click="getUserProfile">点击登录可查看联系方式</button>
+			</view>
 		</view>
 		<view class="description">
 			<view class="scroll-page">
@@ -117,7 +121,33 @@
 					current:this.houseInfo.images[0],
 					urls:this.houseInfo.images
 				});
-			}
+			},
+			getUserProfile: function() {
+				uni.getUserProfile({
+					desc: "获取用户昵称",
+					success: (userProfile) => {
+						this.userInfo.nickname = userProfile.userInfo.nickName;
+						this.login(userProfile.userInfo.nickName);
+					},
+				});
+			},
+			async login(nickname) {
+				uni.showLoading()
+				const res = await wx.cloud.callContainer({
+					config: {
+						env: 'prod-9gip97mx4bfa32a3',
+					},
+					path: "/user/login?nickname=" + encodeURI(nickname),
+					method: 'GET',
+					header: {
+						'X-WX-SERVICE': 'springboot-ds71',
+					}
+				});
+				uni.hideLoading();
+				this.userInfo = res.data.data;
+				this.isLogin = true;
+				uni.setStorageSync("userInfo-2",res.data.data);
+			},
 		},
 		computed: {
 			rentalTime(){
@@ -226,6 +256,28 @@
 		align-items: center;
 		height: 50px;
 		width: 100vw;
+	}
+	.contact-overlay {
+		top: 0;
+		position: absolute;
+		height: 100%;
+		width: 100%;
+		background-color: rgba(139, 139, 139, 1.0);
+		line-height: 110px;
+		text-align: center;
+		font-size: 30px;
+		color: rgba(155, 0, 0, 0.5);
+		border-radius: 5px;
+		border: 5px rgba(34, 34, 34, 0.5);
+	}
+	
+	.login-button {
+		color: rgba(155, 0, 0, 0.5) !important;
+		border: none !important;
+		height: 100%;
+		width: 100%;
+		background-color: rgba(139, 139, 139, 1.0) !important;
+		line-height: 100px;
 	}
 
 	.avatar {

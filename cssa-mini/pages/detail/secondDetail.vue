@@ -1,7 +1,8 @@
 <template>
 	<view class="second-detail">
 		<swiper class="swiper" indicator-dots>
-			<swiper-item  style="display:flex;align-items: center;justify-content: center;" v-for="(image, index) in product.images" @click="previewImage">
+			<swiper-item style="display:flex;align-items: center;justify-content: center;"
+				v-for="(image, index) in product.images" @click="previewImage">
 				<image mode="heightFix" :src="image"></image>
 			</swiper-item>
 		</swiper>
@@ -12,7 +13,7 @@
 					<view class="row-container tag"><text>{{this.condition[product.productCondition]}}</text></view>
 					<view class="row-container tag"><text>{{this.delivery[product.delivery]}}</text></view>
 				</view>
-<!-- 				<view class="shoucang-box">
+				<!-- 				<view class="shoucang-box">
 					<text class="iconfont save-icon" :class="{'save-icon-selected' : isSaved}" @click="save">&#xe6c9;</text>
 				</view> -->
 			</view>
@@ -28,7 +29,11 @@
 					<img class="copy-img" src="/static/fuzhi.png" @click="setClipboardData">
 				</view>
 			</view>
-			<view class="weixin">微信号：{{product.contact}}</view>
+			<view class="weixin" v-show="this.isLogin">微信号：{{product.contact}}</view>
+			<view class="contact-overlay" v-show="!this.isLogin">
+				<button class="login-button" plain="true"
+					@click="getUserProfile">点击登录可查看联系方式</button>
+			</view>
 		</view>
 		<view class="description">
 			<view class="scroll-page">
@@ -44,44 +49,49 @@
 	export default {
 		data() {
 			return {
-				isSaved:false,
+				isSaved: false,
 				product: {},
-				userInfo:{
-					nickname:'小红豆',
-					avatar:1,
+				userInfo: {
+					nickname: '小红豆',
+					avatar: 1,
 				},
-				condition: ['全新','几乎全新', '明显使用痕迹','部分损毁' ],
+				condition: ['全新', '几乎全新', '明显使用痕迹', '部分损毁'],
 				delivery: {
 					'pickup': '自取',
 					'deliver': '送货',
 					'all': '送/取',
 				},
-				collectProductList:[]
-				
-			}
-		},	
-		onLoad(options){
-			wx.cloud.init();
-			this.product = JSON.parse(decodeURIComponent(options.product));
-			this.collectProductList = uni.getStorageSync("collectProductList");
-			if(!this.collectProductList){
-				this.getCollectList();
-			}else{
-				if(this.collectProductList.indexOf(this.product.productID) != -1){
-					this.isSaved = true;
-				}
+				collectProductList: [],
+				isLogin: false,
+
 			}
 		},
-	
+		onLoad(options) {
+			wx.cloud.init();
+			this.product = JSON.parse(decodeURIComponent(options.product));
+			// this.collectProductList = uni.getStorageSync("collectProductList");
+			// if(!this.collectProductList){
+			// 	this.getCollectList();
+			// }else{
+			// 	if(this.collectProductList.indexOf(this.product.productID) != -1){
+			// 		this.isSaved = true;
+			// 	}
+			// }
+		},
+
 		onShow() {
 			uni.getStorage({
 				key: 'userInfo-2',
 				success: (res) => {
 					this.userInfo = res.data;
+					this.isLogin = true;
 				},
+				fail: (res) => {
+					this.isLogin = false;
+				}
 			});
 		},
-	   
+
 		onShareTimeline() {
 			return {
 				title: this.product.productTitle,
@@ -103,21 +113,21 @@
 			}
 		},
 		methods: {
-			getCollectList:async function(){
+			getCollectList: async function() {
 				const res = await wx.cloud.callContainer({
 					config: {
 						env: 'prod-9gip97mx4bfa32a3', // 微信云托管的环境ID
 					},
 					path: `/user/getCollectID?collectType=SECONDHAND`,
-					method: 'GET', 
+					method: 'GET',
 					header: {
 						'X-WX-SERVICE': 'springboot-ds71',
 					}
 				});
-				if(res.data.status && res.data.status == 100){
+				if (res.data.status && res.data.status == 100) {
 					this.collectProductList = res.data.data;
 					uni.setStorage({
-						key:"collectProductList",
+						key: "collectProductList",
 						data: this.collectProductList
 					})
 				}
@@ -126,47 +136,73 @@
 				uni.setClipboardData({
 					data: " 微信号: " + this.product.contact
 				});
-			},			
-			async save(){
+			},
+			getUserProfile: function() {
+				uni.getUserProfile({
+					desc: "获取用户昵称",
+					success: (userProfile) => {
+						this.userInfo.nickname = userProfile.userInfo.nickName;
+						this.login(userProfile.userInfo.nickName);
+					},
+				});
+			},
+			async login(nickname) {
+				uni.showLoading()
+				const res = await wx.cloud.callContainer({
+					config: {
+						env: 'prod-9gip97mx4bfa32a3',
+					},
+					path: "/user/login?nickname=" + encodeURI(nickname),
+					method: 'GET',
+					header: {
+						'X-WX-SERVICE': 'springboot-ds71',
+					}
+				});
+				uni.hideLoading();
+				this.userInfo = res.data.data;
+				this.isLogin = true;
+				uni.setStorageSync("userInfo-2",res.data.data);
+			},
+			async save() {
 				const res = await wx.cloud.callContainer({
 					config: {
 						env: 'prod-9gip97mx4bfa32a3', // 微信云托管的环境ID
 					},
 					path: `/user/collect?save=${!this.isSaved}`,
-					method: 'POST', 
+					method: 'POST',
 					header: {
 						'X-WX-SERVICE': 'springboot-ds71',
 					},
-					data:{
-						collectType:"SECONDHAND",
+					data: {
+						collectType: "SECONDHAND",
 						contentID: this.product.productID
 					}
 				});
-				if(res.data.status == "100"){
+				if (res.data.status == "100") {
 					this.isSaved = !this.isSaved;
-					if(this.isSaved){
+					if (this.isSaved) {
 						this.collectProductList.push(this.product.productID)
 						uni.showToast({
-							mask:true,
-							title:"收藏成功"
+							mask: true,
+							title: "收藏成功"
 						})
-					}else{
+					} else {
 						this.collectProductList.splice(this.collectProductList.indexOf(this.product.productID), 1)
 						uni.showToast({
-							mask:true,
-							title:"取消收藏成功"
+							mask: true,
+							title: "取消收藏成功"
 						})
 					}
 					uni.setStorage({
-						key:"collectProductList",
+						key: "collectProductList",
 						data: this.collectProductList
 					})
 				}
-			},			
-			previewImage: function(){
+			},
+			previewImage: function() {
 				wx.previewImage({
-					current:this.product.images[0],
-					urls:this.product.images
+					current: this.product.images[0],
+					urls: this.product.images
 				});
 			}
 		}
@@ -174,22 +210,26 @@
 </script>
 
 <style lang="scss">
-	.second-detail{
+	.second-detail {
 		width: 100vw;
 		height: 100vh;
 		overflow-x: hidden;
 	}
-	#dollar-icon{
-		font-size:28px;
+
+	#dollar-icon {
+		font-size: 28px;
 		color: #9B0000;
 	}
-	.save-icon{
+
+	.save-icon {
 		font-size: 25px;
 		transition: all 0.5s;
 	}
-	.save-icon-selected{
-		color:#FFDE03;
+
+	.save-icon-selected {
+		color: #FFDE03;
 	}
+
 	.weixin {
 		margin: 10px 0 10vw 40px;
 		color: dimgray;
@@ -227,7 +267,7 @@
 		color: #9B0000;
 		margin-left: 5px;
 	}
-	
+
 	.shoucang-box {
 		display: flex;
 		flex-direction: column;
@@ -239,7 +279,7 @@
 		justify-content: center;
 		margin-right: 10px;
 	}
-	
+
 	.price-box {
 		display: flex;
 		flex-direction: row;
@@ -259,13 +299,37 @@
 		margin-top: 1vh;
 		user-select: text;
 	}
-	
-	.contact{
+
+	.contact {
+		position: relative;
 		width: 90vw;
 		height: 110px;
 		margin-left: 5vw;
 		box-shadow: 0 0px 6px 1px rgba(165, 165, 165, 0.2);
 		border-radius: 5px;
+	}
+
+	.contact-overlay {
+		top: 0;
+		position: absolute;
+		height: 100%;
+		width: 100%;
+		background-color: rgba(139, 139, 139, 1.0);
+		line-height: 110px;
+		text-align: center;
+		font-size: 30px;
+		color: rgba(155, 0, 0, 0.5);
+		border-radius: 5px;
+		border: 5px rgba(34, 34, 34, 0.5);
+	}
+
+	.login-button {
+		color: rgba(155, 0, 0, 0.5) !important;
+		border: none !important;
+		height: 100%;
+		width: 100%;
+		background-color: rgba(139, 139, 139, 1.0) !important;
+		line-height: 100px;
 	}
 	
 	.contact-box {
@@ -314,10 +378,11 @@
 			height: 100%;
 		}
 	}
-	
-	.description{
+
+	.description {
 		margin-top: 10px;
 	}
+
 	.scroll-page {
 		padding: 15px;
 		width: calc(100% - 30px);

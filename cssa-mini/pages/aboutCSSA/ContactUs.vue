@@ -13,15 +13,6 @@
 		<view class="text-middle"> ->&nbsp&nbspInstagram: Cssa_at-Uwmadison</view>
 		<view class = "gap"></view>
 		<view class="text-middle"> ->&nbsp&nbspInstagram: Facebook: CSSA At UW-Madison</view>
-		<view class="app_content_1">____________________________________________</view>
-		<view class="topic-2">&nbsp&nbsp&nbsp&nbsp新生微信群</view>
-		<view class = "small-gap"></view>
-		<view class="small-text">2023秋季新生群、家长群已建立，请添加下方学联小助手</view>
-		<view class="small-text">微信，并备注上自己的NetID，小助手会把你们拉进秋季新</view>
-		<view class="small-text">生群。家长也可以让小助手拉您进家长群,只需在加微信时</view>
-		<view class="small-text">备注上“家长”就可以了。</view>
-		<view class = "gap"></view>
-		<image class="image" src="../../static/QR.jpg"></image>
 	</view>
 </template>
 
