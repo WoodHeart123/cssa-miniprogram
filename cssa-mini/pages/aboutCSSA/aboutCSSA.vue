@@ -46,17 +46,18 @@
 				<view class="name">
 					<text style="font-weight: 400">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp杨天林&nbsp&nbsp</text>
 					<text style="font-weight: 100">现任主席</text>
-					<text style="font-weight: 400">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp楚芸蔚</text>
-					<text style="font-weight: 400">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp沈格非&nbsp&nbsp</text>
+					<text style="font-weight: 400">&nbsp&nbsp&nbsp&nbsp&nbsp楚芸蔚&nbsp&nbsp</text>
+					<text style="font-weight: 100">外联部长</text>
+					<text style="font-weight: 400">&nbsp&nbsp&nbsp&nbsp沈格非&nbsp&nbsp</text>
 					<text style="font-weight: 100">多媒体部长</text>
 				</view>
 				<image mode="aspectFit" class="zhuxituan" src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-main/zhuxituan1.png"></image>
 				<view class="name">
 					<text style="font-weight: 400">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp马伊侬&nbsp&nbsp</text>
 					<text style="font-weight: 100">宣传部长</text>
-					<text style="font-weight: 400">&nbsp&nbsp&nbsp&nbsp&nbsp侯映泽&nbsp&nbsp</text>
+					<text style="font-weight: 400">&nbsp&nbsp&nbsp&nbsp侯映泽&nbsp&nbsp</text>
 					<text style="font-weight: 100">活动部长</text>
-					<text style="font-weight: 400">&nbsp&nbsp&nbsp苏浩涵&nbsp&nbsp</text>
+					<text style="font-weight: 400">&nbsp&nbsp&nbsp&nbsp&nbsp苏浩涵&nbsp&nbsp</text>
 					<text style="font-weight: 100">研究生部长</text>
 				</view>
 				<image mode="aspectFit" class="zhuxituan" src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-main/zhuxituan3.png"></image>
