@@ -1,9 +1,8 @@
 <template>
 	<view>
 		<view class="row-container">
-			<view class="info-box"><text>二手收藏</text></view>
-			<view class="info-box"><text>租房收藏</text></view>
-			<view class="info-box"><text>点赞</text></view>
+			<view class="info-box" @click="page(1)"><text>二手收藏</text></view>
+			<view class="info-box" @click="page(2)"><text>租房收藏</text></view>
 		</view>
 		<scroll-view scroll-y="true" show-scrollbar="true" refresher-enabled="true"
 			class="column-container rental-scroll" refresher-background="white" @refresherrefresh="refresh"
@@ -72,7 +71,8 @@
 				],
 				limit:10,
 				triggered:false,
-				status:"loading"
+				status:"loading",
+				index: 1
 			}
 		},
 		onLoad() {
@@ -81,6 +81,10 @@
 		},
 		
 		methods: {
+			page: function(index){
+					
+			},
+	
 			receive: function(key1){
 				console.log(key1)
 				console.log(this.shoucangDetailList)
@@ -91,14 +95,19 @@
 			refresh:function(){
 				if (!this.triggered) {
 					this.triggered = true;
-					this.limit = 10;
-					//this.shoucangDetailList = [];
+					this.limit = 20;
+					this.offset = 1;
+					this.shoucangDetailList = [];
 					this.status = "loading"
-					//this.getProductList(limit);
+					this.getProductList();
 				}
 			},
 			
 			async getProductList(limit){
+				if(this.status == "noMore"){
+					return;
+				}
+				
 				const res = await wx.cloud.callContainer({
 					config: {
 						env: 'prod-9gip97mx4bfa32a3', // 微信云托管的环境ID
@@ -114,7 +123,8 @@
 			
 			onScrollLower:function(){
 				this.status = "loading";
-				console.log("success")
+				this.limit += 10;
+				console.log("success");
 				//this.getProduct();
 				this.status = "noMore";
 			}
