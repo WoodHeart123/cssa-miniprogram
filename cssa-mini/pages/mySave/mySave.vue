@@ -4,14 +4,7 @@
 			<view class="info-box" @click="page(1)"><text>二手收藏</text></view>
 			<view class="info-box" @click="page(2)"><text>租房收藏</text></view>
 		</view>
-		<scroll-view scroll-y="true" show-scrollbar="true" refresher-enabled="true"
-			class="column-container rental-scroll" refresher-background="white" @refresherrefresh="refresh"
-			enable-back-to-top="true" :refresher-triggered="triggered" @scrolltolower="onScrollLower">
-			<view class="boxes" v-for="(shoucangDetail,index) in shoucangDetailList">
-				<shoucang-box-vue v-on:delete="receive" :product="shoucangDetail"></shoucang-box-vue>
-			</view>
-			<uni-load-more style="padding-bottom: 50px;" :status="status"></uni-load-more>
-		</scroll-view>
+		<uni-load-more style="padding-bottom: 50px;" :status="status"></uni-load-more>
 	</view>
 </template>
 
@@ -69,9 +62,9 @@
 						images: ["https://cssa-mini.oss-cn-shanghai.aliyuncs.com/cssa-community-image/renwu.jpeg"],
 					}
 				],
-				limit:10,
+				limit:20,
 				triggered:false,
-				status:"loading",
+				status:"noMore",
 				index: 1
 			}
 		},
@@ -81,8 +74,10 @@
 		},
 		
 		methods: {
+
 			page: function(index){
-					
+				this.index = index;
+				getList()
 			},
 	
 			receive: function(key1){
@@ -96,36 +91,50 @@
 				if (!this.triggered) {
 					this.triggered = true;
 					this.limit = 20;
-					this.offset = 1;
+					this.offset = 0;
 					this.shoucangDetailList = [];
 					this.status = "loading"
-					this.getProductList();
+					this.getList();
 				}
 			},
 			
-			async getProductList(limit){
+			async getList(){
 				if(this.status == "noMore"){
 					return;
 				}
-				
-				const res = await wx.cloud.callContainer({
-					config: {
-						env: 'prod-9gip97mx4bfa32a3', // 微信云托管的环境ID
-					},
-					path: `/user/getMyProductSave?limit=${limit}&offset=0`,
-					method: 'GET', 
-					header: {
-						'X-WX-SERVICE': 'springboot-ds71',
+				if (this.index == 1){
+					const res = await wx.cloud.callContainer({
+						config: {
+							env: 'prod-9gip97mx4bfa32a3', // 微信云托管的环境ID
+						},
+						path: `/user/getMyProductSave?limit=${this.limit}&offset=${this.offset}`,
+						method: 'GET', 
+						header: {
+							'X-WX-SERVICE': 'springboot-ds71',
+						}
+					});
+					if(res.data.status == 100){
+						this.shoucangDetailList = res.shoucangDetailList.concat(res.data.data);
 					}
-				});
-				this.shoucangDetailList = res.data;
+					this.offset += res.data.data.length;
+					if(res.data.data.length != this.limit){
+						this.status = "noMore";
+					}else{
+						this.status = "more";
+					}
+					this.$nextTick(() => {
+						this.triggered = false;
+					});
+				} else if(this.index == 2){
+					return;
+				}
 			},
 			
 			onScrollLower:function(){
 				this.status = "loading";
 				this.limit += 10;
 				console.log("success");
-				//this.getProduct();
+				//this.getList();
 				this.status = "noMore";
 			}
 		}
@@ -149,7 +158,7 @@
 	}
 	
 	.rental-scroll{
-		height: calc(100vh - 92px);
+		height: 100vh;
 		width: 100%;
 		overflow: hidden;
 		background-color: white;

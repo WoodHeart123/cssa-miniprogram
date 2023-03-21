@@ -21,6 +21,7 @@
 				</view>
 			</view>
 			<uni-load-more :contentText="contentText" :status="status"></uni-load-more>
+			<view style="height: 100px;"></view>
 		</scroll-view>
 		<uni-fab :pattern="pattern" horizontal="right" vertical="bottom" popMene="false" @fabClick="toPostProduct" />
 	</view>
@@ -48,6 +49,7 @@
 					contentrefresh:"正在加载...",
 					contentnomore:"没有更多商品了"
 				},
+				isLogin: false,
 			}
 		},
 		onLoad(){
@@ -56,6 +58,12 @@
 		},
 		onShow() {
 			uni.$on("uploadSuccess",this.uploadSuccess);
+			uni.getStorage({
+				key: "userInfo-2",
+				success:() => {
+					this.isLogin = true;
+				}
+			});
 		},
 		methods: {
 			uploadSuccess:function(){
@@ -74,11 +82,33 @@
 				if (!this.triggered) {
 					this.triggered = true;
 					this.limit = 20;
-					this.offset = 1;
+					this.offset = 0;
 					this.productList = [];
 					this.status = "loading"
 					this.getProductList();
 				}
+			},
+			async login(name) {
+				uni.showLoading({
+					mask:true
+				});
+				const res = await wx.cloud.callContainer({
+					config: {
+						env: 'prod-9gip97mx4bfa32a3',
+					},
+					path: "/user/login?nickname=" + encodeURI(name),
+					method: 'GET',
+					header: {
+						'X-WX-SERVICE': 'springboot-ds71',
+					}
+				});
+				this.isLogin = true;
+				uni.setStorage({
+					key: "userInfo-2",
+					data: res.data.data
+				});
+				uni.hideLoading();
+				this.toPostProduct();
 			},
 			getProductList:async function(){
 				if(this.status == "noMore"){
@@ -107,7 +137,26 @@
 					this.triggered = false;
 				});
 			},
-			toPostProduct: function(index) {
+			toPostProduct: function() {
+				if (!this.isLogin) {
+					uni.showToast({
+						title:"请先登录",
+						icon:"none"
+					});
+					uni.getUserProfile({
+						desc: "获取用户信息",
+						success: (userProfile) => {
+							this.login(userProfile.userInfo.nickName);
+						},
+						fail: () => {
+							uni.showToast({
+								title: "请先登陆",
+								icon: "none"
+							});
+						}
+					});
+					return;
+				}
 				uni.navigateTo({
 					url: "/pages/second/secondMainPost"
 				})

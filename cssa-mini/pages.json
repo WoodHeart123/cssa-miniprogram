@@ -11,7 +11,7 @@
 		}, {
 			"path": "pages/index/index",
 			"style": {
-				// "navigationBarTitleText": "用户",
+				"navigationBarTitleText": "用户主页",
 				"backgroundColor": "#F5F5F5"
 			}
 		}, {
@@ -81,7 +81,14 @@
 		}, {
 			"path": "pages/index/updateName",
 			"style": {
-				"navigationBarTitleText": "",
+				"navigationBarTitleText": "更新昵称",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/index/updateID",
+			"style": {
+				"navigationBarTitleText": "更新微信号",
 				"enablePullDownRefresh": false
 			}
 
@@ -176,7 +183,6 @@
                 "navigationBarTitleText": "",
                 "enablePullDownRefresh": false
             }
-            
         }
         ,{
             "path" : "pages/aboutCSSA/aboutCSSA",
@@ -186,7 +192,21 @@
                 "enablePullDownRefresh": false
             }
             
-        }
+        },
+		{
+			"path": "pages/aboutCSSA/ContactUs",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/aboutCSSA/Guanyu",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+		}
     ],
 		"condition": {
 			"current": 0,
@@ -228,6 +248,12 @@
 				},{
 					"name":"aboutCSSA",
 					"path":"pages/aboutCSSA/aboutCSSA"
+				},{
+					"name":"aboutCSSA",
+					"path":"pages/aboutCSSA/ContactUs"
+				},{
+					"name":"aboutCSSA",
+					"path":"pages/aboutCSSA/Guanyu"
 				}
 			]
 		},

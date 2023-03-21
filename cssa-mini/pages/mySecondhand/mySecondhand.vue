@@ -1,58 +1,58 @@
 <template>
 	<view class="my-secondhand">
-		<view class="hint">向左划可修改或删除二手商品</view>
-		<uni-swipe-action>
-			<uni-swipe-action-item v-for="(product, index) in mySecondHand" :key="index">
-				<view class="box">
-					<view class="left-bar">
-						<productBoxVue :product="product" user="true"></productBoxVue>
-					</view>
-					<view class="right-bar"><span class="iconfont icon">&#xe66d;</span></view>
-				</view>
-				<template v-slot:right>
-					<view class="slot">
-						<view class="slot-button" @click="bindClick({key:0,index:index})">
-							<uni-icons type="gear" size="20" color="#007aff"></uni-icons>
-							<text class="slot-button-text">修改</text>
-						</view>
-						<view class="slot-button" @click="bindClick({key:1,index:index})">
-							<uni-icons type="trash" size="20" color="#F56C6C"></uni-icons>
-							<text class="slot-button-text">删除</text>
-						</view>
-						<view class="slot-button" @click="bindClick({key:2,index:index})">
-							<uni-icons type="trash" size="20" color="#F56C6C"></uni-icons>
-							<text class="slot-button-text">擦一擦</text>
-						</view>
-					</view>
-				</template>
-			</uni-swipe-action-item>
-		</uni-swipe-action>
+		<view class="my-product-box" v-for="(product, index) in mySecondhand" :key="index">
+			<userProductBoxVue :product="product" :index="index"></userProductBoxVue>
+		</view>
 		<uni-load-more :status="status" :contentText="contentText"></uni-load-more>
 	</view>
 </template>
 
 <script>
 	export default {
-		onLoad() {},
 		onShow() {
-			this.getMySecondhand();
+			uni.startPullDownRefresh();
+			uni.$on("uploadSecondSuccess",this.uploadSecondSuccess);
+			uni.$on("mySecondhandDelete", this.delete);
+			uni.$on("mySecondhandRefresh", this.refresh);
 		},
 		data() {
 			return {
+				show: false,
 				offset: 0,
 				limit: 20,
 				status: "more",
 				mySecondhand: [],
+				product: [],
 				contentText: {
 					contentdown: "上拉显示更多",
 					contentrefresh: "正在加载...",
 					contentnomore: "没有更多了"
 				},
-
 			}
 		},
+		components:{
+			userProductBoxVue
+		},
+		onPullDownRefresh(){
+			console.log(1)
+			this.limit = 20;
+			this.offset = 0;
+			this.status = "more";
+			this.mySecondhand = [];
+			this.getMySecondhand();
+		},
 		methods: {
-			async getMySecondhand() {
+			delete:function(index){
+				this.mySecondhand.splice(index,1);
+			},
+			uploadSecondSuccess:function(){
+					uni.startPullDownRefresh();
+					uni.showToast({
+						title: "更新成功",
+						duration: 5000,
+					});
+				},
+			getMySecondhand: async function() {
 				if (this.status == "noMore") {
 					return;
 				}
@@ -71,145 +71,40 @@
 					if (res.data.data.length < this.limit) {
 						this.status = "noMore";
 					}
-					this.offset = res.data.data[res.data.data.length - 1].productID;
+					this.offset += this.limit;
 				}
 				this.mySecondhand = this.mySecondhand.concat(res.data.data);
+				uni.stopPullDownRefresh();
 			},
-			deleteMySecondhand: async function(index, productID) {
-				const res = await wx.cloud.callContainer({
-					config: {
-						env: 'prod-9gip97mx4bfa32a3',
-					},
-					path: `/user/deleteMySecondhand`,
-					method: 'POST',
-					header: {
-						'X-WX-SERVICE': 'springboot-ds71',
-					},
-					data: productID
-				});
-				if (res.data.status == 100) {
-					this.mySecondhand.splice(index, 1);
-					uni.showToast({
-						title: "成功删除",
-					});
-				} else {
-					uni.showToast({
-						title: "删除失败",
-						icon: "error"
-					});
-				}
+			refresh: function(){
+				uni.startPullDownRefresh();
 			},
-			polishMySecondhand: async function(index, productID) {
-				mySecondhand.time = moment.now();
-				const res = await wx.cloud.callContainer({
-					config: {
-						env: 'prod-9gip97mx4bfa32a3',
-					},
-					path: `/user/updateProduct?product=${this.mySecondhand}`,
-					method: 'POST',
-					header: {
-						'X-WX-SERVICE': 'springboot-ds71',
-					},
-					data: this.mySecondhand
-				});
-				uni.hideLoading();
-				if (res.data.status == 100) {
-					uni.$emit("uploadSuccess");
-					uni.navigateBack();
-				} else {
-					uni.showToast({
-						title: "擦亮失败",
-						icon: "error"
-					});
-				}
-			},
-			bindClick: function(e) {
-				if (e.key == 0) {
-					uni.navigateTo({
-						url: "/user/postSecondHand/postSecondHand?product=" + encodeURIComponent(JSON
-							.stringify(this.myProduct[e.index])) + "&edit=true",
-					});
-				} else if (e.key == 1) {
-					uni.showModal({
-						title: "删除商品",
-						content: "是否删除商品？删除后将无法恢复",
-						confirmColor: "#1684FC",
-						success: function(res) {
-							var that = this;
-							if (res.confirm) {
-								this.deleteMySecondhand(e.index, this.mySecondhand[e.index].productID);
-
-							}
-						}.bind(this)
-					});
-				} else if (e.key == 2) {
-
-				}
-			}
 		},
-		components: {
-			productBoxVue
-		}
 	}
-	import productBoxVue from '@/components/product-box/product-box.vue'
+	import moment from "moment/min/moment-with-locales";
+	import 'moment/locale/zh-cn';
+	import userProductBoxVue from '@/components/user-product-box/user-product-box.vue'
 </script>
 
 <style>
-	@import '@/static/iconfont/iconfont.css';
-
 	.my-secondhand {
 		width: 100vw;
 		height: 100vh;
 		overflow-y: scroll;
-		transition: all 3s ease;
+		background-color: #e4e4e4;
 	}
 
-	.hint {
-		position: fixed;
-		top: 0;
-		width: 100%;
-		background-color: white;
-		height: 30px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		font-size: 12px;
-		color: #ccc;
-	}
-
-	.box {
-		width: 100vw;
+	.row-container {
 		display: flex;
 		flex-direction: row;
-
+	}
+	
+	.my-product-box{
+		border: 1px solid white;
+		box-shadow: 0 3px 3px 0 #cbcbcb;
+		width: 96vw;
+		height: 180px;
+		margin: 10px 2vw;
 	}
 
-	.right-bar {
-		width: 8vw;
-		background-color: white;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
-
-	.left-bar {
-		width: 92vw;
-	}
-
-	.slot {
-		width: 20vw;
-		display: flex;
-		flex-direction: column;
-		height: 100%;
-		background-color: white;
-	}
-
-	.slot-button {
-		height: 50%;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		color: #777;
-	}
 </style>

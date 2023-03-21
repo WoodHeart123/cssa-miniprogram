@@ -5,7 +5,7 @@
 				@input="searchBarInput" @confirm="onConfirm" @cancel="onCancel">
 			</uni-search-bar>
 		</view>
-		<view class="history-section" v-show="historyList.length!=0&&!searching&&!showResult">
+		<view class="history-section" v-if="historyList.length!=0&&!searching&&!showResult">
 			<view class="row-container history-text">
 				<text id="history">历史搜索</text>
 				<text id="clear" v-show="historyList.length!=0" @click="clearHistoryList">清除</text>
@@ -16,16 +16,24 @@
 				</view>
 			</view>
 		</view>
-		<view class="suggest-section" v-show="searching&&!showResult">
-			<view class="suggest-item" v-for="(suggest,index) in suggestList">
+		<view class="suggest-section" v-if="!showResult">
+			<view class="suggest-item" v-for="(suggest,index) in suggestList" @click="confirm(suggest)">
 				{{suggest}}
 			</view>
 		</view>
-		<view class="result-section" v-show="showResult">
-			<view v-for="(,index) in 12">
-				<productBoxVue></productBoxVue>
+
+		<scroll-view scroll-y="true" show-scrollbar="true" refresher-enabled="true" class="result-scroll"
+			refresher-background="white" @refresherrefresh="refresh" :refresher-triggered="triggered"
+			@scrolltolower="onScrollLower" v-show="showResult">
+			<view class="result-section">
+				<view v-for="(product,index) in resultList">
+					<productBoxVue :product="product"></productBoxVue>
+				</view>
 			</view>
-		</view>
+			<uni-load-more :status="status" color="#9b0000"></uni-load-more>
+		</scroll-view>
+
+		<uni-load-more v-show="showLoading" :status="status" color="#9b0000"></uni-load-more>
 	</view>
 </template>
 
@@ -40,10 +48,21 @@
 				historyList: [],
 				searching: false,
 				showResult: false,
-				suggestList: []
+				suggestList: [],
+				resultList: [],
+				status: "more",
+				showLoading: false,
+				limit: 20,
+				offset: 0,
+				hide: false,
+				triggered:false,
 			}
 		},
+		onHide() {
+			this.hide = true;
+		},
 		onLoad() {
+			wx.cloud.init();
 			this.historyList = uni.getStorageSync("historyList");
 			if (!this.historyList) {
 				uni.setStorageSync("historyList", []);
@@ -51,33 +70,127 @@
 		},
 		methods: {
 			onFocus: function() {
-				this.showResult = false;
+				if (!this.hide) {
+					this.showResult = false;
+				}
 			},
 			onCancel: function() {
 				uni.navigateBack()
 			},
 			searchBarInput: function(e) {
+				console.log(e)
+				clearTimeout(this.timer);
 				if (e.length == 0) {
 					this.searching = false;
 				} else {
 					this.searching = true;
+					this.timer = setTimeout(() => {
+						this.suggestList = [];
+						this.suggest(e);
+					}, 200);
 				}
 			},
-			onConfirm: function() {
+			suggest: async function(value) {
+				this.status = "loading";
+				this.showLoading = true;
+				const res = await wx.cloud.callContainer({
+					config: {
+						env: 'prod-9gip97mx4bfa32a3',
+					},
+					path: "/secondhand/suggest?value=" + encodeURIComponent(value),
+					method: 'GET',
+					header: {
+						'X-WX-SERVICE': 'springboot-ds71',
+					}
+				});
+				if (res.data.status && res.data.status == 100) {
+					this.suggestList = res.data.data;
+				} else {
+					uni.showModal({
+						content: "搜索服务暂时不可用"
+					})
+				}
+				this.showLoading = false;
+			},
+			confirm: function(value) {
+				this.searchValue = value;
+				this.refresh();
+			},
+			getSearchList: async function() {
+				
+				this.status = "loading";
+				const res = await wx.cloud.callContainer({
+					config: {
+						env: 'prod-9gip97mx4bfa32a3',
+					},
+					path: `/secondhand/search?value=${encodeURIComponent(this.searchValue)}&limit=${this.limit}&offset=${this.offset}`,
+					method: 'GET',
+					header: {
+						'X-WX-SERVICE': 'springboot-ds71',
+					}
+				});
+				if (res.data.status && res.data.status == 100) {
+					this.resultList = res.data.data;
+					if (res.data.data.length != this.limit) {
+						this.status = "noMore"
+					} else {
+						this.status = "more";
+						this.offset += 20;
+					}
+				} else if(res.data.status && res.data.status == 124){
+					this.status = "noMore"
+					uni.showToast({
+						title:"暂时无法搜索到相关二手"
+					})
+				}else{
+					uni.showModal({
+						content: "搜索服务暂时不可用",
+						success: function(res) {
+							if (res.confirm) {
+								uni.navigateBack();
+							}
+						}
+					})
+				}
+				this.$nextTick(() => {
+					this.triggered = false;
+				});
+			},
+			onScrollLower: function() {
+				if(this.status != "noMore"){
+					this.getSearchList()
+				}
+			},
+			refresh:function(){
 				this.showResult = true;
+				this.offset = 0;
+				this.limit = 20;
+				this.triggered = true;
+				this.getSearchList();
+			},
+			onConfirm: async function() {
+				if (this.historyList.indexOf(this.searchValue) == -1) {
+					this.historyList.push(this.searchValue);
+					uni.setStorage({
+						key: "historyList",
+						data: this.historyList
+					});
+				}
+				this.refresh();
 			},
 			onClickHistory: function(index) {
 				this.searchValue = this.historyList[index];
-				this.showResult = true;
+				this.refresh();
 			},
 			clearHistoryList: function(index) {
 				uni.showModal({
 					content: "是否确认删除历史信息，数据不可恢复",
 					success: function(res) {
+						console.log(res)
 						if (res.confirm) {
 							this.historyList = [];
 							uni.setStorageSync("historyList", []);
-						} 
+						}
 					}
 				})
 			}
@@ -159,7 +272,9 @@
 		justify-content: left;
 		flex-direction: row;
 		flex-wrap: wrap;
-		margin-left: 1vw;
+		width: 100%;
+	}
+	.result-scroll{
 		width: 100vw;
 		height: calc(100vh - 50px);
 	}
