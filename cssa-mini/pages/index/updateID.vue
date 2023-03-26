@@ -1,6 +1,6 @@
 <template>
 	<view class="id-page">
-		<view class="title">更新微信号</view>
+		<view class="title"></view>
 		<input class="id-input" v-model="wechatID" placeholder="请输入微信号" @input="onIDInput" />
 
 		<button class="confirm-button" style="background-color: #9b0000; color: #ffffff;" @click="confirm">确定</button>
@@ -40,7 +40,7 @@
 					config: {
 						env: 'prod-9gip97mx4bfa32a3', // 微信云托管的环境ID
 					},
-					path: '/user/updateWechatID?wechatID=' + encodeURI(this.wechatID),
+					path: '/user/updateProfile?str=' + encodeURI(this.wechatID) + '&service=wechatid',
 					method: 'GET',
 					header: {
 						'X-WX-SERVICE': 'springboot-ds71',

@@ -41,7 +41,7 @@
 					config: {
 						env: 'prod-9gip97mx4bfa32a3',
 					},
-					path: "/user/updateAvatar?avatar=" + this.currentAvatar.toString(),
+					path: "/user/updateProfile?str=" + this.currentAvatar.toString() + '&service=avatar',
 					method: 'GET',
 					header: {
 						'X-WX-SERVICE': 'springboot-ds71',

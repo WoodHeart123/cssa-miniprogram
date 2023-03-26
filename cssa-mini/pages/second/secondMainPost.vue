@@ -314,7 +314,7 @@
 					config: {
 						env: 'prod-9gip97mx4bfa32a3',
 					},
-					path: `/user/updateSecondHand`,
+					path: `/secondhand/updateSecondHand`,
 					method: 'POST',
 					header: {
 						'X-WX-SERVICE': 'springboot-ds71',
@@ -407,6 +407,9 @@
 </script>
 
 <style>
+	input{
+		height: 35px;
+	}
 	#second-post {
 		position: absolute;
 		height: 100vh;

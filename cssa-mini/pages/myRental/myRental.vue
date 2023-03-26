@@ -1,0 +1,198 @@
+<template>
+	<view class="my-rental">
+		<view class="my-rental-box" v-for="(rental, index) in myRental" :key="index">
+			<rental-box-vue :rentalInfo="rental"></rental-box-vue>
+			<view class="row-container button-box">
+				<view class="button row-container" @click="editMyRental(index)" v-if="rental.publishedTime != 0">
+					<view class="icon iconfont">&#xe646</view>
+					<view class="button-text">编辑</view>
+				</view>
+				<view class="button row-container" @click="deleteShow(index)" v-if="rental.publishedTime != 0">
+					<view class="icon iconfont">&#xe74b</view>
+					<view class="button-text">删除</view>
+				</view>
+			</view>
+		</view>
+		<uni-load-more :status="status" :contentText="contentText"></uni-load-more>
+	</view>
+</template>
+
+<script>
+	export default {
+		onLoad(){
+			uni.startPullDownRefresh();
+		},
+		onShow() {
+			uni.$on("uploadRentalSuccess",this.uploadRentalSuccess);
+			this.userInfo = uni.getStorageSync('userInfo-2');
+		},
+		data() {
+			return {
+				show: false,
+				offset: 0,
+				limit: 20,
+				status: "more",
+				myRental: [],
+				contentText: {
+					contentdown: "上拉显示更多",
+					contentrefresh: "正在加载...",
+					contentnomore: "没有更多了"
+				},
+			}
+		},
+		components:{
+			rentalBoxVue
+		},
+		onPullDownRefresh(){
+			this.limit = 20;
+			this.offset = 0;
+			this.status = "more";
+			this.myRental = [];
+			this.getMyRental();
+		},
+		methods: {
+			deleteShow: function(index) {
+				uni.showModal({
+					title: '提示',
+					content: '是否删除?删除后不可恢复',
+					success: (res) => {
+						if (res.confirm) {
+							this.deleteMySecondhand(this.deleteMyRental(index));
+						}
+					}
+				});
+			},
+			deleteMyRental: async function(index) {
+				uni.showLoading({
+					mask: true
+				})
+				const res = await wx.cloud.callContainer({
+					config: {
+						env: 'prod-9gip97mx4bfa32a3',
+					},
+					path: `/user/deleteMyItem?itemID=${this.myRental[index].rentalID}&service=rental`,
+					method: 'DELETE',
+					header: {
+						'X-WX-SERVICE': 'springboot-ds71',
+					},
+				});
+				uni.hideLoading()
+				if (res.data && res.data.status == 100) {
+					uni.showToast({
+						title: "成功删除",
+					});
+					this.myRental = this.myRental.splice(index,1);		
+					uni.startPullDownRefresh();
+				} else {
+					uni.showToast({
+						title: "删除失败",
+						icon: "error"
+					});
+				}
+			},
+			uploadRentalSuccess:function(){
+					uni.startPullDownRefresh();
+					uni.showToast({
+						title: "更新成功",
+						duration: 5000,
+					});
+				},
+			getMyRental: async function() {
+				if (this.status == "noMore") {
+					return;
+				}
+				this.status = "loading";
+				const res = await wx.cloud.callContainer({
+					config: {
+						env: 'prod-9gip97mx4bfa32a3',
+					},
+					path: `/user/getMyList?limit=${this.limit}&offset=${this.offset}&service=rental`,
+					method: 'GET',
+					header: {
+						'X-WX-SERVICE': 'springboot-ds71',
+					},
+				});
+				if (res.data && res.data.status == 100) {
+					if (res.data.data.length < this.limit) {
+						this.status = "noMore";
+					}
+					this.offset += this.limit;
+					for(let i = 0;i < res.data.data.length;i++){
+						res.data.data[i].sellerAvatar = this.userInfo.avatar;
+						res.data.data[i].sellerNickname = this.userInfo.nickname;
+					}
+				}
+				this.myRental = this.myRental.concat(res.data.data);
+				uni.stopPullDownRefresh();
+			},
+			refresh: function(){
+				uni.startPullDownRefresh();
+			},
+			editMyRental: async function(index) {
+				uni.navigateTo({
+					url: "../rental/rentalPost?rental=" + encodeURIComponent(JSON.stringify(this.myRental[index]))
+				})
+			},
+		},
+	}
+	import moment from "moment/min/moment-with-locales";
+	import 'moment/locale/zh-cn';
+	import rentalBoxVue from "@/components/rental-box/rental-box.vue"
+</script>
+
+<style>
+	@import '@/static/iconfont/iconfont.css';
+	.my-rental {
+		width: 100vw;
+		height: 100vh;
+		overflow-y: scroll;
+		background-color: #e4e4e4;
+	}
+
+	.row-container {
+		display: flex;
+		flex-direction: row;
+	}
+	
+	.my-rental-box{
+		border: 1px solid white;
+		box-shadow: 0 3px 3px 0 #cbcbcb;
+		width: 96vw;
+		margin: 10px 2vw;
+		border-radius: 10px;
+		overflow: hidden;
+	}
+	
+	.button-box {
+		height: 50px;
+		width: 96vw;
+		align-items: center;
+		background-color: white;
+		justify-content: space-around;
+	}
+	
+	.button {
+		height: 50%;
+		width: 20%;
+		border-radius: 10px;
+		border: 2px solid #9b0000;
+		box-shadow: 0 2px 2px 0 #9b0000;
+		align-items: center;
+	}
+	
+	.button-text {
+		text-align: center;
+		color: #505050;
+		font-weight: 550;
+		height: 55%;
+		font-size: 100%;
+		width: 100%;
+		height: 100%;
+	}
+	
+	.icon {
+		margin: 2px;
+		font-size: 16px;
+	}
+
+</style>

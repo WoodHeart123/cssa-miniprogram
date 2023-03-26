@@ -9,11 +9,14 @@
 
 <script>
 	export default {
-		onShow() {
+		onLoad(){
 			uni.startPullDownRefresh();
+		},
+		onShow() {
 			uni.$on("uploadSecondSuccess",this.uploadSecondSuccess);
 			uni.$on("mySecondhandDelete", this.delete);
 			uni.$on("mySecondhandRefresh", this.refresh);
+			this.userInfo = uni.getStorageSync('userInfo-2');
 		},
 		data() {
 			return {
@@ -71,6 +74,10 @@
 					if (res.data.data.length < this.limit) {
 						this.status = "noMore";
 					}
+					for(let i = 0;i < res.data.data.length;i++){
+						res.data.data[i].sellerAvatar = this.userInfo.avatar;
+						res.data.data[i].sellerNickname = this.userInfo.nickname;
+					}
 					this.offset += this.limit;
 				}
 				this.mySecondhand = this.mySecondhand.concat(res.data.data);
@@ -105,6 +112,7 @@
 		width: 96vw;
 		height: 180px;
 		margin: 10px 2vw;
+		border-radius: 10px;
 	}
 
 </style>

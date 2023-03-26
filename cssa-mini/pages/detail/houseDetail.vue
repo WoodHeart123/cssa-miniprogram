@@ -2,7 +2,7 @@
 	<view class="house-detail">
 		<swiper class="swiper" indicator-dots>
 			<swiper-item style="display:flex;align-items: center;justify-content: center;" v-for="(image, index) in houseInfo.images" @click="previewImage">
-				<image mode="heightFix" :src="image" @click="getImageIndex(index)"></image>
+				<image mode="heightFix" :src="image"></image>
 			</swiper-item>
 		</swiper>
 		<view class="basic">
@@ -56,12 +56,14 @@
 				sexContraintValue:["仅限男生","仅限女生","性别不限"],
 				imageList: ["/static/housing.jpg", "/static/housing.jpg", "/static/housing.jpg"],
 				houseInfo: {},
+				isLogin:false,
 			}
 		},
 		
 		onLoad(options){
 			wx.cloud.init();
 			this.houseInfo = JSON.parse(decodeURIComponent(options.rentalInfo));
+			console.log(this.houseInfo)
 		},
 
 	   	onShow() {
@@ -69,6 +71,7 @@
 	   			key: 'userInfo-2',
 				success: (res) => {
    					this.userInfo = res.data;
+					this.isLogin = true;
 				},
 	   			fail: () => {
 	   				console.log("fail");
@@ -78,7 +81,7 @@
 
 		onShareTimeline() {
 			return {
-				title: "【转租】" + this.houseInfo.name,
+				title: "【转租】" + this.houseInfo.location,
 				imageUrl: this.houseInfo.images[0],
 				path: '/pages/detail/houseDetail?rentalInfo=' + encodeURIComponent(JSON.stringify(this.houseInfo))
 			}
@@ -89,20 +92,14 @@
 				console.log(res.target)
 			}
 			return {
-				title: "【转租】" + this.houseInfo.name,
+				title: "【转租】" + this.houseInfo.location,
 				desc: "CSSA转租分享平台",
+				content:"转租",
 				imageUrl: this.houseInfo.images[0],
 				path: '/pages/detail/housedDetail?rentalInfo=' + encodeURIComponent(JSON.stringify(this.houseInfo))
 			}
 		},
 		methods: {
-			getImageIndex(index){
-				console.log(index);
-				uni.previewImage({
-					current:this.houseInfo.imageList[index],
-					urls:this.houseInfo.imageList,
-				})
-			},
 			
 			setClipboardData: function() {
 				uni.setClipboardData({
@@ -125,7 +122,6 @@
 				uni.getUserProfile({
 					desc: "获取用户昵称",
 					success: (userProfile) => {
-						this.userInfo.nickname = userProfile.userInfo.nickName;
 						this.login(userProfile.userInfo.nickName);
 					},
 				});

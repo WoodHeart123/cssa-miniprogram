@@ -141,7 +141,6 @@
 				uni.getUserProfile({
 					desc: "获取用户昵称",
 					success: (userProfile) => {
-						this.userInfo.nickname = userProfile.userInfo.nickName;
 						this.login(userProfile.userInfo.nickName);
 					},
 				});

@@ -1,6 +1,6 @@
 <template>
 	<view class="name-page">
-		<view class="title">更新昵称</view>
+		<view class="title"></view>
 		<view class="name-input">
 			<uni-easyinput :styles="nameinput" v-model="nickname" placeholder="请输入昵称" :clearable=false maxlength="20" placeholderStyle="color:#999;font-size:14px">
 			</uni-easyinput>
@@ -42,7 +42,7 @@
 					config: {
 						env: 'prod-9gip97mx4bfa32a3', // 微信云托管的环境ID
 					},
-					path: '/user/updateNickname?nickname=' + encodeURI(this.nickname),
+					path: '/user/updateProfile?str=' + encodeURI(this.nickname) + '&service=nickname',
 					method: 'GET',
 					header: {
 						'X-WX-SERVICE': 'springboot-ds71',

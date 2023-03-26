@@ -79,6 +79,7 @@
 		background-color: white;
 		border-bottom: 1px solid rgba(238, 238, 238, 0.6);
 		border-top: 1px solid rgba(238, 238, 238, 0.6);
+		overflow: hidden;
 	}
 	.image-box{
 		display: flex;

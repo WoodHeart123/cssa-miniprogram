@@ -1,9 +1,9 @@
 <template>
-	<view class="title">更新邮箱</view>
+	<view class="title"></view>
 	<input class="email-input" v-model="email" placeholder="请输入邮箱" @input="onEmailInput" />
 	<view class="checkbox check_message">
 		<checkbox-group @change="checkBoxChange">
-			<checkbox value="save_contact" :checked="save" color="#9b0000" style="transform:scale(0.8); le" />
+			<checkbox value="save_contact" :checked="subscribe" color="#9b0000" style="transform:scale(0.8); le" />
 			接受后续活动推送
 		</checkbox-group>
 	</view>
@@ -17,7 +17,7 @@
 				email:"",
 				userInfo:{},
 				hasEmail: false,
-				save: true,
+				subscribe: false,
 				regex:new RegExp('^([-a-zA-Z0-9_.]+)@([-a-zA-Z0-9_.]+).([a-zA-Z]{2,5})$'),
 			}
 		},
@@ -29,7 +29,7 @@
 				this.email = this.userInfo.email
 			}
 			if (this.userInfo.subscribe != null) {
-				this.save = this.userInfo.subscribe
+				this.subscribe = this.userInfo.subscribe
 			}
 		},
 		methods:{
@@ -37,10 +37,11 @@
 				this.email = event.detail.value;
 			},
 			checkBoxChange: function(e) {
+				console.log(e)
 				if (e.detail.length == 0) {
-					this.save = false;
+					this.subscribe = false;
 				} else {
-					this.save = true;
+					this.subscribe = true;
 				}
 			},
 			async confirm(){
@@ -49,7 +50,7 @@
 						config: {
 							env: 'prod-9gip97mx4bfa32a3', // 微信云托管的环境ID
 						},
-						path: `/user/updateEmail?email=${this.email}&subscribe=${this.subscribe}`,
+						path: `/user/updateProfile?str=${this.email}&subscribe=${this.subscribe}&service=email`,
 						method: 'GET', 
 						header: {
 							'X-WX-SERVICE': 'springboot-ds71',
@@ -57,7 +58,7 @@
 					});
 					if(res.data.status == 100){
 						this.userInfo.email = this.email;
-						this.userInfo.subscribe = this.save;
+						this.userInfo.subscribe = this.subscribe;
 						uni.setStorage({
 							key:"userInfo-2",
 							data: this.userInfo
