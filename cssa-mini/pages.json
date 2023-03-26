@@ -215,7 +215,13 @@
                 "enablePullDownRefresh": true
             }
             
-        }
+        },{
+			"path": "pages/restMain/restMain",
+			"style": {
+				"navigationBarTitleText": "餐厅攻略",
+				"enablePullDownRefresh": false
+			}
+		}
     ],
 		"condition": {
 			"current": 0,

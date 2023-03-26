@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="ed7822ca-550d-41b5-bf4c-a3c398f60dee" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/cssa-mini/pages.json" beforeDir="false" afterPath="$PROJECT_DIR$/cssa-mini/pages.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cssa-mini/pages/main/main.vue" beforeDir="false" afterPath="$PROJECT_DIR$/cssa-mini/pages/main/main.vue" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2NZZYsCdIwcL6f3WRLCziE0TEGK" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="ed7822ca-550d-41b5-bf4c-a3c398f60dee" name="Changes" comment="" />
+      <created>1679873618338</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1679873618338</updated>
+      <workItem from="1679873619046" duration="2000" />
+    </task>
+    <servers />
+  </component>
+</project>
