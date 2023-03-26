@@ -52,6 +52,18 @@
 			rentalTime(){
 				return moment(this.rentalInfo.rentalStartTime).format("YYYY-MM-DD") + " 至 " + moment(this.rentalInfo.rentalEndTime).format("YYYY-MM-DD")
 			},
+		},
+		watch: {
+		    // whenever question changes, this function will run
+		    'rentalInfo.UTCPublishedTime': function (newVal, oldVal) {
+		     if(moment().year() - moment.utc(this.rentalInfo.UTCPublishedTime).year() > 0){
+		     	this.rentalPublishTime = moment.utc(newVal).format("YYYY-MM-DD");
+		     }else if(Date.now() - moment.utc(this.rentalInfo.UTCPublishedTime).valueOf() > 86400000 * 7){
+		     	this.rentalPublishTime = moment.utc(newVal).format("MM-DD");
+		     }else{
+		     	this.rentalPublishTime = moment.utc(newVal).locale('zh-cn').fromNow();
+		     }
+		    }
 		}
 	}
 </script>
@@ -79,6 +91,7 @@
 		background-color: white;
 		border-bottom: 1px solid rgba(238, 238, 238, 0.6);
 		border-top: 1px solid rgba(238, 238, 238, 0.6);
+		overflow: hidden;
 	}
 	.image-box{
 		display: flex;

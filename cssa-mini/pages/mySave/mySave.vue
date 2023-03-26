@@ -1,8 +1,7 @@
 <template>
 	<view>
-		<view class="row-container">
-			<view class="info-box" @click="page(1)"><text>二手收藏</text></view>
-			<view class="info-box" @click="page(2)"><text>租房收藏</text></view>
+		<view class="boxes" v-for="(collect,index) in collectList">
+			<shoucang-box-vue v-on:delete="receive" :product="collect"></shoucang-box-vue>
 		</view>
 		<uni-load-more style="padding-bottom: 50px;" :status="status"></uni-load-more>
 	</view>
@@ -16,56 +15,11 @@
 		},
 		data() {
 			return {
-				shoucangDetailList:[
-					{	
-						productID: 1,
-						productTitle: "Madison周围都有什么好玩的呢",
-						productDescription: "Madison周围都有什么好玩的呢，有谁推荐一下吗，如果有推荐可以联系我：123456789. 大家可以一起玩，开心最重要了。",
-						delivery:'pickup',
-						price:100,
-						sellerNickname:"Peter",
-						productCondition:0,
-						sellerAvatar:1,
-						images: ["https://cssa-mini.oss-cn-shanghai.aliyuncs.com/cssa-community-image/renwu.jpeg"],
-					},
-					{
-						productID: 2,
-						productTitle: "lalalalasdsad",
-						productDescription: "Madison周围都有什么好玩的呢，有谁推荐一下吗，如果有推荐可以联系我：123456789. 大家可以一起玩，开心最重要了。",
-						delivery:'pickup',
-						price:100,
-						sellerNickname:"Peter",
-						productCondition:0,
-						sellerAvatar:1,
-						images: ["https://cssa-mini.oss-cn-shanghai.aliyuncs.com/cssa-community-image/renwu.jpeg"],
-					},
-					{
-						productID: 2,
-						productTitle: "lalalalasdsad",
-						productDescription: "Madison周围都有什么好玩的呢，有谁推荐一下吗，如果有推荐可以联系我：123456789. 大家可以一起玩，开心最重要了。",
-						delivery:'pickup',
-						price:100,
-						sellerNickname:"Peter",
-						productCondition:0,
-						sellerAvatar:1,
-						images: ["https://cssa-mini.oss-cn-shanghai.aliyuncs.com/cssa-community-image/renwu.jpeg"],
-					},
-					{
-						productID: 2,
-						productTitle: "lalalalasdsad",
-						productDescription: "Madison周围都有什么好玩的呢，有谁推荐一下吗，如果有推荐可以联系我：123456789. 大家可以一起玩，开心最重要了。",
-						delivery:'pickup',
-						price:100,
-						sellerNickname:"Peter",
-						productCondition:0,
-						sellerAvatar:1,
-						images: ["https://cssa-mini.oss-cn-shanghai.aliyuncs.com/cssa-community-image/renwu.jpeg"],
-					}
-				],
-				limit:20,
+				collectList:[],
 				triggered:false,
-				status:"noMore",
-				index: 1
+				status:"loading",
+				limit:20,
+				offset:0
 			}
 		},
 		onLoad() {
@@ -75,58 +29,14 @@
 		
 		methods: {
 
-			page: function(index){
-				this.index = index;
-				getList()
-			},
-	
-			receive: function(key1){
-				console.log(key1)
-				console.log(this.shoucangDetailList)
-				this.shoucangDetailList = this.shoucangDetailList.filter(product=> product.productID != key1)
-				console.log(this.shoucangDetailList)
-			},
-			
 			refresh:function(){
 				if (!this.triggered) {
 					this.triggered = true;
 					this.limit = 20;
 					this.offset = 0;
-					this.shoucangDetailList = [];
+					this.rentalList = [];
 					this.status = "loading"
-					this.getList();
-				}
-			},
-			
-			async getList(){
-				if(this.status == "noMore"){
-					return;
-				}
-				if (this.index == 1){
-					const res = await wx.cloud.callContainer({
-						config: {
-							env: 'prod-9gip97mx4bfa32a3', // 微信云托管的环境ID
-						},
-						path: `/user/getMyProductSave?limit=${this.limit}&offset=${this.offset}`,
-						method: 'GET', 
-						header: {
-							'X-WX-SERVICE': 'springboot-ds71',
-						}
-					});
-					if(res.data.status == 100){
-						this.shoucangDetailList = res.shoucangDetailList.concat(res.data.data);
-					}
-					this.offset += res.data.data.length;
-					if(res.data.data.length != this.limit){
-						this.status = "noMore";
-					}else{
-						this.status = "more";
-					}
-					this.$nextTick(() => {
-						this.triggered = false;
-					});
-				} else if(this.index == 2){
-					return;
+					this.getCollectList();
 				}
 			},
 			

@@ -159,7 +159,7 @@
 			"path": "pages/mySecondhand/mySecondhand",
 			"style": {
 				"navigationBarTitleText": "我的二手",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": true
 			}
 
 		}, {
@@ -180,7 +180,7 @@
             "path" : "pages/rentalMain/rentalMain",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "转租",
                 "enablePullDownRefresh": false
             }
         }
@@ -207,6 +207,15 @@
 				"enablePullDownRefresh": false
 			}
 		}
+        ,{
+            "path" : "pages/myRental/myRental",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "我的转租",
+                "enablePullDownRefresh": true
+            }
+            
+        }
     ],
 		"condition": {
 			"current": 0,

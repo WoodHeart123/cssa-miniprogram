@@ -1,17 +1,17 @@
 <template>
 	<view id="rental-main">
-		<view class="menu row-container">
-			<!-- <view class="search-box" @click="toSearch">
+		<!-- <view class="menu row-container">
+			<view class="search-box" @click="toSearch">
 				<uni-icons type="search" size="30"></uni-icons>
-			</view> -->
+			</view>
 			<view class="menu-box row-container">
 				<view class="row-container rental-selection">
 					<text @click="clickMenu(0)" :class="{selected:menuIndex==0}">转租</text>
-<!-- 					<text>/</text>
-					<text @click="clickMenu(1)" :class="{selected:menuIndex==1}">找室友</text> -->
+					<text>/</text>
+					<text @click="clickMenu(1)" :class="{selected:menuIndex==1}">找室友</text>
 				</view>
 			</view>
-		</view>
+		</view> -->
 		<view class="row-container filter-box">
 			<view class="setting-icon" @click="popFilter('price')">
 				<uni-icons type="settings-filled" size="30"></uni-icons>
@@ -99,8 +99,8 @@
 					priceLimit: 5000,
 					time: [0, 0],
 				},
-				floorplanList: ['Studio', '1B1B', '2B1B', '2B2B', '3B2B', '3B3B', '4B2B', "4B3B", "其他"],
-				selectedFloorplan: ['Studio', '1B1B', '2B1B', '2B2B', '3B2B', '3B3B', '4B2B', "4B3B", "其他"],
+				floorplanList: ['Studio', '1B1B', '2B1B', '2B2B','3B1B','3B2B', '3B3B','4B1B','4B2B', "4B3B", '4B4B','Other'],
+				selectedFloorplan: ['Studio', '1B1B', '2B1B', '2B2B','3B1B','3B2B', '3B3B','4B1B','4B2B', "4B3B", '4B4B',"Other"],
 				start: Date.now(),
 				end: Date.now() + 10000000000,
 				timeFilter:false,
@@ -346,7 +346,6 @@
 	.filter-box {
 		padding-top: 2px;
 		position: relative;
-		margin-top: 50px;
 		height: 42px;
 		width: 100%;
 		overflow-y: scroll;
