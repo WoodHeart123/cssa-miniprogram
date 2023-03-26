@@ -1,11 +1,22 @@
 <template>
 	<view class="my-rental">
 		<view class="my-rental-box" v-for="(rental, index) in myRental" :key="index">
-			<rental-box-vue :rentalInfo="rental"></rental-box-vue>
+			<view class="my-rental-container">
+				<rental-box-vue :rentalInfo="rental"></rental-box-vue>
+				<view class="is-takeoff" v-if="rental.publishedTime == 0">已下架</view>
+			</view>	
 			<view class="row-container button-box">
 				<view class="button row-container" @click="editMyRental(index)" v-if="rental.publishedTime != 0">
 					<view class="icon iconfont">&#xe646</view>
 					<view class="button-text">编辑</view>
+				</view>
+				<view class="button row-container" @click="setRentalTime(index,0)" v-if="rental.publishedTime != 0">
+					<view class="icon iconfont">&#xe620</view>
+					<view class="button-text">下架</view>
+				</view>
+				<view class="button row-container" @click="setRentalTime(index,1)" v-if="rental.publishedTime == 0">
+					<view class="icon iconfont">&#xe64b</view>
+					<view class="button-text">上架</view>
 				</view>
 				<view class="button row-container" @click="deleteShow(index)" v-if="rental.publishedTime != 0">
 					<view class="icon iconfont">&#xe74b</view>
@@ -51,6 +62,33 @@
 			this.getMyRental();
 		},
 		methods: {
+			setRentalTime: async function(index, flag) {
+				let UTCtime;
+				flag == 0 ? UTCtime = "1970-01-01T00:00:00Z"  : UTCtime = moment.utc().format();
+				uni.showLoading({
+					mask: true
+				});
+				const res = await wx.cloud.callContainer({
+					config: {
+						env: 'prod-9gip97mx4bfa32a3',
+					},
+					path: `/user/setTime?UTCtime=${UTCtime}&itemID=${this.myRental[index].rentalID}&service=rental`,
+					method: 'GET',
+					header: {
+						'X-WX-SERVICE': 'springboot-ds71',
+					},
+				});
+				uni.hideLoading();
+				if (res.data.status == 100) {
+					uni.showToast({
+						title: "操作成功",
+						icon: "success"
+					})
+					flag == 0 ? this.myRental[index].publishedTime = 0 : this.myRental[index].publishedTime = moment().utc(UTCtime).valueOf();
+					this.myRental[index].UTCPublishedTime = UTCtime;
+					console.log(this.myRental[index])
+				};
+			},
 			deleteShow: function(index) {
 				uni.showModal({
 					title: '提示',
@@ -142,6 +180,11 @@
 
 <style>
 	@import '@/static/iconfont/iconfont.css';
+	.my-rental-container{
+		height: 150px;
+		width: 100%;
+		position: relative;
+	}
 	.my-rental {
 		width: 100vw;
 		height: 100vh;
@@ -195,4 +238,18 @@
 		font-size: 16px;
 	}
 
+	.is-takeoff {
+		position: absolute;
+		top:0;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(34, 34, 34, 0.7);
+		text-align: center;
+		line-height: 120px;
+		font-size: 50px;
+		color: rgba(155, 155, 155, 0.5);
+		border-radius: 10px 10px 0 0;
+		border: 5px rgba(34, 34, 34, 0.5);
+		z-index: 10;
+	}
 </style>
