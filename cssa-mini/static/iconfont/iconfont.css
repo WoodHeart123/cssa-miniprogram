@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 3406119 */
-  src: url('//at.alicdn.com/t/c/font_3406119_skddeq8bea.woff2?t=1677725419751') format('woff2'),
-       url('//at.alicdn.com/t/c/font_3406119_skddeq8bea.woff?t=1677725419751') format('woff'),
-       url('//at.alicdn.com/t/c/font_3406119_skddeq8bea.ttf?t=1677725419751') format('truetype');
+  src: url('//at.alicdn.com/t/c/font_3406119_ji5169258zg.woff2?t=1680469226953') format('woff2'),
+       url('//at.alicdn.com/t/c/font_3406119_ji5169258zg.woff?t=1680469226953') format('woff'),
+       url('//at.alicdn.com/t/c/font_3406119_ji5169258zg.ttf?t=1680469226953') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,46 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-notebook-4:before {
+  content: "\e650";
+}
+
+.icon-search:before {
+  content: "\e67d";
+}
+
+.icon-filter:before {
+  content: "\e8c8";
+}
+
+.icon-pingjia:before {
+  content: "\10113";
+}
+
+.icon-wanchengrenwu:before {
+  content: "\10114";
+}
+
+.icon-faxian:before {
+  content: "\1010e";
+}
+
+.icon-pinpaigushi:before {
+  content: "\1010f";
+}
+
+.icon-goumai:before {
+  content: "\10110";
+}
+
+.icon-shijian1:before {
+  content: "\10111";
+}
+
+.icon-dingwei:before {
+  content: "\10112";
 }
 
 .icon-shangjia:before {
