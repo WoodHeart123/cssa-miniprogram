@@ -216,6 +216,13 @@
             }
             
         },{
+			"path": "pages/restMain/restSearch",
+			"style": {
+				"navigationBarTitleText": "搜索",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
 			"path": "pages/restMain/restMain",
 			"style": {
 				"navigationBarTitleText": "餐厅攻略",

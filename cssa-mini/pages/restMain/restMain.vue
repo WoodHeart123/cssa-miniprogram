@@ -2,13 +2,13 @@
 	<view id="rest-main" class="column-container">
 		<view class="row-container search-box">
 			<view class="all"><text>全部餐厅</text></view>
-			<view class="search">
-				<view class="icon iconfont">&#xe646</view>
+			<view class="search" @click="toSearch">
+				<view class="icon iconfont">&#xe67d</view>
 			</view>
 		</view>
 		<view class="row-container filter-box">
 			<view class="setting-icon">
-				<view class="icon iconfont">&#xe646</view>
+				<view class="icon iconfont">&#xe8c8</view>
 			</view>
 			<view class="single-filter-box">
 				<text>价格:0-20</text>
@@ -42,6 +42,14 @@
 		components: {
 			restBoxVue
 		},
+		methods: {
+			toSearch: function() {
+				uni.navigateTo({
+					url: "/pages/restMain/restSearch",
+					animationType: "pop-in"
+				})
+			},
+		}
 	}
 	import restBoxVue from '@/components/rest-box/rest-box.vue'
 </script>
@@ -67,7 +75,6 @@
 		flex-direction: column;
 	}
 	.rest-name{
-		height: 30px;
 		width: calc(100% - 20px);
 		font-weight: 700;
 		margin: 0 2px 0 10px;
