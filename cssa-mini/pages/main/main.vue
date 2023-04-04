@@ -31,7 +31,7 @@
 					<img class="image" src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-icon/apartment.svg" />
 				</view>
 			</view>
-			<view class="row-container function-button disabled">
+			<!-- <view class="row-container function-button disabled">
 				<view class="row-container function-button">
 					<view class="column-container function-text">
 						<text>餐厅推荐</text>
@@ -39,7 +39,7 @@
 					</view>
 					<img class="image" src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-icon/handbook.svg" />
 				</view>
-			</view>
+			</view> -->
 		</view>
 		<!-- 		<view class="leader-list">
 			<text class="cssa-intro-text">CSSA介绍</text>
