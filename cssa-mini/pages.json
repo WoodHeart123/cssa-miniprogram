@@ -1,300 +1,318 @@
 {
-	"pages": [{
-			"path": "pages/main/main",
-			"style": {
-				"navigationBarTitleText": "主页",
-				"enablePullDownRefresh": false,
-				"disableScroll": true
-				
-			}
-
-		}, {
-			"path": "pages/index/index",
-			"style": {
-				"navigationBarTitleText": "用户主页",
-				"backgroundColor": "#F5F5F5"
-			}
-		}, {
-			"path": "pages/index/userInfo",
-			"style": {
-				"navigationBarTitleText": "个人信息",
-				"backgroundColor": "#f5f5f5"
-			}
-		}, {
-			"path": "pages/activity/act",
-			"style": {
-				"navigationBarTitleText": "活动列表",
-				"backgroundColor": "#F5F5F5",
-				"enablePullDownRefresh": true
-			}
-		}, {
-			"path": "pages/detail/detail",
-			"style": {
-				"navigationBarTitleText": "详情",
-				"backgroundColor": "#F5F5F5"
-			}
-		},
-
-		{
-			"path": "pages/activity/remark",
-			"style": {
-				"navigationBarTitleText": "备注",
-				"backgroundColor": "#F5F5F5"
-			}
-		},
-		{
-			"path": "pages/activity/finished",
-			"style": {
-				"navigationBarTitleText": "活动注册完成",
-				"backgroundColor": "#F5F5F5"
-			}
-		},
-		{
-			"path": "pages/index/updateEmail",
-			"style": {
-				"navigationBarTitleText": "更新邮箱",
-				"backgroundColor": "#ffffff",
-				"disableScroll": true
-			}
-		}, {
-			"path": "pages/courseMain/courseMain",
-			"style": {
-				"navigationBarTitleText": "课程吐槽",
-				"disableScroll": true
-			}
-		}, {
-			"path": "pages/coursePage/coursePage",
-			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false,
-				"disableScroll": true
-			}
-
-		}, {
-			"path": "pages/studentAuth/studentAuth",
-			"style": {
-				"navigationBarTitleText": "UW-Madison学生认证",
-				"enablePullDownRefresh": false,
-				"backgroundColor": "#ffffff",
-				"disableScroll": true
-			}
-		}, {
-			"path": "pages/index/updateName",
-			"style": {
-				"navigationBarTitleText": "更新昵称",
-				"enablePullDownRefresh": false
-			}
-
-		}, {
-			"path": "pages/index/updateID",
-			"style": {
-				"navigationBarTitleText": "更新微信号",
-				"enablePullDownRefresh": false
-			}
-
-		}, {
-			"path": "pages/postComment/postComment",
-			"style": {
-				"navigationBarTitleText": "发布评论",
-				"enablePullDownRefresh": false
-			}
-
-		},
-		{
-			"path": "pages/community/com-main",
-			"style": {
-				"navigationBarTitleText": "社区广场",
-				"backgroundColor": "#F5F5F5",
-				"enablePullDownRefresh": true,
-				"onReachBottomDistance": 100
-			}
-		},
-		{
-			"path": "pages/second/secondMain",
-			"style": {
-				"navigationBarTitleText": "二手市场",
-				"enablePullDownRefresh": false
-			}
-		}, {
-			"path": "pages/second/secondMainPost",
-			"style": {
-				"navigationBarTitleText": "发布二手",
-				"enablePullDownRefresh": false,
-				"disableScroll": true
-			}
-		}, {
-			"path": "pages/changeAvatar/changeAvatar",
-			"style": {
-				"navigationBarTitleText": "头像",
-				"enablePullDownRefresh": false
-			}
-		}, {
-			"path": "pages/detail/secondDetail",
-			"style": {
-				"navigationBarTitleText": "二手页面",
-				"backgroundColor": "#F5F5F5"
-			}
-		},
-		{
-			"path": "pages/second/secondMainSearch",
-			"style": {
-				"navigationBarTitleText": "搜索",
-				"enablePullDownRefresh": false
-			}
-
-		}, {
-			"path": "pages/myComment/myComment",
-			"style": {
-				"navigationBarTitleText": "我的吐槽",
-				"disableScroll": true
-			}
-
-		}, {
-			"path": "pages/detail/houseDetail",
-			"style": {
-				"navigationBarTitleText": "转租详情",
-				"backgroundColor": "#F5F5F5"
-			}
-		}, {
-			"path": "pages/mySecondhand/mySecondhand",
-			"style": {
-				"navigationBarTitleText": "我的二手",
-				"enablePullDownRefresh": true
-			}
-
-		}, {
-			"path": "pages/mySave/mySave",
-			"style": {
-				"navigationBarTitleText": "我的收藏",
-				"enablePullDownRefresh": false
-			}
-
-		}, {
-			"path": "pages/rental/rentalPost",
-			"style": {
-				"navigationBarTitleText": "发布转租",
-				"enablePullDownRefresh": false,
-				"disableScroll": true
-			}
-		}    ,{
-            "path" : "pages/rentalMain/rentalMain",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "转租",
-                "enablePullDownRefresh": false
+    "pages" : [
+        {
+            "path" : "pages/main/main",
+            "style" : {
+                "navigationBarTitleText" : "主页",
+                "enablePullDownRefresh" : false,
+                "disableScroll" : true
             }
-        }
-        ,{
-            "path" : "pages/aboutCSSA/aboutCSSA",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
         },
-		{
-			"path": "pages/aboutCSSA/ContactUs",
-			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
-			}
-		},
-		{
-			"path": "pages/aboutCSSA/Guanyu",
-			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
-			}
-		}
-        ,{
-            "path" : "pages/myRental/myRental",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "我的转租",
-                "enablePullDownRefresh": true
+        {
+            "path" : "pages/index/index",
+            "style" : {
+                "navigationBarTitleText" : "用户主页",
+                "backgroundColor" : "#F5F5F5"
             }
-            
+        },
+        {
+            "path" : "pages/index/userInfo",
+            "style" : {
+                "navigationBarTitleText" : "个人信息",
+                "backgroundColor" : "#f5f5f5"
+            }
+        },
+        {
+            "path" : "pages/activity/act",
+            "style" : {
+                "navigationBarTitleText" : "活动列表",
+                "backgroundColor" : "#F5F5F5",
+                "enablePullDownRefresh" : true
+            }
+        },
+        {
+            "path" : "pages/detail/detail",
+            "style" : {
+                "navigationBarTitleText" : "详情",
+                "backgroundColor" : "#F5F5F5"
+            }
+        },
+        {
+            "path" : "pages/activity/remark",
+            "style" : {
+                "navigationBarTitleText" : "备注",
+                "backgroundColor" : "#F5F5F5"
+            }
+        },
+        {
+            "path" : "pages/activity/finished",
+            "style" : {
+                "navigationBarTitleText" : "活动注册完成",
+                "backgroundColor" : "#F5F5F5"
+            }
+        },
+        {
+            "path" : "pages/index/updateEmail",
+            "style" : {
+                "navigationBarTitleText" : "更新邮箱",
+                "backgroundColor" : "#ffffff",
+                "disableScroll" : true
+            }
+        },
+        {
+            "path" : "pages/courseMain/courseMain",
+            "style" : {
+                "navigationBarTitleText" : "课程吐槽",
+                "disableScroll" : true
+            }
+        },
+        {
+            "path" : "pages/coursePage/coursePage",
+            "style" : {
+                "navigationBarTitleText" : "",
+                "enablePullDownRefresh" : false,
+                "disableScroll" : true
+            }
+        },
+        {
+            "path" : "pages/studentAuth/studentAuth",
+            "style" : {
+                "navigationBarTitleText" : "UW-Madison学生认证",
+                "enablePullDownRefresh" : false,
+                "backgroundColor" : "#ffffff",
+                "disableScroll" : true
+            }
+        },
+        {
+            "path" : "pages/index/updateName",
+            "style" : {
+                "navigationBarTitleText" : "更新昵称",
+                "enablePullDownRefresh" : false
+            }
+        },
+        {
+            "path" : "pages/index/updateID",
+            "style" : {
+                "navigationBarTitleText" : "更新微信号",
+                "enablePullDownRefresh" : false
+            }
+        },
+        {
+            "path" : "pages/postComment/postComment",
+            "style" : {
+                "navigationBarTitleText" : "发布评论",
+                "enablePullDownRefresh" : false
+            }
+        },
+        {
+            "path" : "pages/community/com-main",
+            "style" : {
+                "navigationBarTitleText" : "社区广场",
+                "backgroundColor" : "#F5F5F5",
+                "enablePullDownRefresh" : true,
+                "onReachBottomDistance" : 100
+            }
+        },
+        {
+            "path" : "pages/second/secondMain",
+            "style" : {
+                "navigationBarTitleText" : "二手市场",
+                "enablePullDownRefresh" : false
+            }
+        },
+        {
+            "path" : "pages/second/secondMainPost",
+            "style" : {
+                "navigationBarTitleText" : "发布二手",
+                "enablePullDownRefresh" : false,
+                "disableScroll" : true
+            }
+        },
+        {
+            "path" : "pages/changeAvatar/changeAvatar",
+            "style" : {
+                "navigationBarTitleText" : "头像",
+                "enablePullDownRefresh" : false
+            }
+        },
+        {
+            "path" : "pages/detail/secondDetail",
+            "style" : {
+                "navigationBarTitleText" : "二手页面",
+                "backgroundColor" : "#F5F5F5"
+            }
+        },
+        {
+            "path" : "pages/second/secondMainSearch",
+            "style" : {
+                "navigationBarTitleText" : "搜索",
+                "enablePullDownRefresh" : false
+            }
+        },
+        {
+            "path" : "pages/myComment/myComment",
+            "style" : {
+                "navigationBarTitleText" : "我的吐槽",
+                "disableScroll" : true
+            }
+        },
+        {
+            "path" : "pages/detail/houseDetail",
+            "style" : {
+                "navigationBarTitleText" : "转租详情",
+                "backgroundColor" : "#F5F5F5"
+            }
+        },
+        {
+            "path" : "pages/mySecondhand/mySecondhand",
+            "style" : {
+                "navigationBarTitleText" : "我的二手",
+                "enablePullDownRefresh" : true
+            }
+        },
+        {
+            "path" : "pages/mySave/mySave",
+            "style" : {
+                "navigationBarTitleText" : "我的收藏",
+                "enablePullDownRefresh" : false
+            }
+        },
+        {
+            "path" : "pages/rental/rentalPost",
+            "style" : {
+                "navigationBarTitleText" : "发布转租",
+                "enablePullDownRefresh" : false,
+                "disableScroll" : true
+            }
+        },
+        {
+            "path" : "pages/rentalMain/rentalMain",
+            "style" : {
+                "navigationBarTitleText" : "转租",
+                "enablePullDownRefresh" : false
+            }
+        },
+        {
+            "path" : "pages/aboutCSSA/aboutCSSA",
+            "style" : {
+                "navigationBarTitleText" : "",
+                "enablePullDownRefresh" : false
+            }
+        },
+        {
+            "path" : "pages/aboutCSSA/ContactUs",
+            "style" : {
+                "navigationBarTitleText" : "",
+                "enablePullDownRefresh" : false
+            }
+        },
+        {
+            "path" : "pages/aboutCSSA/Guanyu",
+            "style" : {
+                "navigationBarTitleText" : "",
+                "enablePullDownRefresh" : false
+            }
+        },
+        {
+            "path" : "pages/myRental/myRental",
+            "style" : {
+                "navigationBarTitleText" : "我的转租",
+                "enablePullDownRefresh" : true
+            }
+        },
+        {
+            "path" : "pages/detail/restDetail",
+            "style" : {}
+        },
+        {
+            "path" : "pages/map/map",
+            "style" : {}
         }
     ],
-		"condition": {
-			"current": 0,
-			"list": [{
-					"name": "avatar",
-					"path": "pages/changeAvatar/changeAvatar"
-				},
-				{
-					"name": "second",
-					"path": "pages/second/secondMain"
-				},
-				{
-					"name": "secondDetail",
-					"path": "pages/detail/secondDetail"
-				},
-				{
-					"name": "myComment",
-					"path": "pages/myComment/myComment"
-				},
-				{
-					"name": "secondPost",
-					"path": "pages/second/secondMainPost"
-				},
-				{
-					"name": "secondSearch",
-					"path": "pages/second/secondMainSearch"
-				},
-				{
-					"name": "houseDetail",
-					"path": "pages/detail/houseDetail"
-				},
-				{
-					"name": "rental",
-					"path": "pages/rental/rentalPost"
-				},
-				{
-					"name" : "rentalMain",
-				    "path" : "pages/rentalMain/rentalMain"
-				},{
-					"name":"aboutCSSA",
-					"path":"pages/aboutCSSA/aboutCSSA"
-				},{
-					"name":"aboutCSSA",
-					"path":"pages/aboutCSSA/ContactUs"
-				},{
-					"name":"aboutCSSA",
-					"path":"pages/aboutCSSA/Guanyu"
-				}
-			]
-		},
-		"globalStyle": {
-			"navigationBarTextStyle": "black",
-			"navigationBarTitleText": "uni-app",
-			"navigationBarBackgroundColor":"#ffdede"
-		},
-		"tabBar": {
-			"color": "#666666",
-			"selectedColor": "#9b0000",
-			"borderStyle": "black",
-			"backgroundColor": "#ffffff",
-			"fontSize": "14px",
-			"spacing": "3px",
-			"list": [{
-					"pagePath": "pages/main/main",
-					"text": "主页",
-					"iconPath": "./static/home.png",
-					"selectedIconPath": "./static/home-selected.png"
-				}, {
-					"pagePath": "pages/activity/act",
-					"text": "活动",
-					"iconPath": "./static/act.png",
-					"selectedIconPath": "./static/act-selected.png"
-				},
-				{
-					"pagePath": "pages/index/index",
-					"text": "用户",
-					"iconPath": "./static/user.png",
-					"selectedIconPath": "./static/user-selected.png"
-				}
-			]
-		}
-	}
+    "condition" : {
+        "current" : 0,
+        "list" : [
+            {
+                "name" : "avatar",
+                "path" : "pages/changeAvatar/changeAvatar"
+            },
+            {
+                "name" : "second",
+                "path" : "pages/second/secondMain"
+            },
+            {
+                "name" : "secondDetail",
+                "path" : "pages/detail/secondDetail"
+            },
+            {
+                "name" : "myComment",
+                "path" : "pages/myComment/myComment"
+            },
+            {
+                "name" : "secondPost",
+                "path" : "pages/second/secondMainPost"
+            },
+            {
+                "name" : "secondSearch",
+                "path" : "pages/second/secondMainSearch"
+            },
+            {
+                "name" : "houseDetail",
+                "path" : "pages/detail/houseDetail"
+            },
+            {
+                "name" : "rental",
+                "path" : "pages/rental/rentalPost"
+            },
+            {
+                "name" : "rentalMain",
+                "path" : "pages/rentalMain/rentalMain"
+            },
+            {
+                "name" : "aboutCSSA",
+                "path" : "pages/aboutCSSA/aboutCSSA"
+            },
+            {
+                "name" : "aboutCSSA",
+                "path" : "pages/aboutCSSA/ContactUs"
+            },
+            {
+                "name" : "aboutCSSA",
+                "path" : "pages/aboutCSSA/Guanyu"
+            }
+        ]
+    },
+    "globalStyle" : {
+        "navigationBarTextStyle" : "black",
+        "navigationBarTitleText" : "uni-app",
+        "navigationBarBackgroundColor" : "#ffdede"
+    },
+    "tabBar" : {
+        "color" : "#666666",
+        "selectedColor" : "#9b0000",
+        "borderStyle" : "black",
+        "backgroundColor" : "#ffffff",
+        "fontSize" : "14px",
+        "spacing" : "3px",
+        "list" : [
+            {
+                "pagePath" : "pages/main/main",
+                "text" : "主页",
+                "iconPath" : "./static/home.png",
+                "selectedIconPath" : "./static/home-selected.png"
+            },
+            {
+                "pagePath" : "pages/activity/act",
+                "text" : "活动",
+                "iconPath" : "./static/act.png",
+                "selectedIconPath" : "./static/act-selected.png"
+            },
+            {
+                "pagePath" : "pages/index/index",
+                "text" : "用户",
+                "iconPath" : "./static/user.png",
+                "selectedIconPath" : "./static/user-selected.png"
+            }
+        ]
+    }
+}

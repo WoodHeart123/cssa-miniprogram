@@ -2,27 +2,23 @@
 	<view>
 		<view class="column-container rest-box">
 			<view class="rest-name-box">
-				<view class="rest-name"><Text>{{course.courseName}}</Text></view>
+				<view class="rest-name"><Text>{{restaurant.Name}}</Text></view>
 			</view>
 			<view class="row-container rest-intro-box">
 				<view class="rest-diff-like">
 					<view class="row-container rate-box">
-						<view class="rate-text"><text>难度:</text></view>
-						<uni-rate readonly="true" :value="course.avgDifficulty" allowHalf="true" size="20"></uni-rate>
-						<view class="rate-num"><text>{{course.avgDifficulty.toFixed(1)}}</text></view>
+						<view class="rate-text"><text>好吃:</text></view>
+						<uni-rate readonly="true" :value="restaurant.avgGood" allowHalf="true" size="20"></uni-rate>
+						<view class="rate-num"><text>{{restaurant.avgGood.toFixed(1)}}</text></view>
 					</view>
 					<view class="row-container rate-box">
 						<view class="rate-text"><text>推荐:</text></view>
-						<uni-rate readonly="true" :value="course.avgPrefer" allowHalf="true" size="20"></uni-rate>
-						<view class="rate-num"><text>{{course.avgPrefer.toFixed(1)}}</text></view>
+						<uni-rate readonly="true" :value="restaurant.avgPrefer" allowHalf="true" size="20"></uni-rate>
+						<view class="rate-num"><text>{{restaurant.avgPrefer.toFixed(1)}}</text></view>
 					</view>
 				</view>
-				<view class="column-container credit-box">
-					<text class="credit">{{course.credit}}</text>
-					<text style="font-size: 10pt; text-align: center;">学分</text>
-				</view>
 			</view>
-			<view class="footnote">{{course.commentCount}}人参与讨论</view>
+			<view class="footnote">{{restaurant.commentCount}}人参与讨论</view>
 		</view>
 		<view class="row-container filter-box">
 			<view :class="key==0?'row-container filter filter-selected':'row-container filter'" @click="changeKey(0)">
@@ -53,7 +49,12 @@
 				pattern: {
 					buttonColor: "#9B0000"
 				},
-				course: {},
+				restaurant: {
+					Name: "快乐小羊",
+					avgGood: 3,
+					avgPrefer: 4,
+					commentCount: 5
+				},
 				showLoad: false,
 				status: "more",
 				key: 0,
@@ -75,6 +76,8 @@
 				sharing:false,
 			}
 		},
+		
+		/*
 		onShareAppMessage(res) {
 			this.sharing = true;
 			return {
@@ -90,6 +93,8 @@
 				path: '/pages/coursePage/coursePage?course=' + encodeURIComponent(JSON.stringify(this.course)),	
 			}
 		},
+		*/
+	   
 		methods: {
 			changeKey: function(num) {
 				if (this.key != num) {
@@ -191,6 +196,7 @@
 				});
 			}
 		},
+		/*
 		onLoad(options) {
 			this.course = JSON.parse(decodeURIComponent(options.course));
 			uni.setNavigationBarTitle({
@@ -231,6 +237,7 @@
 				},
 			});
 		}
+		*/
 	}
 	import commentBoxVue from '@/components/comment-box/comment-box.vue'
 </script>
@@ -367,5 +374,10 @@
 		overflow: hidden;
 		background-color: white;
 		overflow-y:scroll ;
+	}
+	
+	.map {
+		height: 100vh;
+		width: 100vw;
 	}
 </style>
