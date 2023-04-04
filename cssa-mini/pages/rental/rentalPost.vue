@@ -278,10 +278,10 @@
 				if(this.uploading){
 					return;
 				}
-				this.uploading = true;
-				this.rental.rentalStartTime = moment(this.rental.time[0],"YYYY-MM-DD").valueOf()
-				this.rental.rentalEndTime = moment(this.rental.time[1],"YYYY-MM-DD").valueOf()
 				this.$refs[ref].validate().then(res => {
+					this.uploading = true;
+					this.rental.rentalStartTime = moment(this.rental.time[0],"YYYY-MM-DD").valueOf()
+					this.rental.rentalEndTime = moment(this.rental.time[1],"YYYY-MM-DD").valueOf()
 					this.uploadCount = 0;
 					this.uploadFail = false;
 					this.images = [];

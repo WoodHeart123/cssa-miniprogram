@@ -34,10 +34,10 @@
 			<!-- <view class="row-container function-button disabled">
 				<view class="row-container function-button">
 					<view class="column-container function-text">
-						<text>生活手册</text>
+						<text>餐厅推荐</text>
 						<text style="font-size: 10px;">（待开发）</text>
 					</view>
-					<img class="image" src="../../static/handbook.svg" />
+					<img class="image" src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-icon/handbook.svg" />
 				</view>
 			</view> -->
 		</view>

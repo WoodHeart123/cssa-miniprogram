@@ -45,11 +45,10 @@
 				</view>
 			</view>
 			<view class="function-sub-box">
-				<!-- <view class="button-box disabled">
-					<img class="image" src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-icon/index/mem.svg" />
-					<text class="text-box">活动回忆</text>
-				</view> -->
-				
+				<button class="button-box" open-type="feedback">
+					<img class="image" src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-icon/index/reply.svg" />
+					<text class="text-box">我要反馈</text>
+				</button>
 			</view>
 		</view>
 	</view>
@@ -210,6 +209,24 @@
 		justify-content: center;
 		align-items: center;
 		width: 25%;
+		border: none !important;
+		background-color:white !important;
+		border-radius: 0;
+		color: #000;
+		cursor: pointer;
+		margin-left: 0;
+		margin-right: 0;
+		overflow: hidden;
+		padding-left: 0px;
+		padding-right: 0px;
+		position: relative;
+		text-align: center;
+		text-decoration: none;
+	}
+	
+	.button-box::after {
+		border: none !important;
+		border-radius: 0;
 	}
 
 	.image {
