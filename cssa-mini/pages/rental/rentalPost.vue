@@ -1,7 +1,7 @@
 <template>
 	<view id="rental-post">
 		<uni-forms ref="rentalForm" :model="rental" :rules="rules">
-			<view class="card uni-form-item uni-column">
+			<view class="card uni-form-item uni-column" v-if="!this.edit">
 				<uni-forms-item name="imageList">	
 					<view class="image_upload">
 						<uni-file-picker limit="5" fileMediatype="image" :auto-upload="false" @select="onSelectImage"
@@ -47,7 +47,7 @@
 
 
 			<view class="card" style="padding: 5px">
-				<uni-datetime-picker v-model="rental.time" type="daterange" :start="start" :end="end"
+				<uni-datetime-picker v-model="rental.time" type="daterange" :start="start"
 					:clear-icon="false" :border="false" @maskClick="maskClick" />
 			</view>
 
@@ -97,11 +97,11 @@
 				unloading: false,
 				hasID: false,
 				save: true,
+				edit: false,
 				upLoadFail: false,
 				uploadCount: 0,
 				clearable: false,
 				start: Date.now(),
-				end: Date.now() + 10000000000,
 				rental: {
 					imageList: [],
 					description: "",
@@ -123,6 +123,18 @@
 				}],
 				floorPlan: floorPlan,
 				rules: {
+					imageList: {
+						rules: [{
+								required: true,
+								errorMessage: '请上传图片',
+							},
+							{
+								minLength: 1,
+								maxLength: 5,
+								errorMessage: '最多只能上传五张图片',
+							}
+						]
+					},
 					location: {
 						rules: [{
 								required: true,
@@ -169,6 +181,10 @@
 						rules: [{
 							required: true,
 							errorMessage: '请输入转租价格',
+						},{
+							maximum:5000,
+							minimum:0,
+							errorMessage: '转租价格应在5000至0之内',
 						}]
 					},
 					contact: {
@@ -182,10 +198,18 @@
 				userInfo:{}
 			}
 		},
-		onShow() {
+		onLoad(options){
 			wx.cloud.init();
+			console.log(options)
+			if(options.rental != null){
+				this.edit = true
+				this.rental = JSON.parse(decodeURIComponent(options.rental))
+				this.rental.time = [moment(this.rental.rentalStartTime).format("YYYY-MM-DD"),moment(this.rental.rentalEndTime).format("YYYY-MM-DD")]
+			}
+		},
+		onShow() {
 			this.userInfo = uni.getStorageSync("userInfo-2");
-			if (this.userInfo.wechatID != null) {
+			 if (!this.edit && this.userInfo.wechatID != null) {
 				this.rental.contact = this.userInfo.wechatID;
 				this.save = false;
 				this.hasID = true;
@@ -241,7 +265,6 @@
 						filepath: e.tempFilePaths[i]
 					});
 				}
-				console.log(this.rental.imageList);
 			},
 			onDeleteImage: function(e) {
 				for (let i = 0; i < this.rental.imageList.length; i++) {
@@ -250,23 +273,26 @@
 						return;
 					}
 				}
-				console.log(this.rental.imageList);
 			},
 			submit(ref) {
 				if(this.uploading){
 					return;
 				}
-				this.uploading = true;
-				this.rental.rentalStartTime = moment(this.rental.time[0],"YYYY-MM-DD").valueOf()
-				this.rental.rentalEndTime = moment(this.rental.time[1],"YYYY-MM-DD").valueOf()
 				this.$refs[ref].validate().then(res => {
+					this.uploading = true;
+					this.rental.rentalStartTime = moment(this.rental.time[0],"YYYY-MM-DD").valueOf()
+					this.rental.rentalEndTime = moment(this.rental.time[1],"YYYY-MM-DD").valueOf()
 					this.uploadCount = 0;
 					this.uploadFail = false;
 					this.images = [];
 					uni.showLoading({
 						title: "请耐心等待信息上传"
 					});
-					this.uploadImage();
+					if(this.edit){
+						this.updateRental();
+					}else{
+						this.uploadImage();
+					}
 				}).catch(err => {
 					uni.showToast({
 						title: err[0].errorMessage,
@@ -276,7 +302,8 @@
 			},
 			uploadImage: async function() {
 				uni.showLoading({
-					title: "正在上传内容"
+					title: "正在上传内容",
+					mask: true
 				});
 				for (let i = 0; i < this.rental.imageList.length; i++) {
 					uni.uploadFile({
@@ -348,6 +375,29 @@
 					});
 				}
 			},
+			updateRental: async function(){
+				const res = await wx.cloud.callContainer({
+					config:{
+						env: 'prod-9gip97mx4bfa32a3',
+					},
+					path: `/rental/updateRental`,
+					method: 'POST',
+					header: {
+						'X-WX-SERVICE': 'springboot-ds71',
+					},
+					data: this.rental
+				});
+				uni.hideLoading();
+				if (res.data.status == 100) {
+					uni.$emit("uploadRentalSuccess");
+					uni.navigateBack();
+				} else {
+					uni.showToast({
+						title: "上传信息失败",
+						icon: "error"
+					});
+				}
+			}
 		}
 	}
 	import moment from "moment/min/moment-with-locales";
@@ -355,6 +405,9 @@
 </script>
 
 <style>
+	input{
+		height: 35px;
+	}
 	#rental-post {
 		position: absolute;
 		min-width: 100vw;
@@ -445,6 +498,7 @@
 	}
 
 	.confirm-button {
+		margin-top: 20px;
 		margin-bottom: 20px;
 	}
 

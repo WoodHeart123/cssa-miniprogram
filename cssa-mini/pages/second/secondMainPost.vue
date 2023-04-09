@@ -1,7 +1,7 @@
 <template>
 	<view id="second-post">
 		<uni-forms ref="productForm" :model="product" :rules="rules">
-			<view class="card uni-form-item uni-column">
+			<view class="card uni-form-item uni-column" v-if="!edit">
 				<uni-forms-item name="imageList">	
 					<view class="image_upload">
 						<uni-file-picker limit="5" fileMediatype="image" :auto-upload="false" @select="onSelectImage"
@@ -19,7 +19,7 @@
 
 
 			<view class="card uni-textarea textbox">
-				<uni-forms-item name="productDescription">
+				<uni-forms-item name="productDescription"> 
 					<uni-easyinput type="textarea" v-model="product.productDescription" placeholder="请输入商品描述信息" maxlength="400"
 						placeholderStyle="font-size:14px;color:gray" :clearable="clearable"> </uni-easyinput>
 				</uni-forms-item>
@@ -85,8 +85,8 @@
 
 
 			<view class="uni-padding-wrap uni-common-mt confirm-button">
-				<button type="default" style="background-color: #9b0000; color: #ffffff;" plain="true"
-					@click="submit('productForm')">发布</button>
+				<button type="default" style="background-color: #9B0000; color: #ffffff;" plain="true"
+					@click="submit('productForm')">{{this.edit?"更新":"发布"}}</button>
 			</view>
 		</uni-forms>
 	</view>
@@ -96,6 +96,7 @@
 	export default {
 		data() {
 			return {
+				edit:false,
 				hasID:false,
 				save: true,
 				upLoadFail: false,
@@ -229,6 +230,15 @@
 				},
 			}
 		},
+		onLoad(options){
+			console.log(options)
+			if(options.product != null){
+				this.edit = true
+				this.product = JSON.parse(decodeURIComponent(options.product))
+				this.product.productCondition = this.conditionOption[this.product.productCondition].value
+				this.product.productType = this.item_types[this.product.productType].value
+			}
+		},
 		onShow(){
 			 wx.cloud.init();
 			 let userInfo = uni.getStorageSync("userInfo-2");
@@ -279,7 +289,6 @@
 				console.log(this.product.imageList);
 			},
 			submit(ref) {
-				console.log(this.save);
 				this.$refs[ref].validate().then(res => {
 					this.uploadCount = 0;
 					this.uploadFail = false;
@@ -287,7 +296,11 @@
 					uni.showLoading({
 						title: "请耐心等待信息上传"
 					});
-					this.uploadImage();
+					if(!this.edit){
+						this.uploadImage();
+					}else{
+						this.updateProduct()
+					}
 				}).catch(err => {
 					uni.showToast({
 						title: err[0].errorMessage,
@@ -295,9 +308,33 @@
 					})
 				})
 			},
+			updateProduct: async function(){
+				const res = await wx.cloud.callContainer({
+					config: {
+						env: 'prod-9gip97mx4bfa32a3',
+					},
+					path: `/secondhand/updateSecondHand`,
+					method: 'POST',
+					header: {
+						'X-WX-SERVICE': 'springboot-ds71',
+					},
+					data: this.product
+				});
+				uni.hideLoading();
+				if (res.data.status == 100) {
+					uni.$emit("updateSecondSuccess");
+					uni.navigateBack();
+				} else {
+					uni.showToast({
+						title: "更新信息失败",
+						icon: "error"
+					});
+				}
+			},
 			uploadImage: async function() {
 				uni.showLoading({
-					title: "正在上传内容"
+					title: "正在上传内容",
+					mask: true
 				});
 				for (let i = 0; i < this.product.imageList.length; i++) {
 					uni.uploadFile({
@@ -369,6 +406,9 @@
 </script>
 
 <style>
+	input{
+		height: 35px;
+	}
 	#second-post {
 		position: absolute;
 		height: 100vh;
@@ -450,6 +490,7 @@
 	}
 
 	.confirm-button {
+		margin-top: 20px;
 		margin-bottom: 20px;
 	}
 

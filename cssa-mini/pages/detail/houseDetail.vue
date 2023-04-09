@@ -1,17 +1,14 @@
 <template>
-	<view>
+	<view class="house-detail">
 		<swiper class="swiper" indicator-dots>
-			<swiper-item v-for="(image, index) in houseInfo.images">
-				<image :src="image" @click="getImageIndex(index)"></image>
+			<swiper-item style="display:flex;align-items: center;justify-content: center;" v-for="(image, index) in houseInfo.images" @click="previewImage">
+				<image mode="heightFix" :src="image"></image>
 			</swiper-item>
 		</swiper>
 		<view class="basic">
 			<view class="price-box">
 				<view class="row-container" style="align-items: center;">
 					<view class="row-container tag"><text>{{rentalTime}}</text></view>
-				</view>
-				<view class="shoucang-box">
-					<text class="iconfont save-icon" :class="{'save-icon-selected' : isSaved}" @click="onClickSave()">&#xe6c9;</text>
 				</view>
 			</view>
 			<view class="row-container" style="margin-top: 5px; margin-left: 4px;">
@@ -35,6 +32,10 @@
 				</view>
 			</view>
 			<view class="weixin">微信号：{{houseInfo.contact}}</view>
+			<view class="contact-overlay" v-show="!this.isLogin">
+				<button class="login-button" plain="true"
+					@click="getUserProfile">点击登录可查看联系方式</button>
+			</view>
 		</view>
 		<view class="description">
 			<view class="scroll-page">
@@ -52,19 +53,17 @@
 	export default {
 		data() {
 			return {
-				isSaved: false,
 				sexContraintValue:["仅限男生","仅限女生","性别不限"],
 				imageList: ["/static/housing.jpg", "/static/housing.jpg", "/static/housing.jpg"],
 				houseInfo: {},
+				isLogin:false,
 			}
 		},
 		
 		onLoad(options){
-			console.log(options);
 			wx.cloud.init();
 			this.houseInfo = JSON.parse(decodeURIComponent(options.rentalInfo));
-			console.log(this.houseInfo);
-			this.isSaved = true;
+			console.log(this.houseInfo)
 		},
 
 	   	onShow() {
@@ -72,6 +71,7 @@
 	   			key: 'userInfo-2',
 				success: (res) => {
    					this.userInfo = res.data;
+					this.isLogin = true;
 				},
 	   			fail: () => {
 	   				console.log("fail");
@@ -81,9 +81,9 @@
 
 		onShareTimeline() {
 			return {
-				title: this.houseInfo.name,
-				imageUrl: "/static/renwu.jpeg",
-				path: '/pages/detail/houseDetail?houseInfo=' + encodeURIComponent(JSON.stringify(this.houseInfo))
+				title: "【转租】" + this.houseInfo.location,
+				imageUrl: this.houseInfo.images[0],
+				path: '/pages/detail/houseDetail?rentalInfo=' + encodeURIComponent(JSON.stringify(this.houseInfo))
 			}
 		},
 
@@ -92,28 +92,14 @@
 				console.log(res.target)
 			}
 			return {
-				title: this.houseInfo.name + ": $" + 1200,
-				desc: "CSSA二手交易平台",
-				content: "very happy",
-				imageUrl: "/static/renwu.jpeg",
-				path: '/pages/detail/housedDetail?houseInfo=' + encodeURIComponent(JSON.stringify(this.houseInfo))
+				title: "【转租】" + this.houseInfo.location,
+				desc: "CSSA转租分享平台",
+				content:"转租",
+				imageUrl: this.houseInfo.images[0],
+				path: '/pages/detail/housedDetail?rentalInfo=' + encodeURIComponent(JSON.stringify(this.houseInfo))
 			}
 		},
 		methods: {
-			onClickSave:function(){
-				if(!this.isSaved){
-					this.save();
-				}else{
-					this.unsave();
-				}
-			},
-			getImageIndex(index){
-				console.log(index);
-				uni.previewImage({
-					current:this.houseInfo.imageList[index],
-					urls:this.houseInfo.imageList,
-				})
-			},
 			
 			setClipboardData: function() {
 				uni.setClipboardData({
@@ -126,29 +112,37 @@
 					}
 				});
 			},
-			async save(){
-				console.log('success');
-				this.isSaved = true;
-				/*
+			previewImage: function(){
+				wx.previewImage({
+					current:this.houseInfo.images[0],
+					urls:this.houseInfo.images
+				});
+			},
+			getUserProfile: function() {
+				uni.getUserProfile({
+					desc: "获取用户昵称",
+					success: (userProfile) => {
+						this.login(userProfile.userInfo.nickName);
+					},
+				});
+			},
+			async login(nickname) {
+				uni.showLoading()
 				const res = await wx.cloud.callContainer({
 					config: {
-						env: 'prod-9go38k3y9fee3b2e', // 微信云托管的环境ID
+						env: 'prod-9gip97mx4bfa32a3',
 					},
-					path: '/secondhand/collect?productID='+this.product.productID,
-					method: 'GET', 
+					path: "/user/login?nickname=" + encodeURI(nickname),
+					method: 'GET',
 					header: {
-						'X-WX-SERVICE': 'springboot-f8i8',
+						'X-WX-SERVICE': 'springboot-ds71',
 					}
 				});
-				if(res.status == "101"){
-					this.isSaved = True;
-				}
-				*/
+				uni.hideLoading();
+				this.userInfo = res.data.data;
+				this.isLogin = true;
+				uni.setStorageSync("userInfo-2",res.data.data);
 			},
-			async unsave(){
-				console.log('success');
-				this.isSaved = false;
-			}
 		},
 		computed: {
 			rentalTime(){
@@ -159,6 +153,11 @@
 </script>
 
 <style lang="scss">
+	.house-detail{
+		width: 100vw;
+		height: 100vh;
+		overflow-x:hidden;
+	}
 	#dollar-icon{
 		font-size:28px;
 		color: #9b0000;
@@ -238,6 +237,7 @@
 	}
 	
 	.contact{
+		position: relative;
 		width: 90vw;
 		height: 110px;
 		margin-left: 5vw;
@@ -252,6 +252,28 @@
 		align-items: center;
 		height: 50px;
 		width: 100vw;
+	}
+	.contact-overlay {
+		top: 0;
+		position: absolute;
+		height: 100%;
+		width: 100%;
+		background-color: rgba(139, 139, 139, 1.0);
+		line-height: 110px;
+		text-align: center;
+		font-size: 30px;
+		color: rgba(155, 0, 0, 0.5);
+		border-radius: 5px;
+		border: 5px rgba(34, 34, 34, 0.5);
+	}
+	
+	.login-button {
+		color: rgba(155, 0, 0, 0.5) !important;
+		border: none !important;
+		height: 100%;
+		width: 100%;
+		background-color: rgba(139, 139, 139, 1.0) !important;
+		line-height: 100px;
 	}
 
 	.avatar {

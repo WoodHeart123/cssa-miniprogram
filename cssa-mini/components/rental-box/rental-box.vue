@@ -12,7 +12,7 @@
 			<view class="time-box">{{rentalTime}}</view>
 			<view class="price-box">${{this.rentalInfo.price}}</view>
 			<view class="description-box">{{this.rentalInfo.description}}</view>
-			<view class="publish-time-box">{{publishTime}}</view>
+			<view class="publish-time-box">{{this.rentalPublishTime}}</view>
 		</view>
 	</view>
 </template>
@@ -24,7 +24,13 @@
 		name:"rental-box",
 		props:["rentalInfo"],
 		mounted(){
-			console.log(encodeURIComponent(JSON.stringify(this.houseInfo.contact)))
+			if(moment().year() - moment.utc(this.rentalInfo.UTCPublishedTime).year() > 0){
+				this.rentalPublishTime = moment.utc(this.rentalInfo.UTCPublishedTime).format("YYYY-MM-DD");
+			}else if(Date.now() - moment.utc(this.rentalInfo.UTCPublishedTime).valueOf() > 86400000 * 7){
+				this.rentalPublishTime = moment.utc(this.rentalInfo.UTCPublishedTime).format("MM-DD");
+			}else{
+				this.rentalPublishTime = moment.utc(this.rentalInfo.UTCPublishedTime).locale('zh-cn').fromNow();
+			}
 		},
 		data() {
 			return {
@@ -32,6 +38,7 @@
 				houseInfo: {
 					imageList: ["/static/housing.jpg", "/static/housing.jpg", "/static/housing.jpg"],
 				},
+				rentalPublishTime:""
 			};
 		},
 		methods:{
@@ -45,10 +52,18 @@
 			rentalTime(){
 				return moment(this.rentalInfo.rentalStartTime).format("YYYY-MM-DD") + " 至 " + moment(this.rentalInfo.rentalEndTime).format("YYYY-MM-DD")
 			},
-			publishTime(){
-				moment.locale('zh-cn');
-				return moment(this.rentalInfo.publishedTime).fromNow(); 
-			}
+		},
+		watch: {
+		    // whenever question changes, this function will run
+		    'rentalInfo.UTCPublishedTime': function (newVal, oldVal) {
+		     if(moment().year() - moment.utc(this.rentalInfo.UTCPublishedTime).year() > 0){
+		     	this.rentalPublishTime = moment.utc(newVal).format("YYYY-MM-DD");
+		     }else if(Date.now() - moment.utc(this.rentalInfo.UTCPublishedTime).valueOf() > 86400000 * 7){
+		     	this.rentalPublishTime = moment.utc(newVal).format("MM-DD");
+		     }else{
+		     	this.rentalPublishTime = moment.utc(newVal).locale('zh-cn').fromNow();
+		     }
+		    }
 		}
 	}
 </script>
@@ -76,6 +91,7 @@
 		background-color: white;
 		border-bottom: 1px solid rgba(238, 238, 238, 0.6);
 		border-top: 1px solid rgba(238, 238, 238, 0.6);
+		overflow: hidden;
 	}
 	.image-box{
 		display: flex;
@@ -85,6 +101,7 @@
 		align-items: center;
 		justify-content: center;
 		z-index: 10;
+		overflow:hidden;
 	}
 	.content-box{
 		width: 68%;
@@ -140,7 +157,7 @@
 		font-size: 10px;
 		color: rgba(132, 132,132, 0.6);
 		margin-top:2px;
-		height: 60px;
+		height: 40px;
 		line-height: 20px;
 		white-space: normal;
 		overflow: hidden;

@@ -2,7 +2,7 @@
 	<view class="act_detail"> 
 		<swiper indicator-dots>
 			<swiper-item>
-				<image :src="actDetail.imgs"></image>
+				<image mode="widthFix" :src="actDetail.imgs"></image>
 			</swiper-item>
 		</swiper>
 		<view class="basic">

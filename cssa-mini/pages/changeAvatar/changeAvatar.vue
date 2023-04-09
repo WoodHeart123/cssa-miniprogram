@@ -41,7 +41,7 @@
 					config: {
 						env: 'prod-9gip97mx4bfa32a3',
 					},
-					path: "/user/updateAvatar?avatar=" + this.currentAvatar.toString(),
+					path: "/user/updateProfile?str=" + this.currentAvatar.toString() + '&service=avatar',
 					method: 'GET',
 					header: {
 						'X-WX-SERVICE': 'springboot-ds71',
@@ -67,7 +67,6 @@
 }
 .avatar-container{
 	width: 100vw;
-	height: 45vh;
 	display: flex;
 	flex-flow: row wrap;
 	justify-content: space-around;

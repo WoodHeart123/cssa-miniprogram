@@ -1,19 +1,19 @@
 <template>
 	<view id="rental-main">
-		<view class="menu row-container">
-			<!-- <view class="search-box" @click="toSearch">
+		<!-- <view class="menu row-container">
+			<view class="search-box" @click="toSearch">
 				<uni-icons type="search" size="30"></uni-icons>
-			</view> -->
+			</view>
 			<view class="menu-box row-container">
 				<view class="row-container rental-selection">
 					<text @click="clickMenu(0)" :class="{selected:menuIndex==0}">转租</text>
-<!-- 					<text>/</text>
-					<text @click="clickMenu(1)" :class="{selected:menuIndex==1}">找室友</text> -->
+					<text>/</text>
+					<text @click="clickMenu(1)" :class="{selected:menuIndex==1}">找室友</text>
 				</view>
 			</view>
-		</view>
+		</view> -->
 		<view class="row-container filter-box">
-			<view class="setting-icon">
+			<view class="setting-icon" @click="popFilter('price')">
 				<uni-icons type="settings-filled" size="30"></uni-icons>
 			</view>
 
@@ -39,7 +39,8 @@
 			<view class="rental-box-container" v-for="(rentalInfo,index) in rentalList" :key="index">
 				<rentalBoxVue :rentalInfo="rentalInfo"></rentalBoxVue>
 			</view>
-			<uni-load-more style="padding-bottom: 50px;" :status="status"></uni-load-more>
+			<uni-load-more  :status="status"></uni-load-more>
+			<view style="height: 100px;"></view>
 		</scroll-view>
 		<uni-fab :pattern="pattern" horizontal="right" vertical="bottom" popMene="false" @fabClick="toPostRental" />
 		<uni-popup ref="filter" type="bottom" background-color="#fff" :safeArea="safeArea" @maskClick="maskClick" :is-mask-click="safeArea">
@@ -98,8 +99,8 @@
 					priceLimit: 5000,
 					time: [0, 0],
 				},
-				floorplanList: ['Studio', '1B1B', '2B1B', '2B2B', '3B1B', '3B2B', '3B3B', '4B1B', '4B2B', "4B3B", "其他"],
-				selectedFloorplan: ['Studio', '1B1B', '2B1B', '2B2B', '3B1B', '3B2B', '3B3B', '4B1B', '4B2B', "4B3B", "其他"],
+				floorplanList: ['Studio', '1B1B', '2B1B', '2B2B','3B1B','3B2B', '3B3B','4B1B','4B2B', "4B3B", '4B4B','Other'],
+				selectedFloorplan: ['Studio', '1B1B', '2B1B', '2B2B','3B1B','3B2B', '3B3B','4B1B','4B2B', "4B3B", '4B4B',"Other"]
 				start: Date.now(),
 				end: Date.now() + 10000000000,
 				timeFilter:false,
@@ -112,6 +113,7 @@
 				pattern: {
 					buttonColor: "#9b0000"
 				},
+				isLogin:false,
 				
 			}
 		},
@@ -122,6 +124,12 @@
 		},
 		onShow(){
 			uni.$on("uploadRentalSuccess",this.uploadSuccess);
+			uni.getStorage({
+				key: "userInfo-2",
+				success:() => {
+					this.isLogin = true;
+				}
+			});
 		},
 		methods: {
 			clickMenu: function(e) {
@@ -134,10 +142,51 @@
 					duration: 5000,
 				});
 			},
+			async login(name) {
+				uni.showLoading({
+					mask:true
+				});
+				const res = await wx.cloud.callContainer({
+					config: {
+						env: 'prod-9gip97mx4bfa32a3',
+					},
+					path: "/user/login?nickname=" + encodeURI(name),
+					method: 'GET',
+					header: {
+						'X-WX-SERVICE': 'springboot-ds71',
+					}
+				});
+				this.isLogin = true;
+				uni.setStorage({
+					key: "userInfo-2",
+					data: res.data.data
+				});
+				uni.hideLoading();
+				this.toPostRental();
+			},
 			toPostRental: function() {
+				if (!this.isLogin) {
+					uni.showToast({
+						title:"请先登录",
+						icon:"none"
+					});
+					uni.getUserProfile({
+						desc: "获取用户信息",
+						success: (userProfile) => {
+							this.login(userProfile.userInfo.nickName);
+						},
+						fail: () => {
+							uni.showToast({
+								title: "请先登陆",
+								icon: "none"
+							});
+						}
+					});
+					return;
+				}
 				uni.navigateTo({
 					url: "/pages/rental/rentalPost",
-				})
+				});
 			},
 			popFilter: function(e) {
 				if (e == 'price') {
@@ -298,7 +347,6 @@
 	.filter-box {
 		padding-top: 2px;
 		position: relative;
-		margin-top: 50px;
 		height: 42px;
 		width: 100%;
 		overflow-y: scroll;
@@ -409,7 +457,7 @@
 	}
 	.rental-box-container{
 		width: 100vw;
-		height: 200px;
+		height: 160px;
 		margin-bottom: 10px;
 	}
 	.rental-scroll{

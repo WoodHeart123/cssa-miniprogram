@@ -7,8 +7,7 @@
 
 			<view class="overlay" v-show="showMenu"></view>
 			<view class="column-container suggest-list" v-if="searching">
-				<uni-load-more v-show="searchStatus!='more'" :status="searchStatus" :contentText="searchContentText">
-				</uni-load-more>
+				<uni-load-more v-show="searchStatus!='more'" :status="searchStatus" :contentText="searchContentText" />
 				<view class="row-container suggest-box" v-for="(course, index) in suggestList" :key="index"
 					@click="toCourse(course)">
 					<view class="suggest-box-course-num">
@@ -27,7 +26,7 @@
 					<text>{{departmentName}}</text>
 				</view>
 				<view class="row-container search-select" v-show="!searching">
-					<uni-icons type="search" size="30" color="#1684FC" v-show="!searching" @click="onSearch"></uni-icons>
+					<uni-icons type="search" size="30" color="#9B0000" v-show="!searching" @click="onSearch"></uni-icons>
 				</view>
 				<view class="search-bar" v-show="searching">
 					<uni-search-bar v-model="searchValue" cancelButton="auto" placeholder="搜索课程" clearButton="none" :focus="searching"
@@ -294,7 +293,6 @@
 				});
 			},
 			toCourse: function(course) {
-				console.log(course);
 				uni.navigateTo({
 					url: '/pages/coursePage/coursePage?course=' + encodeURIComponent(JSON.stringify(course)),
 				});

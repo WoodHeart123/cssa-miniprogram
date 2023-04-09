@@ -51,7 +51,7 @@
 		data() {
 			return {
 				pattern: {
-					buttonColor: "#1684FC"
+					buttonColor: "#9B0000"
 				},
 				course: {},
 				showLoad: false,
@@ -321,7 +321,8 @@
 	}
 
 	.filter-selected {
-		background-color: #c9d4fc !important;
+		background-color: #9B0000 !important;
+		color: white;
 	}
 
 	.filter {
