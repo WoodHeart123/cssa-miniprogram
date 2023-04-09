@@ -1,6 +1,6 @@
 <template>
 	<view id="main" class="column-container">
-		<uni-swiper-dot class="uni-swiper-dot-box" @clickItem="clickItem" :info="images" :current="current" mode="dot"
+		<uni-swiper-dot class="uni-swiper-dot-box" @clickItem="clickItem" v-bind:info="images" :current="current" mode="dot"
 			field="content">
 			<swiper class="swiper-box" @change="change" :current="current">
 				<swiper-item v-for="(image, index) in images" :key="index">

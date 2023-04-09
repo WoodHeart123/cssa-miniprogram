@@ -31,6 +31,7 @@
 		},
 		methods: {
 			toCoursePage:function(){
+				uni.$emit("upload",index)
 				uni.navigateTo({
 					url: '/pages/coursePage/coursePage?course=' + encodeURIComponent(JSON.stringify(this.course)),
 				});
