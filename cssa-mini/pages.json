@@ -182,23 +182,19 @@
 				"navigationBarTitleText": "顺风车",
 				"enablePullDownRefresh": false
 			}
-		} ,{
-            "path" : "pages/rentalMain/rentalMain",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "转租",
-                "enablePullDownRefresh": false
-            }
-        }
-        ,{
-            "path" : "pages/aboutCSSA/aboutCSSA",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        },
+		}, {
+			"path": "pages/rentalMain/rentalMain",
+			"style": {
+				"navigationBarTitleText": "转租",
+				"enablePullDownRefresh": false
+			}
+		}, {
+			"path": "pages/aboutCSSA/aboutCSSA",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+		},
 		{
 			"path": "pages/aboutCSSA/ContactUs",
 			"style": {
@@ -212,81 +208,12 @@
 				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false
 			}
-		}
-        ,{
-            "path" : "pages/myRental/myRental",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "我的转租",
-                "enablePullDownRefresh": true
-            }
-            
-        }
-    ],
-		"condition": {
-			"current": 0,
-			"list": [{
-					"name": "avatar",
-					"path": "pages/changeAvatar/changeAvatar"
-				},
-				{
-					"name": "second",
-					"path": "pages/second/secondMain"
-				},
-				{
-					"name": "secondDetail",
-					"path": "pages/detail/secondDetail"
-				},
-				{
-					"name": "myComment",
-					"path": "pages/myComment/myComment"
-				},
-				{
-					"name": "secondPost",
-					"path": "pages/second/secondMainPost"
-				},
-				{
-					"name": "secondSearch",
-					"path": "pages/second/secondMainSearch"
-				},
-				{
-					"name": "houseDetail",
-					"path": "pages/detail/houseDetail"
-				},
-				{
-					"name": "rental",
-					"path": "pages/rental/rentalPost"
-				},
-				{
-					"name" : "rentalMain",
-				    "path" : "pages/rentalMain/rentalMain"
-				},{
-					"name":"aboutCSSA",
-					"path":"pages/aboutCSSA/aboutCSSA"
-				},{
-					"name":"aboutCSSA",
-					"path":"pages/aboutCSSA/ContactUs"
-				},{
-					"name":"aboutCSSA",
-					"path":"pages/aboutCSSA/Guanyu"
-				}
-			]
-		},
-		{
-			"path": "pages/rentalMain/rentalMain",
+		}, {
+			"path": "pages/myRental/myRental",
 			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
+				"navigationBarTitleText": "我的转租",
+				"enablePullDownRefresh": true
 			}
-
-		},
-		{
-			"path": "pages/aboutCSSA/aboutCSSA",
-			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
-			}
-
 		}
 	],
 	"condition": {
@@ -329,6 +256,12 @@
 			}, {
 				"name": "aboutCSSA",
 				"path": "pages/aboutCSSA/aboutCSSA"
+			}, {
+				"name": "aboutCSSA",
+				"path": "pages/aboutCSSA/ContactUs"
+			}, {
+				"name": "aboutCSSA",
+				"path": "pages/aboutCSSA/Guanyu"
 			}
 		]
 	},
@@ -345,22 +278,22 @@
 		"fontSize": "14px",
 		"spacing": "3px",
 		"list": [{
-					"pagePath": "pages/main/main",
-					"text": "主页",
-					"iconPath": "./static/home.png",
-					"selectedIconPath": "./static/home-selected.png"
-				}, {
-					"pagePath": "pages/activity/act",
-					"text": "活动",
-					"iconPath": "./static/act.png",
-					"selectedIconPath": "./static/act-selected.png"
-				},
-				{
-					"pagePath": "pages/index/index",
-					"text": "用户",
-					"iconPath": "./static/user.png",
-					"selectedIconPath": "./static/user-selected.png"
-				}
-			]
+				"pagePath": "pages/main/main",
+				"text": "主页",
+				"iconPath": "./static/home.png",
+				"selectedIconPath": "./static/home-selected.png"
+			}, {
+				"pagePath": "pages/activity/act",
+				"text": "活动",
+				"iconPath": "./static/act.png",
+				"selectedIconPath": "./static/act-selected.png"
+			},
+			{
+				"pagePath": "pages/index/index",
+				"text": "用户",
+				"iconPath": "./static/user.png",
+				"selectedIconPath": "./static/user-selected.png"
+			}
+		]
 	}
 }
