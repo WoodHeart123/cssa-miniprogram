@@ -37,7 +37,7 @@
 			<scroll-view scroll-y="true" show-scrollbar="true" refresher-enabled="true"
 				class="column-container course-list-box" refresher-background="white" @refresherrefresh="refresh"
 				enable-back-to-top="true" :refresher-triggered="triggered" @refresherabort="refreshRestore"
-				@scrolltolower="onScrollLower" @upload="upload">
+				@scrolltolower="onScrollLower">
 				
 				<view class="row-container filter-box">
 					<view :class="key==0?'filter-selected filter':'filter'" class="row-container" @click="changeKey(0)">
@@ -51,7 +51,7 @@
 						<text class="iconfont" v-show="key==4&&sortIndex==4">&#xed58;</text>
 						<text class="iconfont" v-show="key==4&&sortIndex==5">&#xed59;</text>
 					</view>
-					<view v-bind:class="key==2?'filter-selected filter':'filter'" class="row-container" @click="changeKey(2)">
+					<view :class="key==2?'filter-selected filter':'filter'" class="row-container" @click="changeKey(2)">
 						<text>难度</text>
 						<text class="iconfont" v-show="key==2&&sortIndex==3">&#xed58;</text>
 						<text class="iconfont" v-show="key==2&&sortIndex==2">&#xed59;</text>
@@ -128,9 +128,6 @@
 			}
 		},
 		methods: {
-			upload: function(index){
-				
-			},
 			onSearch:function(){
 				this.searching = true;
 			},
