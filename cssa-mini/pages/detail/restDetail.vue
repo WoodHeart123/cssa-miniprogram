@@ -1,8 +1,11 @@
 <template>
 	<view>
 		<view class="column-container rest-box">
-			<view class="rest-name-box">
-				<view class="rest-name"><Text>{{restaurant.Name}}</Text></view>
+			<view class="row-container">
+				<view class="rest-name-box">
+					<view class="rest-name"><text user-select="{{true}}">{{restaurant.Name}}</text></view>
+				</view>
+				<view class="rest-map"><button>地图</button></view>
 			</view>
 			<view class="row-container rest-intro-box">
 				<view class="rest-diff-like">
@@ -24,9 +27,9 @@
 			<view :class="key==0?'row-container filter filter-selected':'row-container filter'" @click="changeKey(0)">
 				<text>最新</text>
 			</view>
-			<!-- <view :class="key==1?'row-container filter filter-selected':'row-container filter'" @click="changeKey(1)">
+			<view :class="key==1?'row-container filter filter-selected':'row-container filter'" @click="changeKey(1)">
 				<text>热度</text>
-			</view> -->
+			</view>
 		</view>
 		<view scroll-y="true" show-scrollbar="true" refresher-enabled="false" refresher-triggered="false"
 			class="column-container comment-container" @scrolltolower="getCommentList()">
@@ -100,7 +103,7 @@
 				if (this.key != num) {
 					this.offset = 0;
 					this.key = num;
-					this.getCommentList();
+					//this.getCommentList();
 					
 				}
 			},
@@ -281,11 +284,19 @@
 		height: 40px;
 		margin: 10px 10px 10px 10px;
 	}
+	
+	.rest-map {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		height: 40px;
+		margin: 10px 10px 10px 10px;
+	}
 
 	.rest-name {
 		min-height: 20px;
 		max-height: 40px;
-		width: calc(100% - 20px);
+		
 		font-weight: 700;
 		text-align: left;
 		line-height: 20px;
