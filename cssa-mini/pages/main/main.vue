@@ -40,6 +40,14 @@
 					<img class="image" src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-icon/handbook.svg" />
 				</view>
 			</view> -->
+			<view class="row-container function-button">
+				<view class="row-container function-button" @click="toRest">
+					<view class="column-container function-text">
+						<text>餐厅攻略</text>
+					</view>
+					<img class="image" src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-icon/apartment.svg" />
+				</view>
+			</view>
 		</view>
 		<!-- 		<view class="leader-list">
 			<text class="cssa-intro-text">CSSA介绍</text>
@@ -152,6 +160,11 @@
 			toRental:function(){
 				uni.navigateTo({
 					url:"/pages/rentalMain/rentalMain",
+				})
+			},
+			toRest: function(){
+				uni.navigateTo({
+					url:"/pages/restMain/restMain",
 				})
 			},
 		}
