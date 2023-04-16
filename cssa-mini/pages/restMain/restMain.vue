@@ -1,20 +1,19 @@
 <template>
 	<view id="rest-main" class="column-container">
 		<view class="row-container search-box">
-			<view class="all"><text>全部餐厅</text></view>
+			<view class="row-container filter-box">
+				<view class="setting-icon">
+					<view class="icon iconfont">&#xe8c8</view>
+				</view>
+				<view class="single-filter-box">
+					<text>价格:0-20</text>
+				</view>
+				<view class="single-filter-box">
+					<text>评价:无限制</text>
+				</view>
+			</view>
 			<view class="search" @click="toSearch">
 				<view class="icon iconfont">&#xe67d</view>
-			</view>
-		</view>
-		<view class="row-container filter-box">
-			<view class="setting-icon">
-				<view class="icon iconfont">&#xe8c8</view>
-			</view>
-			<view class="single-filter-box">
-				<text>价格:0-20</text>
-			</view>
-			<view class="single-filter-box">
-				<text>评价:无限制</text>
 			</view>
 		</view>
 		<view class="rest-box-container">
@@ -122,8 +121,8 @@
 		width: 200px;
 	}
 	.search-box{
-		height: 40px;
-		line-height: 40px;
+		height: 30px;
+		line-height: 30px;
 		padding-left: 5px;
 		padding-right: 5px;
 		width: 100vw;
