@@ -5,7 +5,7 @@
 				<view class="rest-name-box">
 					<view class="rest-name"><text user-select="{{true}}">{{restaurant.Name}}</text></view>
 				</view>
-				<view class="rest-map"><button>地图</button></view>
+				<view class="row-container filter-box" style="width: 100px;"><view class="row-container filter" @click="NavMap()"><text>地图</text></view></view>
 			</view>
 			<view class="row-container rest-intro-box">
 				<view class="rest-diff-like">
@@ -34,7 +34,7 @@
 		<view scroll-y="true" show-scrollbar="true" refresher-enabled="false" refresher-triggered="false"
 			class="column-container comment-container" @scrolltolower="getCommentList()">
 			<view class="box" v-for="(comment, index) in commentList" :key="index">
-				<commentBoxVue :comment="comment" :user="false"></commentBoxVue>
+				<restBoxVue :comment="comment" :user="false"></restBoxVue>
 			</view>
 			<uni-load-more :status="status" :contentText="contentText"></uni-load-more>
 		</view>
@@ -45,7 +45,7 @@
 <script>
 	export default {
 		components: {
-			commentBoxVue
+			restBoxVue
 		},
 		data() {
 			return {
@@ -66,7 +66,15 @@
 				isLogin: true,
 				likedComment:[],
 				userInfo: {},
-				commentList: [],
+				commentList: [
+					{
+						restName:"快了小羊",
+						good: 3,
+						prefer: 4,
+						likeCount: 5,
+						liked:true
+					}
+				],
 				offset: 0,
 				limit: 10,
 				order: [],
@@ -197,6 +205,11 @@
 				uni.navigateTo({
 					url: "/pages/postComment/postComment?course=" + encodeURIComponent(JSON.stringify(this.course)) + "&edit=false",
 				});
+			},
+			NavMap: function(){
+				uni.navigateTo({
+					url:"/pages/map/map"
+				})
 			}
 		},
 		/*
@@ -242,7 +255,7 @@
 		}
 		*/
 	}
-	import commentBoxVue from '@/components/comment-box/comment-box.vue'
+	import restBoxVue from '@/components/rest-box/rest-box.vue'
 </script>
 
 <style>
