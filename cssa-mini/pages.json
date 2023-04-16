@@ -5,7 +5,7 @@
 				"navigationBarTitleText": "主页",
 				"enablePullDownRefresh": false,
 				"disableScroll": true
-				
+
 			}
 
 		}, {
@@ -176,23 +176,25 @@
 				"enablePullDownRefresh": false,
 				"disableScroll": true
 			}
-		}    ,{
-            "path" : "pages/rentalMain/rentalMain",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "转租",
-                "enablePullDownRefresh": false
-            }
-        }
-        ,{
-            "path" : "pages/aboutCSSA/aboutCSSA",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        },
+		}, {
+			"path": "pages/rideMain/rideMain",
+			"style": {
+				"navigationBarTitleText": "顺风车",
+				"enablePullDownRefresh": false
+			}
+		}, {
+			"path": "pages/rentalMain/rentalMain",
+			"style": {
+				"navigationBarTitleText": "转租",
+				"enablePullDownRefresh": false
+			}
+		}, {
+			"path": "pages/aboutCSSA/aboutCSSA",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+		},
 		{
 			"path": "pages/aboutCSSA/ContactUs",
 			"style": {
@@ -206,8 +208,13 @@
 				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false
 			}
-		}
-        ,{
+		}, {
+			"path": "pages/myRental/myRental",
+			"style": {
+				"navigationBarTitleText": "我的转租",
+				"enablePullDownRefresh": true
+			}
+		} ,{
             "path" : "pages/myRental/myRental",
             "style" :                                                                                    
             {
@@ -309,5 +316,6 @@
 					"selectedIconPath": "./static/user-selected.png"
 				}
 			]
-		}
+    }
 	}
+}

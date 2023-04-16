@@ -289,7 +289,6 @@
 				console.log(this.product.imageList);
 			},
 			submit(ref) {
-				console.log(this.save);
 				this.$refs[ref].validate().then(res => {
 					this.uploadCount = 0;
 					this.uploadFail = false;
