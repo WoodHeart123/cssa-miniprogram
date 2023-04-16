@@ -208,12 +208,6 @@
 				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false
 			}
-		}, {
-			"path": "pages/myRental/myRental",
-			"style": {
-				"navigationBarTitleText": "我的转租",
-				"enablePullDownRefresh": true
-			}
 		} ,{
             "path" : "pages/myRental/myRental",
             "style" :                                                                                    
