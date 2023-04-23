@@ -15,7 +15,7 @@
 				<view class="blank"></view>
 				<uni-forms-item name="comment" label-position="top">
 					<uni-easyinput class="input" autoHeight :clearable="false" type="textarea" v-model="comment.comment"
-						placeholder="可以从课程内容，作业量，需要的前置知识等方面进行评价" maxlength="400" />
+						placeholder="可以从餐厅装修，菜品菜量，服务等方面进行评价" maxlength="400" />
 				</uni-forms-item>
 			</uni-forms>
 			<button class="button" style="background-color: #9b0000; color: #ffffff;" type="default" @click="submit">提交</button>

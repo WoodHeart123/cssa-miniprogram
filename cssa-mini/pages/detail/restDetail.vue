@@ -187,6 +187,7 @@
 				this.toComment();
 			},
 			toComment: function() {
+				/*
 				if(this.commentMap[this.restaurant.restID] != undefined && this.commentMap[this.restaurant.restID] >= 2){
 					uni.showToast({
 						title:"超过两条评论",
@@ -214,15 +215,16 @@
 				uni.$once("updateRestaurant", data => {
 					this.restaurant = data.restaurant;
 				})
-
+				*/
 				uni.navigateTo({
 					url: "/pages/postRestComment/postRestComment?restaurant=" + encodeURIComponent(JSON.stringify(this.course)) + "&edit=false",
 				});
 			},
 			NavMap: function(){
 				uni.navigateTo({
-					url:"/pages/map/map?location=" + encodeURIComponent(JSON.stringify({longtitude:88.12610, lantitude:41.79564})),
-				})
+					//url:"/pages/map/map?location=" + encodeURIComponent(JSON.stringify({longtitude:88.12610, latitude:41.79564})),
+					url:"/pages/map/map",
+				});
 			}
 		},
 		/*
