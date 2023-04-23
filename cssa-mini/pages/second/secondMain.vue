@@ -222,8 +222,6 @@
 		width: calc(100vw - 35px);
 		overflow-x: scroll;
 		height: 50px;
-		-ms-overflow-style: none;
-		scrollbar-width: none;
 		flex-shrink: 0;
 	}
 
@@ -247,10 +245,6 @@
 		font-size: 18px;
 		font-weight: 700;
 		color: #9b0000;
-	}
-
-	.menu-box::-webkit-scrollbar {
-		display: none;
 	}
 
 	.container {

@@ -24,6 +24,9 @@
 			</view>
 			<view class="footnote">{{course.commentCount}}人参与讨论</view>
 		</view>
+		<view class = "doc-box">
+			<view class="icon iconfont">&#xe650</view>
+		</view>
 		<view class="row-container filter-box">
 			<view :class="key==0?'row-container filter filter-selected':'row-container filter'" @click="changeKey(0)">
 				<text>最新</text>
@@ -367,5 +370,13 @@
 		overflow: hidden;
 		background-color: white;
 		overflow-y:scroll ;
+	}
+	
+	.icon {
+		font-size: 30px;
+	}
+	.doc-box{
+		background-color: white;
+		padding: 5px;
 	}
 </style>

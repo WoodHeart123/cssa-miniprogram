@@ -120,6 +120,7 @@
 		onLoad(){
 			wx.cloud.init();
 			this.refresh();
+			console.log("init")
 		},
 		onShow(){
 			uni.$on("uploadRentalSuccess",this.uploadSuccess);

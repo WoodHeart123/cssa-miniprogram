@@ -149,7 +149,7 @@
 					method: 'GET',
 					header: {
 						'X-WX-SERVICE': 'springboot-ds71',
-					}
+					},
 				});
 				this.suggestList = res.data.data;
 				if(res.data.status == 100){
