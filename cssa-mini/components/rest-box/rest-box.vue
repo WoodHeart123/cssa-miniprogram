@@ -19,7 +19,8 @@
 					<view><text class="user-rate-text">{{comment.prefer}}</text></view>
 				</view>
 			</view>
-			<view class="comment-time"><text>{{computeCommentTime}}</text></view>
+			<!--<view class="comment-time"><text>{{computeCommentTime}}</text></view>-->
+			<view class="comment-time"><text>12:30</text></view>
 		</view>
 		<view class="wrap">
 			<view :class="this.more?'comment-body comment-body-more':'comment-body'">
@@ -90,6 +91,7 @@
 
 			},
 		},
+		/*
 		computed: {
 			computeCommentTime() {
 				moment.locale('zh-cn');
@@ -97,6 +99,7 @@
 					"MM-DD") : moment(this.comment.commentTime).fromNow();
 			}
 		}
+		*/
 	}
 	import moment from "moment/min/moment-with-locales";
 	import 'moment/locale/zh-cn';
@@ -108,6 +111,7 @@
 	.rest-box {
 		background-color: white;
 		width: 100vw;
+		height: 120px;
 
 	}
 	.course-title{
@@ -182,8 +186,8 @@
 
 	.comment-body {
 		width: calc(99% - 50px);
-		margin-top: 10px;
 		margin-bottom: 5px;
+		margin-top: 10px;
 		max-height: 150px;
 		font-size: 13px;
 		margin-left: 50px;

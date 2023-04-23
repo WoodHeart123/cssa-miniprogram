@@ -2,6 +2,8 @@
 	<view>
 		<map 
 			class="map"
+			:latitude="location.latitude"
+			:longitude="location.longtitude"
 		>
 			
 		</map>
@@ -12,8 +14,11 @@
 	export default {
 		data() {
 			return {
-				
+				location:{}
 			}
+		},
+		onLoad(options) {
+			this.location = JSON.parse(decodeURIComponent(options.location));
 		},
 		methods: {
 			

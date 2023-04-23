@@ -53,6 +53,7 @@
 					buttonColor: "#9B0000"
 				},
 				restaurant: {
+					restID: 123,
 					Name: "快乐小羊",
 					avgGood: 3,
 					avgPrefer: 4,
@@ -72,7 +73,16 @@
 						good: 3,
 						prefer: 4,
 						likeCount: 5,
-						liked:true
+						liked:true,
+						comment:"可太好吃了，棒棒棒！！！！！"
+					},
+					{
+						restName:"快了小羊",
+						good: 3,
+						prefer: 4,
+						likeCount: 5,
+						liked:true,
+						comment:"可太好吃了，棒棒棒！！！！！"
 					}
 				],
 				offset: 0,
@@ -83,7 +93,7 @@
 					contentrefresh:"正在加载...",
 					contentnomore:"没有更多评论了"
 				},
-				commentMap:{},
+				restMap:{},
 				sharing:false,
 			}
 		},
@@ -177,13 +187,14 @@
 				this.toComment();
 			},
 			toComment: function() {
-				if(this.commentMap[this.course.courseID] != undefined && this.commentMap[this.course.courseID] >= 2){
+				if(this.commentMap[this.restaurant.restID] != undefined && this.commentMap[this.restaurant.restID] >= 2){
 					uni.showToast({
 						title:"超过两条评论",
 						icon: "error",
 					});
 					return;
 				}
+				
 				if (!this.isLogin) {
 					uni.getUserProfile({
 						desc: "获取用户信息",
@@ -199,16 +210,18 @@
 					});
 					return;
 				}
-				uni.$once("updateCourse", data => {
-					this.course = data.course;
+				
+				uni.$once("updateRestaurant", data => {
+					this.restaurant = data.restaurant;
 				})
+
 				uni.navigateTo({
-					url: "/pages/postComment/postComment?course=" + encodeURIComponent(JSON.stringify(this.course)) + "&edit=false",
+					url: "/pages/postRestComment/postRestComment?restaurant=" + encodeURIComponent(JSON.stringify(this.course)) + "&edit=false",
 				});
 			},
 			NavMap: function(){
 				uni.navigateTo({
-					url:"/pages/map/map"
+					url:"/pages/map/map?location=" + encodeURIComponent(JSON.stringify({longtitude:88.12610, lantitude:41.79564})),
 				})
 			}
 		},
@@ -226,22 +239,24 @@
 				this.commentList = [];
 			}	
 		},
+		*/
 		onShow() {
 			this.sharing = false;
 			uni.getStorage({
-				key: "commentMap",
+				key: "restCommentMap",
 				success: (res) => {
-					this.commentMap = res.data;
+					this.restMap = res.data;
 				},
 				fail: () => {
-					this.commentMap = {};
+					this.restMap = {};
 					uni.setStorage({
-						key: "commentMap",
+						key: "restCommentMap",
 						data: {}
 					});
 				}
 			})
-			this.getCommentList();
+			//this.getCommentList();
+			/*
 			uni.getStorage({
 				key: "userInfo-2",
 				success: (res) => {
@@ -252,10 +267,11 @@
 					this.isLogin = false;
 				},
 			});
+			*/
 		}
-		*/
 	}
 	import restBoxVue from '@/components/rest-box/rest-box.vue'
+import { encode } from 'querystring';
 </script>
 
 <style>
