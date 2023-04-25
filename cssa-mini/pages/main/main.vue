@@ -45,7 +45,7 @@
 					<view class="column-container function-text">
 						<text>餐厅攻略</text>
 					</view>
-					<img class="image" src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-icon/apartment.svg" />
+					<img class="image" src="..\..\static\rest.svg" />
 				</view>
 			</view>
 		</view>
