@@ -217,7 +217,7 @@
 				})
 				*/
 				uni.navigateTo({
-					url: "/pages/postRestComment/postRestComment?restaurant=" + encodeURIComponent(JSON.stringify(this.course)) + "&edit=false",
+					url: "/pages/postRestComment/postRestComment?restaurant=" + encodeURIComponent(JSON.stringify(this.restaurant)) + "&edit=false",
 				});
 			},
 			NavMap: function(){

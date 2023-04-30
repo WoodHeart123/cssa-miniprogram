@@ -2,7 +2,7 @@
 	<scroll-view id="post-comment" :scroll-y="true">
 		<view class="comment-form">
 			<view class="title">
-				<text>{{this.comment.courseName}}</text>
+				<text>{{this.comment.restName}}</text>
 			</view>
 			<uni-forms ref="form" :model="comment" label-align="left" :rules="rules" v-if="!edit">
 				<view class="blank"></view>
