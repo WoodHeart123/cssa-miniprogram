@@ -1,6 +1,6 @@
 <template>
 	<view id="rental-post">
-		<uni-forms ref="rentalForm" :model="rental" :rules="rules">
+		<uni-forms ref="rentalForm" :modelValue="rental" :rules="rules">
 			<view class="card uni-form-item uni-column" v-if="!this.edit">
 				<uni-forms-item name="imageList">	
 					<view class="image_upload">
@@ -55,8 +55,7 @@
 				<uni-forms-item name="price">
 					<view class="uni-column row-view">
 						<span class="span_margin">$</span>
-						<uni-easyinput type="number" v-model="rental.price" placeholder="请填写价格"
-							placeholder-style="font-size:14px;color:gray" :clearable="clearable" />
+						<input type="digit" v-model="rental.price" placeholder="请填写价格" laceholder-style="font-size:14px;color:gray"/>
 						<span>{{"/ 月"}}</span>
 					</view>
 				</uni-forms-item>
@@ -108,7 +107,8 @@
 					location: "",
 					time: [0, 0],
 					sexConstraint: -1,
-					floorPlan: ""
+					floorPlan: "",
+					price:100
 				},
 				images: [],
 				sexConstraint: [{
@@ -182,8 +182,10 @@
 							required: true,
 							errorMessage: '请输入转租价格',
 						},{
+							format:"number",
+							errorMessage:"类型错误"
+						},{
 							maximum:5000,
-							minimum:0,
 							errorMessage: '转租价格应在5000至0之内',
 						}]
 					},
@@ -294,6 +296,8 @@
 						this.uploadImage();
 					}
 				}).catch(err => {
+					console.log(err);
+					console.log(this.rental)
 					uni.showToast({
 						title: err[0].errorMessage,
 						icon:"error"
