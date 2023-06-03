@@ -1,7 +1,7 @@
 <template>
 	<view id="main" class="column-container">
 		<uni-popup ref="ad" background-color="#fff" @change="change" type="message">
-			<div></div>
+			<div>aaa</div>
 		</uni-popup>
 		<uni-swiper-dot class="uni-swiper-dot-box" @clickItem="clickItem" v-bind:info="images" :current="current" mode="dot"
 			field="content">
