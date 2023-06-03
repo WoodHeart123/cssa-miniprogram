@@ -90,6 +90,10 @@
 					this.isLogin = false;
 				}
 			});
+			
+			if(this.userInfo.savedProductJSON != null && this.userInfo.savedProductJSON.contains(this.product.productID)){
+				this.isSaved = true;
+			}
 		},
 
 		onShareTimeline() {
@@ -112,6 +116,15 @@
 				path: '/pages/detail/secondDetail?product=' + encodeURIComponent(JSON.stringify(this.product))
 			}
 		},
+		
+		beforeUnmount(){
+			console.log("Happy!")
+			uni.setStorageSync("userInfo-2",this.userInfo);
+			if(this.isSaved == true){
+				this.save();
+			}
+		},
+		
 		methods: {
 			getCollectList: async function() {
 				const res = await wx.cloud.callContainer({

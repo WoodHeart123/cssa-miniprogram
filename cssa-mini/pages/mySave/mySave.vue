@@ -42,9 +42,10 @@
 			
 			onScrollLower:function(){
 				this.status = "loading";
+				this.limit += 10;
+				console.log("success");
+				//this.getList();
 				this.status = "noMore";
-				console.log("success")
-				//this.getRentalList();
 			}
 		}
 	}
