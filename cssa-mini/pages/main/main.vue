@@ -1,5 +1,8 @@
 <template>
 	<view id="main" class="column-container">
+		<uni-popup ref="ad" background-color="#fff" @change="change" type="message">
+			<div></div>
+		</uni-popup>
 		<uni-swiper-dot class="uni-swiper-dot-box" @clickItem="clickItem" v-bind:info="images" :current="current" mode="dot"
 			field="content">
 			<swiper class="swiper-box" @change="change" :current="current">
@@ -110,6 +113,9 @@
 				this.current = (this.current + 1) % this.images.length;
 			}, 10000);
 		},
+		onShow() {
+			this.popMask("ad")
+		},
 		onShareAppMessage(res) {
 			return {
 				title: "麦屯小助手",
@@ -123,6 +129,9 @@
 			}
 		},
 		methods: {
+			popMask: function(e){
+				this.$refs.ad.open()
+			},
 			change: function(e) {
 				this.current = e.detail.current;
 			},
