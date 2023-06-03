@@ -16,23 +16,27 @@
 				<view class="icon iconfont">&#xe67d</view>
 			</view>
 		</view>
-		<view class="rest-box-container">
-			<view class="restaurant column-container">
-				<view class="rest-name">
-					<text>Fugu Asian Fusion</text>
+		<scroll-view scroll-y="true" show-scrollbar="true" refresher-enabled="true"
+			class="column-container" refresher-background="white" @refresherrefresh="refresh"
+			enable-back-to-top="true" :refresher-triggered="triggered" @scrolltolower="onScrollLower">
+			<view class = "rest-box-container" v-for="(rest,index) in restList" :key="index">
+				<view class="restaurant column-container">
+					<view class="rest-name">
+						<text>{{rest.name}}</text>
+					</view>
+					<view class="address"><text>{{rest.location}}</text></view>
+					<view class="rate-box">
+						<view><text>人均消费：{{rest.avgPrice}}</text></view>
+					</view>
+					<view class="rate-box row-container">
+						<view><text>推荐指数： </text></view>
+						<uni-rate :value="rest.avgRating" allowHalf="true" :size="15" :max="5"></uni-rate>
+						<view class="rate-text"><text>{{rest.avgRating}}</text></view>
+					</view>
+					<view  class="footnote"><text>{{rest.commentCount}}人参与评论</text></view>
 				</view>
-				<view class="address"><text>411 W Gilman St, Madison, WI 53703</text></view>
-				<view class="rate-box">
-					<view><text>人均消费：$30</text></view>
-				</view>
-				<view class="rate-box row-container">
-					<view><text>推荐指数： </text></view>
-					<uni-rate :value="3" allowHalf="true" :size="15" :max="5"></uni-rate>
-					<view class="rate-text"><text>3</text></view>
-				</view>
-				<view  class="footnote"><text>24人参与评论</text></view>
 			</view>
-		</view>
+		</scroll-view>
 	</view>
 </template>
 
@@ -41,12 +45,66 @@
 		components: {
 			restBoxVue
 		},
+		data(){
+			return{
+				triggered: false,
+				restList: [],
+				offset: 0,
+				limit: 20,
+				status: "loading",
+			}
+		},
+		onLoad(){
+			wx.cloud.init();
+			this.refresh();
+			console.log("init")
+		},
 		methods: {
 			toSearch: function() {
 				uni.navigateTo({
 					url: "/pages/restMain/restSearch",
 					animationType: "pop-in"
 				})
+			},
+			refresh: function() {
+				if (!this.triggered) {
+					this.triggered = true;
+				}else{
+					return;
+				}
+				this.limit = 20;
+				this.offset = 0;
+				this.status = "loading";
+				this.restList = [];
+				this.getRestList()
+			},
+			onScrollLower:function(){
+				this.status = "loading";
+				this.getRestList();
+			},
+			async getRestList() {
+				const res = await wx.cloud.callContainer({
+					config: {
+						env: 'prod-9gip97mx4bfa32a3',
+					},
+					path: `/restaurant/getRestaurantList?limit=${this.limit}&offset=${this.offset}`,
+					method: 'GET',
+					header: {
+						'X-WX-SERVICE': 'springboot-ds71',
+					}
+				});
+				if (res.data.status == 100) {
+					this.restList = this.restList.concat(res.data.data);
+				}
+				if (res.data.data.length == 0) {
+					this.status = "noMore";
+				} else {
+					this.status = "more";
+				}
+				this.$nextTick(() => {
+					this.triggered = false;
+				});
+			
 			},
 		}
 	}
@@ -77,6 +135,7 @@
 		text-align: left;
 		line-height: 30px;
 		font-size: 20px;
+		height: 30px;
 	}
 	.address{
 		height: 23px;
