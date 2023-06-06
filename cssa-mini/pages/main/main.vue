@@ -41,6 +41,16 @@
 				</view>
 			</view> -->
 		</view>
+		<view class="row-container function-box">
+			<view class="row-container function-button">
+				<view class="row-container function-button" @click="toRide()">
+					<view class="column-container function-text">
+						<text>顺风车</text>
+					</view>
+					<!-- <img class="image" src="" />这里补一个顺风车的图片-->
+				</view>
+			</view>
+		</view>
 		<!-- 		<view class="leader-list">
 			<text class="cssa-intro-text">CSSA介绍</text>
 			<scroll-view class="row-container leader-intro" :scroll-x="true">
@@ -152,6 +162,11 @@
 			toRental:function(){
 				uni.navigateTo({
 					url:"/pages/rentalMain/rentalMain",
+				})
+			},
+			toRide:function(){
+				uni.navigateTo({
+					url:"/pages/rideMain/rideMain",
 				})
 			},
 		}

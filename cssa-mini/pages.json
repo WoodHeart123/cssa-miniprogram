@@ -177,6 +177,14 @@
 			}
 		},
 		{
+			"path": "pages/ride/ridePost",
+			"style": {
+				"navigationBarTitleText": "顺风车",
+				"enablePullDownRefresh": false,
+				"disableScroll": true
+			}
+		},
+		{
 			"path": "pages/rentalMain/rentalMain",
 			"style": {
 				"navigationBarTitleText": "",
@@ -230,7 +238,16 @@
 			{
 				"name": "rentalMain",
 				"path": "pages/rentalMain/rentalMain"
-			}, {
+			}, 
+			{
+				"name": "rideMain",
+				"path": "pages/rideMain/rideMain"
+			}, 
+			{
+				"name": "ride",
+				"path": "pages/ride/ridePost"
+			},
+			{
 				"name": "aboutCSSA",
 				"path": "pages/aboutCSSA/aboutCSSA"
 			}
