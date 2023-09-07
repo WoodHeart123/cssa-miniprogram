@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "活动列表",
+  "backgroundColor": "#F5F5F5",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "act-box-vue": "../../components/act-box/act-box",
+    "uni-segmented-control": "../../uni_modules/uni-segmented-control/components/uni-segmented-control/uni-segmented-control"
+  }
+}

@@ -1,0 +1,20 @@
+
+.my-secondhand {
+		width: 100vw;
+		height: 100vh;
+		overflow-y: scroll;
+		background-color: #e4e4e4;
+}
+.row-container {
+		display: flex;
+		flex-direction: row;
+}
+.my-product-box{
+		border: 1px solid white;
+		box-shadow: 0 3px 3px 0 #cbcbcb;
+		width: 96vw;
+		height: 180px;
+		margin: 10px 2vw;
+		border-radius: 10px;
+}
+

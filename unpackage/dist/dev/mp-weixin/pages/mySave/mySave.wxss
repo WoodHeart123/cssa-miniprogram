@@ -1,0 +1,25 @@
+
+.row-container {
+		display: flex;
+		flex-direction: row;
+}
+.info-box{
+		padding-top: 10px;
+		padding-bottom: 10px;
+		width: 50vw;
+		text-align: center;
+		margin-bottom: 15px;
+		border: 1px solid #ACACAC;
+		background-color: rgba(255, 255, 255, 0.9);
+}
+.rental-scroll{
+		height: 100vh;
+		width: 100%;
+		overflow: hidden;
+		background-color: white;
+		overflow-y:scroll ;
+}
+.column-container {
+		display: flex;
+		flex-direction: column;
+}

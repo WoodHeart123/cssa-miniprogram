@@ -1,0 +1,1 @@
+<view class="welcome"><view class="welcome-title">欢迎来到CSSA小助手</view><view class="welcome-text">请完善联系方式以更好的帮助CSSA了解你</view><button class="button" bindtap="{{a}}">完善联系方式</button></view>

@@ -1,0 +1,1 @@
+<view class="scroll-view-item-X" bindtap="{{e}}"><image class="scroll-view-item-M" src="{{a}}"/><view class="scroll-view-item-H"><view class="intro-box"><view class="name">{{b}}</view><view class="position">{{c}}</view><view class="intro">{{d}}</view></view></view></view>

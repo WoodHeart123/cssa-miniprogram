@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "我的收藏",
+  "enablePullDownRefresh": false,
+  "usingComponents": {
+    "shoucang-box-vue": "../../components/shoucang-box/shoucang-box",
+    "uni-load-more": "../../uni_modules/uni-load-more/components/uni-load-more/uni-load-more"
+  }
+}

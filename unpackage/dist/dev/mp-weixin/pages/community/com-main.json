@@ -1,0 +1,11 @@
+{
+  "navigationBarTitleText": "社区广场",
+  "backgroundColor": "#F5F5F5",
+  "enablePullDownRefresh": true,
+  "onReachBottomDistance": 100,
+  "usingComponents": {
+    "com-box-vue": "../../components/com-box/com-box",
+    "uni-search-bar": "../../uni_modules/uni-search-bar/components/uni-search-bar/uni-search-bar",
+    "uni-fab": "../../uni_modules/uni-fab/components/uni-fab/uni-fab"
+  }
+}

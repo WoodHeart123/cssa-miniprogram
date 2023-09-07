@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "餐厅攻略",
+  "enablePullDownRefresh": false,
+  "usingComponents": {
+    "uni-rate": "../../uni_modules/uni-rate/components/uni-rate/uni-rate"
+  }
+}

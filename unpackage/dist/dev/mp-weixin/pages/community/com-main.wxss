@@ -1,0 +1,13 @@
+
+#community{
+		padding-bottom: 20px;
+}
+.search-bar {
+		height: 10vh;
+		background-color: white;
+}
+.column-container {
+		height: 100vh;
+		display: flex;
+		flex-direction: column;
+}

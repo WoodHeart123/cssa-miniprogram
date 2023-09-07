@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "我的吐槽",
+  "disableScroll": true,
+  "usingComponents": {
+    "comment-box-vue": "../../components/comment-box/comment-box",
+    "uni-load-more": "../../uni_modules/uni-load-more/components/uni-load-more/uni-load-more"
+  }
+}

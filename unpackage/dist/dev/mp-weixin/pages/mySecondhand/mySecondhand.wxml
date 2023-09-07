@@ -1,0 +1,1 @@
+<view class="my-secondhand"><view wx:for="{{a}}" wx:for-item="product" wx:key="c" class="my-product-box"><user-product-box-vue wx:if="{{product.b}}" u-i="{{product.a}}" bind:__l="__l" u-p="{{product.b}}"></user-product-box-vue></view><uni-load-more wx:if="{{b}}" u-i="da8f24ce-1" bind:__l="__l" u-p="{{b}}"></uni-load-more></view>
