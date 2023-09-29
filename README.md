@@ -4,8 +4,8 @@
 
 
 ## 运行条件
-* 下载HBuilderX （https://www.dcloud.io/hbuilderx.html）
-* 微信开发者工具 （https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html)
+* 下载HBuilderX (https://www.dcloud.io/hbuilderx.html)
+* 微信开发者工具 (https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html)
 
 
 
