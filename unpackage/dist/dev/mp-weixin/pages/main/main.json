@@ -1,9 +1,0 @@
-{
-  "navigationBarTitleText": "麦屯小助手",
-  "enablePullDownRefresh": false,
-  "disableScroll": true,
-  "usingComponents": {
-    "uni-popup": "../../uni_modules/uni-popup/components/uni-popup/uni-popup",
-    "main-advertisement": "../../components/main-advertisement/main-advertisement"
-  }
-}

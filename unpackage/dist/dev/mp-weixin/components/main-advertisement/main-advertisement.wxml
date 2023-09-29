@@ -1,1 +1,0 @@
-<view id="main-advertisement"><uni-swiper-dot wx:if="{{e}}" u-s="{{['d']}}" class="uni-swiper-dot-box" u-i="7ec1535e-0" bind:__l="__l" u-p="{{e}}"><swiper class="swiper-box" bindchange="{{c}}" current="{{d}}"><swiper-item wx:for="{{a}}" wx:for-item="image" wx:key="b"><image class="swiper-image" src="{{image.a}}" bindtap="{{b}}"/></swiper-item></swiper></uni-swiper-dot></view>
