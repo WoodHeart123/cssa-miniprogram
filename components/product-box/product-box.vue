@@ -30,7 +30,7 @@
 		name: "product-box",
 		data() {
 			return {
-				condition: ['全新','几乎全新', '明显使用痕迹','部分损毁' ],
+				condition: {"NEW":'全新', "ALMOST_NEW":'几乎全新', 'USED':'明显使用痕迹', "IMPAIRED":'部分损毁'},
 				delivery: {
 					'pickup': '自取',
 					'deliver': '送货',
@@ -40,12 +40,12 @@
 			}
 		},
 		mounted(){
-			if(moment().year() - moment.utc(this.product.UTCtime).year() > 0){
-				this.productPublishTime = moment.utc(this.product.UTCtime).format("YYYY-MM-DD");
-			}else if(Date.now() - moment.utc(this.product.UTCtime).valueOf() > 86400000 * 7){
-				this.productPublishTime = moment.utc(this.product.UTCtime).format("MM-DD");
+			if(moment().year() - moment.utc(this.product.utctime).year() > 0){
+				this.productPublishTime = moment.utc(this.product.utctime).format("YYYY-MM-DD");
+			}else if(Date.now() - moment.utc(this.product.utctime).valueOf() > 86400000 * 7){
+				this.productPublishTime = moment.utc(this.product.utctime).format("MM-DD");
 			}else{
-				this.productPublishTime = moment.utc(this.product.UTCtime).locale('zh-cn').fromNow();
+				this.productPublishTime = moment.utc(this.product.utctime).locale('zh-cn').fromNow();
 			}
 		},
 		methods: {
