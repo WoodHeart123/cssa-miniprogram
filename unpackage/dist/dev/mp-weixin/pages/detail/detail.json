@@ -1,8 +1,0 @@
-{
-  "navigationBarTitleText": "详情",
-  "backgroundColor": "#F5F5F5",
-  "usingComponents": {
-    "uni-goods-nav": "../../uni_modules/uni-goods-nav/components/uni-goods-nav/uni-goods-nav",
-    "loading": "../../components/loading/loading"
-  }
-}

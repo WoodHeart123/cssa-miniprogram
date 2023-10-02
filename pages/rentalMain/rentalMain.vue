@@ -117,7 +117,7 @@
 				contentText: {
 					contentdown: "上拉显示更多",
 					contentrefresh: "正在加载...",
-					contentnomore: "没有更多租房信息了。我们只会显示"
+					contentnomore: "没有更多租房信息了。我们只会显示转租开始日期大于现在的转租信息。"
 				},
 				
 			}
@@ -190,7 +190,7 @@
 					return;
 				}
 				uni.navigateTo({
-					url: "/pages/rental/rentalPost",
+					url: "/pages/rentalPost/rentalPost",
 				});
 			},
 			popFilter: function(e) {
@@ -237,7 +237,7 @@
 				if (!this.triggered) {
 					this.triggered = true;
 					this.limit = 20;
-					this.offset = 1;
+					this.offset = 0;
 					this.rentalList = [];
 					this.status = "loading"
 					this.getRentalList();

@@ -333,52 +333,41 @@
 			},
 			uploadImage: async function() {
 				uni.showLoading({
-					title: "正在上传内容",
+					title: `上传图片,0/${this.rental.imageList.length}`,
 					mask: true
 				});
-				for (let i = 0; i < this.product.imageList.length; i++) {
-					uni.uploadFile({
-						url: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com",
-						filePath: this.product.imageList[i].filepath,
-						fileType: 'image',
-						name: 'file',
-						formData: {
-							key: "cssa-secondhand/" + this.product.imageList[i].filename,
-							region: 'oss-us-west-1',
-							accessKeyId: 'LTAI5tG4Jt4WD77C1XSDTJAj',
-							accessKeySecret: 'HsXwO3QW67PBzpIV2CeE1uM6bU4sd7',
-							bucket: 'cssa-mini-na',
-							success_action_status:200,
-						},
-						success: res => {
-							console.log(res);
-							if (res.statusCode != 200) {
-								uni.hideLoading();
-								uni.showToast({
-									title: "上传图片失败",
-									icon: "error"
-								});
-								this.uploadFail = true;
-							}else{
-								this.uploadCount++;
-								this.images.push("https://cssa-mini-na.oss-us-west-1.aliyuncs.com" + "/cssa-secondhand/" + this.product.imageList[i].filename)
-							}
-							if (this.uploadCount == this.product.imageList.length) {
-								this.product.images = this.images,
-								this.postProduct();
-							}
-						},
-						fail: res => {
-							uni.hideLoading();
-							uni.showToast({
-								title: "上传图片失败",
-								icon: "error"
-							});
-						}
+				let uploadedImageCount = 0;
+				const uploadPromises = this.product.imageList.map(async (image) => {
+					try {
+						const uploadedImage = await uploadOSS(image);
+						uploadedImageCount++;
+						uni.showLoading({
+							title: `上传图片,${uploadedImageCount}/${this.product.imageList.length}`,
+							mask: true
+						});
+						return uploadedImage;
+					} catch (error) {
+						throw new Error(`上传图片失败`);
+					}
+				});
+				try {
+					const uploadedImages = await Promise.all(uploadPromises);
+					this.images = uploadedImages;
+					this.product.images = uploadedImages,
+					this.postProduct();
+				} catch (error) {
+					uni.hideLoading();
+					uni.showToast({
+						title: error,
+						icon: "error"
 					});
 				}
 			},
 			postProduct: async function() {
+				uni.showLoading({
+					title: `发布信息中`,
+					mask: true
+				});
 				const res = await wx.cloud.callContainer({
 					config: {
 						env: 'prod-9gip97mx4bfa32a3',
@@ -396,13 +385,14 @@
 					uni.navigateBack();
 				} else {
 					uni.showToast({
-						title: "上传信息失败",
+						title:"上传信息失败",
 						icon: "error"
 					});
 				}
 			},
 		}
 	}
+	import uploadOSS from '@/api/upload.js'
 </script>
 
 <style>
