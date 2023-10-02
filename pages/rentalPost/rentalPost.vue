@@ -307,11 +307,22 @@
 			},
 			uploadImage: async function() {
 				uni.showLoading({
-					title: "正在上传内容",
+					title: `上传图片,0/${this.rental.imageList.length}`,
 					mask: true
 				});
-				const uploadPromises = this.rental.imageList.map(image => {
-					uploadOSS(image);
+				let uploadedImageCount = 0;
+				const uploadPromises = this.rental.imageList.map(async (image) => {
+					try {
+						const uploadedImage = await uploadOSS(image);
+						uploadedImageCount++;
+						uni.showLoading({
+							title: `上传图片,${uploadedImageCount}/${this.rental.imageList.length}`,
+							mask: true
+						});
+						return uploadedImage;
+					} catch (error) {
+						throw new Error(`上传图片失败`);
+					}
 				});
 				try {
 					const uploadedImages = await Promise.all(uploadPromises);
@@ -329,6 +340,10 @@
 
 			postRental: async function() {
 				try {
+					uni.showLoading({
+						title: `发布信息中`,
+						mask: true
+					});
 					const res = await wx.cloud.callContainer({
 						config: {
 							env: 'prod-9gip97mx4bfa32a3',
