@@ -1,8 +1,5 @@
 <template>
 	<view id="main" class="column-container">
-		<uni-popup ref="ad" background-color="#fff" type="message">
-			<div>aaa</div>
-		</uni-popup>
 		<view class="swiper-container">
 			<main-advertisement width="90vw" height="200px"></main-advertisement>
 		</view>
@@ -34,13 +31,13 @@
 					<text>新生手册</text>
 				</view>
 			</view>
-<!-- 			<view class="column-container function-button" @click="toRental">
+			<!-- 			<view class="column-container function-button" @click="toRental">
 				<img class="image" src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/main/community.png" />
 				<view class="column-container function-text">
 					<text>官方社群</text>
 				</view>
 			</view> -->
-<!-- 			<view class="row-container function-button">
+			<!-- 			<view class="row-container function-button">
 			<view class="row-container function-button" @click="toRide()">
 					<view class="column-container function-text">
 						<text>顺风车</text>
@@ -57,7 +54,8 @@
 	export default {
 		components: {
 			actBoxVue,
-			mainAdvertisementVue
+			mainAdvertisementVue,
+			privacyBoxVue
 		},
 		data() {
 			return {
@@ -69,6 +67,7 @@
 					selectedBackgroundColor: 'rgba(83, 200, 249,0.9)',
 					selectedBorder: '1px rgba(83, 200, 249,0.9) solid'
 				},
+				isLogin: true,
 			}
 		},
 		onLoad() {
@@ -76,6 +75,7 @@
 			uni.getStorage({
 				key: "userInfo-2",
 				fail: () => {
+					this.isLogin = false;
 					uni.switchTab({
 						url: "/pages/index/index"
 					})
@@ -119,11 +119,23 @@
 				})
 			},
 			toSecond: function() {
+				if (!this.isLogin) {
+					uni.switchTab({
+						url: "/pages/index/index"
+					})
+					return;
+				}
 				uni.navigateTo({
 					url: "/pages/second/secondMain",
 				})
 			},
 			toRental: function() {
+				if (!this.isLogin) {
+					uni.switchTab({
+						url: "/pages/index/index"
+					});
+					return;
+				}
 				uni.navigateTo({
 					url: "/pages/rentalMain/rentalMain",
 				})
@@ -138,12 +150,12 @@
 					url: "/pages/restMain/restMain",
 				})
 			},
-			showGuide: function(){
+			showGuide: function() {
 				uni.showLoading({
 					title: "正在加载：0%"
 				})
 				const task = wx.downloadFile({
-					url:"https://cssa-mini-na.oss-us-west-1.aliyuncs.com/%E6%96%B0%E7%94%9F%E6%89%8B%E5%86%8C.pdf",
+					url: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com/%E6%96%B0%E7%94%9F%E6%89%8B%E5%86%8C.pdf",
 					success: (event) => {
 						uni.hideLoading();
 						wx.openDocument({
@@ -153,19 +165,19 @@
 						})
 					},
 					fail: (event) => {
-							uni.showToast({
-								icon: "error",
-								title: "下载文件失败"
-							})
+						uni.showToast({
+							icon: "error",
+							title: "下载文件失败"
+						})
 					},
 					complete: () => {
 						uni.hideLoading()
 					}
 				});
 				task.onProgressUpdate((res) => {
-				  uni.showLoading({
-				  	title: `正在加载：${res.progress}%`
-				  })
+					uni.showLoading({
+						title: `正在加载：${res.progress}%`
+					})
 				})
 			},
 		}
@@ -173,6 +185,7 @@
 	import actBoxVue from '@/components/act-box/act-box.vue';
 	//import presidentBoxVue from '../../components/president-box/president-box.vue'
 	import mainAdvertisementVue from '@/components/main-advertisement/main-advertisement.vue'
+	import privacyBoxVue from '@/components/privacy-box/privacy-box.vue'
 </script>
 
 <style>
@@ -304,7 +317,7 @@
 	}
 
 	.swiper-container {
-		height: 30vh;
+		height: 200px;
 		width: 90vw;
 		margin-left: 5vw;
 	}
