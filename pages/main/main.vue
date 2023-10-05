@@ -54,8 +54,7 @@
 	export default {
 		components: {
 			actBoxVue,
-			mainAdvertisementVue,
-			privacyBoxVue
+			mainAdvertisementVue
 		},
 		data() {
 			return {
@@ -185,7 +184,6 @@
 	import actBoxVue from '@/components/act-box/act-box.vue';
 	//import presidentBoxVue from '../../components/president-box/president-box.vue'
 	import mainAdvertisementVue from '@/components/main-advertisement/main-advertisement.vue'
-	import privacyBoxVue from '@/components/privacy-box/privacy-box.vue'
 </script>
 
 <style>

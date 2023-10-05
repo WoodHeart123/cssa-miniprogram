@@ -1,277 +1,391 @@
 <template>
-	<view class="act_detail"> 
-		<swiper indicator-dots>
-			<swiper-item>
-				<image mode="widthFix" :src="actDetail.imgs"></image>
+	<view class="act_detail">
+		<swiper class="swiper-container" indicator-dots>
+			<swiper-item v-for="(image_url, index) in this.actDetail.images" :key="index">
+				<image mode="widthFix" :src="image_url" @click="toPreview(index)"></image>
 			</swiper-item>
 		</swiper>
-		<view class="basic">
+		<view class="content-box"> 
 			<view class="price">
-				<text class="iconfont icon">&#xe70b;</text>
-				<text v-if="this.actDetail.price != 0" class="new_price">{{this.userInfo.ifJoined?actDetail.price:Math.round(actDetail.price * discount)}}</text>
-				<text v-if="this.actDetail.price == 0" class="new_price">免费</text>
-				<text v-if="show_price&&!userInfo.ifJoined" class="original_price">{{actDetail.price}}</text>
+				<text v-if="this.actDetail.price != 0" class="dollar-sign">$</text><text v-if="this.actDetail.price != 0" class="new-price">{{actDetail.price}}</text>
+				<text v-if="this.actDetail.price == 0" class="new-price">免费</text>
 			</view>
-			<view class="act_name"><span>{{actDetail.title}}</span></view>
+			<view class="act-count">
+				<view class="number">{{actDetail.userJoinedNum}}/{{actDetail.capacity}}</view>
+			</view>
+			<view class="weekday-box">
+				<view class="weekday">{{startDateWeekDay}}</view>
+				<view class="date">{{startDateFormat}}</view>
+			</view>
+			<view class="info-box">
+				<view class="title">{{this.actDetail.title}}</view>
+			<div class="icon-row">
+				<text class="iconfont icon">&#xe65e;</text>
+				<text class="font-small" style="margin-left: 3px;">{{this.actDetail.location}}</text>
+			</div>
+			<div class="icon-row">
+				<text class="iconfont icon" style="font-size: 13px;margin-left: 1px;">&#xe8c5;</text>
+				<text class="font-small" style="margin-left: 3px;">{{actDateDurationFormat}}</text>
+			</div>
+			</view>
 		</view>
-		<view class="blank_line"></view>
-		<view class="act_count" v-if="!this.userInfo.ifJoined">
-			<view class="number">人数/上限：{{actDetail.userJoinedNum}}/{{actDetail.capacity}}</view>
-		</view>
-		<view class="blank_line"></view>
-		<view class="act_count">
-			<view class="number">活动开始时间：{{actDateFormat}}</view>
-		</view>
-		<view class="blank_line"></view>
-		<view class="act_count">
-			<view class="number">报名截止时间：{{endDateFormat}}</view>
-		</view>
-		<view class="blank_line"></view>
 		<view class="description">
-			<view class="tit">详情介绍</view>
-			<scroll-view class="scroll_page" scroll-y="true" :style="height">
-				<rich-text :nodes="actDetail.description" class="content">{{actDetail.description}}</rich-text>
-			</scroll-view>
+			<rich-text :nodes="actDetail.description" class="content">{{actDetail.description}}</rich-text>
 		</view>
 		<view class="act_buy">
-			<uni-goods-nav class="buy" :buttonGroup="buttonGroup" :options="options" fill="true" @buttonClick="toPay"></uni-goods-nav>
+			<uni-goods-nav class="buy" :buttonGroup="buttonGroup" :options="options" fill="true"
+				@buttonClick="toPay"></uni-goods-nav>
 		</view>
-		<loading :show="loadShow"></loading>
 	</view>
 </template>
 
 <script>
 	export default {
-		 onShareAppMessage(res) {
-		    if (res.from === 'button') {// 来自页面内分享按钮
-		      console.log(res.target)
-		    }
-		    return {
-		      title: this.actDetail.title,
-		      path: '/pages/detail/detail?actDetail=' + encodeURIComponent(JSON.stringify(this.actDetail)),
-		    }
-		  },
+		onShareTimeline(res) {
+			return {
+				title: "CSSA邀请你参加" + this.actDetail.title,
+				imageUrl: this.actDetail.images[0],
+				path: '/pages/detail/detail?actDetail=' + encodeURIComponent(JSON.stringify(this.actDetail)),
+			}
+		},
+		onShareAppMessage(res) {
+			return {
+				title: "CSSA邀请你参加" + this.actDetail.title,
+				desc: "CSSA" + this.actDetail.title + "活动报名",
+				content: "活动",
+				imageUrl: this.actDetail.images[0],
+				path: '/pages/detail/detail?actDetail=' + encodeURIComponent(JSON.stringify(this.actDetail))
+			}
+		},
 		data() {
 			return {
-				show_price: false,
-				remain: 0,
-				discount: 0,
-				distance_1: 0,
-				distance_2: 0,
-				height: "",
-				sample: "hao",
 				buttonGroup: [{
 					text: '立即参加',
 					backgroundColor: "#1684FC",
 					color: '#fff'
 				}],
-				actDetail:{},
-				userInfo:{},
+				actDetail: {},
+				signupInfo: {},
 				options: [],
-				enable:false,
-				show:false,
-				loadShow:false,
-				
+				isLogin: false,
+				weekday: ["", "周一","周二","周三","周四","周五","周六","周天"]
 			}
 		},
 		onLoad(options) {
+			console.log(options.actDetail)
 			this.actDetail = JSON.parse(decodeURIComponent(options.actDetail));
-			console.log(this.actDetail);
-			this.update_number();
-			for(let i = 0;i < this.actDetail.additionalInfo.length;i++){
-				if(this.actDetail.additionalInfo[i].type == "select"){
-					this.actDetail.additionalInfo[i].index = 0;
-					this.actDetail.additionalInfo[i].value = this.actDetail.additionalInfo[i].options[0];
-				}
-			}
+			wx.cloud.init();
+			this.checkSignUp();
+			uni.setNavigationBarTitle({
+				title: this.actDetail.title
+			})
 		},
 		methods: {
-			update_price() {
-				if (this.userInfo.discount == 1 || this.actDetail.price == 0) {
-					this.discount = 1;
-				} else {
-					this.discount = this.userInfo.discount;
-					this.show_price = true;
-				}
+			toPreview: function(index) {
+				wx.previewImage({
+					current: this.actDetail.images[index],
+					urls: this.actDetail.images
+				});
 			},
-			update_number(){
-				this.remain = this.actDetail.capacity - this.actDetail.userJoinedNum;
-			},
-			update_button(){
-				if (this.userInfo.ifJoined) {
-					this.buttonGroup[0].text = "已参加/查看付款方式";
+			updateButton() {
+				this.buttonGroup = [{
+					text: '立即参加',
+					backgroundColor: "#1684FC",
+					color: '#fff'
+				}];
+				if (this.signupInfo.ifJoined && this.actDetail.additionalInfoJSON === '{}') {
+					this.buttonGroup[0].text = "已参加";
 					this.buttonGroup[0].backgroundColor = "#A8A8A8";
 					this.buttonGroup[0].color = "#101010";
-					this.enable = false;
-				} else if(this.remain == 0){
+				}else if(this.signupInfo.ifJoined && this.actDetail.additionalInfoJSON !== '{}'){
+					this.buttonGroup[0].text = "修改报名"
+					this.buttonGroup.push({
+						text: "取消报名",
+						backgroundColor: "#9b0000",
+						color: "#fff"
+					})
+				} else if (this.actDetail.capacity - this.actDetail.userJoinedNum <= 0) {
 					this.buttonGroup[0].text = "人数已满";
 					this.buttonGroup[0].backgroundColor = "#A8A8A8";
 					this.buttonGroup[0].color = "#101010";
 					this.enable = false;
 				}
 			},
-			toPay(){
-				if(this.userInfo.ifJoined){
-					uni.navigateTo({
-						url: '/pages/activity/finished',
-					});
-				}
-				else if(this.remain != 0 && this.actDetail.additionalInfo.length == 0){
-					this.register();
-				}
-				else if(this.remain != 0){
-					this.actDetail.payment = Math.floor(this.actDetail.price * this.discount);
-					uni.navigateTo({
-						url: '/pages/activity/remark?actDetail=' + encodeURIComponent(JSON.stringify(this.actDetail)),
-					});
-				}else{
+			toPay(index) {
+				const remain = this.actDetail.capacity - this.actDetail.userJoinedNum;
+				if (this.signupInfo.ifJoined && this.actDetail.additionalInfoJSON === '{}') {
 					uni.showToast({
-						title:"人数已满"
+						title: "您已报名该活动",
+					})
+				}else if(this.signupInfo.ifJoined && this.actDetail.additionalInfoJSON !== '{}'){
+					console.log(index);
+					if(index.index === 0){
+						uni.navigateTo({
+							url: `/pages/activity/remark?actDetail=${encodeURIComponent(JSON.stringify(this.actDetail))}&signupInfo=${encodeURIComponent(JSON.stringify(this.signupInfo))}`,
+						});
+					}else{
+						uni.showModal({
+							title: "取消报名",
+							content: "您是否确认取消活动报名。",
+							success: (res) => {
+								if(res.confirm){
+									this.cancelRegister()
+								}
+							}
+						})	
+					}
+				} else if (remain != 0 && this.actDetail.additionalInfoJSON === '{}') {
+					this.register();
+				} else if (remain != 0) {
+					uni.navigateTo({
+						url: `/pages/activity/remark?actDetail=${encodeURIComponent(JSON.stringify(this.actDetail))}&signupInfo=${encodeURIComponent(JSON.stringify(this.signupInfo))}`,
+					});
+				} else {
+					uni.showToast({
+						title: "人数已满"
 					})
 				}
 			},
-			async checkSignUp(){
-				const res = await wx.cloud.callContainer({
-				  config: {
-				    env: 'prod-9gip97mx4bfa32a3', // 微信云托管的环境ID
-				  },
-				  path: '/activity/checksignup?actID=' + this.actDetail.actID +'&date=0',
-				  method: 'GET', // 按照自己的业务开发，选择对应的方法
-				  header: {
-				    'X-WX-SERVICE': 'springboot-ds71',
-				  }
-				});
-			   this.userInfo = res.data.data;
-			   this.update_number();
-			   this.update_price();
-			   this.update_button();
+			async cancelRegister(){
+				uni.showLoading({
+					mask: true,
+					title: "取消中"
+				})
+				const res = await requestAPI({
+					path: `/activity/register/${this.actDetail.id}`,
+					type: "DELETE"
+				})
+				if(res.data&&res.data.status === 100){
+					this.signupInfo.ifJoined = false;
+					uni.showToast({
+						icon: "success",
+						title: "取消成功"
+					})
+					this.updateButton()
+				}else{
+					uni.showToast({
+						title: "取消失败",
+						icon: "error"
+					})
+				}
+				uni.hideLoading()
 			},
-			async register(){
-				this.loadShow = true;
+			async checkSignUp() {
+				uni.showLoading({
+					title: "查询报名信息",
+					mask: true
+				})
+				const res = await wx.cloud.callContainer({
+					config: {
+						env: 'prod-9gip97mx4bfa32a3', // 微信云托管的环境ID
+					},
+					path: `/activity/events/signup/${this.actDetail.id}`,
+					method: 'GET', // 按照自己的业务开发，选择对应的方法
+					header: {
+						'X-WX-SERVICE': 'springboot-ds71',
+					}
+				});
+				uni.hideLoading()
+				this.signupInfo = res.data.data;
+				this.updateButton();
+			},
+			async register() {
+				uni.showLoading({
+					title: "正在记录报名信息",
+					mask: true,
+				});
+
 				let bodyData = {
-					actId: this.actDetail.actID,
-					response: [],
-					payment: 0,
+					actID: this.actDetail.id,
+					responseJSON: "{}",
 				};
 				const res = await wx.cloud.callContainer({
 					config: {
 						env: 'prod-9gip97mx4bfa32a3', // 微信云托管的环境ID
 					},
 					path: '/activity/register',
-					method: 'POST', 
+					method: 'POST',
 					header: {
 						'X-WX-SERVICE': 'springboot-ds71',
 					},
 					data: bodyData
 				});
-				this.loadShow = true;
-				if(res.data.status == 100){
+				uni.hideLoading()
+				if (res.data.status == 100) {
 					uni.reLaunch({
-						url: '/pages/activity/finished',
+						url: '/pages/activity/finished?actDetail=' + encodeURIComponent(JSON.stringify(this.actDetail)),
 					});
-				}else{
-					uni.showToast({title:res.data.message});
+				} else {
+					uni.showToast({
+						title: res.data.message
+					});
 				}
 			}
 		},
-		mounted() {
-			const query = uni.createSelectorQuery().in(this);
-			let a = 0;
-			query.select('.tit').boundingClientRect();
-			query.select('.buy').boundingClientRect();
-			query.exec((res) => {
-				this.distance_1 = res[0].bottom;
-				this.distance_2 = res[1].top;
-				console.log(this.distance_2 - this.distance_1);
-				this.height = "height: " + (this.distance_2 - this.distance_1 - 20) + "px;";
-				console.log(this.height);
-			});
-			wx.cloud.init();
-			this.checkSignUp();
-		},
 		computed: {
-			actDateFormat() {
-				return moment(this.actDetail.startDate).format("YYYY-MM-DD h:mm a");
+			startDateFormat() {
+				return moment(this.actDetail.startDate).format("MM月DD号");
 			},
-			endDateFormat(){
-				return moment(this.actDetail.endDate).format("YYYY-MM-DD h:mm a");
+			actDateDurationFormat() {
+				return moment(this.actDetail.startDate).format("MM-DD ") + this.weekday[moment(this.actDetail.startDate).isoWeekday()] + moment(this.actDetail.startDate).format(" HH:MM - ") + moment(this.actDetail.endDate).format("HH:MM");
+			},
+			startDateWeekDay(){
+				return this.weekday[moment(this.actDetail.startDate).isoWeekday()]
 			}
 		},
 	}
 	import moment from 'moment';
+	import requestAPI from '@/api/request.js'
 </script>
 
 <style>
-@import '@/static/iconfont/iconfont.css';
+	@import '@/static/iconfont/iconfont.css';
 </style>
 <style lang="scss">
-	.icon{
-		font-size:45rpx;
-		font-weight:300;
+	
+	.content-box{
+		width: 100vw;
+		height: 100px;
+		padding: 10px;
+		display: flex;
+		flex-direction: row;
+		position: relative;
+		
+		.act-count {
+			position: absolute;
+			font-size: 12px;
+			color: #ccc;
+			right: 5px;
+			bottom: 0px;
+		}
+		
+		.price{
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			position: absolute;
+			font-size: 28px;
+			top: 10px;
+			color: #9b0000;
+			right:5px;
+			font-weight: 700;
+			
+			.dollar-sign{
+				font-size: 18px;
+				margin-top: 3px;
+			}
+		}
+		
+		.weekday-box{
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			width: 25%;
+			border-right: 1px black dotted;
+			
+			.weekday{
+				font-size: 18px;
+				font-weight: 700;
+			}
+			
+			.date{
+				font-size: 12px;
+				color: #999;
+				margin-top: 3px;
+			}
+		}
+		
+		.info-box{
+			display: flex;
+			flex-direction: column;
+			width: 72%;
+			margin-left: 3%;
+			justify-content: center;
+			
+			.title{
+				font-size: 18px;
+				font-weight: 700;
+			}
+			
+			.icon-row{
+				display: flex;
+				flex-direction: row;
+				margin: 7px 0 0 0;
+				line-height: 15px;
+				.icon {
+					color: #1684FC;
+				}
+				
+				.font-small {
+					font-size: 12px;
+					color: #777;
+				}				
+			}
+
+		}
 	}
+
 	.act_detail {
 		swiper {
-			height: 500rpx;
+			overflow: auto !important;
+			min-height: 50vh;
+			max-height: 80vh;
 
-			image {
-				width: 100%;
-				height: 100%;
+			swiper-item {
+				display: flex;
+				justify-content: center;
 			}
 		}
 
-		.basic {
+		.countdown{
 			padding: 10px;
+			width: 100vw;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+		.basic {
+			position: relative;
+			display: flex;
+			flex-direction: row;
+			padding: 10px;
+			align-items: center;
+
 			.price {
-				display:flex;
+				display: flex;
 				flex-direction: row;
 				align-items: center;
-				font-size: 30rpx;
-				color: darkred;
+				font-size: 20px;
 
-				text:nth-child(3) {
-					color: #ccc;
-					font-size: 28rpx;
-					text-decoration: line-through;
-					margin-left: 20rpx;
-				}
-				
-				.new_price{
-					line-height: 30rpx;
-					font-size:30rpx;
+				font-weight: 700;
+				margin-left: 5px;
+
+				.new-price {
+					font-size: 20px;
 				}
 			}
 
-			.act_name {
-				font-size: 32rpx;
-				line-height: 60rpx;
+			.act-name {
+				font-size: 30px;
 				font-weight: 600;
 			}
 		}
 
-		.blank_line {
+		.act-time {
+			padding: 0 15px 0 15px;
+			font-size: 12px;
+		}
+
+		.blank-line {
 			height: 10rpx;
 			width: 100%;
 			background: #eee;
 		}
 
-		.number {
-			padding: 0 10px;
-			font-size: 32rpx;
-			line-height: 50rpx;
-		}
 
 		.description {
-			.tit {
-				font-size: 32rpx;
-				padding-left: 10px;
-				border-bottom: 2px solid #eee;
-				line-height: 70rpx;
-			}
-			
-			.scroll_page{
-				padding: 10px;
-				width:calc(100% - 20px);
-			}
+			padding: 10px;
 		}
 
 		.act_buy {

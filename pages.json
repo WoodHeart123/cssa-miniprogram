@@ -41,7 +41,7 @@
             "path" : "pages/activity/remark",
             "style" : {
                 "navigationBarTitleText" : "备注",
-                "backgroundColor" : "#F5F5F5"
+                "backgroundColor" : "#FFFFFF"
             }
         },
         {
