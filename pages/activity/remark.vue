@@ -1,6 +1,6 @@
 <template>
 	<view id="remark">
-		<uni-forms style="margin-bottom: 50px;" ref="activity-form" :modelValue="response" :rules="rules"
+		<uni-forms style="margin-bottom: 100px;" ref="activity-form" :modelValue="response" :rules="rules"
 			label-position="top">
 			<view class="act-segment" v-for="(info, index) in actDetail.additionalInfo.questions" :key="index">
 				<uni-forms-item :label="info.title" :required="!info.optional" :name="info.title">
@@ -165,12 +165,10 @@
 	import requestAPI from '@/api/request.js'
 </script>
 
-<style>
+<style lang="scss">
 	#remark {
 		width: 100vw;
 		height: 100vh;
-		padding: 15px;
-		background-color: white;
 		overflow-y: scroll;
 	}
 
@@ -201,6 +199,52 @@
 
 	.act-segment {
 		margin-top: 20px;
+		margin-bottom: 40px;
+		.uni-forms-item__label{
+			margin-left: 15px;
+		}
+		
+			
+		.checklist-box{
+			margin: 0 !important;
+			padding: 10px 10px 10px 10px !important;
+			box-sizing: content-box !important;
+			
+			
+		}
+		
+		.uni-forms-item__label{
+			width: 50vw !important;
+			&::before{
+				content: ' ';
+				width: 2px;
+				height: 100%;
+				background-color: #9b0000;
+				margin-right: 3px;
+			}
+			
+			.is-required{
+				margin-right: 2px;
+			}
+			
+		}
+		
+		.uni-forms-item__error {
+			margin-left: 5px;
+		}
+		
+		
+		.uni-data-checklist{
+			margin: 0 !important;
+		}
+		
+		.uni-forms-item__content{
+			background-color: white;
+		}
+		
+		.uni-file-picker{
+			padding: 10px;
+		}
 	}
 
 	.input {
@@ -209,9 +253,12 @@
 	}
 
 	.placeholder {
-		margin-left: 10px;
+		padding-left: 35px;
 		color: #999;
 		font-size: 12px;
+		background-color: #F5F5F5;
+		padding-bottom: 5px;
+		
 	}
 
 	.name {
@@ -232,7 +279,7 @@
 	}
 
 	.uni-forms {
-		margin-bottom: 50px;
+		margin-bottom: 100px;
 	}
 	
 	.uni-data-checklist .checklist-group .checklist-box.is--button{
