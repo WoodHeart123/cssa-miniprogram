@@ -269,7 +269,15 @@
                 "navigationBarTitleText" : "餐厅评价",
                 "disableScroll" : true
             }
-        }
+        },
+		{
+			"path": "pages/findFriend/findFriend",
+			"style": {
+				"navigationBarTitleText": "找搭子",
+				"enablePullDownRefresh": true,
+				 "backgroundColor" : "#F5F5F5"
+			}
+		}
     ],
     "condition" : {
         "current" : 0,
@@ -341,7 +349,11 @@
             {
                 "name" : "RestMap",
                 "path" : "pages/map/map"
-            }
+            },
+			{
+				"name": "findFriend",
+				"path": "pages/findFriend/findFriend"
+			}
         ]
     },
     "globalStyle" : {
