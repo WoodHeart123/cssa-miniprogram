@@ -124,16 +124,16 @@
 		},
 		onShareAppMessage(res) {
 			return {
-				title: "麦屯小助手-课程吐槽",
+				title: "麦屯小助手：一起来评价课程吧",
 				path: '/pages/courseMain/courseMain',
-				imageUrl: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-share/forum.png"
+				imageUrl: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-share/course.png"
 			}
 		},
 		onShareTimeline(res) {
 			return {
-				title: "麦屯小助手-课程吐槽",
+				title: "麦屯小助手：一起来评价课程吧",
 				path: '/pages/courseMain/courseMain',
-
+				imageUrl: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-share/course.png"
 			}
 		},
 		methods: {
