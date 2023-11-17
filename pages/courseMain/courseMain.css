@@ -1,6 +1,8 @@
 .full-screen {
-	height: 100vh;
+	height: calc(100vh - 56px);
 	width: 185vw;
+	position: fixed;
+	margin-top: 56px;
 }
 
 
@@ -119,8 +121,7 @@
 	position: fixed;
 	width: 100vw;
 	left:0;
-	height: calc(100vh - 56px);
-	top:56px;
+	height: 100vh;
 	background-color: rgba(0,0,0,0.8);
 	z-index: 20;
 }
@@ -150,7 +151,6 @@
 	margin-left: 85vw;
 	width: 100vw;
 	height: calc(100 - 56px)vh;
-	margin-top:56px;
 	background-color: #F5F5F5;
 	z-index:2;
 }

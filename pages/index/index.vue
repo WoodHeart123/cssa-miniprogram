@@ -106,6 +106,9 @@
 					this.userInfo = res.data;
 					this.isLogin = true;
 					this.login(res.data.nickname);
+					uni.setNavigationBarTitle({
+						title: `${this.userInfo.nickname}的主页`
+					});
 				},
 				fail: () => {
 					this.isLogin = false;
@@ -208,6 +211,9 @@
 					}
 				});
 				this.userInfo = res.data.data;
+				uni.setNavigationBarTitle({
+					title: `${this.userInfo.nickname}的主页`
+				});
 				this.isLogin = true;
 				uni.setStorageSync("userInfo-2", res.data.data);
 
