@@ -1,5 +1,15 @@
 <template>
-	<View>
+	<view>
+		<view class="column-container suggest-list" v-if="searching">
+			<uni-load-more v-show="searchStatus!='more'" :status="searchStatus" :contentText="searchContentText" />
+			<view class="row-container suggest-box" v-for="(course, index) in suggestList" :key="index"
+				@click="toCourse(course)">
+				<view class="suggest-box-course-num">
+					{{course.departmentAbrev + " " + String(course.courseNum) + " "}}
+				</view>
+				<view class="suggest-box-course-name">{{course.courseName}}</view>
+			</view>
+		</view>
 		<view class="row-container top-bar">
 			<view class="row-container department-select" v-show="!searching">
 				<uni-transition ref="menuOpen" show>
@@ -17,16 +27,6 @@
 					:focus="searching" @focus="onFocus" @input="searchBarInput" @confirm="searchBarInput"
 					@cancel="onCancel">
 				</uni-search-bar>
-			</view>
-			<view class="column-container suggest-list" v-if="searching">
-				<uni-load-more v-show="searchStatus!='more'" :status="searchStatus" :contentText="searchContentText" />
-				<view class="row-container suggest-box" v-for="(course, index) in suggestList" :key="index"
-					@click="toCourse(course)">
-					<view class="suggest-box-course-num">
-						{{course.departmentAbrev + " " + String(course.courseNum) + " "}}
-					</view>
-					<view class="suggest-box-course-name">{{course.courseName}}</view>
-				</view>
 			</view>
 		</view>
 		<uni-transition ref="main" show customClass="full-screen">
@@ -86,7 +86,7 @@
 				</scroll-view>
 			</view>
 		</uni-transition>
-	</View>
+	</view>
 
 </template>
 

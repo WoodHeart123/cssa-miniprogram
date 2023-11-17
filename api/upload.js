@@ -1,4 +1,4 @@
-const ossAccessKeySecret = "HsXwO3QW67PBzpIV2CeE1uM6bU4sd7";
+const ossAccessKeySecret = "";
 export default async function(image, path = "cssa-rental") {
 	return new Promise((resolve, reject) => {
 		uni.uploadFile({
