@@ -211,7 +211,7 @@
 
 	.comment-form {
 		padding: 15px;
-		width: calc(100vw - 30px);
+		width: 100vw;
 	}
 
 	.title {
