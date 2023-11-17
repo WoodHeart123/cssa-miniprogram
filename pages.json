@@ -51,14 +51,14 @@
                 "backgroundColor" : "#F5F5F5"
             }
         },
-        {
+/*        {
             "path" : "pages/index/updateEmail",
             "style" : {
                 "navigationBarTitleText" : "更新邮箱",
                 "backgroundColor" : "#ffffff",
                 "disableScroll" : true
             }
-        },
+        }, */
         {
             "path" : "pages/courseMain/courseMain",
             "style" : {
@@ -90,13 +90,13 @@
                 "enablePullDownRefresh" : false
             }
         },
-        {
+/*        {
             "path" : "pages/index/updateID",
             "style" : {
                 "navigationBarTitleText" : "更新微信号",
                 "enablePullDownRefresh" : false
             }
-        },
+        }, */
         {
             "path" : "pages/postComment/postComment",
             "style" : {
@@ -234,15 +234,15 @@
                 "navigationBarTitleText" : "我的转租",
                 "enablePullDownRefresh" : true
             }
-        },
-        {
+        }
+/*        {
             "path" : "pages/restMain/restSearch",
             "style" : {
                 "navigationBarTitleText" : "搜索",
                 "enablePullDownRefresh" : false
             }
-        },
-        {
+        }, */
+/*        {
             "path" : "pages/restMain/restMain",
             "style" : {
                 "navigationBarTitleText" : "餐厅攻略",
@@ -269,7 +269,7 @@
                 "navigationBarTitleText" : "餐厅评价",
                 "disableScroll" : true
             }
-        }
+        } */
     ],
     "condition" : {
         "current" : 0,

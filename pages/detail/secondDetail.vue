@@ -147,7 +147,13 @@
 			},
 			setClipboardData: function() {
 				uni.setClipboardData({
-					data: " 微信号: " + this.product.contact
+					data: " 微信号: " + this.product.contact,
+					success: (res) => {
+						uni.showToast({
+							icon:'none',
+							title:'微信号复制成功'
+						})
+					}
 				});
 			},
 			getUserProfile: function() {

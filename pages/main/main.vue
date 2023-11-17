@@ -78,11 +78,19 @@
 					uni.switchTab({
 						url: "/pages/index/index"
 					})
+				},
+				success: (res) => {
+					this.isLogin = true;
 				}
 			});
 		},
 		onShow() {
-			//this.popMask("ad")
+			uni.getStorage({
+				key: "userInfo-2",
+				success: (res) => {
+					this.isLogin = true;
+				}
+			});
 		},
 		onShareAppMessage(res) {
 			return {

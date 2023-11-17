@@ -133,6 +133,7 @@
 		methods: {
 			handleAgreePrivacyAuthorization: function(){
 				this.showPrivacy = false;
+				this.needPrivacy = false;
 				this.getUserProfile()
 			},
 			handleOpenPrivacyContract: function(){
