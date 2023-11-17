@@ -63,11 +63,25 @@
 							<text class="iconfont" v-show="key==2&&sortIndex==3">&#xed58;</text>
 							<text class="iconfont" v-show="key==2&&sortIndex==2">&#xed59;</text>
 						</view>
+						<text style="line-height:30px;color:#ccc;font-size:20px">|</text>
+						<view :class="!isGrad?'filter-selected filter':'filter'" class="row-container"
+							@click="onClickDegree(false)">
+							<text>本科</text>
+							<text class="iconfont" v-show="key==4&&sortIndex==4">&#xed58;</text>
+							<text class="iconfont" v-show="key==4&&sortIndex==5">&#xed59;</text>
+						</view>
+						<view :class="isGrad?'filter-selected filter':'filter'" class="row-container"
+							@click="onClickDegree(true)">
+							<text>研究生</text>
+							<text class="iconfont" v-show="key==2&&sortIndex==3">&#xed58;</text>
+							<text class="iconfont" v-show="key==2&&sortIndex==2">&#xed59;</text>
+						</view>
+						
 					</view>
 					<view v-for="(course,index) in courseList" :key="index">
 						<course-box-vue :course="course" class="box"></course-box-vue>
 					</view>
-					<uni-load-more v-show="courseList.length >= 10" :status="status" :contentText="contentText">
+					<uni-load-more :status="status" :contentText="contentText">
 					</uni-load-more>
 				</scroll-view>
 			</view>
@@ -112,6 +126,7 @@
 					contentnomore: "没有匹配课程"
 				},
 				searchStatus: "",
+				isGrad: false,
 			}
 		},
 		onLoad() {
@@ -229,7 +244,7 @@
 			},
 			async getCourseList() {
 				const res = await requestAPI({
-					path: `/course/courselist?departmentID=${this.departmentID}&limit=20&offset=${this.courseCount}&orderType=${this.sort[this.sortIndex]}`,
+					path: `/course/courselist?departmentID=${this.departmentID}&limit=20&offset=${this.courseCount}&orderType=${this.sort[this.sortIndex]}&isGrad=${this.isGrad}`,
 					type: "GET"
 				})
 				if (res.data.status == 100) {
@@ -296,6 +311,10 @@
 					this.$refs.main.run();
 					this.$refs.menuOpen.run();
 				}
+			},
+			onClickDegree: function(e){
+				this.isGrad = e;
+				this.refresh();
 			}
 		}
 	}
