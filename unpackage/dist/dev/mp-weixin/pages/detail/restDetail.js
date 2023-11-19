@@ -1,5 +1,5 @@
 "use strict";
-var common_vendor = require("../../common/vendor.js");
+const common_vendor = require("../../common/vendor.js");
 const _sfc_main = {
   components: {
     restBoxVue
@@ -11,7 +11,7 @@ const _sfc_main = {
       },
       restaurant: {
         restID: 123,
-        Name: "\u5FEB\u4E50\u5C0F\u7F8A",
+        Name: "快乐小羊",
         avgGood: 3,
         avgPrefer: 4,
         commentCount: 5
@@ -26,34 +26,51 @@ const _sfc_main = {
       userInfo: {},
       commentList: [
         {
-          restName: "\u5FEB\u4E86\u5C0F\u7F8A",
+          restName: "快了小羊",
           good: 3,
           prefer: 4,
           likeCount: 5,
           liked: true,
-          comment: "\u53EF\u592A\u597D\u5403\u4E86\uFF0C\u68D2\u68D2\u68D2\uFF01\uFF01\uFF01\uFF01\uFF01"
+          comment: "可太好吃了，棒棒棒！！！！！"
         },
         {
-          restName: "\u5FEB\u4E86\u5C0F\u7F8A",
+          restName: "快了小羊",
           good: 3,
           prefer: 4,
           likeCount: 5,
           liked: true,
-          comment: "\u53EF\u592A\u597D\u5403\u4E86\uFF0C\u68D2\u68D2\u68D2\uFF01\uFF01\uFF01\uFF01\uFF01"
+          comment: "可太好吃了，棒棒棒！！！！！"
         }
       ],
       offset: 0,
       limit: 10,
       order: [],
       contentText: {
-        contentdown: "\u4E0A\u62C9\u663E\u793A\u66F4\u591A",
-        contentrefresh: "\u6B63\u5728\u52A0\u8F7D...",
-        contentnomore: "\u6CA1\u6709\u66F4\u591A\u8BC4\u8BBA\u4E86"
+        contentdown: "上拉显示更多",
+        contentrefresh: "正在加载...",
+        contentnomore: "没有更多评论了"
       },
       restMap: {},
       sharing: false
     };
   },
+  /*
+  onShareAppMessage(res) {
+  	this.sharing = true;
+  	return {
+  		title: this.course.departmentAbrev + " " + String(this.course.courseNum) + "-" + this.course.courseName,
+  		path: '/pages/coursePage/coursePage?course=' + encodeURIComponent(JSON.stringify(this.course)),
+  		imageUrl: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-share/forum.png"
+  	}
+  },
+  onShareTimeline(res) {
+  	this.sharing = true;
+  	return {
+  		title: this.course.courseName,
+  		path: '/pages/coursePage/coursePage?course=' + encodeURIComponent(JSON.stringify(this.course)),	
+  	}
+  },
+  */
   methods: {
     changeKey: function(num) {
       if (this.key != num) {
@@ -66,7 +83,7 @@ const _sfc_main = {
         return;
       }
       this.status = "loading";
-      const res = await wx.cloud.callContainer({
+      const res = await common_vendor.wx$1.cloud.callContainer({
         config: {
           env: "prod-9gip97mx4bfa32a3"
         },
@@ -91,7 +108,7 @@ const _sfc_main = {
         }
       } else {
         common_vendor.index.showToast({
-          title: "\u51FA\u73B0\u672A\u77E5\u9519\u8BEF",
+          title: "出现未知错误",
           duration: 2e3,
           image: "../../static/wrong.png"
         });
@@ -100,7 +117,7 @@ const _sfc_main = {
     },
     async login() {
       common_vendor.index.showLoading();
-      const res = await wx.cloud.callContainer({
+      const res = await common_vendor.wx$1.cloud.callContainer({
         config: {
           env: "prod-9gip97mx4bfa32a3"
         },
@@ -126,10 +143,26 @@ const _sfc_main = {
     },
     NavMap: function() {
       common_vendor.index.navigateTo({
+        //url:"/pages/map/map?location=" + encodeURIComponent(JSON.stringify({longtitude:88.12610, latitude:41.79564})),
         url: "/pages/map/map"
       });
     }
   },
+  /*
+  onLoad(options) {
+  	this.course = JSON.parse(decodeURIComponent(options.course));
+  	uni.setNavigationBarTitle({
+  		title: this.course.departmentAbrev + " " + String(this.course.courseNum)
+  	});	
+  },
+  onHide(){
+  	if(!this.sharing){
+  		this.status = "more";
+  		this.offset = 0;
+  		this.commentList = [];
+  	}	
+  },
+  */
   onShow() {
     this.sharing = false;
     common_vendor.index.getStorage({
@@ -186,7 +219,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     k: common_vendor.o(($event) => $options.changeKey(1)),
     l: common_vendor.f($data.commentList, (comment, index, i0) => {
       return {
-        a: "66a7c566-2-" + i0,
+        a: "a711126c-2-" + i0,
         b: common_vendor.p({
           comment,
           user: false
@@ -208,6 +241,6 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   };
 }
-var MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/cssa/cssa-miniprogram/pages/detail/restDetail.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/pg/Desktop/cssa-miniprogram/pages/detail/restDetail.vue"]]);
 _sfc_main.__runtimeHooks = 6;
 wx.createPage(MiniProgramPage);

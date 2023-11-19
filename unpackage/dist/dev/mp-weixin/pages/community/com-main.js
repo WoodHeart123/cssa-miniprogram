@@ -1,5 +1,5 @@
 "use strict";
-var common_vendor = require("../../common/vendor.js");
+const common_vendor = require("../../common/vendor.js");
 const _sfc_main = {
   components: {
     comBoxVue
@@ -8,14 +8,14 @@ const _sfc_main = {
     return {
       comDetailList: [
         {
-          title: "Madison\u5468\u56F4\u90FD\u6709\u4EC0\u4E48\u597D\u73A9\u7684\u5462",
-          content: "Madison\u5468\u56F4\u90FD\u6709\u4EC0\u4E48\u597D\u73A9\u7684\u5462\uFF0C\u6709\u8C01\u63A8\u8350\u4E00\u4E0B\u5417\uFF0C\u5982\u679C\u6709\u63A8\u8350\u53EF\u4EE5\u8054\u7CFB\u6211\uFF1A123456789. \u5927\u5BB6\u53EF\u4EE5\u4E00\u8D77\u73A9\uFF0C\u5F00\u5FC3\u6700\u91CD\u8981\u4E86\u3002",
+          title: "Madison周围都有什么好玩的呢",
+          content: "Madison周围都有什么好玩的呢，有谁推荐一下吗，如果有推荐可以联系我：123456789. 大家可以一起玩，开心最重要了。",
           shrinkContent: "",
           imageUrls: ["https://cssa-mini.oss-cn-shanghai.aliyuncs.com/cssa-community-image/renwu.jpeg"]
         },
         {
-          title: "Madison\u5468\u56F4\u90FD\u6709\u4EC0\u4E48\u597D\u73A9\u7684\u5462Madison\u5468\u56F4\u90FD\u6709\u4EC0\u4E48\u597D\u73A9\u7684\u5462Madison\u5468\u56F4\u90FD\u6709\u4EC0\u4E48\u597D\u73A9\u7684\u5462",
-          content: "Madison\u5468\u56F4\u90FD\u6709\u4EC0\u4E48\u597D\u73A9\u7684\u5462\u3002",
+          title: "Madison周围都有什么好玩的呢Madison周围都有什么好玩的呢Madison周围都有什么好玩的呢",
+          content: "Madison周围都有什么好玩的呢。",
           shrinkContent: "",
           imageUrls: [
             "https://cssa-mini.oss-cn-shanghai.aliyuncs.com/cssa-community-image/renwu.jpeg",
@@ -23,8 +23,8 @@ const _sfc_main = {
           ]
         },
         {
-          title: "Madison\u5468\u56F4\u90FD\u6709\u4EC0\u4E48\u597D\u73A9\u7684\u5462Madison\u5468\u56F4\u90FD\u6709\u4EC0\u4E48\u597D\u73A9\u7684\u5462Madison\u5468\u56F4\u90FD\u6709\u4EC0\u4E48\u597D\u73A9\u7684\u5462",
-          content: "Madison\u5468\u56F4\u90FD\u6709\u4EC0\u4E48\u597D\u73A9\u7684\u5462\uFF0C\u6709\u8C01\u63A8\u8350\u4E00\u4E0B\u5417\uFF0C\u5982\u679C\u6709\u63A8\u8350\u53EF\u4EE5\u8054\u7CFB\u6211\uFF1A123456789. \u5927\u5BB6\u53EF\u4EE5\u4E00\u8D77\u73A9\uFF0C\u5F00\u5FC3\u6700\u91CD\u8981\u4E86,Madison\u5468\u56F4\u90FD\u6709\u4EC0\u4E48\u597D\u73A9\u7684\u5462\uFF0C\u6709\u8C01\u63A8\u8350\u4E00\u4E0B\u5417\uFF0C\u5982\u679C\u6709\u63A8\u8350\u53EF\u4EE5\u8054\u7CFB\u6211\uFF1A123456789. \u5927\u5BB6\u53EF\u4EE5\u4E00\u8D77\u73A9\uFF0C\u5F00\u5FC3\u6700\u91CD\u8981\u4E86",
+          title: "Madison周围都有什么好玩的呢Madison周围都有什么好玩的呢Madison周围都有什么好玩的呢",
+          content: "Madison周围都有什么好玩的呢，有谁推荐一下吗，如果有推荐可以联系我：123456789. 大家可以一起玩，开心最重要了,Madison周围都有什么好玩的呢，有谁推荐一下吗，如果有推荐可以联系我：123456789. 大家可以一起玩，开心最重要了",
           shrinkContent: "",
           imageUrls: [
             "https://cssa-mini.oss-cn-shanghai.aliyuncs.com/cssa-community-image/renwu.jpeg",
@@ -33,8 +33,8 @@ const _sfc_main = {
           ]
         },
         {
-          title: "Madison\u5468\u56F4\u90FD\u6709\u4EC0\u4E48\u597D\u73A9\u7684\u5462Madison\u5468\u56F4\u90FD\u6709\u4EC0\u4E48\u597D\u73A9\u7684\u5462Madison\u5468\u56F4\u90FD\u6709\u4EC0\u4E48\u597D\u73A9\u7684\u5462",
-          content: "Madison\u5468\u56F4\u90FD\u6709\u4EC0\u4E48\u597D\u73A9\u7684\u5462\uFF0C\u6709\u8C01\u63A8\u8350\u4E00\u4E0B\u5417\uFF0C\u5982\u679C\u6709\u63A8\u8350\u53EF\u4EE5\u8054\u7CFB\u6211\uFF1A123456789. \u5927\u5BB6\u53EF\u4EE5\u4E00\u8D77\u73A9\uFF0C\u5F00\u5FC3\u6700\u91CD\u8981\u4E86,Madison\u5468\u56F4\u90FD\u6709\u4EC0\u4E48\u597D\u73A9\u7684\u5462\uFF0C\u6709\u8C01\u63A8\u8350\u4E00\u4E0B\u5417\u3002",
+          title: "Madison周围都有什么好玩的呢Madison周围都有什么好玩的呢Madison周围都有什么好玩的呢",
+          content: "Madison周围都有什么好玩的呢，有谁推荐一下吗，如果有推荐可以联系我：123456789. 大家可以一起玩，开心最重要了,Madison周围都有什么好玩的呢，有谁推荐一下吗。",
           shrinkContent: "",
           imageUrls: []
         }
@@ -67,10 +67,10 @@ const _sfc_main = {
   },
   methods: {
     init: function() {
-      console.log("\u5F00\u59CB\u52A0\u8F7D");
+      console.log("开始加载");
     },
     loadMore: function() {
-      console.log("\u52A0\u8F7D\u66F4\u591A");
+      console.log("加载更多");
     },
     onFocus: function() {
       this.searching = true;
@@ -104,7 +104,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     }),
     e: common_vendor.f($data.comDetailList, (comDetail, index, i0) => {
       return {
-        a: "38e042d1-1-" + i0,
+        a: "528018f4-1-" + i0,
         b: common_vendor.p({
           comDetail
         })
@@ -117,5 +117,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   };
 }
-var MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/cssa/cssa-miniprogram/pages/community/com-main.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/pg/Desktop/cssa-miniprogram/pages/community/com-main.vue"]]);
 wx.createPage(MiniProgramPage);

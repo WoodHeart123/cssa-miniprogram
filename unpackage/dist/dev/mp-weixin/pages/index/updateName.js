@@ -1,5 +1,5 @@
 "use strict";
-var common_vendor = require("../../common/vendor.js");
+const common_vendor = require("../../common/vendor.js");
 const _sfc_main = {
   data() {
     return {
@@ -11,7 +11,7 @@ const _sfc_main = {
     };
   },
   onShow() {
-    wx.cloud.init();
+    common_vendor.wx$1.cloud.init();
     this.userInfo = common_vendor.index.getStorageSync("userInfo-2");
     console.log(this.userInfo);
     this.nickname = this.userInfo.nickname;
@@ -24,12 +24,13 @@ const _sfc_main = {
       if (this.nickname.length == 0) {
         common_vendor.index.showToast({
           icon: "none",
-          title: "\u6635\u79F0\u4E0D\u5E94\u4E3A\u7A7A"
+          title: "昵称不应为空"
         });
       }
-      const res = await wx.cloud.callContainer({
+      const res = await common_vendor.wx$1.cloud.callContainer({
         config: {
           env: "prod-9gip97mx4bfa32a3"
+          // 微信云托管的环境ID
         },
         path: "/user/updateProfile?str=" + encodeURI(this.nickname) + "&service=nickname",
         method: "GET",
@@ -46,7 +47,7 @@ const _sfc_main = {
       } else {
         common_vendor.index.showToast({
           icon: "error",
-          title: "\u6682\u65F6\u65E0\u6CD5\u4FEE\u6539\u6635\u79F0\uFF0C\u8BF7\u7A0D\u540E\u518D\u5C1D\u8BD5"
+          title: "暂时无法修改昵称，请稍后再尝试"
         });
       }
     }
@@ -65,7 +66,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     a: common_vendor.o(($event) => $data.nickname = $event),
     b: common_vendor.p({
       styles: $data.nameinput,
-      placeholder: "\u8BF7\u8F93\u5165\u6635\u79F0",
+      placeholder: "请输入昵称",
       clearable: false,
       maxlength: "20",
       placeholderStyle: "color:#999;font-size:14px",
@@ -74,5 +75,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     c: common_vendor.o((...args) => $options.confirm && $options.confirm(...args))
   };
 }
-var MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/cssa/cssa-miniprogram/pages/index/updateName.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/pg/Desktop/cssa-miniprogram/pages/index/updateName.vue"]]);
 wx.createPage(MiniProgramPage);

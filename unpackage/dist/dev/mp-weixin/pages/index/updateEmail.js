@@ -1,5 +1,5 @@
 "use strict";
-var common_vendor = require("../../common/vendor.js");
+const common_vendor = require("../../common/vendor.js");
 const _sfc_main = {
   data() {
     return {
@@ -11,7 +11,7 @@ const _sfc_main = {
     };
   },
   onLoad() {
-    wx.cloud.init();
+    common_vendor.wx$1.cloud.init();
     this.userInfo = common_vendor.index.getStorageSync("userInfo-2");
     if (this.userInfo.email != null) {
       this.hasEmail = true;
@@ -35,9 +35,10 @@ const _sfc_main = {
     },
     async confirm() {
       if (this.regex.test(this.email)) {
-        const res = await wx.cloud.callContainer({
+        const res = await common_vendor.wx$1.cloud.callContainer({
           config: {
             env: "prod-9gip97mx4bfa32a3"
+            // 微信云托管的环境ID
           },
           path: `/user/updateProfile?str=${this.email}&subscribe=${this.subscribe}&service=email`,
           method: "GET",
@@ -58,7 +59,7 @@ const _sfc_main = {
         }
       } else {
         common_vendor.index.showToast({
-          title: "\u90AE\u7BB1\u683C\u5F0F\u4E0D\u6B63\u786E",
+          title: "邮箱格式不正确",
           icon: "error"
         });
       }
@@ -79,5 +80,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     e: common_vendor.o((...args) => $options.confirm && $options.confirm(...args))
   };
 }
-var MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/cssa/cssa-miniprogram/pages/index/updateEmail.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/pg/Desktop/cssa-miniprogram/pages/index/updateEmail.vue"]]);
 wx.createPage(MiniProgramPage);

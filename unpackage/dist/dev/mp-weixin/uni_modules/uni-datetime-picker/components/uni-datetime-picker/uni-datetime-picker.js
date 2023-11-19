@@ -1,6 +1,6 @@
 "use strict";
-var common_vendor = require("../../../../common/vendor.js");
-var uni_modules_uniDatetimePicker_components_uniDatetimePicker_i18n_index = require("./i18n/index.js");
+const common_vendor = require("../../../../common/vendor.js");
+const uni_modules_uniDatetimePicker_components_uniDatetimePicker_i18n_index = require("./i18n/index.js");
 const calendar = () => "./calendar.js";
 const timePicker = () => "./time-picker.js";
 const {
@@ -17,10 +17,12 @@ const _sfc_main = {
       isRange: false,
       hasTime: false,
       mobileRange: false,
+      // 单选
       singleVal: "",
       tempSingleDate: "",
       defSingleDate: "",
       time: "",
+      // 范围选
       caleRange: {
         startDate: "",
         startTime: "",
@@ -29,7 +31,9 @@ const _sfc_main = {
       },
       range: {
         startDate: "",
+        // startTime: '',
         endDate: ""
+        // endTime: ''
       },
       tempRange: {
         startDate: "",
@@ -37,6 +41,7 @@ const _sfc_main = {
         endDate: "",
         endTime: ""
       },
+      // 左右日历同步数据
       startMultipleStatus: {
         before: "",
         after: "",
@@ -199,8 +204,13 @@ const _sfc_main = {
     datePopupWidth() {
       return this.isRange ? 653 : 301;
     },
+    /**
+     * for i18n
+     */
     singlePlaceholderText() {
-      return this.placeholder || (this.type === "date" ? this.selectDateText : t("uni-datetime-picker.selectDateTime"));
+      return this.placeholder || (this.type === "date" ? this.selectDateText : t(
+        "uni-datetime-picker.selectDateTime"
+      ));
     },
     startPlaceholderText() {
       return this.startPlaceholder || this.startDateText;
@@ -251,6 +261,9 @@ const _sfc_main = {
     this.platform();
   },
   methods: {
+    /**
+     * 获取父元素实例
+     */
     getForm(name = "uniForms") {
       let parent = this.$parent;
       let parentName = parent.$options.name;
@@ -510,6 +523,9 @@ const _sfc_main = {
         this[type].endDate = before;
       }
     },
+    /**
+     * 比较时间大小
+     */
     dateCompare(startDate, endDate) {
       startDate = new Date(startDate.replace("-", "/").replace("-", "/"));
       endDate = new Date(endDate.replace("-", "/").replace("-", "/"));
@@ -519,6 +535,9 @@ const _sfc_main = {
         return false;
       }
     },
+    /**
+     * 比较时间差
+     */
     diffDate(startDate, endDate) {
       startDate = new Date(startDate.replace("-", "/").replace("-", "/"));
       endDate = new Date(endDate.replace("-", "/").replace("-", "/"));
@@ -582,6 +601,7 @@ const _sfc_main = {
     lessTen(item) {
       return item < 10 ? "0" + item : item;
     },
+    //兼容 iOS、safari 日期格式
     fixIosDateFormat(value) {
       if (typeof value === "string") {
         value = value.replace(/-/g, "/");
@@ -668,7 +688,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       modelValue: $data.time
     })
   } : {}, {
-    I: common_vendor.sr("pcSingle", "751243fc-4"),
+    I: common_vendor.sr("pcSingle", "8814cf42-4"),
     J: common_vendor.o($options.singleChange),
     K: common_vendor.p({
       showMonth: false,
@@ -722,7 +742,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       modelValue: $data.tempRange.endTime
     })
   } : {}, {
-    aj: common_vendor.sr("left", "751243fc-8"),
+    aj: common_vendor.sr("left", "8814cf42-8"),
     ak: common_vendor.o($options.leftChange),
     al: common_vendor.o($options.updateRightCale),
     am: common_vendor.o($options.leftMonthSwitch),
@@ -733,7 +753,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       range: true,
       pleStatus: $data.endMultipleStatus
     }),
-    ao: common_vendor.sr("right", "751243fc-9"),
+    ao: common_vendor.sr("right", "8814cf42-9"),
     ap: common_vendor.o($options.rightChange),
     aq: common_vendor.o($options.updateLeftCale),
     ar: common_vendor.o($options.rightMonthSwitch),
@@ -755,7 +775,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   }), {
     aA: $data.popup
   }) : {}, {
-    aB: common_vendor.sr("mobile", "751243fc-10"),
+    aB: common_vendor.sr("mobile", "8814cf42-10"),
     aC: $data.isPhone,
     aD: common_vendor.o($options.mobileChange),
     aE: common_vendor.p({
@@ -774,5 +794,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   });
 }
-var Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/cssa/cssa-miniprogram/uni_modules/uni-datetime-picker/components/uni-datetime-picker/uni-datetime-picker.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/pg/Desktop/cssa-miniprogram/uni_modules/uni-datetime-picker/components/uni-datetime-picker/uni-datetime-picker.vue"]]);
 wx.createComponent(Component);

@@ -1,5 +1,5 @@
 "use strict";
-var common_vendor = require("../../common/vendor.js");
+const common_vendor = require("../../common/vendor.js");
 const _sfc_main = {
   data() {
     return {
@@ -17,6 +17,8 @@ const _sfc_main = {
         model: "",
         bodyStule: "",
         plate: "",
+        // numOfPassanger: 0,
+        // numOfLuggage: 0,
         origin: "",
         time: [0],
         destination: "",
@@ -30,12 +32,12 @@ const _sfc_main = {
           rules: [
             {
               required: true,
-              errorMessage: "\u8BF7\u586B\u5199\u6C7D\u8F66\u54C1\u724C"
+              errorMessage: "请填写汽车品牌"
             },
             {
               minLength: 1,
               maxLength: 8,
-              errorMessage: "\u6C7D\u8F66\u4FE1\u606F\u957F\u5EA6\u5728 1 \u5230 8 \u4E2A\u5B57\u7B26\u4E4B\u95F4"
+              errorMessage: "汽车信息长度在 1 到 8 个字符之间"
             }
           ]
         },
@@ -43,12 +45,12 @@ const _sfc_main = {
           rules: [
             {
               required: true,
-              errorMessage: "\u8BF7\u586B\u5199\u6C7D\u8F66\u54C1\u724C"
+              errorMessage: "请填写汽车品牌"
             },
             {
               minLength: 1,
               maxLength: 15,
-              errorMessage: "\u6C7D\u8F66\u4FE1\u606F\u957F\u5EA6\u5728 1 \u5230 15 \u4E2A\u5B57\u7B26\u4E4B\u95F4"
+              errorMessage: "汽车信息长度在 1 到 15 个字符之间"
             }
           ]
         },
@@ -56,12 +58,12 @@ const _sfc_main = {
           rules: [
             {
               required: false,
-              errorMessage: "\u8BF7\u586B\u5199\u6C7D\u8F66\u7C7B\u578B"
+              errorMessage: "请填写汽车类型"
             },
             {
               minLength: 1,
               maxLength: 9,
-              errorMessage: "\u6C7D\u8F66\u4FE1\u606F\u957F\u5EA6\u5728 1 \u5230 9 \u4E2A\u5B57\u7B26\u4E4B\u95F4"
+              errorMessage: "汽车信息长度在 1 到 9 个字符之间"
             }
           ]
         },
@@ -69,12 +71,12 @@ const _sfc_main = {
           rules: [
             {
               required: true,
-              errorMessage: "\u8BF7\u586B\u5199\u6C7D\u8F66\u54C1\u724C"
+              errorMessage: "请填写汽车品牌"
             },
             {
               minLength: 1,
               maxLength: 9,
-              errorMessage: "\u6C7D\u8F66\u4FE1\u606F\u957F\u5EA6\u5728 1 \u5230 9 \u4E2A\u5B57\u7B26\u4E4B\u95F4"
+              errorMessage: "汽车信息长度在 1 到 9 个字符之间"
             }
           ]
         },
@@ -82,43 +84,43 @@ const _sfc_main = {
           rules: [
             {
               required: true,
-              errorMessage: "\u8BF7\u586B\u5199\u65C5\u7A0B\u8BE6\u60C5"
+              errorMessage: "请填写旅程详情"
             },
             {
               minLength: 1,
               maxLength: 400,
-              errorMessage: "\u65C5\u7A0B\u8BE6\u60C5\u957F\u5EA6\u5728 1 \u5230 400 \u4E2A\u5B57\u7B26\u4E4B\u95F4"
+              errorMessage: "旅程详情长度在 1 到 400 个字符之间"
             }
           ]
         },
         price: {
           rules: [{
             required: true,
-            errorMessage: "\u8BF7\u586B\u5199\u5355\u4EBA\u987A\u98CE\u8F66\u4EF7\u683C"
+            errorMessage: "请填写单人顺风车价格"
           }]
         },
         origin: {
           rules: [{
             required: true,
-            errorMessage: "\u8BF7\u586B\u5199\u59CB\u53D1\u5730"
+            errorMessage: "请填写始发地"
           }]
         },
         destination: {
           rules: [{
             required: true,
-            errorMessage: "\u8BF7\u586B\u5199\u76EE\u7684\u5730"
+            errorMessage: "请填写目的地"
           }]
         },
         numOfPassanger: {
           rules: [{
             required: true,
-            errorMessage: "\u8BF7\u586B\u5199\u4E58\u5BA2\u4EBA\u6570"
+            errorMessage: "请填写乘客人数"
           }]
         },
         dateAndTime: {
           rules: [{
             required: true,
-            errorMessage: "\u8BF7\u586B\u5199\u51FA\u53D1\u65E5\u671F\u548C\u65F6\u95F4\u4FE1\u606F"
+            errorMessage: "请填写出发日期和时间信息"
           }]
         },
         numOfLuggage: {
@@ -129,7 +131,7 @@ const _sfc_main = {
         weChat: {
           rules: [{
             required: true,
-            errorMessage: "\u8BF7\u8F93\u5165\u5FAE\u4FE1\u53F7"
+            errorMessage: "请输入微信号"
           }]
         }
       },
@@ -137,7 +139,7 @@ const _sfc_main = {
     };
   },
   onShow() {
-    wx.cloud.init();
+    common_vendor.wx$1.cloud.init();
     this.userInfo = common_vendor.index.getStorageSync("userInfo-2");
     if (this.userInfo.wechatID != null) {
       this.ride.weChat = this.userInfo.wechatID;
@@ -147,12 +149,12 @@ const _sfc_main = {
   },
   watch: {
     range(newval) {
-      console.log("\u8303\u56F4\u9009:", this.range);
+      console.log("范围选:", this.range);
     }
   },
   methods: {
     getDate(type) {
-      const date = new Date();
+      const date = /* @__PURE__ */ new Date();
       let year = date.getFullYear();
       let month = date.getMonth() + 1;
       let day = date.getDate();
@@ -162,7 +164,7 @@ const _sfc_main = {
       return `${year}-${month}-${day}`;
     },
     maskClick(e) {
-      console.log("maskClick\u4E8B\u4EF6:", e);
+      console.log("maskClick事件:", e);
     },
     onSelectImage: function(e) {
       for (let i = 0; i < e.tempFilePaths.length && i < e.tempFiles.length; i++) {
@@ -192,7 +194,7 @@ const _sfc_main = {
         this.uploadFail = false;
         this.images = [];
         common_vendor.index.showLoading({
-          title: "\u8BF7\u8010\u5FC3\u7B49\u5F85\u4FE1\u606F\u4E0A\u4F20"
+          title: "请耐心等待信息上传"
         });
         this.uploadImage();
       }).catch((err) => {
@@ -204,7 +206,7 @@ const _sfc_main = {
     },
     uploadImage: async function() {
       common_vendor.index.showLoading({
-        title: "\u6B63\u5728\u4E0A\u4F20\u5185\u5BB9"
+        title: "正在上传内容"
       });
       for (let i = 0; i < this.ride.imageList.length; i++) {
         common_vendor.index.uploadFile({
@@ -212,12 +214,19 @@ const _sfc_main = {
           filePath: this.ride.imageList[i].filepath,
           fileType: "image",
           name: "file",
-          formData: {},
+          formData: {
+            // key: "cssa-ride/" + this.ride.imageList[i].filename,
+            // region: 'oss-us-west-1',
+            // accessKeyId: 'LTAI5tG4Jt4WD77C1XSDTJAj',
+            // accessKeySecret: 'HsXwO3QW67PBzpIV2CeE1uM6bU4sd7',
+            // bucket: 'cssa-mini-na',
+            // success_action_status: 200,
+          },
           success: (res) => {
             if (res.statusCode != 200) {
               common_vendor.index.hideLoading();
               common_vendor.index.showToast({
-                title: "\u4E0A\u4F20\u56FE\u7247\u5931\u8D25",
+                title: "上传图片失败",
                 icon: "error"
               });
               console.log(res);
@@ -233,7 +242,7 @@ const _sfc_main = {
           fail: (res) => {
             common_vendor.index.hideLoading();
             common_vendor.index.showToast({
-              title: "\u4E0A\u4F20\u56FE\u7247\u5931\u8D25",
+              title: "上传图片失败",
               icon: "error"
             });
           }
@@ -241,9 +250,10 @@ const _sfc_main = {
       }
     },
     postRide: async function() {
-      const res = await wx.cloud.callContainer({
+      const res = await common_vendor.wx$1.cloud.callContainer({
         config: {
           env: "prod-9gip97mx4bfa32a3"
+          // 加一个新的config？
         },
         path: `/ride/postRideInfo?save=${this.save}`,
         method: "POST",
@@ -262,7 +272,7 @@ const _sfc_main = {
         common_vendor.index.navigateBack();
       } else {
         common_vendor.index.showToast({
-          title: "\u4E0A\u4F20\u4FE1\u606F\u5931\u8D25",
+          title: "上传信息失败",
           icon: "error"
         });
       }
@@ -297,7 +307,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     d: common_vendor.p({
       name: "imageList"
     }),
-    e: common_vendor.sr("rideForm", "ad9d890e-1,ad9d890e-0"),
+    e: common_vendor.sr("rideForm", "24f6db76-1,24f6db76-0"),
     f: common_vendor.p({
       model: $data.ride,
       rules: $data.rules
@@ -331,7 +341,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     v: common_vendor.o(($event) => $data.ride.description = $event),
     w: common_vendor.p({
       type: "textarea",
-      placeholder: "\u53EF\u63CF\u8FF0\u8F66\u8F86, \u65C5\u7A0B, \u6216\u5176\u5B83\u4FE1\u606F\u7B49",
+      placeholder: "可描述车辆, 旅程, 或其它信息等",
       maxlength: "400",
       placeholderStyle: "font-size:14px;color:gray",
       clearable: $data.clearable,
@@ -345,7 +355,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     A: common_vendor.p({
       ["clear-icon"]: false,
       border: false,
-      placeholder: "\u9009\u62E9\u51FA\u53D1\u65E5\u671F\u65F6\u95F4",
+      placeholder: "选择出发日期时间",
       modelValue: $data.ride.dateAndTime
     }),
     B: common_vendor.p({
@@ -362,12 +372,12 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       name: "contact"
     }),
     I: common_vendor.o(($event) => $options.submit("<!-- rideForm -->")),
-    J: common_vendor.sr("rideForm", "ad9d890e-0"),
+    J: common_vendor.sr("rideForm", "24f6db76-0"),
     K: common_vendor.p({
       model: $data.ride,
       rules: $data.rules
     })
   });
 }
-var MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/cssa/cssa-miniprogram/pages/ride/ridePost.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/pg/Desktop/cssa-miniprogram/pages/ride/ridePost.vue"]]);
 wx.createPage(MiniProgramPage);

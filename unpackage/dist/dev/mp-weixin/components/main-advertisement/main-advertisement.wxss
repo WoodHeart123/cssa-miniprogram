@@ -1,16 +1,16 @@
 /* 水平间距 */
 /* 水平间距 */
 #main-advertisement {
-  height: var(--4ee3c9b8-height);
-  width: var(--4ee3c9b8-width);
+  height: var(--5b54e7d9);
+  width: var(--19798e58);
 }
 .uni-swiper-dot-box {
-  height: var(--4ee3c9b8-height);
-  width: var(--4ee3c9b8-width);
+  height: var(--5b54e7d9);
+  width: var(--19798e58);
 }
 .swiper-box {
   width: 100%;
-  height: var(--4ee3c9b8-height);
+  height: var(--5b54e7d9);
   background-color: transparent;
   border-radius: 20px;
   box-shadow: 0 0 5px rgba(165, 165, 165, 0.2);

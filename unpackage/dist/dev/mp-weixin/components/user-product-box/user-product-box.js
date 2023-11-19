@@ -1,5 +1,5 @@
 "use strict";
-var common_vendor = require("../../common/vendor.js");
+const common_vendor = require("../../common/vendor.js");
 const _sfc_main = {
   props: ["product", "index"],
   data() {
@@ -25,8 +25,8 @@ const _sfc_main = {
     },
     deleteShow: function() {
       common_vendor.index.showModal({
-        title: "\u63D0\u793A",
-        content: "\u662F\u5426\u5220\u9664?\u5220\u9664\u540E\u4E0D\u53EF\u6062\u590D",
+        title: "提示",
+        content: "是否删除?删除后不可恢复",
         success: (res) => {
           if (res.confirm) {
             this.deleteMySecondhand(this.product.productID);
@@ -38,7 +38,7 @@ const _sfc_main = {
       common_vendor.index.showLoading({
         mask: true
       });
-      const res = await wx.cloud.callContainer({
+      const res = await common_vendor.wx$1.cloud.callContainer({
         config: {
           env: "prod-9gip97mx4bfa32a3"
         },
@@ -51,12 +51,12 @@ const _sfc_main = {
       common_vendor.index.hideLoading();
       if (res.data.status == 100) {
         common_vendor.index.showToast({
-          title: "\u6210\u529F\u5220\u9664"
+          title: "成功删除"
         });
         common_vendor.index.$emit("mySecondhandDelete", this.index);
       } else {
         common_vendor.index.showToast({
-          title: "\u5220\u9664\u5931\u8D25",
+          title: "删除失败",
           icon: "error"
         });
       }
@@ -65,7 +65,7 @@ const _sfc_main = {
       common_vendor.index.showLoading({
         mask: true
       });
-      const res = await wx.cloud.callContainer({
+      const res = await common_vendor.wx$1.cloud.callContainer({
         config: {
           env: "prod-9gip97mx4bfa32a3"
         },
@@ -79,13 +79,13 @@ const _sfc_main = {
       if (index == 1) {
         if (res.data.status == 100) {
           common_vendor.index.showToast({
-            title: "\u64E6\u4EAE\u6210\u529F",
+            title: "擦亮成功",
             icon: "success"
           });
           common_vendor.index.$emit("mySecondhandRefresh", this.index);
         } else {
           common_vendor.index.showToast({
-            title: "\u64E6\u4EAE\u5931\u8D25",
+            title: "擦亮失败",
             icon: "error"
           });
         }
@@ -93,13 +93,13 @@ const _sfc_main = {
       if (index == 2) {
         if (res.data.status == 100) {
           common_vendor.index.showToast({
-            title: "\u4E0A\u67B6\u6210\u529F",
+            title: "上架成功",
             icon: "success"
           });
           common_vendor.index.$emit("mySecondhandRefresh", this.index);
         } else {
           common_vendor.index.showToast({
-            title: "\u4E0A\u67B6\u5931\u8D25",
+            title: "上架失败",
             icon: "error"
           });
         }
@@ -109,7 +109,7 @@ const _sfc_main = {
       common_vendor.index.showLoading({
         mask: true
       });
-      const res = await wx.cloud.callContainer({
+      const res = await common_vendor.wx$1.cloud.callContainer({
         config: {
           env: "prod-9gip97mx4bfa32a3"
         },
@@ -122,13 +122,13 @@ const _sfc_main = {
       common_vendor.index.hideLoading();
       if (res.data.status == 100) {
         common_vendor.index.showToast({
-          title: "\u4E0B\u67B6\u6210\u529F",
+          title: "下架成功",
           icon: "success"
         });
         this.product.time = 0;
       } else {
         common_vendor.index.showToast({
-          title: "\u4E0B\u67B6\u5931\u8D25",
+          title: "下架失败",
           icon: "error"
         });
       }
@@ -171,5 +171,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     q: common_vendor.o((...args) => $options.deleteShow && $options.deleteShow(...args))
   } : {});
 }
-var Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/cssa/cssa-miniprogram/components/user-product-box/user-product-box.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/pg/Desktop/cssa-miniprogram/components/user-product-box/user-product-box.vue"]]);
 wx.createComponent(Component);

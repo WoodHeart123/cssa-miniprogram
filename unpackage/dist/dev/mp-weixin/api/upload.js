@@ -1,6 +1,6 @@
 "use strict";
-var common_vendor = require("../common/vendor.js");
-const ossAccessKeySecret = {}.VUE_APP_OSS_ACCESS_KEY_SECRET;
+const common_vendor = require("../common/vendor.js");
+const ossAccessKeySecret = "process.env.VUE_APP_OSS_ACCESS_KEY_SECRET;";
 async function uploadOSS(image) {
   return new Promise((resolve, reject) => {
     common_vendor.index.uploadFile({
@@ -18,13 +18,15 @@ async function uploadOSS(image) {
       },
       success: (res) => {
         if (res.statusCode !== 200) {
-          reject("\u4E0A\u4F20\u56FE\u7247\u5931\u8D25");
+          reject("上传图片失败");
         } else {
-          resolve(`https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-rental/${image.filename}`);
+          resolve(
+            `https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-rental/${image.filename}`
+          );
         }
       },
       fail: () => {
-        reject("\u4E0A\u4F20\u56FE\u7247\u5931\u8D25");
+        reject("上传图片失败");
       }
     });
   });

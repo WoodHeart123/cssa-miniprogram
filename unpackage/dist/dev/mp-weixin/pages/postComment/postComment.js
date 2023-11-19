@@ -1,5 +1,5 @@
 "use strict";
-var common_vendor = require("../../common/vendor.js");
+const common_vendor = require("../../common/vendor.js");
 const _sfc_main = {
   data() {
     return {
@@ -12,11 +12,11 @@ const _sfc_main = {
           rules: [
             {
               required: true,
-              errorMessage: "\u8BF7\u586B\u5199\u8BC4\u8BBA"
+              errorMessage: "请填写评论"
             },
             {
               maxLength: 400,
-              errorMessage: "\u8BC4\u8BBA\u6700\u957F\u4E3A400\u5B57\u7B26"
+              errorMessage: "评论最长为400字符"
             }
           ]
         }
@@ -39,25 +39,25 @@ const _sfc_main = {
       this.rules["professor"] = {
         rules: [{
           required: true,
-          errorMessage: "\u8BF7\u586B\u5199\u6559\u6388\u540D\u5B57"
+          errorMessage: "请填写教授名字"
         }]
       };
       this.rules["courseTime"] = {
         rules: [{
           required: true,
-          errorMessage: "\u8BF7\u9009\u62E9\u6559\u5B66\u65F6\u95F4"
+          errorMessage: "请选择教学时间"
         }]
       };
       this.rules["difficulty"] = {
         rules: [{
           required: true,
-          errorMessage: "\u8BF7\u9009\u62E9\u96BE\u5EA6"
+          errorMessage: "请选择难度"
         }]
       };
       this.rules["prefer"] = {
         rules: [{
           required: true,
-          errorMessage: "\u8BF7\u9009\u62E9\u63A8\u8350\u5EA6"
+          errorMessage: "请选择推荐度"
         }]
       };
       this.comment.courseID = this.course.courseID;
@@ -78,8 +78,8 @@ const _sfc_main = {
   },
   methods: {
     initTimePicker: function() {
-      let year = new Date().getFullYear();
-      let month = new Date().getMonth();
+      let year = (/* @__PURE__ */ new Date()).getFullYear();
+      let month = (/* @__PURE__ */ new Date()).getMonth();
       for (let i = 2018; i <= year; i++) {
         let temp = {
           text: String(i),
@@ -106,10 +106,10 @@ const _sfc_main = {
     },
     async postComment() {
       common_vendor.index.showLoading({
-        title: "\u6B63\u5728\u4E0A\u4F20\u4E2D",
+        title: "正在上传中",
         mask: true
       });
-      const res = await wx.cloud.callContainer({
+      const res = await common_vendor.wx$1.cloud.callContainer({
         config: {
           env: "prod-9gip97mx4bfa32a3"
         },
@@ -123,14 +123,14 @@ const _sfc_main = {
       if (res.data.status == 500) {
         common_vendor.index.showToast({
           icon: "fail",
-          title: "\u670D\u52A1\u53D1\u751F\u9519\u8BEF\uFF0C\u8BF7\u7A0D\u540E\u5C1D\u8BD5"
+          title: "服务发生错误，请稍后尝试"
         });
         common_vendor.index.hideLoading();
         return;
       } else if (res.data.status == 110) {
         this.commentMap[this.comment.courseID] = 2;
         common_vendor.index.showToast({
-          title: "\u8D85\u8FC7\u4E24\u6761\u8BC4\u8BBA",
+          title: "超过两条评论",
           icon: "error",
           mask: true,
           complete: () => {
@@ -191,12 +191,12 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     c: common_vendor.o(($event) => $data.comment.professor = $event),
     d: common_vendor.p({
       clearable: false,
-      placeholder: "\u6559\u6388\u540D",
+      placeholder: "教授名",
       modelValue: $data.comment.professor
     }),
     e: common_vendor.p({
       name: "professor",
-      label: "\u6559\u6388"
+      label: "教授"
     }),
     f: common_vendor.o(($event) => $data.comment.difficulty = $event),
     g: common_vendor.p({
@@ -206,7 +206,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     }),
     h: common_vendor.p({
       name: "difficulty",
-      label: "\u96BE\u5EA6"
+      label: "难度"
     }),
     i: common_vendor.o(($event) => $data.comment.prefer = $event),
     j: common_vendor.p({
@@ -216,7 +216,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     }),
     k: common_vendor.p({
       name: "prefer",
-      label: "\u63A8\u8350"
+      label: "推荐"
     }),
     l: common_vendor.o(($event) => $data.comment.courseTime = $event),
     m: common_vendor.p({
@@ -225,14 +225,14 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     }),
     n: common_vendor.p({
       name: "courseTime",
-      label: "\u65F6\u95F4"
+      label: "时间"
     }),
     o: common_vendor.o(($event) => $data.comment.comment = $event),
     p: common_vendor.p({
       autoHeight: true,
       clearable: false,
       type: "textarea",
-      placeholder: "\u53EF\u4EE5\u4ECE\u8BFE\u7A0B\u5185\u5BB9\uFF0C\u4F5C\u4E1A\u91CF\uFF0C\u9700\u8981\u7684\u524D\u7F6E\u77E5\u8BC6\u7B49\u65B9\u9762\u8FDB\u884C\u8BC4\u4EF7",
+      placeholder: "可以从课程内容，作业量，需要的前置知识等方面进行评价",
       maxlength: "400",
       modelValue: $data.comment.comment
     }),
@@ -240,7 +240,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       name: "comment",
       ["label-position"]: "top"
     }),
-    r: common_vendor.sr("form", "52d30539-0"),
+    r: common_vendor.sr("form", "653ae614-0"),
     s: common_vendor.p({
       model: $data.comment,
       ["label-align"]: "left",
@@ -250,5 +250,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     t: common_vendor.o((...args) => $options.submit && $options.submit(...args))
   });
 }
-var MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/cssa/cssa-miniprogram/pages/postComment/postComment.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/pg/Desktop/cssa-miniprogram/pages/postComment/postComment.vue"]]);
 wx.createPage(MiniProgramPage);

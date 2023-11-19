@@ -269,7 +269,13 @@
                 "navigationBarTitleText" : "餐厅评价",
                 "disableScroll" : true
             }
-        }
+        },
+		{
+			"path": "pages/findFriendPost/findFriendPost",
+			"style": {
+				"navigationBarTitleText" : "找搭子发布"
+			}
+		}
     ],
     "condition" : {
         "current" : 0,
@@ -341,7 +347,11 @@
             {
                 "name" : "RestMap",
                 "path" : "pages/map/map"
-            }
+            },
+			{
+				"name" : "findFriendPost",
+				"path" : "pages/findFriendPost/findFriendPost"
+			}
         ]
     },
     "globalStyle" : {

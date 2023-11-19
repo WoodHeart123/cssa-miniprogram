@@ -1,6 +1,6 @@
 "use strict";
-var common_vendor = require("../../../../common/vendor.js");
-var dataPicker = {
+const common_vendor = require("../../../../common/vendor.js");
+const dataPicker = {
   props: {
     localdata: {
       type: [Array, Object],
@@ -186,7 +186,7 @@ var dataPicker = {
       this._treeData = [];
     },
     getCommand(options = {}) {
-      let db = common_vendor.pn.database(this.spaceInfo);
+      let db = common_vendor.Ds.database(this.spaceInfo);
       const action = options.action || this.action;
       if (action) {
         db = db.action(action);
@@ -411,7 +411,7 @@ var dataPicker = {
       if (!isleaf && this.selected.length < dataList.length) {
         this.selected.push({
           value: null,
-          text: "\u8BF7\u9009\u62E9"
+          text: "请选择"
         });
       }
       return {

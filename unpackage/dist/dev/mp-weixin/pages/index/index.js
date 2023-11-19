@@ -1,5 +1,5 @@
 "use strict";
-var common_vendor = require("../../common/vendor.js");
+const common_vendor = require("../../common/vendor.js");
 const _sfc_main = {
   components: {
     mainAdvertisementVue
@@ -14,7 +14,7 @@ const _sfc_main = {
     };
   },
   onLoad() {
-    wx.cloud.init();
+    common_vendor.wx$1.cloud.init();
   },
   onShow() {
     common_vendor.index.$on("authSuccess", this.authSuccess);
@@ -35,13 +35,13 @@ const _sfc_main = {
   },
   onShareAppMessage(res) {
     return {
-      title: "\u9EA6\u5C6F\u5C0F\u52A9\u624B",
+      title: "麦屯小助手",
       path: "/pages/main/main"
     };
   },
   onShareTimeline(res) {
     return {
-      title: "\u9EA6\u5C6F\u5C0F\u52A9\u624B",
+      title: "麦屯小助手",
       path: "/pages/main/main"
     };
   },
@@ -50,7 +50,7 @@ const _sfc_main = {
       let directURL = "";
       if ((index == 2 || index == 3) && !this.isLogin) {
         common_vendor.index.showToast({
-          title: "\u8BF7\u5148\u767B\u5F55",
+          title: "请先登录",
           icon: "error"
         });
         return;
@@ -76,7 +76,7 @@ const _sfc_main = {
     },
     getUserProfile: function() {
       common_vendor.index.getUserProfile({
-        desc: "\u83B7\u53D6\u7528\u6237\u6635\u79F0",
+        desc: "获取用户昵称",
         success: (userProfile) => {
           this.userInfo.nickname = userProfile.userInfo.nickName;
           this.login(userProfile.userInfo.nickName);
@@ -89,7 +89,7 @@ const _sfc_main = {
       });
     },
     async login(nickname) {
-      const res = await wx.cloud.callContainer({
+      const res = await common_vendor.wx$1.cloud.callContainer({
         config: {
           env: "prod-9gip97mx4bfa32a3"
         },
@@ -127,7 +127,7 @@ if (!Math) {
 }
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   return common_vendor.e({
-    a: common_vendor.sr("welcome", "16f0b55f-0"),
+    a: common_vendor.sr("welcome", "baaf9ec8-0"),
     b: common_vendor.p({
       ["background-color"]: "fff"
     }),
@@ -158,6 +158,6 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   });
 }
-var MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/cssa/cssa-miniprogram/pages/index/index.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/pg/Desktop/cssa-miniprogram/pages/index/index.vue"]]);
 _sfc_main.__runtimeHooks = 6;
 wx.createPage(MiniProgramPage);

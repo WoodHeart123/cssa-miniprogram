@@ -1,11 +1,11 @@
 "use strict";
-var common_vendor = require("../../common/vendor.js");
+const common_vendor = require("../../common/vendor.js");
 const _sfc_main = {
   data() {
     return {
       userInfo: {},
       buttonGroup: [{
-        text: "\u63D0\u4EA4",
+        text: "提交",
         backgroundColor: "#1684FC",
         color: "#fff"
       }],
@@ -18,11 +18,11 @@ const _sfc_main = {
   onLoad(options) {
     this.actDetail = JSON.parse(decodeURIComponent(options.actDetail));
     console.log(this.actDetail);
-    wx.cloud.init();
+    common_vendor.wx$1.cloud.init();
   },
   methods: {
     jumpToHomePage() {
-      wx.switchTab({
+      common_vendor.wx$1.switchTab({
         url: "/pages/activity/act"
       });
     },
@@ -49,9 +49,10 @@ const _sfc_main = {
         response: valueArr,
         payment: this.actDetail.payment
       };
-      const res = await wx.cloud.callContainer({
+      const res = await common_vendor.wx$1.cloud.callContainer({
         config: {
           env: "prod-9gip97mx4bfa32a3"
+          // 微信云托管的环境ID
         },
         path: "/activity/register",
         method: "POST",
@@ -88,18 +89,18 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         a: common_vendor.t(info.name),
         b: info.type == "input"
       }, info.type == "input" ? {
-        c: common_vendor.o(($event) => $options.changeIndex(index)),
-        d: common_vendor.o((...args) => $options.bindInputChange && $options.bindInputChange(...args)),
-        e: common_vendor.o((...args) => $options.bindInputChange && $options.bindInputChange(...args)),
-        f: common_vendor.o((...args) => $options.bindInputChange && $options.bindInputChange(...args))
+        c: common_vendor.o(($event) => $options.changeIndex(index), index),
+        d: common_vendor.o((...args) => $options.bindInputChange && $options.bindInputChange(...args), index),
+        e: common_vendor.o((...args) => $options.bindInputChange && $options.bindInputChange(...args), index),
+        f: common_vendor.o((...args) => $options.bindInputChange && $options.bindInputChange(...args), index)
       } : {}, {
         g: info.type == "select"
       }, info.type == "select" ? {
         h: common_vendor.t(info.options[info.index] ? info.options[info.index] : _ctx.a),
         i: info.options,
         j: info.index,
-        k: common_vendor.o(($event) => $options.changeIndex(index)),
-        l: common_vendor.o((...args) => $options.bindPickerChange && $options.bindPickerChange(...args))
+        k: common_vendor.o(($event) => $options.changeIndex(index), index),
+        l: common_vendor.o((...args) => $options.bindPickerChange && $options.bindPickerChange(...args), index)
       } : {}, {
         m: index
       });
@@ -115,5 +116,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   };
 }
-var MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/cssa/cssa-miniprogram/pages/activity/remark.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/pg/Desktop/cssa-miniprogram/pages/activity/remark.vue"]]);
 wx.createPage(MiniProgramPage);

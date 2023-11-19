@@ -36,7 +36,8 @@
     "pages/restMain/restMain",
     "pages/map/map",
     "pages/detail/restDetail",
-    "pages/postRestComment/postRestComment"
+    "pages/postRestComment/postRestComment",
+    "pages/findFriendPost/findFriendPost"
   ],
   "window": {
     "navigationBarTextStyle": "black",

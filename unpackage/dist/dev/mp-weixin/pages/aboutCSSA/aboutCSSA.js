@@ -1,25 +1,29 @@
 "use strict";
-var common_vendor = require("../../common/vendor.js");
+const common_vendor = require("../../common/vendor.js");
 const _sfc_main = {
   data() {
     return {
+      // swiper
       indicatorDots: true,
       autoplay: true,
       interval: 2e3,
       duration: 500,
+      // scoller downwards
       scrollTop: 0,
       old: {
         scrollTop: 0
       },
       orderTypeLise: [
+        //name-标题 icon-图标
         {
-          name: "CSSA\u8BE6\u60C5",
+          name: "CSSA详情",
           icon: "group icon.jpg"
         }
       ]
     };
   },
   methods: {
+    // swiper 
     changeAutoplay(e) {
       this.autoplay = !this.autoplay;
     },
@@ -29,6 +33,7 @@ const _sfc_main = {
     durationChange(e) {
       this.duration = e.target.value;
     },
+    // scoller downwards
     upper: function(e) {
       console.log(e);
     },
@@ -46,7 +51,7 @@ const _sfc_main = {
       });
       common_vendor.index.showToast({
         icon: "none",
-        title: "\u5DF2\u8FD4\u56DE\u9876\u90E8"
+        title: "已返回顶部"
       });
     },
     toPage: function(index) {
@@ -70,5 +75,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     c: $data.duration
   };
 }
-var MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/cssa/cssa-miniprogram/pages/aboutCSSA/aboutCSSA.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/pg/Desktop/cssa-miniprogram/pages/aboutCSSA/aboutCSSA.vue"]]);
 wx.createPage(MiniProgramPage);

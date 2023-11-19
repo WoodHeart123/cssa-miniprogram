@@ -53,7 +53,7 @@ function rgbToHex(rgb) {
     let strHex = "#";
     for (let i = 0; i < aColor.length; i++) {
       let hex = Number(aColor[i]).toString(16);
-      hex = String(hex).length == 1 ? 0 + "" + hex : hex;
+      hex = String(hex).length == 1 ? "0" + hex : hex;
       if (hex === "0") {
         hex += hex;
       }
@@ -99,7 +99,7 @@ function colorToRgba(color, alpha = 0.3) {
     return sColor;
   }
 }
-var colorGradient$1 = {
+const colorGradient$1 = {
   colorGradient,
   hexToRgb,
   rgbToHex,

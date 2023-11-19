@@ -1,30 +1,30 @@
 "use strict";
-var common_vendor = require("../../common/vendor.js");
-var uni_modules_vkUviewUi_libs_mixin_mixin = require("./libs/mixin/mixin.js");
-var uni_modules_vkUviewUi_libs_request_index = require("./libs/request/index.js");
-var uni_modules_vkUviewUi_libs_function_queryParams = require("./libs/function/queryParams.js");
-var uni_modules_vkUviewUi_libs_function_route = require("./libs/function/route.js");
-var uni_modules_vkUviewUi_libs_function_timeFormat = require("./libs/function/timeFormat.js");
-var uni_modules_vkUviewUi_libs_function_timeFrom = require("./libs/function/timeFrom.js");
-var uni_modules_vkUviewUi_libs_function_colorGradient = require("./libs/function/colorGradient.js");
-var uni_modules_vkUviewUi_libs_function_guid = require("./libs/function/guid.js");
-var uni_modules_vkUviewUi_libs_function_color = require("./libs/function/color.js");
-var uni_modules_vkUviewUi_libs_function_type2icon = require("./libs/function/type2icon.js");
-var uni_modules_vkUviewUi_libs_function_randomArray = require("./libs/function/randomArray.js");
-var uni_modules_vkUviewUi_libs_function_deepClone = require("./libs/function/deepClone.js");
-var uni_modules_vkUviewUi_libs_function_deepMerge = require("./libs/function/deepMerge.js");
-var uni_modules_vkUviewUi_libs_function_addUnit = require("./libs/function/addUnit.js");
-var uni_modules_vkUviewUi_libs_function_test = require("./libs/function/test.js");
-var uni_modules_vkUviewUi_libs_function_random = require("./libs/function/random.js");
-var uni_modules_vkUviewUi_libs_function_trim = require("./libs/function/trim.js");
-var uni_modules_vkUviewUi_libs_function_toast = require("./libs/function/toast.js");
-var uni_modules_vkUviewUi_libs_function_getParent = require("./libs/function/getParent.js");
-var uni_modules_vkUviewUi_libs_function_$parent = require("./libs/function/_parent.js");
-var uni_modules_vkUviewUi_libs_function_sys = require("./libs/function/sys.js");
-var uni_modules_vkUviewUi_libs_function_debounce = require("./libs/function/debounce.js");
-var uni_modules_vkUviewUi_libs_function_throttle = require("./libs/function/throttle.js");
-var uni_modules_vkUviewUi_libs_config_config = require("./libs/config/config.js");
-var uni_modules_vkUviewUi_libs_config_zIndex = require("./libs/config/zIndex.js");
+const common_vendor = require("../../common/vendor.js");
+const uni_modules_vkUviewUi_libs_mixin_mixin = require("./libs/mixin/mixin.js");
+const uni_modules_vkUviewUi_libs_request_index = require("./libs/request/index.js");
+const uni_modules_vkUviewUi_libs_function_queryParams = require("./libs/function/queryParams.js");
+const uni_modules_vkUviewUi_libs_function_route = require("./libs/function/route.js");
+const uni_modules_vkUviewUi_libs_function_timeFormat = require("./libs/function/timeFormat.js");
+const uni_modules_vkUviewUi_libs_function_timeFrom = require("./libs/function/timeFrom.js");
+const uni_modules_vkUviewUi_libs_function_colorGradient = require("./libs/function/colorGradient.js");
+const uni_modules_vkUviewUi_libs_function_guid = require("./libs/function/guid.js");
+const uni_modules_vkUviewUi_libs_function_color = require("./libs/function/color.js");
+const uni_modules_vkUviewUi_libs_function_type2icon = require("./libs/function/type2icon.js");
+const uni_modules_vkUviewUi_libs_function_randomArray = require("./libs/function/randomArray.js");
+const uni_modules_vkUviewUi_libs_function_deepClone = require("./libs/function/deepClone.js");
+const uni_modules_vkUviewUi_libs_function_deepMerge = require("./libs/function/deepMerge.js");
+const uni_modules_vkUviewUi_libs_function_addUnit = require("./libs/function/addUnit.js");
+const uni_modules_vkUviewUi_libs_function_test = require("./libs/function/test.js");
+const uni_modules_vkUviewUi_libs_function_random = require("./libs/function/random.js");
+const uni_modules_vkUviewUi_libs_function_trim = require("./libs/function/trim.js");
+const uni_modules_vkUviewUi_libs_function_toast = require("./libs/function/toast.js");
+const uni_modules_vkUviewUi_libs_function_getParent = require("./libs/function/getParent.js");
+const uni_modules_vkUviewUi_libs_function_$parent = require("./libs/function/_parent.js");
+const uni_modules_vkUviewUi_libs_function_sys = require("./libs/function/sys.js");
+const uni_modules_vkUviewUi_libs_function_debounce = require("./libs/function/debounce.js");
+const uni_modules_vkUviewUi_libs_function_throttle = require("./libs/function/throttle.js");
+const uni_modules_vkUviewUi_libs_config_config = require("./libs/config/config.js");
+const uni_modules_vkUviewUi_libs_config_zIndex = require("./libs/config/zIndex.js");
 function wranning(str) {
   {
     console.warn(str);
@@ -35,6 +35,7 @@ const $u = {
   route: uni_modules_vkUviewUi_libs_function_route.route,
   timeFormat: uni_modules_vkUviewUi_libs_function_timeFormat.timeFormat,
   date: uni_modules_vkUviewUi_libs_function_timeFormat.timeFormat,
+  // 另名date
   timeFrom: uni_modules_vkUviewUi_libs_function_timeFrom.timeFrom,
   colorGradient: uni_modules_vkUviewUi_libs_function_colorGradient.colorGradient.colorGradient,
   colorToRgba: uni_modules_vkUviewUi_libs_function_colorGradient.colorGradient.colorToRgba,
@@ -63,6 +64,7 @@ const $u = {
   http: uni_modules_vkUviewUi_libs_request_index.http,
   toast: uni_modules_vkUviewUi_libs_function_toast.toast,
   config: uni_modules_vkUviewUi_libs_config_config.config,
+  // uView配置信息相关，比如版本号
   zIndex: uni_modules_vkUviewUi_libs_config_zIndex.zIndex,
   debounce: uni_modules_vkUviewUi_libs_function_debounce.debounce,
   throttle: uni_modules_vkUviewUi_libs_function_throttle.throttle
@@ -72,7 +74,7 @@ const install = (Vue) => {
   Vue.mixin(uni_modules_vkUviewUi_libs_mixin_mixin.mixin);
   Vue.config.globalProperties.$u = $u;
 };
-var uView = {
+const uView = {
   install
 };
 exports.uView = uView;

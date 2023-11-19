@@ -1,5 +1,5 @@
 "use strict";
-var common_vendor = require("../../../../common/vendor.js");
+const common_vendor = require("../../../../common/vendor.js");
 const ERR_MSG_OK = "chooseAndUploadFile:ok";
 const ERR_MSG_FAIL = "chooseAndUploadFile:fail";
 function chooseImage(opts) {
@@ -82,12 +82,12 @@ function chooseAll(opts) {
   } = opts;
   return new Promise((resolve, reject) => {
     let chooseFile = common_vendor.index.chooseFile;
-    if (typeof wx !== "undefined" && typeof wx.chooseMessageFile === "function") {
-      chooseFile = wx.chooseMessageFile;
+    if (typeof common_vendor.wx$1 !== "undefined" && typeof common_vendor.wx$1.chooseMessageFile === "function") {
+      chooseFile = common_vendor.wx$1.chooseMessageFile;
     }
     if (typeof chooseFile !== "function") {
       return reject({
-        errMsg: ERR_MSG_FAIL + " \u8BF7\u6307\u5B9A type \u7C7B\u578B\uFF0C\u8BE5\u5E73\u53F0\u4EC5\u652F\u6301\u9009\u62E9 image \u6216 video\u3002"
+        errMsg: ERR_MSG_FAIL + " 请指定 type 类型，该平台仅支持选择 image 或 video。"
       });
     }
     chooseFile({
@@ -139,7 +139,7 @@ function uploadCloudFiles(files, max = 5, onUploadProgress) {
       const index = self.files.findIndex((v) => v.uuid === fileItem.uuid);
       fileItem.url = "";
       delete fileItem.errMsg;
-      common_vendor.pn.uploadFile({
+      common_vendor.Ds.uploadFile({
         filePath: fileItem.path,
         cloudPath: fileItem.cloudPath,
         fileType: fileItem.fileType,

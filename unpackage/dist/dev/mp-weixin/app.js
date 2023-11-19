@@ -1,8 +1,7 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports[Symbol.toStringTag] = "Module";
-var common_vendor = require("./common/vendor.js");
-var uni_modules_vkUviewUi_index = require("./uni_modules/vk-uview-ui/index.js");
+Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
+const common_vendor = require("./common/vendor.js");
+const uni_modules_vkUviewUi_index = require("./uni_modules/vk-uview-ui/index.js");
 require("./uni_modules/vk-uview-ui/libs/mixin/mixin.js");
 require("./uni_modules/vk-uview-ui/libs/request/index.js");
 require("./uni_modules/vk-uview-ui/libs/function/deepMerge.js");
@@ -66,10 +65,11 @@ if (!Math) {
   "./pages/map/map.js";
   "./pages/detail/restDetail.js";
   "./pages/postRestComment/postRestComment.js";
+  "./pages/findFriendPost/findFriendPost.js";
 }
 const _sfc_main = {
   onLaunch: function() {
-    console.warn("\u5F53\u524D\u7EC4\u4EF6\u4EC5\u652F\u6301 uni_modules \u76EE\u5F55\u7ED3\u6784 \uFF0C\u8BF7\u5347\u7EA7 HBuilderX \u5230 3.1.0 \u7248\u672C\u4EE5\u4E0A\uFF01");
+    console.warn("当前组件仅支持 uni_modules 目录结构 ，请升级 HBuilderX 到 3.1.0 版本以上！");
     console.log("App Launch");
   },
   onShow: function() {
@@ -79,7 +79,7 @@ const _sfc_main = {
     console.log("App Hide");
   }
 };
-var App = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__file", "D:/cssa/cssa-miniprogram/App.vue"]]);
+const App = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__file", "/Users/pg/Desktop/cssa-miniprogram/App.vue"]]);
 function createApp() {
   const app = common_vendor.createSSRApp(App);
   app.use(uni_modules_vkUviewUi_index.uView);

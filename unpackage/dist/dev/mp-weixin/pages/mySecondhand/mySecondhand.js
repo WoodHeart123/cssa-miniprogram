@@ -1,5 +1,5 @@
 "use strict";
-var common_vendor = require("../../common/vendor.js");
+const common_vendor = require("../../common/vendor.js");
 const _sfc_main = {
   onLoad() {
     common_vendor.index.startPullDownRefresh();
@@ -19,9 +19,9 @@ const _sfc_main = {
       mySecondhand: [],
       product: [],
       contentText: {
-        contentdown: "\u4E0A\u62C9\u663E\u793A\u66F4\u591A",
-        contentrefresh: "\u6B63\u5728\u52A0\u8F7D...",
-        contentnomore: "\u6CA1\u6709\u66F4\u591A\u4E86"
+        contentdown: "上拉显示更多",
+        contentrefresh: "正在加载...",
+        contentnomore: "没有更多了"
       }
     };
   },
@@ -43,7 +43,7 @@ const _sfc_main = {
     uploadSecondSuccess: function() {
       common_vendor.index.startPullDownRefresh();
       common_vendor.index.showToast({
-        title: "\u66F4\u65B0\u6210\u529F",
+        title: "更新成功",
         duration: 5e3
       });
     },
@@ -52,7 +52,7 @@ const _sfc_main = {
         return;
       }
       this.status = "loading";
-      const res = await wx.cloud.callContainer({
+      const res = await common_vendor.wx$1.cloud.callContainer({
         config: {
           env: "prod-9gip97mx4bfa32a3"
         },
@@ -94,7 +94,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   return {
     a: common_vendor.f($data.mySecondhand, (product, index, i0) => {
       return {
-        a: "da8f24ce-0-" + i0,
+        a: "b0f60bd4-0-" + i0,
         b: common_vendor.p({
           product,
           index
@@ -108,5 +108,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   };
 }
-var MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/cssa/cssa-miniprogram/pages/mySecondhand/mySecondhand.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/pg/Desktop/cssa-miniprogram/pages/mySecondhand/mySecondhand.vue"]]);
 wx.createPage(MiniProgramPage);

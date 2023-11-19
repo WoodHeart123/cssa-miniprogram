@@ -1,4 +1,4 @@
-const ossAccessKeySecret = process.env.VUE_APP_OSS_ACCESS_KEY_SECRET;
+const ossAccessKeySecret = 'process.env.VUE_APP_OSS_ACCESS_KEY_SECRET;'
 export default async function(image) {
 	return new Promise((resolve, reject) => {
 		uni.uploadFile({

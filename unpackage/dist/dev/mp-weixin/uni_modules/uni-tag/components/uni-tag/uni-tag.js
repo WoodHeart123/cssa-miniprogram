@@ -1,34 +1,41 @@
 "use strict";
-var common_vendor = require("../../../../common/vendor.js");
+const common_vendor = require("../../../../common/vendor.js");
 const _sfc_main = {
   name: "UniTag",
   emits: ["click"],
   props: {
     type: {
+      // 标签类型default、primary、success、warning、error、royal
       type: String,
       default: "default"
     },
     size: {
+      // 标签大小 normal, small
       type: String,
       default: "normal"
     },
+    // 标签内容
     text: {
       type: String,
       default: ""
     },
     disabled: {
+      // 是否为禁用状态
       type: [Boolean, String],
       default: false
     },
     inverted: {
+      // 是否为空心
       type: [Boolean, String],
       default: false
     },
     circle: {
+      // 是否为圆角样式
       type: [Boolean, String],
       default: false
     },
     mark: {
+      // 是否为标记样式
       type: [Boolean, String],
       default: false
     },
@@ -55,6 +62,7 @@ const _sfc_main = {
         isTrue(inverted) ? "uni-tag--" + type + "--inverted" : "",
         isTrue(circle) ? "uni-tag--circle" : "",
         isTrue(mark) ? "uni-tag--mark" : "",
+        // type === 'default' ? 'uni-tag--default' : 'uni-tag-text',
         isTrue(inverted) ? "uni-tag--inverted uni-tag-text--" + type : "",
         size === "small" ? "uni-tag-text--small" : ""
       ];
@@ -82,5 +90,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     e: common_vendor.o((...args) => $options.onClick && $options.onClick(...args))
   } : {});
 }
-var Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/cssa/cssa-miniprogram/uni_modules/uni-tag/components/uni-tag/uni-tag.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/pg/Desktop/cssa-miniprogram/uni_modules/uni-tag/components/uni-tag/uni-tag.vue"]]);
 wx.createComponent(Component);

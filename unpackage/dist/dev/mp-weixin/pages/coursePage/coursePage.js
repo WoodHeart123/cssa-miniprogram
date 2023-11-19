@@ -1,5 +1,5 @@
 "use strict";
-var common_vendor = require("../../common/vendor.js");
+const common_vendor = require("../../common/vendor.js");
 const _sfc_main = {
   components: {
     commentBoxVue
@@ -23,9 +23,9 @@ const _sfc_main = {
       limit: 10,
       order: [],
       contentText: {
-        contentdown: "\u4E0A\u62C9\u663E\u793A\u66F4\u591A",
-        contentrefresh: "\u6B63\u5728\u52A0\u8F7D...",
-        contentnomore: "\u6CA1\u6709\u66F4\u591A\u8BC4\u8BBA\u4E86"
+        contentdown: "上拉显示更多",
+        contentrefresh: "正在加载...",
+        contentnomore: "没有更多评论了"
       },
       commentMap: {},
       sharing: false
@@ -59,7 +59,7 @@ const _sfc_main = {
         return;
       }
       this.status = "loading";
-      const res = await wx.cloud.callContainer({
+      const res = await common_vendor.wx$1.cloud.callContainer({
         config: {
           env: "prod-9gip97mx4bfa32a3"
         },
@@ -84,7 +84,7 @@ const _sfc_main = {
         }
       } else {
         common_vendor.index.showToast({
-          title: "\u51FA\u73B0\u672A\u77E5\u9519\u8BEF",
+          title: "出现未知错误",
           duration: 2e3,
           image: "../../static/wrong.png"
         });
@@ -93,7 +93,7 @@ const _sfc_main = {
     },
     async login() {
       common_vendor.index.showLoading();
-      const res = await wx.cloud.callContainer({
+      const res = await common_vendor.wx$1.cloud.callContainer({
         config: {
           env: "prod-9gip97mx4bfa32a3"
         },
@@ -115,20 +115,20 @@ const _sfc_main = {
     toComment: function() {
       if (this.commentMap[this.course.courseID] != void 0 && this.commentMap[this.course.courseID] >= 2) {
         common_vendor.index.showToast({
-          title: "\u8D85\u8FC7\u4E24\u6761\u8BC4\u8BBA",
+          title: "超过两条评论",
           icon: "error"
         });
         return;
       }
       if (!this.isLogin) {
         common_vendor.index.getUserProfile({
-          desc: "\u83B7\u53D6\u7528\u6237\u4FE1\u606F",
+          desc: "获取用户信息",
           success: (userProfile) => {
             this.login(userProfile.userInfo.nickName);
           },
           fail: () => {
             common_vendor.index.showToast({
-              title: "\u8BF7\u5148\u767B\u9646",
+              title: "请先登陆",
               icon: "none"
             });
           }
@@ -222,7 +222,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     i: common_vendor.o(($event) => $options.changeKey(0)),
     j: common_vendor.f($data.commentList, (comment, index, i0) => {
       return {
-        a: "3cbe808e-3-" + i0,
+        a: "5e0dda94-3-" + i0,
         b: common_vendor.p({
           comment,
           user: false
@@ -244,6 +244,6 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   };
 }
-var MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/cssa/cssa-miniprogram/pages/coursePage/coursePage.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/pg/Desktop/cssa-miniprogram/pages/coursePage/coursePage.vue"]]);
 _sfc_main.__runtimeHooks = 6;
 wx.createPage(MiniProgramPage);

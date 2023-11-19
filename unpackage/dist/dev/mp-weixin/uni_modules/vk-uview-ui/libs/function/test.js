@@ -21,7 +21,9 @@ function digits(value) {
   return /^\d+$/.test(value);
 }
 function idCard(value) {
-  return /^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$/.test(value);
+  return /^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$/.test(
+    value
+  );
 }
 function carNo(value) {
   const xreg = /^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}(([0-9]{5}[DF]$)|([DF][A-HJ-NP-Z0-9][0-9]{4}$))/;
@@ -74,11 +76,11 @@ function empty(value) {
         return true;
       break;
     case "number":
-      if (value === 0 || isNaN(value))
+      if (0 === value || isNaN(value))
         return true;
       break;
     case "object":
-      if (value === null || value.length === 0)
+      if (null === value || value.length === 0)
         return true;
       for (var i in value) {
         return false;
@@ -115,7 +117,7 @@ function object(value) {
 function code(value, len = 6) {
   return new RegExp(`^\\d{${len}}$`).test(value);
 }
-var test = {
+const test = {
   email,
   mobile,
   url,

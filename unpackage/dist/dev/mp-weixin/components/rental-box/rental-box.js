@@ -1,5 +1,5 @@
 "use strict";
-var common_vendor = require("../../common/vendor.js");
+const common_vendor = require("../../common/vendor.js");
 const _sfc_main = {
   name: "rental-box",
   props: ["rentalInfo"],
@@ -14,7 +14,7 @@ const _sfc_main = {
   },
   data() {
     return {
-      sexContraintValue: ["\u4EC5\u9650\u7537\u751F", "\u4EC5\u9650\u5973\u751F", "\u6027\u522B\u4E0D\u9650"],
+      sexContraintValue: ["仅限男生", "仅限女生", "性别不限"],
       houseInfo: {
         imageList: ["/static/housing.jpg", "/static/housing.jpg", "/static/housing.jpg"]
       },
@@ -30,10 +30,11 @@ const _sfc_main = {
   },
   computed: {
     rentalTime() {
-      return common_vendor.moment(this.rentalInfo.rentalStartTime).format("YYYY-MM-DD") + " \u81F3 " + common_vendor.moment(this.rentalInfo.rentalEndTime).format("YYYY-MM-DD");
+      return common_vendor.moment(this.rentalInfo.rentalStartTime).format("YYYY-MM-DD") + " 至 " + common_vendor.moment(this.rentalInfo.rentalEndTime).format("YYYY-MM-DD");
     }
   },
   watch: {
+    // whenever question changes, this function will run
     "rentalInfo.UTCPublishedTime": function(newVal, oldVal) {
       if (common_vendor.moment().year() - common_vendor.moment.utc(this.rentalInfo.UTCPublishedTime).year() > 0) {
         this.rentalPublishTime = common_vendor.moment.utc(newVal).format("YYYY-MM-DD");
@@ -58,5 +59,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     i: common_vendor.o((...args) => $options.toRentalDetail && $options.toRentalDetail(...args))
   };
 }
-var Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/cssa/cssa-miniprogram/components/rental-box/rental-box.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/pg/Desktop/cssa-miniprogram/components/rental-box/rental-box.vue"]]);
 wx.createComponent(Component);

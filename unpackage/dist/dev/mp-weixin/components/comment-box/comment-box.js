@@ -1,5 +1,5 @@
 "use strict";
-var common_vendor = require("../../common/vendor.js");
+const common_vendor = require("../../common/vendor.js");
 const _sfc_main = {
   props: ["comment", "user"],
   name: "comment-box",
@@ -26,7 +26,7 @@ const _sfc_main = {
       if (this.comment.liked) {
         return;
       }
-      const res = await wx.cloud.callContainer({
+      const res = await common_vendor.wx$1.cloud.callContainer({
         config: {
           env: "prod-9gip97mx4bfa32a3"
         },
@@ -45,7 +45,7 @@ const _sfc_main = {
       }
       if (res.data.status == 107) {
         common_vendor.index.showToast({
-          title: "\u60A8\u5DF2\u7ECF\u70B9\u8FC7\u8D5E\u5566",
+          title: "您已经点过赞啦",
           duration: 2e3
         });
       }
@@ -54,7 +54,9 @@ const _sfc_main = {
   computed: {
     computeCommentTime() {
       common_vendor.moment.locale("zh-cn");
-      return Date.now() - this.comment.commentTime >= 864e5 * 7 ? common_vendor.moment(this.comment.commentTime).format("MM-DD") : common_vendor.moment(this.comment.commentTime).fromNow();
+      return Date.now() - this.comment.commentTime >= 864e5 * 7 ? common_vendor.moment(this.comment.commentTime).format(
+        "MM-DD"
+      ) : common_vendor.moment(this.comment.commentTime).fromNow();
     }
   }
 };
@@ -103,5 +105,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     s: common_vendor.o((...args) => $options.addZan && $options.addZan(...args))
   });
 }
-var Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/cssa/cssa-miniprogram/components/comment-box/comment-box.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/pg/Desktop/cssa-miniprogram/components/comment-box/comment-box.vue"]]);
 wx.createComponent(Component);

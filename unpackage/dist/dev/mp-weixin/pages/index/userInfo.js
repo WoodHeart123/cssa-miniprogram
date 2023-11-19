@@ -1,5 +1,5 @@
 "use strict";
-var common_vendor = require("../../common/vendor.js");
+const common_vendor = require("../../common/vendor.js");
 const _sfc_main = {
   data() {
     return {
@@ -50,17 +50,17 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   return common_vendor.e({
     a: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/" + this.userInfo.avatar + ".jpg",
     b: common_vendor.o((...args) => $options.toChangeAvatar && $options.toChangeAvatar(...args)),
-    c: common_vendor.t(this.userInfo.isStudent ? "\u5DF2\u8BA4\u8BC1\u221A" : "\u6682\u65E0\u8BA4\u8BC1"),
+    c: common_vendor.t(this.userInfo.isStudent ? "已认证√" : "暂无认证"),
     d: !this.userInfo.isStudent
   }, !this.userInfo.isStudent ? {} : {}, {
     e: common_vendor.o((...args) => $options.toStudentAuth && $options.toStudentAuth(...args)),
     f: common_vendor.t(this.userInfo.nickname),
     g: common_vendor.o((...args) => $options.toName && $options.toName(...args)),
-    h: common_vendor.t(this.userInfo.wechatID ? this.userInfo.wechatID : "\u65E0"),
+    h: common_vendor.t(this.userInfo.wechatID ? this.userInfo.wechatID : "无"),
     i: common_vendor.o((...args) => $options.toID && $options.toID(...args)),
-    j: common_vendor.t(this.userInfo.email ? this.userInfo.email : "\u65E0"),
+    j: common_vendor.t(this.userInfo.email ? this.userInfo.email : "无"),
     k: common_vendor.o((...args) => $options.toEmail && $options.toEmail(...args))
   });
 }
-var MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/cssa/cssa-miniprogram/pages/index/userInfo.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/pg/Desktop/cssa-miniprogram/pages/index/userInfo.vue"]]);
 wx.createPage(MiniProgramPage);

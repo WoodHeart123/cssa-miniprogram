@@ -1,5 +1,5 @@
 "use strict";
-var common_vendor = require("../../common/vendor.js");
+const common_vendor = require("../../common/vendor.js");
 const _sfc_main = {
   data() {
     return {
@@ -16,54 +16,54 @@ const _sfc_main = {
       },
       images: [],
       item_types: [{
-        text: "\u7535\u5B50\u4EA7\u54C1",
+        text: "电子产品",
         value: "ELECTRONIC"
       }, {
-        text: "\u4EA4\u901A\u5DE5\u5177",
+        text: "交通工具",
         value: "TRANSPORT"
       }, {
-        text: "\u5BB6\u5177\u5BB6\u7535",
+        text: "家具家电",
         value: "FURNITURE"
       }, {
-        text: "\u865A\u62DF\u5361\u5238",
+        text: "虚拟卡券",
         value: "DIGITAL"
       }, {
-        text: "\u65E5\u5E38\u7528\u54C1",
+        text: "日常用品",
         value: "DAILY"
       }, {
-        text: "\u7F8E\u5986\u670D\u9970",
+        text: "美妆服饰",
         value: "MAKEUP"
       }, {
-        text: "\u4E66\u7C4D\u6559\u5177",
+        text: "书籍教具",
         value: "EDU"
       }, {
-        text: "\u5BA0\u7269\u7528\u54C1",
+        text: "宠物用品",
         value: "PET"
       }, {
-        text: "\u5176\u4ED6",
+        text: "其他",
         value: "OTHERS"
       }],
       deliveryOption: [{
-        text: "\u81EA\u53D6",
+        text: "自取",
         value: "pickup"
       }, {
-        text: "\u9001\u8D27",
+        text: "送货",
         value: "deliver"
       }, {
-        text: "\u7686\u53EF",
+        text: "皆可",
         value: "all"
       }],
       conditionOption: [{
-        text: "\u5168\u65B0",
+        text: "全新",
         value: "NEW"
       }, {
-        text: "\u51E0\u4E4E\u5168\u65B0",
+        text: "几乎全新",
         value: "ALMOST_NEW"
       }, {
-        text: "\u660E\u663E\u4F7F\u7528\u75D5\u8FF9",
+        text: "明显使用痕迹",
         value: "USED"
       }, {
-        text: "\u90E8\u5206\u635F\u6BC1",
+        text: "部分损毁",
         value: "IMPAIRED"
       }],
       rules: {
@@ -71,12 +71,12 @@ const _sfc_main = {
           rules: [
             {
               required: true,
-              errorMessage: "\u8BF7\u4E0A\u4F20\u56FE\u7247"
+              errorMessage: "请上传图片"
             },
             {
               minLength: 1,
               maxLength: 5,
-              errorMessage: "\u6700\u591A\u53EA\u80FD\u4E0A\u4F20\u4E94\u5F20\u56FE\u7247"
+              errorMessage: "最多只能上传五张图片"
             }
           ]
         },
@@ -84,12 +84,12 @@ const _sfc_main = {
           rules: [
             {
               required: true,
-              errorMessage: "\u8BF7\u586B\u5199\u5546\u54C1\u540D\u79F0"
+              errorMessage: "请填写商品名称"
             },
             {
               minLength: 1,
               maxLength: 22,
-              errorMessage: "\u5546\u54C1\u540D\u79F0\u957F\u5EA6\u5728 1 \u5230 22 \u4E2A\u5B57\u7B26\u4E4B\u95F4"
+              errorMessage: "商品名称长度在 1 到 22 个字符之间"
             }
           ]
         },
@@ -97,43 +97,43 @@ const _sfc_main = {
           rules: [
             {
               required: true,
-              errorMessage: "\u8BF7\u586B\u5199\u5546\u54C1\u63CF\u8FF0"
+              errorMessage: "请填写商品描述"
             },
             {
               minLength: 1,
               maxLength: 400,
-              errorMessage: "\u5546\u54C1\u540D\u79F0\u957F\u5EA6\u5728 1 \u5230 400 \u4E2A\u5B57\u7B26\u4E4B\u95F4"
+              errorMessage: "商品名称长度在 1 到 400 个字符之间"
             }
           ]
         },
         productType: {
           rules: [{
             required: true,
-            errorMessage: "\u8BF7\u9009\u62E9\u5546\u54C1\u7C7B\u578B"
+            errorMessage: "请选择商品类型"
           }]
         },
         delivery: {
           rules: [{
             required: true,
-            errorMessage: "\u8BF7\u9009\u62E9\u914D\u9001\u65B9\u5F0F"
+            errorMessage: "请选择配送方式"
           }]
         },
         productCondition: {
           rules: [{
             required: true,
-            errorMessage: "\u8BF7\u9009\u62E9\u5546\u54C1\u6210\u8272"
+            errorMessage: "请选择商品成色"
           }]
         },
         price: {
           rules: [{
             required: true,
-            errorMessage: "\u8BF7\u8F93\u5165\u5546\u54C1\u4EF7\u683C"
+            errorMessage: "请输入商品价格"
           }]
         },
         contact: {
           rules: [{
             required: true,
-            errorMessage: "\u8BF7\u8F93\u5165\u8054\u7CFB\u65B9\u5F0F"
+            errorMessage: "请输入联系方式"
           }]
         }
       }
@@ -149,7 +149,7 @@ const _sfc_main = {
     }
   },
   onShow() {
-    wx.cloud.init();
+    common_vendor.wx$1.cloud.init();
     let userInfo = common_vendor.index.getStorageSync("userInfo-2");
     this.product.sellerAvatar = userInfo.avatar;
     this.product.sellerNickname = userInfo.nickname;
@@ -203,7 +203,7 @@ const _sfc_main = {
         this.uploadFail = false;
         this.images = [];
         common_vendor.index.showLoading({
-          title: "\u8BF7\u8010\u5FC3\u7B49\u5F85\u4FE1\u606F\u4E0A\u4F20"
+          title: "请耐心等待信息上传"
         });
         if (!this.edit) {
           this.uploadImage();
@@ -218,7 +218,7 @@ const _sfc_main = {
       });
     },
     updateProduct: async function() {
-      const res = await wx.cloud.callContainer({
+      const res = await common_vendor.wx$1.cloud.callContainer({
         config: {
           env: "prod-9gip97mx4bfa32a3"
         },
@@ -235,14 +235,14 @@ const _sfc_main = {
         common_vendor.index.navigateBack();
       } else {
         common_vendor.index.showToast({
-          title: "\u66F4\u65B0\u4FE1\u606F\u5931\u8D25",
+          title: "更新信息失败",
           icon: "error"
         });
       }
     },
     uploadImage: async function() {
       common_vendor.index.showLoading({
-        title: "\u6B63\u5728\u4E0A\u4F20\u5185\u5BB9",
+        title: "正在上传内容",
         mask: true
       });
       for (let i = 0; i < this.product.imageList.length; i++) {
@@ -264,7 +264,7 @@ const _sfc_main = {
             if (res.statusCode != 200) {
               common_vendor.index.hideLoading();
               common_vendor.index.showToast({
-                title: "\u4E0A\u4F20\u56FE\u7247\u5931\u8D25",
+                title: "上传图片失败",
                 icon: "error"
               });
               this.uploadFail = true;
@@ -279,7 +279,7 @@ const _sfc_main = {
           fail: (res) => {
             common_vendor.index.hideLoading();
             common_vendor.index.showToast({
-              title: "\u4E0A\u4F20\u56FE\u7247\u5931\u8D25",
+              title: "上传图片失败",
               icon: "error"
             });
           }
@@ -287,7 +287,7 @@ const _sfc_main = {
       }
     },
     postProduct: async function() {
-      const res = await wx.cloud.callContainer({
+      const res = await common_vendor.wx$1.cloud.callContainer({
         config: {
           env: "prod-9gip97mx4bfa32a3"
         },
@@ -304,7 +304,7 @@ const _sfc_main = {
         common_vendor.index.navigateBack();
       } else {
         common_vendor.index.showToast({
-          title: "\u4E0A\u4F20\u4FE1\u606F\u5931\u8D25",
+          title: "上传信息失败",
           icon: "error"
         });
       }
@@ -352,7 +352,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     i: common_vendor.o(($event) => $data.product.productDescription = $event),
     j: common_vendor.p({
       type: "textarea",
-      placeholder: "\u8BF7\u8F93\u5165\u5546\u54C1\u63CF\u8FF0\u4FE1\u606F",
+      placeholder: "请输入商品描述信息",
       maxlength: "400",
       placeholderStyle: "font-size:14px;color:gray",
       clearable: $data.clearable,
@@ -372,8 +372,8 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     }),
     o: common_vendor.o(($event) => $data.product.productType = $event),
     p: common_vendor.p({
-      placeholder: "\u8BF7\u9009\u62E9\u5546\u54C1\u7C7B\u578B",
-      ["popup-title"]: "\u8BF7\u9009\u62E9\u5546\u54C1\u7C7B\u578B",
+      placeholder: "请选择商品类型",
+      ["popup-title"]: "请选择商品类型",
       localdata: $data.item_types,
       modelValue: $data.product.productType
     }),
@@ -392,7 +392,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     v: common_vendor.o(($event) => $data.product.price = $event),
     w: common_vendor.p({
       type: "number",
-      placeholder: "\u8BF7\u586B\u5199\u4EF7\u683C",
+      placeholder: "请填写价格",
       ["placeholder-style"]: "font-size:14px;color:gray",
       clearable: $data.clearable,
       modelValue: $data.product.price
@@ -410,14 +410,14 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     D: common_vendor.p({
       name: "contact"
     }),
-    E: common_vendor.t(this.edit ? "\u66F4\u65B0" : "\u53D1\u5E03"),
+    E: common_vendor.t(this.edit ? "更新" : "发布"),
     F: common_vendor.o(($event) => $options.submit("productForm")),
-    G: common_vendor.sr("productForm", "800a94dc-0"),
+    G: common_vendor.sr("productForm", "a159eee2-0"),
     H: common_vendor.p({
       model: $data.product,
       rules: $data.rules
     })
   });
 }
-var MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/cssa/cssa-miniprogram/pages/second/secondMainPost.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/pg/Desktop/cssa-miniprogram/pages/second/secondMainPost.vue"]]);
 wx.createPage(MiniProgramPage);

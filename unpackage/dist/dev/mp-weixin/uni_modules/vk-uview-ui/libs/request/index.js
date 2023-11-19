@@ -1,11 +1,13 @@
 "use strict";
-var common_vendor = require("../../../../common/vendor.js");
-var uni_modules_vkUviewUi_libs_function_deepMerge = require("../function/deepMerge.js");
-var uni_modules_vkUviewUi_libs_function_test = require("../function/test.js");
+const common_vendor = require("../../../../common/vendor.js");
+const uni_modules_vkUviewUi_libs_function_deepMerge = require("../function/deepMerge.js");
+const uni_modules_vkUviewUi_libs_function_test = require("../function/test.js");
 class Request {
+  // 设置全局默认配置
   setConfig(customConfig) {
     this.config = uni_modules_vkUviewUi_libs_function_deepMerge.deepMerge(this.config, customConfig);
   }
+  // 主要请求部分
   request(options = {}) {
     if (this.interceptor.request && typeof this.interceptor.request === "function") {
       let interceptorRequest = this.interceptor.request(options);
@@ -70,19 +72,30 @@ class Request {
   constructor() {
     this.config = {
       baseUrl: "",
+      // 请求的根域名
+      // 默认的请求头
       header: {},
       method: "POST",
+      // 设置为json，返回后uni.request会对数据进行一次JSON.parse
       dataType: "json",
+      // 此参数无需处理，因为5+和支付宝小程序不支持，默认为text即可
       responseType: "text",
       showLoading: true,
-      loadingText: "\u8BF7\u6C42\u4E2D...",
+      // 是否显示请求中的loading
+      loadingText: "请求中...",
       loadingTime: 800,
+      // 在此时间内，请求还没回来的话，就显示加载中动画，单位ms
       timer: null,
+      // 定时器
       originalData: false,
+      // 是否在拦截器中返回服务端的原始数据，见文档说明
       loadingMask: true
+      // 展示loading的时候，是否给一个透明的蒙层，防止触摸穿透
     };
     this.interceptor = {
+      // 请求前的拦截
       request: null,
+      // 请求后的拦截
       response: null
     };
     this.get = (url, data = {}, header = {}) => {
@@ -119,5 +132,5 @@ class Request {
     };
   }
 }
-var http = new Request();
+const http = new Request();
 exports.http = http;

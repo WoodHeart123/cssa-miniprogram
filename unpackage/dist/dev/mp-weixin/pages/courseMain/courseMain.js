@@ -1,6 +1,6 @@
 "use strict";
-var common_vendor = require("../../common/vendor.js");
-var api_request = require("../../api/request.js");
+const common_vendor = require("../../common/vendor.js");
+const api_request = require("../../api/request.js");
 const _sfc_main = {
   components: {
     courseBoxVue
@@ -27,24 +27,24 @@ const _sfc_main = {
       departmentDict: [],
       courseList: [],
       departmentID: 0,
-      departmentName: "\u6240\u6709\u8BFE\u7A0B",
+      departmentName: "所有课程",
       timer: {},
       suggestList: [],
       contentText: {
-        contentdown: "\u4E0A\u62C9\u663E\u793A\u66F4\u591A",
-        contentrefresh: "\u6B63\u5728\u52A0\u8F7D...",
-        contentnomore: "\u6CA1\u6709\u66F4\u591A\u8BFE\u7A0B\u4E86"
+        contentdown: "上拉显示更多",
+        contentrefresh: "正在加载...",
+        contentnomore: "没有更多课程了"
       },
       searchContentText: {
-        contentdown: "\u4E0A\u62C9\u663E\u793A\u66F4\u591A",
-        contentrefresh: "\u6B63\u5728\u641C\u7D22...",
-        contentnomore: "\u6CA1\u6709\u5339\u914D\u8BFE\u7A0B"
+        contentdown: "上拉显示更多",
+        contentrefresh: "正在搜索...",
+        contentnomore: "没有匹配课程"
       },
       searchStatus: ""
     };
   },
   onLoad() {
-    wx.cloud.init();
+    common_vendor.wx$1.cloud.init();
     this.refresh();
     this.getDepartmentList();
     common_vendor.index.$on("refreshPage", () => {
@@ -53,14 +53,14 @@ const _sfc_main = {
   },
   onShareAppMessage(res) {
     return {
-      title: "\u9EA6\u5C6F\u5C0F\u52A9\u624B-\u8BFE\u7A0B\u5410\u69FD",
+      title: "麦屯小助手-课程吐槽",
       path: "/pages/courseMain/courseMain",
       imageUrl: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-share/forum.png"
     };
   },
   onShareTimeline(res) {
     return {
-      title: "\u9EA6\u5C6F\u5C0F\u52A9\u624B-\u8BFE\u7A0B\u5410\u69FD",
+      title: "麦屯小助手-课程吐槽",
       path: "/pages/courseMain/courseMain"
     };
   },
@@ -180,7 +180,7 @@ const _sfc_main = {
       let tempList = res.data.data;
       this.departmentList = [{
         letter: " ",
-        data: ["\u6240\u6709\u8BFE\u7A0B"]
+        data: ["所有课程"]
       }];
       let wordList = {
         letter: tempList[0].department[0],
@@ -255,7 +255,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   } : {}, {
     h: common_vendor.o((...args) => $options.clickMenu && $options.clickMenu(...args)),
-    i: common_vendor.sr("menuOpen", "5749bd0e-3,5749bd0e-0"),
+    i: common_vendor.sr("menuOpen", "78991714-3,78991714-0"),
     j: common_vendor.p({
       show: true
     }),
@@ -277,7 +277,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     w: common_vendor.o(($event) => $data.searchValue = $event),
     x: common_vendor.p({
       cancelButton: "auto",
-      placeholder: "\u641C\u7D22\u8BFE\u7A0B",
+      placeholder: "搜索课程",
       clearButton: "none",
       focus: $data.searching,
       modelValue: $data.searchValue
@@ -297,7 +297,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     K: common_vendor.o(($event) => $options.changeKey(2)),
     L: common_vendor.f($data.courseList, (course, index, i0) => {
       return {
-        a: "5749bd0e-6-" + i0 + ",5749bd0e-0",
+        a: "78991714-6-" + i0 + ",78991714-0",
         b: common_vendor.p({
           course
         }),
@@ -315,13 +315,13 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     R: common_vendor.o((...args) => $options.onScrollLower && $options.onScrollLower(...args)),
     S: common_vendor.o((...args) => _ctx.touchstart && _ctx.touchstart(...args)),
     T: common_vendor.o((...args) => _ctx.touchmove && _ctx.touchmove(...args)),
-    U: common_vendor.sr("main", "5749bd0e-0"),
+    U: common_vendor.sr("main", "78991714-0"),
     V: common_vendor.p({
       show: true,
       customClass: "full-screen"
     })
   });
 }
-var MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/cssa/cssa-miniprogram/pages/courseMain/courseMain.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/pg/Desktop/cssa-miniprogram/pages/courseMain/courseMain.vue"]]);
 _sfc_main.__runtimeHooks = 6;
 wx.createPage(MiniProgramPage);

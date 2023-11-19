@@ -1,5 +1,5 @@
 "use strict";
-var common_vendor = require("../../../../common/vendor.js");
+const common_vendor = require("../../../../common/vendor.js");
 const _sfc_main = {
   name: "uploadImage",
   emits: ["uploadFiles", "choose", "delFile"],
@@ -152,9 +152,9 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     a: common_vendor.f($props.filesList, (item, index, i0) => {
       return common_vendor.e({
         a: item.url,
-        b: common_vendor.o(($event) => $options.prviewImage(item, index))
+        b: common_vendor.o(($event) => $options.prviewImage(item, index), index)
       }, $props.delIcon && !$props.readonly ? {
-        c: common_vendor.o(($event) => $options.delFile(index))
+        c: common_vendor.o(($event) => $options.delFile(index), index)
       } : {}, {
         d: item.progress && item.progress !== 100 || item.progress === 0
       }, item.progress && item.progress !== 100 || item.progress === 0 ? {
@@ -163,7 +163,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       } : {}, {
         g: item.errMsg
       }, item.errMsg ? {
-        h: common_vendor.o(($event) => $options.uploadFiles(item, index))
+        h: common_vendor.o(($event) => $options.uploadFiles(item, index), index)
       } : {}, {
         i: index
       });
@@ -178,5 +178,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     h: common_vendor.s($options.boxStyle)
   } : {});
 }
-var Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/cssa/cssa-miniprogram/uni_modules/uni-file-picker/components/uni-file-picker/upload-image.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/pg/Desktop/cssa-miniprogram/uni_modules/uni-file-picker/components/uni-file-picker/upload-image.vue"]]);
 wx.createComponent(Component);

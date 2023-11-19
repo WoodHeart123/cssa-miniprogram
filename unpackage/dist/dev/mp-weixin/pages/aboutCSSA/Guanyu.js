@@ -1,8 +1,9 @@
 "use strict";
-var common_vendor = require("../../common/vendor.js");
+const common_vendor = require("../../common/vendor.js");
 const _sfc_main = {
   data() {
     return {
+      // scoller downwards
       scrollTop: 0,
       old: {
         scrollTop: 0
@@ -10,6 +11,7 @@ const _sfc_main = {
     };
   },
   methods: {
+    // scoller downwards
     upper: function(e) {
       console.log(e);
     },
@@ -27,7 +29,7 @@ const _sfc_main = {
       });
       common_vendor.index.showToast({
         icon: "none",
-        title: "\u5DF2\u8FD4\u56DE\u9876\u90E8"
+        title: "已返回顶部"
       });
     }
   }
@@ -35,5 +37,5 @@ const _sfc_main = {
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   return {};
 }
-var MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/cssa/cssa-miniprogram/pages/aboutCSSA/Guanyu.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/pg/Desktop/cssa-miniprogram/pages/aboutCSSA/Guanyu.vue"]]);
 wx.createPage(MiniProgramPage);

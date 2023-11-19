@@ -1,5 +1,5 @@
 "use strict";
-var common_vendor = require("../../common/vendor.js");
+const common_vendor = require("../../common/vendor.js");
 const shoucangBoxVue = () => "../../components/shoucang-box/shoucang-box.js";
 const _sfc_main = {
   components: {
@@ -15,7 +15,7 @@ const _sfc_main = {
     };
   },
   onLoad() {
-    wx.cloud.init();
+    common_vendor.wx$1.cloud.init();
     this.refresh();
   },
   methods: {
@@ -50,7 +50,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   return {
     a: common_vendor.f($data.collectList, (collect, index, i0) => {
       return {
-        a: "39ba8f59-0-" + i0,
+        a: "94ffa154-0-" + i0,
         b: common_vendor.p({
           product: collect
         })
@@ -62,5 +62,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   };
 }
-var MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/cssa/cssa-miniprogram/pages/mySave/mySave.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/pg/Desktop/cssa-miniprogram/pages/mySave/mySave.vue"]]);
 wx.createPage(MiniProgramPage);

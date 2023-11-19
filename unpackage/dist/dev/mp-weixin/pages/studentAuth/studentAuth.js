@@ -1,5 +1,5 @@
 "use strict";
-var common_vendor = require("../../common/vendor.js");
+const common_vendor = require("../../common/vendor.js");
 const _sfc_main = {
   data() {
     return {
@@ -34,12 +34,12 @@ const _sfc_main = {
       });
       if (this.authCode.length == 0) {
         common_vendor.index.showToast({
-          title: "\u8BF7\u8F93\u5165\u9A8C\u8BC1\u7801",
+          title: "请输入验证码",
           icon: "error"
         });
         return;
       }
-      const res = await wx.cloud.callContainer({
+      const res = await common_vendor.wx$1.cloud.callContainer({
         config: {
           env: "prod-9gip97mx4bfa32a3"
         },
@@ -59,13 +59,13 @@ const _sfc_main = {
       } else if (res.data.status && res.data.status == 106) {
         common_vendor.index.hideLoading();
         common_vendor.index.showToast({
-          title: "\u9A8C\u8BC1\u7801\u9519\u8BEF",
+          title: "验证码错误",
           icon: "error"
         });
       } else {
         common_vendor.index.hideLoading();
         common_vendor.index.showToast({
-          title: "\u670D\u52A1\u51FA\u73B0\u9519\u8BEF",
+          title: "服务出现错误",
           icon: "error"
         });
       }
@@ -73,7 +73,7 @@ const _sfc_main = {
     async getAuthCode() {
       if (this.email.length == 0) {
         common_vendor.index.showToast({
-          title: "\u8BF7\u8F93\u5165\u90AE\u7BB1",
+          title: "请输入邮箱",
           icon: "error"
         });
         return;
@@ -88,7 +88,7 @@ const _sfc_main = {
             this.showTime = false;
           }
         }, 1e3);
-        await wx.cloud.callContainer({
+        await common_vendor.wx$1.cloud.callContainer({
           config: {
             env: "prod-9gip97mx4bfa32a3"
           },
@@ -101,7 +101,7 @@ const _sfc_main = {
         this.showButton = true;
       } else {
         common_vendor.index.showToast({
-          title: "\u90AE\u7BB1\u683C\u5F0F\u4E0D\u6B63\u786E",
+          title: "邮箱格式不正确",
           icon: "error"
         });
       }
@@ -121,5 +121,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     i: common_vendor.o((...args) => $options.confirm && $options.confirm(...args))
   };
 }
-var MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/cssa/cssa-miniprogram/pages/studentAuth/studentAuth.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/pg/Desktop/cssa-miniprogram/pages/studentAuth/studentAuth.vue"]]);
 wx.createPage(MiniProgramPage);

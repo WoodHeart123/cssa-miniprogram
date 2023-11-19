@@ -1,6 +1,6 @@
 "use strict";
-var uni_modules_uniDataPicker_components_uniDataPickerview_uniDataPicker = require("../uni-data-pickerview/uni-data-picker.js");
-var common_vendor = require("../../../../common/vendor.js");
+const uni_modules_uniDataPicker_components_uniDataPickerview_uniDataPicker = require("../uni-data-pickerview/uni-data-picker.js");
+const common_vendor = require("../../../../common/vendor.js");
 const DataPickerView = () => "../uni-data-pickerview/uni-data-pickerview.js";
 const _sfc_main = {
   name: "UniDataPicker",
@@ -18,11 +18,11 @@ const _sfc_main = {
     },
     popupTitle: {
       type: String,
-      default: "\u8BF7\u9009\u62E9"
+      default: "请选择"
     },
     placeholder: {
       type: String,
-      default: "\u8BF7\u9009\u62E9"
+      default: "请选择"
     },
     heightMobile: {
       type: String,
@@ -277,7 +277,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   }, $data.isOpened ? {
     r: common_vendor.t($props.popupTitle),
     s: common_vendor.o((...args) => $options.handleClose && $options.handleClose(...args)),
-    t: common_vendor.sr("pickerView", "65a5c966-2"),
+    t: common_vendor.sr("pickerView", "1439ac30-2"),
     v: common_vendor.o($options.onchange),
     w: common_vendor.o($options.ondatachange),
     x: common_vendor.o($options.onnodeclick),
@@ -299,5 +299,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   } : {});
 }
-var Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/cssa/cssa-miniprogram/uni_modules/uni-data-picker/components/uni-data-picker/uni-data-picker.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/pg/Desktop/cssa-miniprogram/uni_modules/uni-data-picker/components/uni-data-picker/uni-data-picker.vue"]]);
 wx.createComponent(Component);

@@ -1,5 +1,5 @@
 "use strict";
-var common_vendor = require("../../../../common/vendor.js");
+const common_vendor = require("../../../../common/vendor.js");
 const _sfc_main = {
   name: "UniIndexedList",
   emits: ["itemClick"],
@@ -52,7 +52,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   }, ($props.loaded || $props.list.itemIndex < 15) && $props.list.items && $props.list.items.length > 0 ? {
     e: common_vendor.f($props.list.items, (item, index, i0) => {
       return common_vendor.e($props.showSelect ? {
-        a: "0d6fe704-0-" + i0,
+        a: "7f9ae4e7-0-" + i0,
         b: common_vendor.p({
           type: item.checked ? "checkbox-filled" : "circle",
           color: item.checked ? "#007aff" : "#C0C0C0",
@@ -61,12 +61,12 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       } : {}, {
         c: common_vendor.t(item.name),
         d: index === $props.list.items.length - 1 ? 1 : "",
-        e: common_vendor.o(($event) => $options.onClick($props.idx, index)),
+        e: common_vendor.o(($event) => $options.onClick($props.idx, index), index),
         f: index
       });
     }),
     f: $props.showSelect
   } : {});
 }
-var Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/cssa/cssa-miniprogram/uni_modules/uni-indexed-list/components/uni-indexed-list/uni-indexed-list-item.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/pg/Desktop/cssa-miniprogram/uni_modules/uni-indexed-list/components/uni-indexed-list/uni-indexed-list-item.vue"]]);
 wx.createComponent(Component);

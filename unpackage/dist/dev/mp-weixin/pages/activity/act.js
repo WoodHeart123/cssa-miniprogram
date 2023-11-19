@@ -1,9 +1,9 @@
 "use strict";
-var common_vendor = require("../../common/vendor.js");
+const common_vendor = require("../../common/vendor.js");
 const _sfc_main = {
   onShareAppMessage(res) {
     return {
-      title: "\u9EA6\u5C6F\u5C0F\u52A9\u624B",
+      title: "麦屯小助手",
       path: "/pages/activity/act"
     };
   },
@@ -15,14 +15,14 @@ const _sfc_main = {
       userInfo: {},
       actDetailList: [],
       registerList: [],
-      items: ["\u5F85\u62A5\u540D", "\u5DF2\u62A5\u540D/\u5DF2\u53C2\u52A0"],
+      items: ["待报名", "已报名/已参加"],
       current: 0,
       count: 0,
       mode: ""
     };
   },
   onLoad() {
-    wx.cloud.init();
+    common_vendor.wx$1.cloud.init();
     common_vendor.index.getStorage({
       key: "userInfo-2",
       success: (res) => {
@@ -55,12 +55,14 @@ const _sfc_main = {
       }
     },
     async getActivityList() {
-      const res = await wx.cloud.callContainer({
+      const res = await common_vendor.wx$1.cloud.callContainer({
         config: {
           env: "prod-9gip97mx4bfa32a3"
+          // 微信云托管的环境ID
         },
         path: "/activity/activityList?current=" + Date.now(),
         method: "GET",
+        // 按照自己的业务开发，选择对应的方法
         header: {
           "X-WX-SERVICE": "springboot-ds71"
         }
@@ -69,7 +71,7 @@ const _sfc_main = {
       common_vendor.index.stopPullDownRefresh();
     },
     async getRegisterList() {
-      const res = await wx.cloud.callContainer({
+      const res = await common_vendor.wx$1.cloud.callContainer({
         config: {
           env: "prod-9gip97mx4bfa32a3"
         },
@@ -107,39 +109,39 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   }, $data.current == 0 ? {
     d: common_vendor.f($data.actDetailList, (actDetail, index, i0) => {
       return {
-        a: "69768510-1-" + i0,
-        b: common_vendor.p({
+        a: common_vendor.o(_ctx.toDetail, index),
+        b: "9306ac4a-1-" + i0,
+        c: common_vendor.p({
           actDetail,
           ifJoined: false
         }),
-        c: index
+        d: index
       };
-    }),
-    e: common_vendor.o(_ctx.toDetail)
+    })
   } : {}, {
-    f: $data.current == 1
+    e: $data.current == 1
   }, $data.current == 1 ? {
-    g: common_vendor.f($data.registerList, (actDetail, index, i0) => {
+    f: common_vendor.f($data.registerList, (actDetail, index, i0) => {
       return {
-        a: "69768510-2-" + i0,
-        b: common_vendor.p({
+        a: common_vendor.o(_ctx.toDetail, index),
+        b: "9306ac4a-2-" + i0,
+        c: common_vendor.p({
           actDetail,
           ifJoined: true
         }),
-        c: index
+        d: index
       };
-    }),
-    h: common_vendor.o(_ctx.toDetail)
+    })
   } : {}, {
-    i: $data.current == 1
+    g: $data.current == 1
   }, $data.current == 1 ? {
-    j: common_vendor.f($data.registerList, (actDetail, index, i0) => {
+    h: common_vendor.f($data.registerList, (actDetail, index, i0) => {
       return {
         a: index
       };
     })
   } : {});
 }
-var MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/cssa/cssa-miniprogram/pages/activity/act.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/pg/Desktop/cssa-miniprogram/pages/activity/act.vue"]]);
 _sfc_main.__runtimeHooks = 2;
 wx.createPage(MiniProgramPage);

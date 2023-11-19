@@ -1,5 +1,5 @@
 "use strict";
-var common_vendor = require("../../common/vendor.js");
+const common_vendor = require("../../common/vendor.js");
 const _sfc_main = {
   components: {
     actBoxVue,
@@ -19,7 +19,7 @@ const _sfc_main = {
     };
   },
   onLoad() {
-    wx.cloud.init();
+    common_vendor.wx$1.cloud.init();
     common_vendor.index.getStorage({
       key: "userInfo-2",
       fail: () => {
@@ -33,13 +33,13 @@ const _sfc_main = {
   },
   onShareAppMessage(res) {
     return {
-      title: "\u9EA6\u5C6F\u5C0F\u52A9\u624B",
+      title: "麦屯小助手",
       path: "/pages/main/main"
     };
   },
   onShareTimeline(res) {
     return {
-      title: "\u9EA6\u5C6F\u5C0F\u52A9\u624B",
+      title: "麦屯小助手",
       path: "/pages/activity/act"
     };
   },
@@ -101,7 +101,7 @@ if (!Math) {
 }
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   return {
-    a: common_vendor.sr("ad", "f7e7704e-0"),
+    a: common_vendor.sr("ad", "a6192354-0"),
     b: common_vendor.p({
       ["background-color"]: "#fff",
       type: "message"
@@ -117,6 +117,6 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     h: common_vendor.o((...args) => $options.toRental && $options.toRental(...args))
   };
 }
-var MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/cssa/cssa-miniprogram/pages/main/main.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/pg/Desktop/cssa-miniprogram/pages/main/main.vue"]]);
 _sfc_main.__runtimeHooks = 6;
 wx.createPage(MiniProgramPage);

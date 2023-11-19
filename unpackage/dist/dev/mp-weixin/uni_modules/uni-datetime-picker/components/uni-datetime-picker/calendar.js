@@ -1,7 +1,7 @@
 "use strict";
-var uni_modules_uniDatetimePicker_components_uniDatetimePicker_util = require("./util.js");
-var common_vendor = require("../../../../common/vendor.js");
-var uni_modules_uniDatetimePicker_components_uniDatetimePicker_i18n_index = require("./i18n/index.js");
+const uni_modules_uniDatetimePicker_components_uniDatetimePicker_util = require("./util.js");
+const common_vendor = require("../../../../common/vendor.js");
+const uni_modules_uniDatetimePicker_components_uniDatetimePicker_i18n_index = require("./i18n/index.js");
 const calendarItem = () => "./calendar-item.js";
 const timePicker = () => "./time-picker.js";
 const {
@@ -201,6 +201,9 @@ const _sfc_main = {
       const res = activeDate === this.endDate ? this.selectableTimes.end : "";
       return res;
     },
+    /**
+     * for i18n
+     */
     selectDateText() {
       return t("uni-datetime-picker.selectDate");
     },
@@ -237,10 +240,12 @@ const _sfc_main = {
   },
   created() {
     this.cale = new uni_modules_uniDatetimePicker_components_uniDatetimePicker_util.Calendar({
+      // date: new Date(),
       selected: this.selected,
       startDate: this.startDate,
       endDate: this.endDate,
       range: this.range
+      // multipleStatus: this.pleStatus
     });
     this.init(this.date);
   },
@@ -272,6 +277,7 @@ const _sfc_main = {
       const [yearB, monthB] = B.split("-");
       return yearA === yearB && monthA === monthB;
     },
+    // 取消穿透
     clean() {
       this.close();
     },
@@ -296,11 +302,29 @@ const _sfc_main = {
       const value = e.detail.value + "-1";
       this.init(value);
     },
+    /**
+     * 初始化日期显示
+     * @param {Object} date
+     */
     init(date) {
       this.cale.setDate(date);
       this.weeks = this.cale.weeks;
       this.nowDate = this.calendar = this.cale.getInfo(date);
     },
+    // choiceDate(weeks) {
+    // 	if (weeks.disable) return
+    // 	this.calendar = weeks
+    // 	// 设置多选
+    // 	this.cale.setMultiple(this.calendar.fullDate, true)
+    // 	this.weeks = this.cale.weeks
+    // 	this.tempSingleDate = this.calendar.fullDate
+    // 	this.tempRange.before = this.cale.multipleStatus.before
+    // 	this.tempRange.after = this.cale.multipleStatus.after
+    // 	this.change()
+    // },
+    /**
+     * 打开日历弹窗
+     */
     open() {
       if (this.clearDate && !this.insert) {
         this.cale.cleanMultipleStatus();
@@ -313,6 +337,9 @@ const _sfc_main = {
         }, 50);
       });
     },
+    /**
+     * 关闭日历弹窗
+     */
     close() {
       this.aniMaskShow = false;
       this.$nextTick(() => {
@@ -322,15 +349,24 @@ const _sfc_main = {
         }, 300);
       });
     },
+    /**
+     * 确认按钮
+     */
     confirm() {
       this.setEmit("confirm");
       this.close();
     },
+    /**
+     * 变化触发
+     */
     change() {
       if (!this.insert)
         return;
       this.setEmit("change");
     },
+    /**
+     * 选择月份触发
+     */
     monthSwitch() {
       let {
         year,
@@ -341,6 +377,10 @@ const _sfc_main = {
         month: Number(month)
       });
     },
+    /**
+     * 派发事件
+     * @param {Object} name
+     */
     setEmit(name) {
       let {
         year,
@@ -362,6 +402,10 @@ const _sfc_main = {
         extraInfo: extraInfo || {}
       });
     },
+    /**
+     * 选择天触发
+     * @param {Object} weeks
+     */
     choiceDate(weeks) {
       if (weeks.disable)
         return;
@@ -374,11 +418,17 @@ const _sfc_main = {
       this.tempRange.after = this.cale.multipleStatus.after;
       this.change();
     },
+    /**
+     * 回到今天
+     */
     backtoday() {
-      let date = this.cale.getDate(new Date()).fullDate;
+      let date = this.cale.getDate(/* @__PURE__ */ new Date()).fullDate;
       this.init(date);
       this.change();
     },
+    /**
+     * 比较时间大小
+     */
     dateCompare(startDate, endDate) {
       startDate = new Date(startDate.replace("-", "/").replace("-", "/"));
       endDate = new Date(endDate.replace("-", "/").replace("-", "/"));
@@ -388,16 +438,26 @@ const _sfc_main = {
         return false;
       }
     },
+    /**
+     * 上个月
+     */
     pre() {
       const preDate = this.cale.getDate(this.nowDate.fullDate, -1, "month").fullDate;
       this.setDate(preDate);
       this.monthSwitch();
     },
+    /**
+     * 下个月
+     */
     next() {
       const nextDate = this.cale.getDate(this.nowDate.fullDate, 1, "month").fullDate;
       this.setDate(nextDate);
       this.monthSwitch();
     },
+    /**
+     * 设置日期
+     * @param {Object} date
+     */
     setDate(date) {
       this.cale.setDate(date);
       this.weeks = this.cale.weeks;
@@ -428,7 +488,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   }, $props.left ? {
     f: common_vendor.o((...args) => $options.pre && $options.pre(...args))
   } : {}, {
-    g: common_vendor.t(($data.nowDate.year || "") + " \u5E74 " + ($data.nowDate.month || "") + " \u6708"),
+    g: common_vendor.t(($data.nowDate.year || "") + " 年 " + ($data.nowDate.month || "") + " 月"),
     h: $props.date,
     i: common_vendor.o((...args) => $options.bindDateChange && $options.bindDateChange(...args)),
     j: $props.right
@@ -455,27 +515,27 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       return {
         a: common_vendor.f(item, (weeks, weeksIndex, i1) => {
           return {
-            a: "1ab9ca56-0-" + i0 + "-" + i1,
-            b: common_vendor.p({
+            a: common_vendor.o($options.choiceDate, weeksIndex),
+            b: common_vendor.o($options.handleMouse, weeksIndex),
+            c: "e5aeb35c-0-" + i0 + "-" + i1,
+            d: common_vendor.p({
               weeks,
               calendar: $data.calendar,
               selected: $props.selected,
               lunar: $props.lunar,
               checkHover: $props.range
             }),
-            c: weeksIndex
+            e: weeksIndex
           };
         }),
         b: weekIndex
       };
     }),
-    z: common_vendor.o($options.choiceDate),
-    A: common_vendor.o($options.handleMouse),
-    B: !$props.insert && !$props.range && $props.typeHasTime
+    z: !$props.insert && !$props.range && $props.typeHasTime
   }, !$props.insert && !$props.range && $props.typeHasTime ? {
-    C: common_vendor.t($data.tempSingleDate ? $data.tempSingleDate : $options.selectDateText),
-    D: common_vendor.o(($event) => $data.time = $event),
-    E: common_vendor.p({
+    A: common_vendor.t($data.tempSingleDate ? $data.tempSingleDate : $options.selectDateText),
+    B: common_vendor.o(($event) => $data.time = $event),
+    C: common_vendor.p({
       type: "time",
       start: $options.reactStartTime,
       end: $options.reactEndTime,
@@ -485,11 +545,11 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       modelValue: $data.time
     })
   } : {}, {
-    F: !$props.insert && $props.range && $props.typeHasTime
+    D: !$props.insert && $props.range && $props.typeHasTime
   }, !$props.insert && $props.range && $props.typeHasTime ? {
-    G: common_vendor.t($data.tempRange.before ? $data.tempRange.before : $options.startDateText),
-    H: common_vendor.o(($event) => $data.timeRange.startTime = $event),
-    I: common_vendor.p({
+    E: common_vendor.t($data.tempRange.before ? $data.tempRange.before : $options.startDateText),
+    F: common_vendor.o(($event) => $data.timeRange.startTime = $event),
+    G: common_vendor.p({
       type: "time",
       start: $options.reactStartTime,
       border: false,
@@ -497,13 +557,13 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       disabled: !$data.tempRange.before,
       modelValue: $data.timeRange.startTime
     }),
-    J: common_vendor.p({
+    H: common_vendor.p({
       type: "arrowthinright",
       color: "#999"
     }),
-    K: common_vendor.t($data.tempRange.after ? $data.tempRange.after : $options.endDateText),
-    L: common_vendor.o(($event) => $data.timeRange.endTime = $event),
-    M: common_vendor.p({
+    I: common_vendor.t($data.tempRange.after ? $data.tempRange.after : $options.endDateText),
+    J: common_vendor.o(($event) => $data.timeRange.endTime = $event),
+    K: common_vendor.p({
       type: "time",
       end: $options.reactEndTime,
       border: false,
@@ -512,16 +572,16 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       modelValue: $data.timeRange.endTime
     })
   } : {}, {
-    N: !$props.insert
+    L: !$props.insert
   }, !$props.insert ? {
-    O: common_vendor.o((...args) => $options.confirm && $options.confirm(...args))
+    M: common_vendor.o((...args) => $options.confirm && $options.confirm(...args))
   } : {}, {
-    P: !$props.insert ? 1 : "",
-    Q: $data.aniMaskShow ? 1 : "",
-    R: $data.aniMaskShow ? 1 : ""
+    N: !$props.insert ? 1 : "",
+    O: $data.aniMaskShow ? 1 : "",
+    P: $data.aniMaskShow ? 1 : ""
   }) : {}, {
-    S: common_vendor.o((...args) => $options.leaveCale && $options.leaveCale(...args))
+    Q: common_vendor.o((...args) => $options.leaveCale && $options.leaveCale(...args))
   });
 }
-var Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/cssa/cssa-miniprogram/uni_modules/uni-datetime-picker/components/uni-datetime-picker/calendar.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/pg/Desktop/cssa-miniprogram/uni_modules/uni-datetime-picker/components/uni-datetime-picker/calendar.vue"]]);
 wx.createComponent(Component);

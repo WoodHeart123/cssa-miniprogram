@@ -1,6 +1,6 @@
 "use strict";
-var common_vendor = require("../../../../common/vendor.js");
-var mixin = {
+const common_vendor = require("../../../../common/vendor.js");
+const mixin = {
   data() {
     return {};
   },
@@ -8,6 +8,9 @@ var mixin = {
     this.$u.getRect = this.$uGetRect;
   },
   methods: {
+    // 查询节点信息
+    // 目前此方法在支付宝小程序中无法获取组件跟接点的尺寸，为支付宝的bug(2020-07-21)
+    // 解决办法为在组件根部再套一个没有任何作用的view元素
     $uGetRect(selector, all) {
       return new Promise((resolve) => {
         common_vendor.index.createSelectorQuery().in(this)[all ? "selectAll" : "select"](selector).boundingClientRect((rect) => {
@@ -31,6 +34,7 @@ var mixin = {
         this.parentData.value = this.parent.modelValue;
       }
     },
+    // 阻止事件冒泡
     preventEvent(e) {
       e && e.stopPropagation && e.stopPropagation();
     }

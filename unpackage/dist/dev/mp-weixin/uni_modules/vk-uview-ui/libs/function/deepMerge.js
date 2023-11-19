@@ -1,5 +1,5 @@
 "use strict";
-var uni_modules_vkUviewUi_libs_function_deepClone = require("./deepClone.js");
+const uni_modules_vkUviewUi_libs_function_deepClone = require("./deepClone.js");
 function deepMerge(target = {}, source = {}) {
   target = uni_modules_vkUviewUi_libs_function_deepClone.deepClone(target);
   if (typeof target !== "object" || typeof source !== "object")

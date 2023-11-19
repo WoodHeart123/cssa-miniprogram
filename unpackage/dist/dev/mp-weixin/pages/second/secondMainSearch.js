@@ -1,5 +1,5 @@
 "use strict";
-var common_vendor = require("../../common/vendor.js");
+const common_vendor = require("../../common/vendor.js");
 const _sfc_main = {
   components: {
     productBoxVue
@@ -24,7 +24,7 @@ const _sfc_main = {
     this.hide = true;
   },
   onLoad() {
-    wx.cloud.init();
+    common_vendor.wx$1.cloud.init();
     this.historyList = common_vendor.index.getStorageSync("historyList");
     if (!this.historyList) {
       common_vendor.index.setStorageSync("historyList", []);
@@ -55,7 +55,7 @@ const _sfc_main = {
     suggest: async function(value) {
       this.status = "loading";
       this.showLoading = true;
-      const res = await wx.cloud.callContainer({
+      const res = await common_vendor.wx$1.cloud.callContainer({
         config: {
           env: "prod-9gip97mx4bfa32a3"
         },
@@ -69,7 +69,7 @@ const _sfc_main = {
         this.suggestList = res.data.data;
       } else {
         common_vendor.index.showModal({
-          content: "\u641C\u7D22\u670D\u52A1\u6682\u65F6\u4E0D\u53EF\u7528"
+          content: "搜索服务暂时不可用"
         });
       }
       this.showLoading = false;
@@ -80,7 +80,7 @@ const _sfc_main = {
     },
     getSearchList: async function() {
       this.status = "loading";
-      const res = await wx.cloud.callContainer({
+      const res = await common_vendor.wx$1.cloud.callContainer({
         config: {
           env: "prod-9gip97mx4bfa32a3"
         },
@@ -101,11 +101,11 @@ const _sfc_main = {
       } else if (res.data.status && res.data.status == 124) {
         this.status = "noMore";
         common_vendor.index.showToast({
-          title: "\u6682\u65F6\u65E0\u6CD5\u641C\u7D22\u5230\u76F8\u5173\u4E8C\u624B"
+          title: "暂时无法搜索到相关二手"
         });
       } else {
         common_vendor.index.showModal({
-          content: "\u641C\u7D22\u670D\u52A1\u6682\u65F6\u4E0D\u53EF\u7528",
+          content: "搜索服务暂时不可用",
           success: function(res2) {
             if (res2.confirm) {
               common_vendor.index.navigateBack();
@@ -145,7 +145,7 @@ const _sfc_main = {
     },
     clearHistoryList: function(index) {
       common_vendor.index.showModal({
-        content: "\u662F\u5426\u786E\u8BA4\u5220\u9664\u5386\u53F2\u4FE1\u606F\uFF0C\u6570\u636E\u4E0D\u53EF\u6062\u590D",
+        content: "是否确认删除历史信息，数据不可恢复",
         success: function(res) {
           console.log(res);
           if (res.confirm) {
@@ -177,7 +177,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     d: common_vendor.o($options.onCancel),
     e: common_vendor.o(($event) => $data.searchValue = $event),
     f: common_vendor.p({
-      placeholder: "\u641C\u7D22\u5546\u54C1",
+      placeholder: "搜索商品",
       focus: "true",
       modelValue: $data.searchValue
     }),
@@ -203,7 +203,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   } : {}, {
     m: common_vendor.f($data.resultList, (product, index, i0) => {
       return {
-        a: "603d901a-1-" + i0,
+        a: "4a65d052-1-" + i0,
         b: common_vendor.p({
           product
         })
@@ -224,5 +224,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   });
 }
-var MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/cssa/cssa-miniprogram/pages/second/secondMainSearch.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/pg/Desktop/cssa-miniprogram/pages/second/secondMainSearch.vue"]]);
 wx.createPage(MiniProgramPage);

@@ -1,14 +1,14 @@
 "use strict";
-var common_vendor = require("../../common/vendor.js");
+const common_vendor = require("../../common/vendor.js");
 const _sfc_main = {
   props: ["product"],
   data() {
     return {
-      condition: ["\u5168\u65B0", "\u51E0\u4E4E\u5168\u65B0", "\u660E\u663E\u4F7F\u7528\u75D5\u8FF9", "\u90E8\u5206\u635F\u6BC1"],
+      condition: ["全新", "几乎全新", "明显使用痕迹", "部分损毁"],
       delivery: {
-        "pickup": "\u81EA\u53D6",
-        "deliver": "\u9001\u8D27",
-        "all": "\u9001/\u53D6"
+        "pickup": "自取",
+        "deliver": "送货",
+        "all": "送/取"
       }
     };
   },
@@ -17,7 +17,7 @@ const _sfc_main = {
       console.log(this.product.productID);
       this.$emit("delete", this.product.productID);
       common_vendor.index.showToast({
-        title: "\u5DF2\u5220\u9664"
+        title: "已删除"
       });
     }
   }
@@ -46,5 +46,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     j: common_vendor.o($options.bindClick)
   };
 }
-var Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/cssa/cssa-miniprogram/components/shoucang-box/shoucang-box.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/pg/Desktop/cssa-miniprogram/components/shoucang-box/shoucang-box.vue"]]);
 wx.createComponent(Component);

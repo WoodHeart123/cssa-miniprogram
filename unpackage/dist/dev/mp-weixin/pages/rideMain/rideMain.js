@@ -1,5 +1,5 @@
 "use strict";
-var common_vendor = require("../../common/vendor.js");
+const common_vendor = require("../../common/vendor.js");
 const _sfc_main = {
   components: {
     rideBoxVue
@@ -8,7 +8,7 @@ const _sfc_main = {
     return {};
   },
   onLoad() {
-    wx.cloud.init();
+    common_vendor.wx$1.cloud.init();
   },
   methods: {
     clickMenu: function(e) {
@@ -43,7 +43,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     b: _ctx.menuIndex == 0 ? 1 : "",
     c: common_vendor.f(_ctx.rideList, (rideInfo, index, i0) => {
       return {
-        a: "c727944e-0-" + i0,
+        a: "7c378f56-0-" + i0,
         b: common_vendor.p({
           rideInfo
         }),
@@ -65,5 +65,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   };
 }
-var MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/cssa/cssa-miniprogram/pages/rideMain/rideMain.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/pg/Desktop/cssa-miniprogram/pages/rideMain/rideMain.vue"]]);
 wx.createPage(MiniProgramPage);

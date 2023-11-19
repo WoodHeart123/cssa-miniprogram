@@ -1,5 +1,5 @@
 "use strict";
-var common_vendor = require("../../../../common/vendor.js");
+const common_vendor = require("../../../../common/vendor.js");
 let platform = "other";
 const _sfc_main = {
   name: "UniFab",
@@ -59,18 +59,23 @@ const _sfc_main = {
     contentWidthMin() {
       return "55px";
     },
+    // 动态计算宽度
     boxWidth() {
       return this.getPosition(3, "horizontal");
     },
+    // 动态计算高度
     boxHeight() {
       return this.getPosition(3, "vertical");
     },
+    // 计算左下位置
     leftBottom() {
       return this.getPosition(0, "left", "bottom");
     },
+    // 计算右下位置
     rightBottom() {
       return this.getPosition(0, "right", "bottom");
     },
+    // 计算左上位置
     leftTop() {
       return this.getPosition(0, "left", "top");
     },
@@ -119,12 +124,18 @@ const _sfc_main = {
     close() {
       this.isShow = false;
     },
+    /**
+     * 按钮点击事件
+     */
     _onItemClick(index, item) {
       this.$emit("trigger", {
         index,
         item
       });
     },
+    /**
+     * 获取 位置信息
+     */
     getPosition(types, paramA, paramB) {
       if (types === 0) {
         return this.horizontal === paramA && this.vertical === paramB;
@@ -193,5 +204,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     B: common_vendor.o((...args) => $options._onClick && $options._onClick(...args))
   });
 }
-var Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/cssa/cssa-miniprogram/uni_modules/uni-fab/components/uni-fab/uni-fab.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/pg/Desktop/cssa-miniprogram/uni_modules/uni-fab/components/uni-fab/uni-fab.vue"]]);
 wx.createComponent(Component);

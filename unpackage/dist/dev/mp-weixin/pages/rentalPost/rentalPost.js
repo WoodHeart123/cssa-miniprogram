@@ -1,7 +1,7 @@
 "use strict";
-var common_vendor = require("../../common/vendor.js");
-var api_upload = require("../../api/upload.js");
-var api_request = require("../../api/request.js");
+const common_vendor = require("../../common/vendor.js");
+const api_upload = require("../../api/upload.js");
+const api_request = require("../../api/request.js");
 const floorPlan = [
   {
     text: "Studio",
@@ -84,13 +84,13 @@ const _sfc_main = {
       },
       images: [],
       sexConstraint: [{
-        text: "\u9650\u7537",
+        text: "限男",
         value: 0
       }, {
-        text: "\u9650\u5973",
+        text: "限女",
         value: 1
       }, {
-        text: "\u6027\u522B\u4E0D\u9650",
+        text: "性别不限",
         value: 2
       }],
       floorPlan,
@@ -99,12 +99,12 @@ const _sfc_main = {
           rules: [
             {
               required: true,
-              errorMessage: "\u8BF7\u4E0A\u4F20\u56FE\u7247"
+              errorMessage: "请上传图片"
             },
             {
               minLength: 1,
               maxLength: 5,
-              errorMessage: "\u6700\u591A\u53EA\u80FD\u4E0A\u4F20\u4E94\u5F20\u56FE\u7247"
+              errorMessage: "最多只能上传五张图片"
             }
           ]
         },
@@ -112,12 +112,12 @@ const _sfc_main = {
           rules: [
             {
               required: true,
-              errorMessage: "\u8BF7\u586B\u5199\u623F\u5C4B\u4FE1\u606F"
+              errorMessage: "请填写房屋信息"
             },
             {
               minLength: 1,
               maxLength: 22,
-              errorMessage: "\u623F\u5C4B\u4FE1\u606F\u957F\u5EA6\u5728 1 \u5230 22 \u4E2A\u5B57\u7B26\u4E4B\u95F4"
+              errorMessage: "房屋信息长度在 1 到 22 个字符之间"
             }
           ]
         },
@@ -125,49 +125,49 @@ const _sfc_main = {
           rules: [
             {
               required: true,
-              errorMessage: "\u8BF7\u586B\u5199\u623F\u5C4B\u8BE6\u60C5"
+              errorMessage: "请填写房屋详情"
             },
             {
               minLength: 1,
               maxLength: 400,
-              errorMessage: "\u623F\u5C4B\u8BE6\u60C5\u957F\u5EA6\u5728 1 \u5230 400 \u4E2A\u5B57\u7B26\u4E4B\u95F4"
+              errorMessage: "房屋详情长度在 1 到 400 个字符之间"
             }
           ]
         },
         furnitureType: {
           rules: [{
             required: true,
-            errorMessage: "\u8BF7\u9009\u62E9\u5BB6\u5177"
+            errorMessage: "请选择家具"
           }]
         },
         floorPlan: {
           rules: [{
             required: true,
-            errorMessage: "\u8BF7\u9009\u62E9\u6237\u578B"
+            errorMessage: "请选择户型"
           }]
         },
         leasePeriod: {
           rules: [{
             required: true,
-            errorMessage: "\u8BF7\u9009\u62E9\u79DF\u671F"
+            errorMessage: "请选择租期"
           }]
         },
         price: {
           rules: [{
             required: true,
-            errorMessage: "\u8BF7\u8F93\u5165\u8F6C\u79DF\u4EF7\u683C"
+            errorMessage: "请输入转租价格"
           }, {
             format: "number",
-            errorMessage: "\u7C7B\u578B\u9519\u8BEF"
+            errorMessage: "类型错误"
           }, {
             maximum: 5e3,
-            errorMessage: "\u8F6C\u79DF\u4EF7\u683C\u5E94\u57285000\u81F30\u4E4B\u5185"
+            errorMessage: "转租价格应在5000至0之内"
           }]
         },
         contact: {
           rules: [{
             required: true,
-            errorMessage: "\u8BF7\u8F93\u5165\u8054\u7CFB\u65B9\u5F0F"
+            errorMessage: "请输入联系方式"
           }]
         }
       },
@@ -175,7 +175,7 @@ const _sfc_main = {
     };
   },
   onLoad(options) {
-    wx.cloud.init();
+    common_vendor.wx$1.cloud.init();
     console.log(options);
     if (options.rental != null) {
       this.edit = true;
@@ -193,15 +193,15 @@ const _sfc_main = {
   },
   watch: {
     range(newval) {
-      console.log("\u8303\u56F4\u9009:", this.range);
+      console.log("范围选:", this.range);
     }
   },
   methods: {
     maskClick(e) {
-      console.log("maskClick\u4E8B\u4EF6:", e);
+      console.log("maskClick事件:", e);
     },
     getDate(type) {
-      const date = new Date();
+      const date = /* @__PURE__ */ new Date();
       let year = date.getFullYear();
       let month = date.getMonth() + 1;
       let day = date.getDate();
@@ -259,7 +259,7 @@ const _sfc_main = {
         this.rental.rentalEndTime = common_vendor.moment(this.rental.time[1], "YYYY-MM-DD").valueOf();
         this.images = [];
         common_vendor.index.showLoading({
-          title: "\u8BF7\u8010\u5FC3\u7B49\u5F85\u4FE1\u606F\u4E0A\u4F20"
+          title: "请耐心等待信息上传"
         });
         if (this.edit) {
           this.updateRental();
@@ -277,7 +277,7 @@ const _sfc_main = {
     },
     uploadImage: async function() {
       common_vendor.index.showLoading({
-        title: "\u6B63\u5728\u4E0A\u4F20\u5185\u5BB9",
+        title: "正在上传内容",
         mask: true
       });
       const uploadPromises = this.rental.imageList.map((image) => {
@@ -298,7 +298,7 @@ const _sfc_main = {
     },
     postRental: async function() {
       try {
-        const res = await wx.cloud.callContainer({
+        const res = await common_vendor.wx$1.cloud.callContainer({
           config: {
             env: "prod-9gip97mx4bfa32a3"
           },
@@ -319,14 +319,14 @@ const _sfc_main = {
           common_vendor.index.navigateBack();
         } else {
           common_vendor.index.showToast({
-            title: "\u4E0A\u4F20\u4FE1\u606F\u5931\u8D25",
+            title: "上传信息失败",
             icon: "error"
           });
         }
       } catch (error) {
         common_vendor.index.hideLoading();
         common_vendor.index.showToast({
-          title: "\u4E0A\u4F20\u4FE1\u606F\u5931\u8D25",
+          title: "上传信息失败",
           icon: "error"
         });
       }
@@ -343,7 +343,7 @@ const _sfc_main = {
         common_vendor.index.navigateBack();
       } else {
         common_vendor.index.showToast({
-          title: "\u4E0A\u4F20\u4FE1\u606F\u5931\u8D25",
+          title: "上传信息失败",
           icon: "error"
         });
       }
@@ -387,9 +387,9 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   } : {}, {
     f: common_vendor.o(($event) => $data.rental.floorPlan = $event),
     g: common_vendor.p({
-      placeholder: "\u8BF7\u9009\u62E9\u6237\u578B",
+      placeholder: "请选择户型",
       localdata: $data.floorPlan,
-      ["popup-title"]: "\u8BF7\u9009\u62E9\u6237\u578B",
+      ["popup-title"]: "请选择户型",
       ["clear-icon"]: false,
       modelValue: $data.rental.floorPlan
     }),
@@ -413,7 +413,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     o: common_vendor.o(($event) => $data.rental.description = $event),
     p: common_vendor.p({
       type: "textarea",
-      placeholder: "\u8BF7\u63CF\u8FF0\u623F\u5C4B\u8BE6\u60C5,\u5982\u6237\u578B/\u5730\u70B9/\u5177\u4F53\u79DF\u671F,\u8BF7\u5305\u62EC\u6574\u95F4\u8F6C\u79DF\u8FD8\u662F\u5355\u4E2A\u5367\u5BA4\u8F6C\u79DF\u7B49",
+      placeholder: "请描述房屋详情,如户型/地点/具体租期,请包括整间转租还是单个卧室转租等",
       maxlength: "400",
       placeholderStyle: "font-size:14px;color:gray",
       clearable: $data.clearable,
@@ -433,7 +433,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     }),
     v: $data.rental.price,
     w: common_vendor.o(($event) => $data.rental.price = $event.detail.value),
-    x: common_vendor.t("/ \u6708"),
+    x: common_vendor.t("/ 月"),
     y: common_vendor.p({
       name: "price"
     }),
@@ -448,12 +448,12 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       name: "contact"
     }),
     F: common_vendor.o(($event) => $options.submit("rentalForm")),
-    G: common_vendor.sr("rentalForm", "8cb2c90e-0"),
+    G: common_vendor.sr("rentalForm", "ae022314-0"),
     H: common_vendor.p({
       modelValue: $data.rental,
       rules: $data.rules
     })
   });
 }
-var MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/cssa/cssa-miniprogram/pages/rentalPost/rentalPost.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/pg/Desktop/cssa-miniprogram/pages/rentalPost/rentalPost.vue"]]);
 wx.createPage(MiniProgramPage);

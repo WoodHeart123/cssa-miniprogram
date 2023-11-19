@@ -1,5 +1,5 @@
 "use strict";
-var common_vendor = require("../../common/vendor.js");
+const common_vendor = require("../../common/vendor.js");
 const _sfc_main = {
   name: "ride-box",
   props: ["rideInfo"],
@@ -17,7 +17,7 @@ const _sfc_main = {
   },
   computed: {
     rideTrip() {
-      return "\u4ECE " + this.rideInfo.orign + " \u81F3 " + this.rideInfo.destination;
+      return "从 " + this.rideInfo.orign + " 至 " + this.rideInfo.destination;
     },
     rideTime() {
       return common_vendor.moment(this.rentalInfo.dateAndTime).format();
@@ -34,5 +34,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     f: common_vendor.o((...args) => $options.toRideDetail && $options.toRideDetail(...args))
   };
 }
-var Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/cssa/cssa-miniprogram/components/ride-box/ride-box.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/pg/Desktop/cssa-miniprogram/components/ride-box/ride-box.vue"]]);
 wx.createComponent(Component);

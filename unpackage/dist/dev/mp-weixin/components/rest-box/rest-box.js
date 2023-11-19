@@ -1,5 +1,5 @@
 "use strict";
-var common_vendor = require("../../common/vendor.js");
+const common_vendor = require("../../common/vendor.js");
 const _sfc_main = {
   props: ["comment", "user"],
   name: "rest-box",
@@ -26,7 +26,7 @@ const _sfc_main = {
       if (this.comment.liked) {
         return;
       }
-      const res = await wx.cloud.callContainer({
+      const res = await common_vendor.wx$1.cloud.callContainer({
         config: {
           env: "prod-9gip97mx4bfa32a3"
         },
@@ -45,12 +45,21 @@ const _sfc_main = {
       }
       if (res.data.status == 107) {
         common_vendor.index.showToast({
-          title: "\u60A8\u5DF2\u7ECF\u70B9\u8FC7\u8D5E\u5566",
+          title: "您已经点过赞啦",
           duration: 2e3
         });
       }
     }
   }
+  /*
+  computed: {
+  	computeCommentTime() {
+  		moment.locale('zh-cn');
+  		return Date.now() - this.comment.commentTime >= 86400000 * 7 ? moment(this.comment.commentTime).format(
+  			"MM-DD") : moment(this.comment.commentTime).fromNow();
+  	}
+  }
+  */
 };
 if (!Array) {
   const _easycom_uni_rate2 = common_vendor.resolveComponent("uni-rate");
@@ -66,7 +75,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   }, $props.user ? {
     b: common_vendor.t($props.comment.restName)
   } : {}, {
-    c: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/" + 1 + ".jpg",
+    c: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/1.jpg",
     d: common_vendor.p({
       readonly: "true",
       value: $props.comment.good,
@@ -93,5 +102,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     o: common_vendor.o((...args) => $options.addZan && $options.addZan(...args))
   });
 }
-var Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/cssa/cssa-miniprogram/components/rest-box/rest-box.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/pg/Desktop/cssa-miniprogram/components/rest-box/rest-box.vue"]]);
 wx.createComponent(Component);

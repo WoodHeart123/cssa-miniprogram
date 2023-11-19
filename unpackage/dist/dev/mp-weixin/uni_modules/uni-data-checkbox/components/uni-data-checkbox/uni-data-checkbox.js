@@ -1,8 +1,8 @@
 "use strict";
-var common_vendor = require("../../../../common/vendor.js");
+const common_vendor = require("../../../../common/vendor.js");
 const _sfc_main = {
   name: "uniDataChecklist",
-  mixins: [common_vendor.pn.mixinDatacom || {}],
+  mixins: [common_vendor.Ds.mixinDatacom || {}],
   emits: ["input", "update:modelValue", "change"],
   props: {
     mode: {
@@ -19,6 +19,7 @@ const _sfc_main = {
         return "";
       }
     },
+    // TODO vue3
     modelValue: {
       type: [Array, String, Number],
       default() {
@@ -57,7 +58,7 @@ const _sfc_main = {
     },
     emptyText: {
       type: String,
-      default: "\u6682\u65E0\u6570\u636E"
+      default: "暂无数据"
     },
     disabled: {
       type: Boolean,
@@ -105,9 +106,9 @@ const _sfc_main = {
       dataList: [],
       range: [],
       contentText: {
-        contentdown: "\u67E5\u770B\u66F4\u591A",
-        contentrefresh: "\u52A0\u8F7D\u4E2D",
-        contentnomore: "\u6CA1\u6709\u66F4\u591A"
+        contentdown: "查看更多",
+        contentrefresh: "加载中",
+        contentnomore: "没有更多"
       },
       isLocal: true,
       styles: {
@@ -165,6 +166,9 @@ const _sfc_main = {
         this.mixinDatacomErrorMessage = err.message;
       });
     },
+    /**
+     * 获取父元素实例
+     */
     getForm(name = "uniForms") {
       let parent = this.$parent;
       let parentName = parent.$options.name;
@@ -210,6 +214,10 @@ const _sfc_main = {
         this.dataList = this.getDataList(detail.value);
       }
     },
+    /**
+     * 获取渲染的新数组
+     * @param {Object} value 选中内容
+     */
     getDataList(value) {
       let dataList = JSON.parse(JSON.stringify(this.range));
       let list = [];
@@ -234,6 +242,10 @@ const _sfc_main = {
       });
       return this.setRange(list);
     },
+    /**
+     * 处理最大最小值
+     * @param {Object} list
+     */
     setRange(list) {
       let selectList = list.filter((item) => item.selected);
       let min = Number(this.min) || 0;
@@ -258,12 +270,21 @@ const _sfc_main = {
       });
       return list;
     },
+    /**
+     * 设置 class
+     * @param {Object} item
+     * @param {Object} index
+     */
     setStyles(item, index) {
       item.styleBackgroud = this.setStyleBackgroud(item);
       item.styleIcon = this.setStyleIcon(item);
       item.styleIconText = this.setStyleIconText(item);
       item.styleRightIcon = this.setStyleRightIcon(item);
     },
+    /**
+     * 获取选中值
+     * @param {Object} range
+     */
     getSelectedValue(range) {
       if (!this.multiple)
         return this.dataValue;
@@ -275,6 +296,9 @@ const _sfc_main = {
       });
       return this.dataValue && this.dataValue.length > 0 ? this.dataValue : selectedArr;
     },
+    /**
+     * 设置背景样式
+     */
     setStyleBackgroud(item) {
       let styles = {};
       let selectedColor = this.selectedColor ? this.selectedColor : "#2979ff";
@@ -419,5 +443,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     v: $data.isTop + "px"
   });
 }
-var Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/cssa/cssa-miniprogram/uni_modules/uni-data-checkbox/components/uni-data-checkbox/uni-data-checkbox.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/pg/Desktop/cssa-miniprogram/uni_modules/uni-data-checkbox/components/uni-data-checkbox/uni-data-checkbox.vue"]]);
 wx.createComponent(Component);

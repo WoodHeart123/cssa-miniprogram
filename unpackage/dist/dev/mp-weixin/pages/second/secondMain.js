@@ -1,31 +1,31 @@
 "use strict";
-var common_vendor = require("../../common/vendor.js");
-const productTypeList = [{ name: "\u5168\u90E8", type: "ALL" }, {
-  name: "\u7535\u5B50\u4EA7\u54C1",
+const common_vendor = require("../../common/vendor.js");
+const productTypeList = [{ name: "全部", type: "ALL" }, {
+  name: "电子产品",
   type: "ELECTRONIC"
 }, {
-  name: "\u4EA4\u901A\u5DE5\u5177",
+  name: "交通工具",
   type: "TRANSPORT"
 }, {
-  name: "\u5BB6\u5177\u5BB6\u7535",
+  name: "家具家电",
   type: "FURNITURE"
 }, {
-  name: "\u865A\u62DF\u5361\u5238",
+  name: "虚拟卡券",
   type: "DIGITAL"
 }, {
-  name: "\u65E5\u5E38\u7528\u54C1",
+  name: "日常用品",
   type: "DAILY"
 }, {
-  name: "\u7F8E\u5986\u670D\u9970",
+  name: "美妆服饰",
   type: "MAKEUP"
 }, {
-  name: "\u4E66\u7C4D\u6559\u5177",
+  name: "书籍教具",
   type: "EDU"
 }, {
-  name: "\u5BA0\u7269\u7528\u54C1",
+  name: "宠物用品",
   type: "PET"
 }, {
-  name: "\u5176\u4ED6",
+  name: "其他",
   type: "OTHERS"
 }];
 const _sfc_main = {
@@ -45,15 +45,15 @@ const _sfc_main = {
       status: "loading",
       productList: [],
       contentText: {
-        contentdown: "\u4E0A\u62C9\u663E\u793A\u66F4\u591A",
-        contentrefresh: "\u6B63\u5728\u52A0\u8F7D...",
-        contentnomore: "\u6CA1\u6709\u66F4\u591A\u5546\u54C1\u4E86"
+        contentdown: "上拉显示更多",
+        contentrefresh: "正在加载...",
+        contentnomore: "没有更多商品了"
       },
       isLogin: false
     };
   },
   onLoad() {
-    wx.cloud.init();
+    common_vendor.wx$1.cloud.init();
     this.refresh();
   },
   onShow() {
@@ -69,7 +69,7 @@ const _sfc_main = {
     uploadSuccess: function() {
       this.refresh();
       common_vendor.index.showToast({
-        title: "\u4E0A\u4F20\u6210\u529F"
+        title: "上传成功"
       });
     },
     onClickMenu: function(index) {
@@ -92,7 +92,7 @@ const _sfc_main = {
       common_vendor.index.showLoading({
         mask: true
       });
-      const res = await wx.cloud.callContainer({
+      const res = await common_vendor.wx$1.cloud.callContainer({
         config: {
           env: "prod-9gip97mx4bfa32a3"
         },
@@ -114,7 +114,7 @@ const _sfc_main = {
       if (this.status == "noMore") {
         return;
       }
-      const res = await wx.cloud.callContainer({
+      const res = await common_vendor.wx$1.cloud.callContainer({
         config: {
           env: "prod-9gip97mx4bfa32a3"
         },
@@ -140,17 +140,17 @@ const _sfc_main = {
     toPostProduct: function() {
       if (!this.isLogin) {
         common_vendor.index.showToast({
-          title: "\u8BF7\u5148\u767B\u5F55",
+          title: "请先登录",
           icon: "none"
         });
         common_vendor.index.getUserProfile({
-          desc: "\u83B7\u53D6\u7528\u6237\u4FE1\u606F",
+          desc: "获取用户信息",
           success: (userProfile) => {
             this.login(userProfile.userInfo.nickName);
           },
           fail: () => {
             common_vendor.index.showToast({
-              title: "\u8BF7\u5148\u767B\u9646",
+              title: "请先登陆",
               icon: "none"
             });
           }
@@ -200,7 +200,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     }),
     d: common_vendor.f($data.productList, (product, index, i0) => {
       return {
-        a: "52f135d2-1-" + i0,
+        a: "32bc8f4f-1-" + i0,
         b: common_vendor.p({
           product
         }),
@@ -223,5 +223,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   };
 }
-var MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/cssa/cssa-miniprogram/pages/second/secondMain.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/pg/Desktop/cssa-miniprogram/pages/second/secondMain.vue"]]);
 wx.createPage(MiniProgramPage);

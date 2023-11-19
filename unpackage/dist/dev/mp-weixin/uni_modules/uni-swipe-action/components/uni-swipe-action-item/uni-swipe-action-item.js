@@ -1,41 +1,47 @@
 "use strict";
-var uni_modules_uniSwipeAction_components_uniSwipeActionItem_mpwxs = require("./mpwxs.js");
-var uni_modules_uniSwipeAction_components_uniSwipeActionItem_bindingx = require("./bindingx.js");
-var uni_modules_uniSwipeAction_components_uniSwipeActionItem_mpother = require("./mpother.js");
-var common_vendor = require("../../../../common/vendor.js");
-var block0 = (Component2) => {
+const uni_modules_uniSwipeAction_components_uniSwipeActionItem_mpwxs = require("./mpwxs.js");
+const uni_modules_uniSwipeAction_components_uniSwipeActionItem_bindingx = require("./bindingx.js");
+const uni_modules_uniSwipeAction_components_uniSwipeActionItem_mpother = require("./mpother.js");
+const common_vendor = require("../../../../common/vendor.js");
+const block0 = (Component2) => {
   if (!Component2.wxsCallMethods) {
     Component2.wxsCallMethods = [];
   }
   Component2.wxsCallMethods.push("closeSwipe", "change");
 };
-var block1 = {};
+const block1 = {};
 const _sfc_main = {
   mixins: [uni_modules_uniSwipeAction_components_uniSwipeActionItem_mpwxs.mpwxs, uni_modules_uniSwipeAction_components_uniSwipeActionItem_bindingx.bindIngXMixins, uni_modules_uniSwipeAction_components_uniSwipeActionItem_mpother.otherMixins],
   emits: ["click", "change"],
   props: {
+    // 控制开关
     show: {
       type: String,
       default: "none"
     },
+    // 禁用
     disabled: {
       type: Boolean,
       default: false
     },
+    // 是否自动关闭
     autoClose: {
       type: Boolean,
       default: true
     },
+    // 滑动缺省距离
     threshold: {
       type: Number,
       default: 20
     },
+    // 左侧按钮内容
     leftOptions: {
       type: Array,
       default() {
         return [];
       }
     },
+    // 右侧按钮内容
     rightOptions: {
       type: Array,
       default() {
@@ -43,6 +49,7 @@ const _sfc_main = {
       }
     }
   },
+  // TODO vue3
   unmounted() {
     this.__isUnmounted = true;
     this.uninstall();
@@ -57,6 +64,9 @@ const _sfc_main = {
         });
       }
     },
+    /**
+     * 获取父元素实例
+     */
     getSwipeAction(name = "uniSwipeAction") {
       let parent = this.$parent;
       let parentName = parent.$options.name;
@@ -105,5 +115,5 @@ if (typeof block0 === "function")
   block0(_sfc_main);
 if (typeof block1 === "function")
   block1(_sfc_main);
-var Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/cssa/cssa-miniprogram/uni_modules/uni-swipe-action/components/uni-swipe-action-item/uni-swipe-action-item.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/pg/Desktop/cssa-miniprogram/uni_modules/uni-swipe-action/components/uni-swipe-action-item/uni-swipe-action-item.vue"]]);
 wx.createComponent(Component);

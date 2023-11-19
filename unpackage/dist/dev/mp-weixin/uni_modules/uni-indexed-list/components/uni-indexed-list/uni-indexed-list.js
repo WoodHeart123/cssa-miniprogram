@@ -1,5 +1,5 @@
 "use strict";
-var common_vendor = require("../../../../common/vendor.js");
+const common_vendor = require("../../../../common/vendor.js");
 const indexedListItem = () => "./uni-indexed-list-item.js";
 const _sfc_main = {
   name: "UniIndexedList",
@@ -105,6 +105,9 @@ const _sfc_main = {
     touchEnd() {
       this.touchmove = false;
     },
+    /**
+     * 兼容 PC @tian
+     */
     mousedown(e) {
       if (!this.isPC)
         return;
@@ -159,20 +162,20 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   return common_vendor.e({
     a: common_vendor.f($data.lists, (list, idx, i0) => {
       return {
-        a: "15c39f6c-0-" + i0,
-        b: common_vendor.p({
+        a: common_vendor.o($options.onClick, idx),
+        b: "25143fa9-0-" + i0,
+        c: common_vendor.p({
           list,
           loaded: $data.loaded,
           idx,
           showSelect: $props.showSelect
         }),
-        c: idx,
-        d: "uni-indexed-list-" + idx
+        d: idx,
+        e: "uni-indexed-list-" + idx
       };
     }),
-    b: common_vendor.o($options.onClick),
-    c: $data.scrollViewId,
-    d: common_vendor.f($data.lists, (list, key, i0) => {
+    b: $data.scrollViewId,
+    c: common_vendor.f($data.lists, (list, key, i0) => {
       return {
         a: common_vendor.t(list.key),
         b: common_vendor.n($data.touchmoveIndex == key ? "uni-indexed-list__menu-text--active" : ""),
@@ -180,16 +183,16 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         d: common_vendor.n($data.touchmoveIndex == key ? "uni-indexed-list__menu--active" : "")
       };
     }),
-    e: common_vendor.o((...args) => $options.touchStart && $options.touchStart(...args)),
-    f: common_vendor.o((...args) => $options.touchMove && $options.touchMove(...args)),
-    g: common_vendor.o((...args) => $options.touchEnd && $options.touchEnd(...args)),
-    h: common_vendor.o((...args) => $options.mousedown && $options.mousedown(...args)),
-    i: common_vendor.o((...args) => $options.mousemove && $options.mousemove(...args)),
-    j: common_vendor.o((...args) => $options.mouseleave && $options.mouseleave(...args)),
-    k: $data.touchmove
+    d: common_vendor.o((...args) => $options.touchStart && $options.touchStart(...args)),
+    e: common_vendor.o((...args) => $options.touchMove && $options.touchMove(...args)),
+    f: common_vendor.o((...args) => $options.touchEnd && $options.touchEnd(...args)),
+    g: common_vendor.o((...args) => $options.mousedown && $options.mousedown(...args)),
+    h: common_vendor.o((...args) => $options.mousemove && $options.mousemove(...args)),
+    i: common_vendor.o((...args) => $options.mouseleave && $options.mouseleave(...args)),
+    j: $data.touchmove
   }, $data.touchmove ? {
-    l: common_vendor.t($data.lists[$data.touchmoveIndex].key)
+    k: common_vendor.t($data.lists[$data.touchmoveIndex].key)
   } : {});
 }
-var Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/cssa/cssa-miniprogram/uni_modules/uni-indexed-list/components/uni-indexed-list/uni-indexed-list.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/pg/Desktop/cssa-miniprogram/uni_modules/uni-indexed-list/components/uni-indexed-list/uni-indexed-list.vue"]]);
 wx.createComponent(Component);

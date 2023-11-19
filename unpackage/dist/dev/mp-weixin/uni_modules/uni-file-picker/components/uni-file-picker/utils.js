@@ -1,5 +1,5 @@
 "use strict";
-var common_vendor = require("../../../../common/vendor.js");
+const common_vendor = require("../../../../common/vendor.js");
 const get_file_ext = (name) => {
   const last_len = name.lastIndexOf(".");
   const len = name.length;
@@ -35,7 +35,7 @@ const get_files_and_is_max = (res, _extname) => {
   });
   if (files.length !== res.tempFiles.length) {
     common_vendor.index.showToast({
-      title: `\u5F53\u524D\u9009\u62E9\u4E86${res.tempFiles.length}\u4E2A\u6587\u4EF6 \uFF0C${res.tempFiles.length - files.length} \u4E2A\u6587\u4EF6\u683C\u5F0F\u4E0D\u6B63\u786E`,
+      title: `当前选择了${res.tempFiles.length}个文件 ，${res.tempFiles.length - files.length} 个文件格式不正确`,
       icon: "none",
       duration: 5e3
     });
@@ -69,6 +69,7 @@ const get_file_data = async (files, type = "image") => {
     fileType: files.fileType,
     url: files.path || files.path,
     size: files.size,
+    //单位是字节
     image: {},
     path: files.path,
     video: {}

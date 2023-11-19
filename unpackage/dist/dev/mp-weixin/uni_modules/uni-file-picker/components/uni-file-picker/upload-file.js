@@ -1,5 +1,5 @@
 "use strict";
-var common_vendor = require("../../../../common/vendor.js");
+const common_vendor = require("../../../../common/vendor.js");
 const _sfc_main = {
   name: "uploadFile",
   emits: ["uploadFiles", "choose", "delFile"],
@@ -26,8 +26,11 @@ const _sfc_main = {
       type: Object,
       default() {
         return {
+          // 是否显示边框
           border: true,
+          // 是否显示分隔线
           dividline: true,
+          // 线条样式
           borderStyle: {}
         };
       }
@@ -145,7 +148,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       return common_vendor.e({
         a: common_vendor.t(item.name)
       }, $props.delIcon && !$props.readonly ? {
-        b: common_vendor.o(($event) => $options.delFile(index))
+        b: common_vendor.o(($event) => $options.delFile(index), index)
       } : {}, {
         c: item.progress && item.progress !== 100 || item.progress === 0
       }, item.progress && item.progress !== 100 || item.progress === 0 ? {
@@ -154,7 +157,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       } : {}, {
         f: item.status === "error"
       }, item.status === "error" ? {
-        g: common_vendor.o(($event) => $options.uploadFiles(item, index))
+        g: common_vendor.o(($event) => $options.uploadFiles(item, index), index)
       } : {}, {
         h: index,
         i: index !== 0 && $options.styles.dividline ? 1 : "",
@@ -165,5 +168,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     f: common_vendor.s($options.borderStyle)
   } : {});
 }
-var Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/cssa/cssa-miniprogram/uni_modules/uni-file-picker/components/uni-file-picker/upload-file.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/pg/Desktop/cssa-miniprogram/uni_modules/uni-file-picker/components/uni-file-picker/upload-file.vue"]]);
 wx.createComponent(Component);

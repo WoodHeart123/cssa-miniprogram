@@ -1,5 +1,5 @@
 "use strict";
-var common_vendor = require("../../common/vendor.js");
+const common_vendor = require("../../common/vendor.js");
 const _sfc_main = {
   onShareAppMessage(res) {
     if (res.from === "button") {
@@ -20,7 +20,7 @@ const _sfc_main = {
       height: "",
       sample: "hao",
       buttonGroup: [{
-        text: "\u7ACB\u5373\u53C2\u52A0",
+        text: "立即参加",
         backgroundColor: "#1684FC",
         color: "#fff"
       }],
@@ -57,12 +57,12 @@ const _sfc_main = {
     },
     update_button() {
       if (this.userInfo.ifJoined) {
-        this.buttonGroup[0].text = "\u5DF2\u53C2\u52A0/\u67E5\u770B\u4ED8\u6B3E\u65B9\u5F0F";
+        this.buttonGroup[0].text = "已参加/查看付款方式";
         this.buttonGroup[0].backgroundColor = "#A8A8A8";
         this.buttonGroup[0].color = "#101010";
         this.enable = false;
       } else if (this.remain == 0) {
-        this.buttonGroup[0].text = "\u4EBA\u6570\u5DF2\u6EE1";
+        this.buttonGroup[0].text = "人数已满";
         this.buttonGroup[0].backgroundColor = "#A8A8A8";
         this.buttonGroup[0].color = "#101010";
         this.enable = false;
@@ -82,17 +82,19 @@ const _sfc_main = {
         });
       } else {
         common_vendor.index.showToast({
-          title: "\u4EBA\u6570\u5DF2\u6EE1"
+          title: "人数已满"
         });
       }
     },
     async checkSignUp() {
-      const res = await wx.cloud.callContainer({
+      const res = await common_vendor.wx$1.cloud.callContainer({
         config: {
           env: "prod-9gip97mx4bfa32a3"
+          // 微信云托管的环境ID
         },
         path: "/activity/checksignup?actID=" + this.actDetail.actID + "&date=0",
         method: "GET",
+        // 按照自己的业务开发，选择对应的方法
         header: {
           "X-WX-SERVICE": "springboot-ds71"
         }
@@ -109,9 +111,10 @@ const _sfc_main = {
         response: [],
         payment: 0
       };
-      const res = await wx.cloud.callContainer({
+      const res = await common_vendor.wx$1.cloud.callContainer({
         config: {
           env: "prod-9gip97mx4bfa32a3"
+          // 微信云托管的环境ID
         },
         path: "/activity/register",
         method: "POST",
@@ -141,7 +144,7 @@ const _sfc_main = {
       this.height = "height: " + (this.distance_2 - this.distance_1 - 20) + "px;";
       console.log(this.height);
     });
-    wx.cloud.init();
+    common_vendor.wx$1.cloud.init();
     this.checkSignUp();
   },
   computed: {
@@ -198,6 +201,6 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   });
 }
-var MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/cssa/cssa-miniprogram/pages/detail/detail.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/pg/Desktop/cssa-miniprogram/pages/detail/detail.vue"]]);
 _sfc_main.__runtimeHooks = 2;
 wx.createPage(MiniProgramPage);

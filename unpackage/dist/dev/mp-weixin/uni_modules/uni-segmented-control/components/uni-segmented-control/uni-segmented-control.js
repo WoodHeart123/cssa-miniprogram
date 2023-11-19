@@ -1,5 +1,5 @@
 "use strict";
-var common_vendor = require("../../../../common/vendor.js");
+const common_vendor = require("../../../../common/vendor.js");
 const _sfc_main = {
   name: "UniSegmentedControl",
   emits: ["clickItem"],
@@ -70,5 +70,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     d: $props.styleType === "text" ? "" : $props.activeColor
   };
 }
-var Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/cssa/cssa-miniprogram/uni_modules/uni-segmented-control/components/uni-segmented-control/uni-segmented-control.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/pg/Desktop/cssa-miniprogram/uni_modules/uni-segmented-control/components/uni-segmented-control/uni-segmented-control.vue"]]);
 wx.createComponent(Component);

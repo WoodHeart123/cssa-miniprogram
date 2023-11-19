@@ -1,5 +1,5 @@
 "use strict";
-var common_vendor = require("../../common/vendor.js");
+const common_vendor = require("../../common/vendor.js");
 const __default__ = {
   name: "main-advertisement",
   props: ["height", "width"],
@@ -24,7 +24,7 @@ const __default__ = {
       this.current = e.detail.current;
     },
     toPreview: function() {
-      wx.previewImage({
+      common_vendor.wx$1.previewImage({
         current: this.detailImages[this.current],
         urls: this.detailImages
       });
@@ -33,8 +33,8 @@ const __default__ = {
 };
 const __injectCSSVars__ = () => {
   common_vendor.useCssVars((_ctx) => ({
-    "4ee3c9b8-height": _ctx.height,
-    "4ee3c9b8-width": _ctx.width
+    "5b54e7d9": _ctx.height,
+    "19798e58": _ctx.width
   }));
 };
 const __setup__ = __default__.setup;
@@ -56,19 +56,20 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     a: common_vendor.f($data.images, (image, index, i0) => {
       return {
         a: image,
-        b: index
+        b: common_vendor.o((...args) => $options.toPreview && $options.toPreview(...args), index),
+        c: index
       };
     }),
-    b: common_vendor.o((...args) => $options.toPreview && $options.toPreview(...args)),
-    c: common_vendor.o((...args) => $options.change && $options.change(...args)),
-    d: $data.current,
-    e: common_vendor.p({
+    b: common_vendor.o((...args) => $options.change && $options.change(...args)),
+    c: $data.current,
+    d: common_vendor.p({
       info: $data.images,
       current: $data.current,
       mode: "dot",
       field: "content"
-    })
+    }),
+    e: common_vendor.s(_ctx.__cssVars())
   };
 }
-var Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/cssa/cssa-miniprogram/components/main-advertisement/main-advertisement.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/pg/Desktop/cssa-miniprogram/components/main-advertisement/main-advertisement.vue"]]);
 wx.createComponent(Component);

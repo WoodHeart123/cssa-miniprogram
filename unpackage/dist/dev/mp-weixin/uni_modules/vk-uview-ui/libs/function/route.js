@@ -1,21 +1,28 @@
 "use strict";
-var common_vendor = require("../../../../common/vendor.js");
+const common_vendor = require("../../../../common/vendor.js");
 class Router {
   constructor() {
     this.config = {
       type: "navigateTo",
       url: "",
       delta: 1,
+      // navigateBack页面后退时,回退的层数
       params: {},
+      // 传递的参数
       animationType: "pop-in",
+      // 窗口动画,只在APP有效
       animationDuration: 300,
+      // 窗口动画持续时间,单位毫秒,只在APP有效
       intercept: false
+      // 是否需要拦截
     };
     this.route = this.route.bind(this);
   }
+  // 判断url前面是否有"/"，如果没有则加上，否则无法跳转
   addRootPath(url) {
     return url[0] === "/" ? url : `/${url}`;
   }
+  // 整合路由参数
   mixinParam(url, params) {
     url = url && this.addRootPath(url);
     let query = "";
@@ -27,6 +34,7 @@ class Router {
       return url += query;
     }
   }
+  // 对外的方法名称
   async route(options = {}, params = {}) {
     let mergeConfig = {};
     if (typeof options === "string") {
@@ -50,6 +58,7 @@ class Router {
       this.openPage(mergeConfig);
     }
   }
+  // 执行路由跳转
   openPage(config) {
     const {
       url,
@@ -87,5 +96,5 @@ class Router {
     }
   }
 }
-var route = new Router().route;
+const route = new Router().route;
 exports.route = route;

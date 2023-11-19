@@ -1,5 +1,5 @@
 "use strict";
-var common_vendor = require("../../../../common/vendor.js");
+const common_vendor = require("../../../../common/vendor.js");
 const _sfc_main = {
   name: "uniSwipeAction",
   data() {
@@ -9,8 +9,10 @@ const _sfc_main = {
     this.children = [];
   },
   methods: {
+    // 公开给用户使用，重制组件样式
     resize() {
     },
+    // 公开给用户使用，关闭全部 已经打开的组件
     closeAll() {
       this.children.forEach((vm) => {
         vm.is_show = "none";
@@ -27,5 +29,5 @@ const _sfc_main = {
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   return {};
 }
-var Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/cssa/cssa-miniprogram/uni_modules/uni-swipe-action/components/uni-swipe-action/uni-swipe-action.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/pg/Desktop/cssa-miniprogram/uni_modules/uni-swipe-action/components/uni-swipe-action/uni-swipe-action.vue"]]);
 wx.createComponent(Component);

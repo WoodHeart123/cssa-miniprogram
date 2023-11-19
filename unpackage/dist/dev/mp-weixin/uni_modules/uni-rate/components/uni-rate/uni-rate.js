@@ -1,57 +1,70 @@
 "use strict";
-var common_vendor = require("../../../../common/vendor.js");
+const common_vendor = require("../../../../common/vendor.js");
 const _sfc_main = {
   name: "UniRate",
   props: {
     isFill: {
+      // 星星的类型，是否镂空
       type: [Boolean, String],
       default: true
     },
     color: {
+      // 星星未选中的颜色
       type: String,
       default: "#ececec"
     },
     activeColor: {
+      // 星星选中状态颜色
       type: String,
       default: "#ffca3e"
     },
     disabledColor: {
+      // 星星禁用状态颜色
       type: String,
       default: "#c0c0c0"
     },
     size: {
+      // 星星的大小
       type: [Number, String],
       default: 24
     },
     value: {
+      // 当前评分
       type: [Number, String],
       default: 0
     },
     modelValue: {
+      // 当前评分
       type: [Number, String],
       default: 0
     },
     max: {
+      // 最大评分
       type: [Number, String],
       default: 5
     },
     margin: {
+      // 星星的间距
       type: [Number, String],
       default: 0
     },
     disabled: {
+      // 是否可点击
       type: [Boolean, String],
       default: false
     },
     readonly: {
+      // 是否只读
       type: [Boolean, String],
       default: false
     },
     allowHalf: {
+      // 是否显示半星
       type: [Boolean, String],
       default: false
     },
     touchable: {
+      // 是否支持滑动手势
       type: [Boolean, String],
       default: true
     }
@@ -128,17 +141,23 @@ const _sfc_main = {
       } = e.changedTouches[0];
       this._getRateCount(clientX || screenX);
     },
+    /**
+     * 兼容 PC @tian
+     */
     mousedown(e) {
     },
     mousemove(e) {
     },
     mouseleave(e) {
     },
+    /**
+     * 获取星星个数
+     */
     _getRateCount(clientX) {
       this._getSize();
       const size = Number(this.size);
       if (isNaN(size)) {
-        return new Error("size \u5C5E\u6027\u53EA\u80FD\u8BBE\u7F6E\u4E3A\u6570\u5B57");
+        return new Error("size 属性只能设置为数字");
       }
       const rateMoveRange = clientX - this._rateBoxLeft;
       let index = parseInt(rateMoveRange / (size + this.marginNumber));
@@ -162,6 +181,9 @@ const _sfc_main = {
       this.valueSync = value;
       this._onChange();
     },
+    /**
+     * 触发动态修改
+     */
     _onChange() {
       this.$emit("input", this.valueSync);
       this.$emit("update:modelValue", this.valueSync);
@@ -169,6 +191,9 @@ const _sfc_main = {
         value: this.valueSync
       });
     },
+    /**
+     * 获取星星距离屏幕左侧距离
+     */
     _getSize() {
       common_vendor.index.createSelectorQuery().in(this).select(".uni-rate").boundingClientRect().exec((ret) => {
         if (ret) {
@@ -190,8 +215,8 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   return {
     a: common_vendor.f($options.stars, (star, index, i0) => {
       return {
-        a: "635e05f4-0-" + i0,
-        b: "635e05f4-1-" + i0,
+        a: "61c44443-0-" + i0,
+        b: "61c44443-1-" + i0,
         c: star.activeWitch,
         d: index,
         e: common_vendor.o((...args) => $options.touchstart && $options.touchstart(...args), index),
@@ -215,5 +240,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     e: $options.marginNumber + "px"
   };
 }
-var Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/cssa/cssa-miniprogram/uni_modules/uni-rate/components/uni-rate/uni-rate.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/pg/Desktop/cssa-miniprogram/uni_modules/uni-rate/components/uni-rate/uni-rate.vue"]]);
 wx.createComponent(Component);

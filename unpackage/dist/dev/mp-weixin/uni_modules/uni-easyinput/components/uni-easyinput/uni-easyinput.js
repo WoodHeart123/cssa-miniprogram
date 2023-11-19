@@ -1,5 +1,5 @@
 "use strict";
-var common_vendor = require("../../../../common/vendor.js");
+const common_vendor = require("../../../../common/vendor.js");
 function obj2strClass(obj) {
   let classess = "";
   for (let key in obj) {
@@ -135,9 +135,11 @@ const _sfc_main = {
       focusShow: false,
       localMsg: "",
       isEnter: false
+      // 用于判断当前是否是使用回车操作
     };
   },
   computed: {
+    // 输入框内是否有值
     isVal() {
       const val = this.val;
       if (val || val === 0) {
@@ -148,12 +150,15 @@ const _sfc_main = {
     msg() {
       return this.localMsg || this.errorMessage;
     },
+    // 因为uniapp的input组件的maxlength组件必须要数值，这里转为数值，用户可以传入字符串数值
     inputMaxlength() {
       return Number(this.maxlength);
     },
+    // 处理外层样式的style
     boxStyle() {
       return `color:${this.inputBorder && this.msg ? "#e43d33" : this.styles.color};`;
     },
+    // input 内容的类和样式处理
     inputContentClass() {
       return obj2strClass({
         "is-input-border": this.inputBorder,
@@ -171,6 +176,7 @@ const _sfc_main = {
         "background-color": this.disabled ? this.styles.disableColor : this.styles.backgroundColor
       });
     },
+    // input右侧样式
     inputStyle() {
       const paddingRight = this.type === "password" || this.clearable || this.prefixIcon ? "" : "10px";
       return obj2strStyle({
@@ -208,6 +214,9 @@ const _sfc_main = {
     });
   },
   methods: {
+    /**
+     * 初始化变量值
+     */
     init() {
       if (this.value || this.value === 0) {
         this.val = this.value;
@@ -217,13 +226,24 @@ const _sfc_main = {
         this.val = null;
       }
     },
+    /**
+     * 点击图标时触发
+     * @param {Object} type
+     */
     onClickIcon(type) {
       this.$emit("iconClick", type);
     },
+    /**
+     * 显示隐藏内容，密码框时生效
+     */
     onEyes() {
       this.showPassword = !this.showPassword;
       this.$emit("eyes", this.showPassword);
     },
+    /**
+     * 输入时触发
+     * @param {Object} event
+     */
     onInput(event) {
       let value = event.detail.value;
       if (this.trim) {
@@ -240,6 +260,11 @@ const _sfc_main = {
       this.$emit("input", value);
       this.$emit("update:modelValue", value);
     },
+    /**
+     * 外部调用方法
+     * 获取焦点时触发
+     * @param {Object} event
+     */
     onFocus() {
       this.$nextTick(() => {
         this.focused = true;
@@ -250,6 +275,11 @@ const _sfc_main = {
       this.focusShow = true;
       this.$emit("focus", event);
     },
+    /**
+     * 外部调用方法
+     * 失去焦点时触发
+     * @param {Object} event
+     */
     onBlur() {
       this.focused = false;
       this.$emit("focus", null);
@@ -268,6 +298,10 @@ const _sfc_main = {
         }
       }
     },
+    /**
+     * 按下键盘的发送键
+     * @param {Object} e
+     */
     onConfirm(e) {
       this.$emit("confirm", this.val);
       this.isEnter = true;
@@ -276,15 +310,27 @@ const _sfc_main = {
         this.isEnter = false;
       });
     },
+    /**
+     * 清理内容
+     * @param {Object} event
+     */
     onClear(event) {
       this.val = "";
       this.$emit("input", "");
       this.$emit("update:modelValue", "");
       this.$emit("clear");
     },
+    /**
+     * 键盘高度发生变化的时候触发此事件
+     * 兼容性：微信小程序2.7.0+、App 3.1.0+
+     * @param {Object} event
+     */
     onkeyboardheightchange(event) {
       this.$emit("keyboardheightchange", event);
     },
+    /**
+     * 去除空格
+     */
     trimStr(str, pos = "both") {
       if (pos === "both") {
         return str.trim();
@@ -398,5 +444,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     ab: common_vendor.s($options.boxStyle)
   });
 }
-var Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/cssa/cssa-miniprogram/uni_modules/uni-easyinput/components/uni-easyinput/uni-easyinput.vue"]]);
+const Component = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "/Users/pg/Desktop/cssa-miniprogram/uni_modules/uni-easyinput/components/uni-easyinput/uni-easyinput.vue"]]);
 wx.createComponent(Component);

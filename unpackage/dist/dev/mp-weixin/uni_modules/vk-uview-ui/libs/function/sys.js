@@ -1,5 +1,5 @@
 "use strict";
-var common_vendor = require("../../../../common/vendor.js");
+const common_vendor = require("../../../../common/vendor.js");
 function os() {
   return common_vendor.index.getSystemInfoSync().platform;
 }
