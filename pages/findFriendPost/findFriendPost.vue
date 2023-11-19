@@ -11,6 +11,9 @@
 		        <textarea id="information" v-model="information" placeholder="输入内容" class="input-text"></textarea>
 		    </div>
 		</div>
+		<view class="example-body">
+			<uni-datetime-picker v-model="range" type="daterange" @maskClick="maskClick" />
+		</view>
 		<div class="input-container">
 		    <div class="button">
 		        <button @click="submitPost" class="submit-button">Submit</button>
