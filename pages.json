@@ -234,42 +234,15 @@
                 "navigationBarTitleText" : "我的转租",
                 "enablePullDownRefresh" : true
             }
-        }
-/*        {
-            "path" : "pages/restMain/restSearch",
-            "style" : {
-                "navigationBarTitleText" : "搜索",
-                "enablePullDownRefresh" : false
-            }
-        }, */
-/*        {
-            "path" : "pages/restMain/restMain",
-            "style" : {
-                "navigationBarTitleText" : "餐厅攻略",
-                "enablePullDownRefresh" : false
-            }
         },
-        {
-            "path" : "pages/map/map",
-            "style" : {
-                "navigationBarTitleText" : "地图",
-                "enablePullDownRefresh" : false
-            }
-        },
-        {
-            "path" : "pages/detail/restDetail",
-            "style" : {
-                "navigationBarTitleText" : "餐厅详情",
-                "enablePullDownRefresh" : true
-            }
-        },
-        {
-            "path" : "pages/postRestComment/postRestComment",
-            "style" : {
-                "navigationBarTitleText" : "餐厅评价",
-                "disableScroll" : true
-            }
-        } */
+		{
+			"path": "pages/findFriend/findFriend",
+			"style": {
+				"navigationBarTitleText": "找搭子",
+				"enablePullDownRefresh": true,
+				 "backgroundColor" : "#F5F5F5"
+			}
+		}
     ],
     "condition" : {
         "current" : 0,
@@ -341,7 +314,11 @@
             {
                 "name" : "RestMap",
                 "path" : "pages/map/map"
-            }
+            },
+			{
+				"name": "findFriend",
+				"path": "pages/findFriend/findFriend"
+			}
         ]
     },
     "globalStyle" : {
@@ -363,6 +340,12 @@
                 "iconPath" : "./static/home.png",
                 "selectedIconPath" : "./static/home-selected.png"
             },
+			{
+				"pagePath": "pages/findFriend/findFriend",
+				"text": "麦屯圈",
+				"iconPath": "./static/community.png",
+				"selectedIconPath": "./static/community-selected.png"
+			},
             {
                 "pagePath" : "pages/activity/act",
                 "text" : "活动",
