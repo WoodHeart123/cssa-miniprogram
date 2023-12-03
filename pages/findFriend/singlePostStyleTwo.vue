@@ -8,11 +8,12 @@
 		</div>
 		
 		<div class="post-title">
-			<div style="font-weight: 500;">{{ post.title }}</div>
-			<div style="font-size: 0.7rem;">{{ post.OP }}</div>
+			<image v-bind:src="`${post.avatar}`" class="avatar" mode="aspectFill" />
+			<div style="font-weight: 500; font-size: 90%; width: 70%; text-align: right; overflow-wrap: break-word;">{{ postTitle }}</div>
 		</div>
+		
 		<div class="post-title post-time">
-			<div>{{ displayEventTimeFrame }}</div>
+			<div>{{ postOP }}</div>
 			<div>{{ timeElapasedSincePost }}</div>
 		</div>
 	</div>
@@ -31,15 +32,6 @@
 			}
 		},
 		computed: {
-			displayEventTimeFrame() {
-				if (this.post.eventTimeFrame == "") {
-					return "不限"
-				}
-				else {
-					return this.post.eventTimeFrame
-				}
-			},
-			
 			// TODO: actually compute time elapsed since post
 			
 			timeElapasedSincePost() {
@@ -49,6 +41,20 @@
 				return {
 					"post": true,
 					[this.useBorderStyle]: true,
+				}
+			},
+			postTitle() {
+				if (this.post.title.length > 12) {
+					return this.post.title.slice(0, 12) + " ..."
+				} else {
+					return this.post.title
+				}
+			},
+			postOP() {
+				if (this.post.OP.length > 9) {
+					return this.post.OP.slice(0, 9) + " ..."
+				} else {
+					return this.post.OP
 				}
 			}
 		}
@@ -68,9 +74,15 @@
 		width: 100%;
 		display: flex;
 		flex-direction: row;
-		flex-wrap: wrap;
+		flex-wrap: nowrap;
 		justify-content: space-between;
+		align-items: center;
 		margin-bottom: 0.2rem;
+	}
+	.avatar {
+		width: 2rem;
+		height: 2rem;
+		border-radius: 50%;
 	}
 	.post-time {
 		color: darkgray;

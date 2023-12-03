@@ -1,14 +1,13 @@
 <template>
 	<view class="post-detail-background">
 		<div class="post-content">
-			<div class="post-title">
-				<div style="font-weight: 500; font-size: 110%;">{{ post.title }}</div>
-				<div>{{ post.OP }}</div>
+			<div class="post-meta-data">
+				<image v-bind:src="`${post.avatar}`" class="avatar" mode="aspectFit" />
+				<div class="post-title">{{ post.title }}</div>
 			</div>
-			<div class="post-title post-time">
-				<div>{{ displayEventTimeFrame }}</div>
-				<div>{{ timeElapasedSincePost }}</div>
-			</div>
+			
+			<div class="post-OP">{{ post.OP }} <span style="font-size: 200%; vertical-align: middle; color: darkgray; padding-left: 0.25rem; padding-right: 0.1rem;">·</span> 于 {{ timeElapsedSincePost }}</div>
+			<div style="width: 90%; font-weight: 500;">(活动时间：{{ eventTime }})</div>
 			
 			<div class="post-text">{{ post.text }}</div>
 			<div v-if="post.images.length > 0" class="post-images">
@@ -17,8 +16,8 @@
 				<div v-if="post.images.length % 3 == 1" class="individual-post-image" />
 			</div>
 			
-			<div v-if="post.comments.length > 0" class="post-comments">
-				<div v-for="comment in post.comments" class="individual-post-comment">
+			<div v-if="comments.length > 0" class="post-comments">
+				<div v-for="comment in comments" class="individual-post-comment">
 					<div style="color: cadetblue; float: left; padding-right: 0.5rem;">{{ comment.userName + " :" }}</div>
 					<div>{{ comment.comment }}</div>
 				</div>
@@ -36,7 +35,7 @@
 		</div>
 		
 		<div v-if="showLargeImage && post.images.length > 0" class="large-images">
-			<swiper class="swiper" circular style="height: 100%; width: 100%;">
+			<swiper class="swiper" circular indicator-dots="true" style="height: 100%; width: 100%;">
 				<swiper-item v-for="i in post.images.length" style="height: 100%; width: 100%;">
 					<view style="width: 100%; height: 100%;" v-on:click="deactivateLargeImages">
 						<image v-bind:src="post.images[(i - 1 + clickedImageIndex) % post.images.length]" style="width: 100%; height: 100%;" mode="aspectFit" />
@@ -51,38 +50,46 @@
 	export default {
 		data() {
 			return {
-				userComment: "",
-				post: {},
-				showLargeImage: false,
+				userName: "", 
+				userComment: "", 
+				post: {}, 
+				comments: [], 
+				showLargeImage: false, 
 				clickedImageIndex: -1
 			}
 		},
 		onLoad(option) {
 			this.post = JSON.parse(decodeURIComponent(option.post));
+			try {
+				const value = uni.getStorageSync('userInfo-2');
+				if (value) {
+					console.log(value)
+					this.userName = value.nickname
+				}
+			} catch (e) {
+				console.log(e)
+			}
+			
+			// TODO: get comments of this post from backend
+			this.comments = [{userName: "用户 1", comment: "评论评论"}, {userName: "用户 2", comment: "互动一下, 互动一下, 互动一下, 互动一下, 互动一下, 互动一下, 互动一下, 互动一下, 互动一下, 互动一下, 互动一下, 互动一下, 互动一下, 互动一下"}]
 		},
 		
-		// TODO: get the user's username somehow
 		// TODO: update the comment section to the backend database when the user quits this page
 		
 		computed: {
-			displayEventTimeFrame() {
-				if (this.post.eventTimeFrame == "") {
-					return "不限"
-				}
-				else {
-					return this.post.eventTimeFrame
-				}
+			eventTime() {
+				// TODO: display event time frame in type DATE
+				return "Nov. 23"
 			},
 			
-			// TODO: actually compute time elapsed since post
-			
-			timeElapasedSincePost() {
+			timeElapsedSincePost() {
+				// TODO: actually compute time elapsed since post
 				return "50 分钟前"
 			}
 		},
 		methods: {
 			addComment(e) {
-				this.post.comments.push({userName: "当前用户", comment: this.userComment});
+				this.comments.push({userName: this.userName, comment: this.userComment});
 				this.userComment = ""
 			},
 			activateLargeImages(index) {
@@ -110,18 +117,35 @@
 		flex-direction: column;
 		align-items: center;
 		flex-wrap: nowrap;
-		padding-top: 2rem;
+		padding-top: 3rem;
 	}
-	.post-title {
+	.post-meta-data {
 		width: 90%;
 		display: flex;
 		flex-direction: row;
-		flex-wrap: wrap;
+		flex-wrap: nowrap;
 		justify-content: space-between;
-		margin-bottom: 0.2rem;
+		align-items: center;
+		margin-bottom: 1rem;
 	}
-	.post-time {
-		color: darkgray;
+	.post-title {
+		width: 80%; 
+		font-size: 110%; 
+		font-weight: 500;
+		overflow-wrap: break-word; 
+		text-align: left;
+	}
+	.avatar {
+		width: 3rem;
+		height: 3rem;
+		border-radius: 50%;
+	}
+	.post-OP {
+		width: 90%; 
+		color: darkgray; 
+		font-size: 80%; 
+		overflow-wrap: break-word;
+		margin-bottom: 2rem;
 	}
 	.post-text {
 		width: 90%;
@@ -147,7 +171,7 @@
 		width: 100vw;
 		height: 100%;
 		z-index: 4;
-		background-color: #000000;
+		background-color: whitesmoke;
 	}
 	.post-comments {
 		width: 90%;
@@ -158,7 +182,7 @@
 		padding-top: 2rem;
 	}
 	.individual-post-comment {
-		margin-bottom: 1rem;
+		margin-bottom: 0.5rem;
 		width: 100%;
 	}
 	.add-comment {
