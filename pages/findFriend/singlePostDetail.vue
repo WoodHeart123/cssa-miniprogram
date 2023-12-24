@@ -7,7 +7,7 @@
 			</div>
 			
 			<div class="post-OP">{{ post.OP }} <span style="font-size: 200%; vertical-align: middle; color: darkgray; padding-left: 0.25rem; padding-right: 0.1rem;">·</span> 于 {{ timeElapsedSincePost }}</div>
-			<div style="width: 90%; font-weight: 500;">(活动时间：{{ eventTime }})</div>
+			<div style="width: 90%; font-weight: 500;">(活动时间：{{ post.eventTimeFrame }})</div>
 			
 			<div class="post-text">{{ post.text }}</div>
 			<div v-if="post.images.length > 0" class="post-images">
@@ -16,10 +16,23 @@
 				<div v-if="post.images.length % 3 == 1" class="individual-post-image" />
 			</div>
 			
-			<div v-if="comments.length > 0" class="post-comments">
-				<div v-for="comment in comments" class="individual-post-comment">
-					<div style="color: cadetblue; float: left; padding-right: 0.5rem;">{{ comment.userName + " :" }}</div>
-					<div>{{ comment.comment }}</div>
+			<div class="post-likes-comments">
+				<div style="width: 90%; padding-top: 0.5rem;">
+					<uni-icons v-if="!clickLike" type="heart" size="20" color="cadetblue" style="float: left; padding-right: 1rem;" v-on:click="likePost"/>
+					<uni-icons v-else type="heart-filled" size="20" color="cadetblue" style="float: left; padding-right: 1rem;" v-on:click="unlikePost" />
+					<div v-if="likes.length > 0" style="display: flex; flex-direction: row; flex-wrap: wrap; align-content: center;">
+						<div v-for="(name, index) in likes">
+							<div v-if="index < likes.length - 1" style="padding-right: 0.5rem;">{{ name + " ," }}</div>
+						</div>
+						<div>{{ likes[likes.length - 1] }}</div>
+					</div>
+				</div>
+				
+				<div v-if="comments.length > 0" class="post-comments">
+					<div v-for="comment in comments" class="individual-post-comment">
+						<div style="color: cadetblue; float: left; padding-right: 0.5rem;" v-on:click="reply(comment.userName)">{{ comment.userName + " :" }}</div>
+						<div>{{ comment.comment }}</div>
+					</div>
 				</div>
 			</div>
 			
@@ -38,7 +51,11 @@
 			<swiper class="swiper" circular indicator-dots="true" style="height: 100%; width: 100%;">
 				<swiper-item v-for="i in post.images.length" style="height: 100%; width: 100%;">
 					<view style="width: 100%; height: 100%;" v-on:click="deactivateLargeImages">
-						<image v-bind:src="post.images[(i - 1 + clickedImageIndex) % post.images.length]" style="width: 100%; height: 100%;" mode="aspectFit" />
+						<movable-area style="width: 100%; height: 100%;">
+							<movable-view direction="all" out-of-bounds="true" scale="true" style="width: 100%; height: 100%;">
+								<image v-bind:src="post.images[(i - 1 + clickedImageIndex) % post.images.length]" style="width: 100%; height: 100%;" mode="aspectFit" />
+							</movable-view>
+						</movable-area>
 					</view>
 				</swiper-item>
 			</swiper>
@@ -53,9 +70,12 @@
 				userName: "", 
 				userComment: "", 
 				post: {}, 
+				likes: [], 
+				clickLike: false, 
 				comments: [], 
 				showLargeImage: false, 
-				clickedImageIndex: -1
+				clickedImageIndex: -1, 
+				userInteraction: [] 
 			}
 		},
 		onLoad(option) {
@@ -70,32 +90,54 @@
 				console.log(e)
 			}
 			
-			// TODO: get comments of this post from backend
+			// TODO: get likes & comments info of this post from backend
+			this.likes = ["用户 1", "用户 2"]
 			this.comments = [{userName: "用户 1", comment: "评论评论"}, {userName: "用户 2", comment: "互动一下, 互动一下, 互动一下, 互动一下, 互动一下, 互动一下, 互动一下, 互动一下, 互动一下, 互动一下, 互动一下, 互动一下, 互动一下, 互动一下"}]
 		},
 		
 		// TODO: update the comment section to the backend database when the user quits this page
+		onUnload() {
+			console.log("page unloaded")
+		}, 
 		
 		computed: {
 			eventTime() {
-				// TODO: display event time frame in type DATE
-				return "Nov. 23"
+				// TODO: is it possible that the backend sends back the string of date in format "yyyy-mm-dd"
+				return this.post.eventTimeFrame
 			},
 			
 			timeElapsedSincePost() {
-				// TODO: actually compute time elapsed since post
-				return "50 分钟前"
+				let now = new Date()
+				let elapsed = now - new Date(this.post.postTime)
+				if (elapsed > 24 * 60 * 60 * 1000) {
+					return (Math.round(elapsed / (24 * 60 * 60 * 1000))).toString() + " 天前"
+				} else if (elapsed > 60 * 60 * 1000) {
+					return (Math.round(elapsed / (60 * 60 * 1000))).toString() + " 小时前"
+				} else {
+					return (Math.round(elapsed / (60 * 1000))).toString() + " 分钟前"
+				}
 			}
 		},
 		methods: {
+			likePost(e) {
+				this.likes.push(this.userName); 
+				this.clickLike = true
+			}, 
+			unlikePost(e) {
+				this.likes.pop();
+				this.clickLike = false
+			}, 
 			addComment(e) {
 				this.comments.push({userName: this.userName, comment: this.userComment});
 				this.userComment = ""
-			},
+			}, 
+			reply(replyTo) {
+				this.userComment += "@" + replyTo + ": "
+			}, 
 			activateLargeImages(index) {
 				this.showLargeImage = true
 				this.clickedImageIndex = index
-			},
+			}, 
 			deactivateLargeImages() {
 				this.showLargeImage = false
 				this.clickedImageIndex = -1
@@ -173,13 +215,21 @@
 		z-index: 4;
 		background-color: whitesmoke;
 	}
-	.post-comments {
+	.post-likes-comments {
 		width: 90%;
-		background-color: white;
+		margin-top: 2rem;
 		display: flex;
 		flex-direction: column;
 		flex-wrap: nowrap;
-		padding-top: 2rem;
+		align-items: center;
+		background-color: whitesmoke;
+	}
+	.post-comments {
+		width: 90%;
+		display: flex;
+		flex-direction: column;
+		flex-wrap: nowrap;
+		padding-top: 1rem;
 	}
 	.individual-post-comment {
 		margin-bottom: 0.5rem;

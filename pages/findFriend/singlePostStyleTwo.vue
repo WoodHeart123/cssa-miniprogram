@@ -14,7 +14,7 @@
 		
 		<div class="post-title post-time">
 			<div>{{ postOP }}</div>
-			<div>{{ timeElapasedSincePost }}</div>
+			<div>{{ timeElapsedSincePost() }}</div>
 		</div>
 	</div>
 </template>
@@ -32,11 +32,6 @@
 			}
 		},
 		computed: {
-			// TODO: actually compute time elapsed since post
-			
-			timeElapasedSincePost() {
-				return "50 分钟前"
-			},
 			borderStyle() {
 				return {
 					"post": true,
@@ -55,6 +50,19 @@
 					return this.post.OP.slice(0, 9) + " ..."
 				} else {
 					return this.post.OP
+				}
+			}
+		}, 
+		methods: {
+			timeElapsedSincePost() {
+				let now = new Date()
+				let elapsed = now - new Date(this.post.postTime)
+				if (elapsed > 24 * 60 * 60 * 1000) {
+					return (Math.round(elapsed / (24 * 60 * 60 * 1000))).toString() + " 天前"
+				} else if (elapsed > 60 * 60 * 1000) {
+					return (Math.round(elapsed / (60 * 60 * 1000))).toString() + " 小时前"
+				} else {
+					return (Math.round(elapsed / (60 * 1000))).toString() + " 分钟前"
 				}
 			}
 		}
