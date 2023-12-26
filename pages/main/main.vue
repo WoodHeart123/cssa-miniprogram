@@ -31,12 +31,12 @@
 					<text>新生手册</text>
 				</view>
 			</view>
-			<!-- 			<view class="column-container function-button" @click="toRental">
+			<!-- <navigator class="column-container function-button" url='../findFriend/findClassmate'>
 				<img class="image" src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/main/community.png" />
 				<view class="column-container function-text">
 					<text>官方社群</text>
 				</view>
-			</view> -->
+			</navigator> -->
 			<!-- 			<view class="row-container function-button">
 			<view class="row-container function-button" @click="toRide()">
 					<view class="column-container function-text">

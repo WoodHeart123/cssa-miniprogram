@@ -51,14 +51,14 @@
                 "backgroundColor" : "#F5F5F5"
             }
         },
-/*        {
+       {
             "path" : "pages/index/updateEmail",
             "style" : {
                 "navigationBarTitleText" : "更新邮箱",
                 "backgroundColor" : "#ffffff",
                 "disableScroll" : true
             }
-        }, */
+        },
         {
             "path" : "pages/courseMain/courseMain",
             "style" : {
@@ -90,13 +90,13 @@
                 "enablePullDownRefresh" : false
             }
         },
-/*        {
+       {
             "path" : "pages/index/updateID",
             "style" : {
                 "navigationBarTitleText" : "更新微信号",
                 "enablePullDownRefresh" : false
             }
-        }, */
+        },
         {
             "path" : "pages/postComment/postComment",
             "style" : {
@@ -400,12 +400,12 @@
                 "iconPath" : "./static/home.png",
                 "selectedIconPath" : "./static/home-selected.png"
             },
-			{
+/* 			{
 				"pagePath": "pages/findFriend/findFriend",
 				"text": "麦屯圈",
 				"iconPath": "./static/community.png",
 				"selectedIconPath": "./static/community-selected.png"
-			},
+			}, */
             {
                 "pagePath" : "pages/activity/act",
                 "text" : "活动",
