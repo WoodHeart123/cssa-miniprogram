@@ -1,6 +1,19 @@
 <template>
 	<view id="index">
 		<script src="@/static/iconfont/iconfont.js"></script>
+		<view class="privacy" v-show="showPrivacy">
+			<view class="content">
+				<view class="title">隐私保护指引</view>
+				<view class="des">
+					在使用当前小程序服务之前，请仔细阅读
+					<text class="link" @click="handleOpenPrivacyContract">《麦屯小助手小程序隐私保护指引》</text>。如你同意《麦屯小助手小程序隐私保护指引》，请点击“同意”开始使用。
+				</view>
+				<view class="btns">
+					<button class="item reject" @click="exitMiniProgram">拒绝</button>
+					<button id="agree-btn" class="item agree" open-type="agreePrivacyAuthorization" @click="handleAgreePrivacyAuthorization">同意</button>
+				</view>
+			</view>
+		</view>
 		<view class="container">
 			<uni-popup ref="welcome" background-color="fff">
 				<welcome></welcome>
@@ -73,11 +86,17 @@
 				isLogin: false,
 				iconList:[
 					{text: ""}
-				]
+				],
+				showPrivacy: false,
+				needPrivacy: false,
 			}
 		},
 		onLoad() {
 			wx.cloud.init();
+			wx.onNeedPrivacyAuthorization((resolve, eventInfo) => {
+				  this.showPrivacy = true;
+			      this.resolvePrivacyAuthorization = resolve
+			})
 		},
 		onShow() {
 			uni.$on("authSuccess", this.authSuccess)
@@ -87,6 +106,9 @@
 					this.userInfo = res.data;
 					this.isLogin = true;
 					this.login(res.data.nickname);
+					uni.setNavigationBarTitle({
+						title: `${this.userInfo.nickname}的主页`
+					});
 				},
 				fail: () => {
 					this.isLogin = false;
@@ -109,6 +131,25 @@
 			}
 		},
 		methods: {
+			handleAgreePrivacyAuthorization: function(){
+				this.showPrivacy = false;
+				this.needPrivacy = false;
+				this.getUserProfile()
+			},
+			handleOpenPrivacyContract: function(){
+				 wx.openPrivacyContract({
+				      success: () => {}, // 打开成功
+				      fail: () => {}, // 打开失败
+				      complete: () => {}
+				    })
+			},
+			exitMiniProgram: function(){
+				uni.showToast({
+					icon:"none",
+					title: "需同意隐私策略才能进入个人信息页面"
+				});
+				this.showPrivacy = false;
+			},
 			jump: function(index) {
 				let directURL = "";
 				if ((index == 2 || index == 3) && !this.isLogin) {
@@ -138,11 +179,19 @@
 				})
 			},
 			getUserProfile: function() {
+				if(this.needPrivacy === true){
+					this.showPrivacy = true;
+					return;
+				}
 				uni.getUserProfile({
 					desc: "获取用户昵称",
 					success: (userProfile) => {
+						uni.showLoading({
+							title: "正在登录"
+						})
 						this.userInfo.nickname = userProfile.userInfo.nickName;
 						this.login(userProfile.userInfo.nickName);
+						uni.hideLoading()
 					},
 				});
 			},
@@ -163,6 +212,9 @@
 					}
 				});
 				this.userInfo = res.data.data;
+				uni.setNavigationBarTitle({
+					title: `${this.userInfo.nickname}的主页`
+				});
 				this.isLogin = true;
 				uni.setStorageSync("userInfo-2", res.data.data);
 
@@ -309,5 +361,73 @@
 		height: 20%;
 		position:absolute;
 		bottom:10%;
+	}
+	.privacy {
+		position: fixed;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		background: rgba(0, 0, 0, .5);
+		z-index: 9999999;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	
+	.content {
+		width: 632rpx;
+		min-height: 200px;
+		padding: 48rpx;
+		box-sizing: border-box;
+		background: #fff;
+		border-radius: 16rpx;
+	}
+	
+	.content .title {
+		text-align: center;
+		color: #333;
+		font-weight: bold;
+		font-size: 32rpx;
+	}
+	
+	.content .des {
+		font-size: 26rpx;
+		color: #666;
+		margin-top: 40rpx;
+		text-align: justify;
+		line-height: 1.6;
+	}
+	
+	.content .des .link {
+		color: #07c160;
+		text-decoration: underline;
+	}
+	
+	.btns {
+		margin-top: 48rpx;
+		display: flex;
+	}
+	
+	.btns .item {
+		justify-content: space-between;
+		width: 244rpx;
+		height: 80rpx;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 16rpx;
+		box-sizing: border-box;
+		border: none;
+	}
+	
+	.btns .reject {
+		background: #f4f4f5;
+		color: #909399;
+	}
+	
+	.btns .agree {
+		background: #07c160;
+		color: #fff;
 	}
 </style>

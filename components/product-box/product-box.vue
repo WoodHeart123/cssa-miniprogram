@@ -40,12 +40,13 @@
 			}
 		},
 		mounted(){
-			if(moment().year() - moment.utc(this.product.utctime).year() > 0){
-				this.productPublishTime = moment.utc(this.product.utctime).format("YYYY-MM-DD");
-			}else if(Date.now() - moment.utc(this.product.utctime).valueOf() > 86400000 * 7){
-				this.productPublishTime = moment.utc(this.product.utctime).format("MM-DD");
+			console.log(this.product)
+			if(moment().year() - moment.utc(this.product.UTCtime).year() > 0){
+				this.productPublishTime = moment.utc(this.product.UTCtime).format("YYYY-MM-DD");
+			}else if(Date.now() - moment.utc(this.product.UTCtime).valueOf() > 86400000 * 7){
+				this.productPublishTime = moment.utc(this.product.UTCtime).format("MM-DD");
 			}else{
-				this.productPublishTime = moment.utc(this.product.utctime).locale('zh-cn').fromNow();
+				this.productPublishTime = moment.utc(this.product.UTCtime).locale('zh-cn').fromNow();
 			}
 		},
 		methods: {

@@ -1,70 +1,93 @@
 <template>
-	<uni-transition ref="main" :show=true customClass="full-screen">
-		<view id="course" class="row-container" @touchstart="touchstart" @touchmove="touchmove">
-			<view class="menu column-container">
-				<uni-indexed-list :options="departmentList" :show-select=false @click="bindClick"></uni-indexed-list>
+	<view>
+		<view class="column-container suggest-list" v-if="searching">
+			<uni-load-more v-show="searchStatus!='more'" :status="searchStatus" :contentText="searchContentText" />
+			<view class="row-container suggest-box" v-for="(course, index) in suggestList" :key="index"
+				@click="toCourse(course)">
+				<view class="suggest-box-course-num">
+					{{course.departmentAbrev + " " + String(course.courseNum) + " "}}
+				</view>
+				<view class="suggest-box-course-name">{{course.courseName}}</view>
 			</view>
-
-			<view class="overlay" v-show="showMenu"></view>
-			<view class="column-container suggest-list" v-if="searching">
-				<uni-load-more v-show="searchStatus!='more'" :status="searchStatus" :contentText="searchContentText" />
-				<view class="row-container suggest-box" v-for="(course, index) in suggestList" :key="index"
-					@click="toCourse(course)">
-					<view class="suggest-box-course-num">
-						{{course.departmentAbrev + " " + String(course.courseNum) + " "}}
-					</view>
-					<view class="suggest-box-course-name">{{course.courseName}}</view>
-				</view>
-			</view>
-			<view class="row-container top-bar">
-				<view class="row-container department-select" v-show="!searching">
-					<uni-transition ref="menuOpen" :show=true>
-						<text class="iconfont icon" @click="clickMenu">&#xed55;</text>
-					</uni-transition>
-				</view>
-				<view class="row-container department" v-show="!searching">
-					<text>{{departmentName}}</text>
-				</view>
-				<view class="row-container search-select" v-show="!searching">
-					<uni-icons type="search" size="30" color="#9B0000" v-show="!searching" @click="onSearch"></uni-icons>
-				</view>
-				<view class="search-bar" v-show="searching">
-					<uni-search-bar v-model="searchValue" cancelButton="auto" placeholder="搜索课程" clearButton="none" :focus="searching"
-						@focus="onFocus" @input="searchBarInput" @confirm="searchBarInput" @cancel="onCancel">
-					</uni-search-bar>
-				</view>
-			</view>
-			<scroll-view scroll-y="true" show-scrollbar="true" refresher-enabled="true"
-				class="column-container course-list-box" refresher-background="white" @refresherrefresh="refresh"
-				enable-back-to-top="true" :refresher-triggered="triggered" @refresherabort="refreshRestore"
-				@scrolltolower="onScrollLower">
-				
-				<view class="row-container filter-box">
-					<view :class="key==0?'filter-selected filter':'filter'" class="row-container" @click="changeKey(0)">
-						<text>课号</text>
-					</view>
-					<view :class="key==1?'filter-selected filter':'filter'" class="row-container" @click="changeKey(1)">
-						<text>热门课程</text>
-					</view>
-					<view :class="key==4?'filter-selected filter':'filter'" class="row-container" @click="changeKey(4)">
-						<text>推荐</text>
-						<text class="iconfont" v-show="key==4&&sortIndex==4">&#xed58;</text>
-						<text class="iconfont" v-show="key==4&&sortIndex==5">&#xed59;</text>
-					</view>
-					<view :class="key==2?'filter-selected filter':'filter'" class="row-container" @click="changeKey(2)">
-						<text>难度</text>
-						<text class="iconfont" v-show="key==2&&sortIndex==3">&#xed58;</text>
-						<text class="iconfont" v-show="key==2&&sortIndex==2">&#xed59;</text>
-					</view>
-				</view>
-				<view v-for="(course,index) in courseList" :key="index">
-					<course-box-vue :course="course" class="box"></course-box-vue>
-				</view>
-				<uni-load-more v-show="courseList.length >= 10" :status="status" :contentText="contentText">
-				</uni-load-more>
-			</scroll-view>
 		</view>
-	</uni-transition>
+		<view class="row-container top-bar">
+			<view class="row-container department-select" v-show="!searching">
+				<uni-transition ref="menuOpen" show>
+					<text class="iconfont icon" @click="clickMenu">&#xed55;</text>
+				</uni-transition>
+			</view>
+			<view class="row-container department" v-show="!searching">
+				<text>{{departmentName}}</text>
+			</view>
+			<view class="row-container search-select" v-show="!searching">
+				<uni-icons type="search" size="30" color="#9B0000" v-show="!searching" @click="onSearch"></uni-icons>
+			</view>
+			<view class="search-bar" v-show="searching">
+				<uni-search-bar v-model="searchValue" cancelButton="auto" placeholder="搜索课程" clearButton="none"
+					:focus="searching" @focus="onFocus" @input="searchBarInput" @confirm="searchBarInput"
+					@cancel="onCancel">
+				</uni-search-bar>
+			</view>
+		</view>
+		<uni-transition ref="main" show customClass="full-screen">
+			<view id="course" class="row-container" @touchstart="touchstart" @touchmove="touchmove">
+				<view class="menu column-container">
+					<uni-indexed-list :options="departmentList" :show-select=false @click="bindClick">
+					</uni-indexed-list>
+				</view>
+				<view class="overlay" v-if="showMenu" @click="onClickOverlay"></view>
+
+				<scroll-view scroll-y="true" show-scrollbar="true" refresher-enabled="true"
+					class="column-container course-list-box" refresher-background="white" @refresherrefresh="refresh"
+					enable-back-to-top="true" :refresher-triggered="triggered" @refresherabort="refreshRestore"
+					@scrolltolower="onScrollLower">
+
+					<view class="row-container filter-box">
+						<view :class="key==0?'filter-selected filter':'filter'" class="row-container"
+							@click="changeKey(0)">
+							<text>课号</text>
+						</view>
+						<view :class="key==1?'filter-selected filter':'filter'" class="row-container"
+							@click="changeKey(1)">
+							<text>热门课程</text>
+						</view>
+						<view :class="key==4?'filter-selected filter':'filter'" class="row-container"
+							@click="changeKey(4)">
+							<text>推荐</text>
+							<text class="iconfont" v-show="key==4&&sortIndex==4">&#xed58;</text>
+							<text class="iconfont" v-show="key==4&&sortIndex==5">&#xed59;</text>
+						</view>
+						<view :class="key==2?'filter-selected filter':'filter'" class="row-container"
+							@click="changeKey(2)">
+							<text>难度</text>
+							<text class="iconfont" v-show="key==2&&sortIndex==3">&#xed58;</text>
+							<text class="iconfont" v-show="key==2&&sortIndex==2">&#xed59;</text>
+						</view>
+						<text style="line-height:30px;color:#ccc;font-size:20px">|</text>
+						<view :class="!isGrad?'filter-selected filter':'filter'" class="row-container"
+							@click="onClickDegree(false)">
+							<text>本科</text>
+							<text class="iconfont" v-show="key==4&&sortIndex==4">&#xed58;</text>
+							<text class="iconfont" v-show="key==4&&sortIndex==5">&#xed59;</text>
+						</view>
+						<view :class="isGrad?'filter-selected filter':'filter'" class="row-container"
+							@click="onClickDegree(true)">
+							<text>研究生</text>
+							<text class="iconfont" v-show="key==2&&sortIndex==3">&#xed58;</text>
+							<text class="iconfont" v-show="key==2&&sortIndex==2">&#xed59;</text>
+						</view>
+						
+					</view>
+					<view v-for="(course,index) in courseList" :key="index">
+						<course-box-vue :course="course" class="box"></course-box-vue>
+					</view>
+					<uni-load-more :status="status" :contentText="contentText">
+					</uni-load-more>
+				</scroll-view>
+			</view>
+		</uni-transition>
+	</view>
+
 </template>
 
 <script>
@@ -103,32 +126,33 @@
 					contentnomore: "没有匹配课程"
 				},
 				searchStatus: "",
+				isGrad: false,
 			}
 		},
 		onLoad() {
 			wx.cloud.init();
 			this.refresh();
 			this.getDepartmentList();
-			uni.$on("refreshPage", () =>{
+			uni.$on("refreshPage", () => {
 				this.refresh();
 			})
 		},
 		onShareAppMessage(res) {
 			return {
-				title: "麦屯小助手-课程吐槽",
+				title: "麦屯小助手：一起来评价课程吧",
 				path: '/pages/courseMain/courseMain',
-				imageUrl: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-share/forum.png"
+				imageUrl: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-share/course.png"
 			}
 		},
 		onShareTimeline(res) {
 			return {
-				title: "麦屯小助手-课程吐槽",
+				title: "麦屯小助手：一起来评价课程吧",
 				path: '/pages/courseMain/courseMain',
-
+				imageUrl: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-share/course.png"
 			}
 		},
 		methods: {
-			onSearch:function(){
+			onSearch: function() {
 				this.searching = true;
 			},
 			searchBarInput: function(value) {
@@ -146,12 +170,12 @@
 					type: "GET"
 				})
 				this.suggestList = res.data.data;
-				if(res.data.status == 100){
+				if (res.data.status == 100) {
 					this.searchStatus = "more";
-				}else{
+				} else {
 					this.searchStatus = "noMore";
 					this.suggestList = [];
-				}				
+				}
 			},
 			changeKey: function(num) {
 				if (this.key == num && (this.key == 2 || this.key == 4)) {
@@ -211,7 +235,7 @@
 			refresh: function() {
 				if (!this.triggered) {
 					this.triggered = true;
-				}else{
+				} else {
 					return;
 				}
 				this.courseList = [];
@@ -220,7 +244,7 @@
 			},
 			async getCourseList() {
 				const res = await requestAPI({
-					path: `/course/courselist?departmentID=${this.departmentID}&limit=20&offset=${this.courseCount}&orderType=${this.sort[this.sortIndex]}`,
+					path: `/course/courselist?departmentID=${this.departmentID}&limit=20&offset=${this.courseCount}&orderType=${this.sort[this.sortIndex]}&isGrad=${this.isGrad}`,
 					type: "GET"
 				})
 				if (res.data.status == 100) {
@@ -274,6 +298,23 @@
 				uni.navigateTo({
 					url: '/pages/coursePage/coursePage?course=' + encodeURIComponent(JSON.stringify(course)),
 				});
+			},
+			onClickOverlay: function() {
+				if (this.showMenu) {
+					this.showMenu = false;
+					this.$refs.menuOpen.step({
+						rotate: '0'
+					});
+					this.$refs.main.step({
+						translateX: '0',
+					});
+					this.$refs.main.run();
+					this.$refs.menuOpen.run();
+				}
+			},
+			onClickDegree: function(e){
+				this.isGrad = e;
+				this.refresh();
 			}
 		}
 	}

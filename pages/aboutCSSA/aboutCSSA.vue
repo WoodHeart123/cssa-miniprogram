@@ -13,16 +13,7 @@
 				</image>
 			</swiper-item>
 		</swiper>
-		<view>
-			<!-- 			<view class="box">
-				<view class="label" v-for="(row,index) in orderTypeLise" :key="row.name" hover-class="hover" @click="toPage(index)">
-					<view class="icon">
-						<image :src="'https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-main/'+row.icon"></image>
-					</view>
-					<text>{{row.name}}</text>
-					{{row.name}}
-				</view>
-			</view> -->
+		<view style="margin-bottom: 50px;">
 			<view class="gap"></view>
 			<view class="zxt1">
 				<text style="font-weight: 100">关于</text>
@@ -36,42 +27,9 @@
 			</view>
 			<view class="gap"></view>
 			<view>
-				<view class="app_content_medium">CSSA主席团介绍</view>
-			</view>
-			<view id="demo2" class="scroll-view-item uni-bg-green">
-				<image mode="aspectFit" class="zhuxituan"
-					src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-main/zhuxituan.png"></image>
-				<view class="name">
-					<text style="font-weight: 400">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp杨天林&nbsp&nbsp</text>
-					<text style="font-weight: 100">现任主席</text>
-					<text style="font-weight: 400">&nbsp&nbsp&nbsp&nbsp&nbsp楚芸蔚&nbsp&nbsp</text>
-					<text style="font-weight: 100">外联部长</text>
-					<text style="font-weight: 400">&nbsp&nbsp&nbsp&nbsp沈格非&nbsp&nbsp</text>
-					<text style="font-weight: 100">多媒体部长</text>
-				</view>
-				<image mode="aspectFit" class="zhuxituan"
-					src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-main/zhuxituan1.png"></image>
-				<view class="name">
-					<text style="font-weight: 400">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp马伊侬&nbsp&nbsp</text>
-					<text style="font-weight: 100">宣传部长</text>
-					<text style="font-weight: 400">&nbsp&nbsp&nbsp&nbsp侯映泽&nbsp&nbsp</text>
-					<text style="font-weight: 100">活动部长</text>
-					<text style="font-weight: 400">&nbsp&nbsp&nbsp&nbsp&nbsp苏浩涵&nbsp&nbsp</text>
-					<text style="font-weight: 100">研究生部长</text>
-				</view>
-				<image mode="aspectFit" class="zhuxituan"
-					src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-main/zhuxituan3.png"></image>
-				<view class="name">
-					<text
-						style="font-weight: 400">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp孙博彦&nbsp&nbsp</text>
-					<text style="font-weight: 100">技术部部长</text>
-				</view>
+				<view class="app_content_medium">申请加入CSSA</view>
 				<view class="gap"></view>
-				<view>
-					<view class="app_content_medium">申请加入CSSA</view>
-					<view class="gap"></view>
-					<view class="app_content_1">CSSA at UW Madison 将在每年春季和秋季进行招新，敬请关注CSSA官方微信公众账号(CSSAatUWMadison)！
-					</view>
+				<view class="app_content_1">CSSA at UW Madison 将在每年春季和秋季进行招新，敬请关注CSSA官方微信公众账号(<text style="user-select: all;">CSSAatUWMadison</text>)！
 				</view>
 			</view>
 		</view>

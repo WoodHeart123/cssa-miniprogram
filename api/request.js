@@ -1,5 +1,6 @@
 export default async function requestAPI(opt, number = 0) {
 	console.log(opt)
+	wx.cloud.init()
 	try{
 		return await wx.cloud.callContainer({
 			config: {
@@ -18,8 +19,8 @@ export default async function requestAPI(opt, number = 0) {
 			return requestAPI(opt, number + 1)
 	    } else {
 			uni.showToast({
-				icon: "exception",
-				title: "当前网络状态不佳，请稍后尝试。"
+				icon: "error",
+				title: "服务加载失败"
 			})
 		}
 	}

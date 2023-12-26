@@ -5,7 +5,7 @@
 				<img class="avatar" src="@/static/cssalogo-red-sm.png" />
 				<span>{{this.actDetail.title}}</span>
 			</div>
-			<div v-if="!ifJoined" class="image" :style="{'background-image': 'url(' + this.actDetail.imgs +')' }" />
+			<div v-if="!ifJoined" class="image" :style="{'background-image': 'url(' + this.actDetail.images[0] +')' }" />
 			<div class="row">
 				<span class="iconfont icon">&#xe65e;</span>
 				<span class="font-small">{{this.actDetail.location}}</span>
@@ -103,8 +103,7 @@
 
 	.title {
 		height: 30px;
-		padding-bottom: 5px;
-		padding-left: 10px;
+		margin: 6px;
 		display: flex;
 		flex-direction: row;
 		align-items: center;

@@ -70,13 +70,13 @@
 						<input class="uni-input" v-model="rental.contact" maxlength="22" placeholder="请填写微信号以便联系"
 							placeholder-style="font-size:14px;color:gray" />
 					</view>
-					<view class="checkbox check_message" v-if="!hasID">
+<!-- 					<view class="checkbox check_message" v-if="!hasID">
 						<checkbox-group @change="checkBoxChange">
 							<checkbox value="save_contact" :checked="save" color="#9b0000"
 								style="transform:scale(0.8);" />
 							保存联系方式，方便后续使用
 						</checkbox-group>
-					</view>
+					</view> -->
 				</uni-forms-item>
 			</view>
 

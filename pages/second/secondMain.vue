@@ -1,19 +1,7 @@
 <template>
 	<view id="second-main">
-		<view class="menu row-container">
-			<view class="search-box" @click="toSearch">
-				<uni-icons type="search" size="30"></uni-icons>
-			</view>
-			<view class="menu-box row-container">
-				<view class="row-container product-type-item" v-for="(productType, index) in productTypeList"
-					:key="index" @click="onClickMenu(index)">
-					<text
-						:class="currentIndex==index?'product-text selected':'product-text'">{{productType.name}}</text>
-				</view>
-			</view>
-		</view>
 		<scroll-view scroll-y="true" show-scrollbar="true" refresher-enabled="true"
-			class="column-container comment-container" refresher-background="white" @refresherrefresh="refresh"
+			class="column-container secondhand-container" refresher-background="white" @refresherrefresh="refresh"
 			enable-back-to-top="true" :refresher-triggered="triggered" @scrolltolower="onScrollLower">
 			<view class="box">
 				<view v-for="(product,index) in productList" :key="index">
@@ -186,11 +174,11 @@
 		display: flex;
 	}
 
-	.comment-container {
-		margin-top: 55px;
-		height: calc(100vh - 55px);
+	.secondhand-container {
+		height: 100vh;
 		width: 100vw;
 		background-color: white;
+		padding-top: 10px;
 	}
 
 	.row-container {

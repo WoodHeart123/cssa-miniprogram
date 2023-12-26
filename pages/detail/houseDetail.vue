@@ -26,9 +26,9 @@
 				<img class="avatar"
 					:src="'https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/'+houseInfo.sellerAvatar+'.jpg'">
 				<text class="nickname">{{houseInfo.sellerNickname}}</text>
-				<view class="copy-box">
+				<view class="copy-box"  @click="copy">
 					<text>复制</text>
-					<img class="copy-img" src="/static/fuzhi.png" @click="setClipboardData">
+					<img class="copy-img" src="/static/fuzhi.png">
 				</view>
 			</view>
 			<view class="weixin">微信号：{{houseInfo.contact}}</view>
@@ -101,14 +101,18 @@
 		},
 		methods: {
 			
-			setClipboardData: function() {
+			copy: function() {
+				console.log(this.houseInfo.contact)
 				uni.setClipboardData({
-					data: this.houseInfo.contact[0],
+					data: this.houseInfo.contact,
 					success: (res) => {
 						uni.showToast({
 							icon:'none',
 							title:'微信号复制成功'
 						})
+					},
+					fail: (res) => {
+						console.log(res);
 					}
 				});
 			},
@@ -172,6 +176,7 @@
 	.weixin {
 		margin: 10px 0 10vw 40px;
 		color: dimgray;
+		user-select: text;
 	}
 
 	.row-container {

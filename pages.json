@@ -41,7 +41,7 @@
             "path" : "pages/activity/remark",
             "style" : {
                 "navigationBarTitleText" : "备注",
-                "backgroundColor" : "#F5F5F5"
+                "backgroundColor" : "#FFFFFF"
             }
         },
         {
@@ -51,7 +51,7 @@
                 "backgroundColor" : "#F5F5F5"
             }
         },
-        {
+       {
             "path" : "pages/index/updateEmail",
             "style" : {
                 "navigationBarTitleText" : "更新邮箱",
@@ -90,7 +90,7 @@
                 "enablePullDownRefresh" : false
             }
         },
-        {
+       {
             "path" : "pages/index/updateID",
             "style" : {
                 "navigationBarTitleText" : "更新微信号",
@@ -235,41 +235,54 @@
                 "enablePullDownRefresh" : true
             }
         },
-        {
-            "path" : "pages/restMain/restSearch",
-            "style" : {
-                "navigationBarTitleText" : "搜索",
-                "enablePullDownRefresh" : false
-            }
-        },
-        {
-            "path" : "pages/restMain/restMain",
-            "style" : {
-                "navigationBarTitleText" : "餐厅攻略",
-                "enablePullDownRefresh" : false
-            }
-        },
-        {
-            "path" : "pages/map/map",
-            "style" : {
-                "navigationBarTitleText" : "地图",
-                "enablePullDownRefresh" : false
-            }
-        },
-        {
-            "path" : "pages/detail/restDetail",
-            "style" : {
-                "navigationBarTitleText" : "餐厅详情",
-                "enablePullDownRefresh" : true
-            }
-        },
-        {
-            "path" : "pages/postRestComment/postRestComment",
-            "style" : {
-                "navigationBarTitleText" : "餐厅评价",
-                "disableScroll" : true
-            }
-        }
+		{
+			"path": "pages/findFriend/findFriend",
+			"style": {
+				"navigationBarTitleText": "找搭子",
+				"enablePullDownRefresh": true,
+				"backgroundColor" : "#ffffff"
+			}
+		},
+		{
+			"path": "pages/findFriend/findClassmate",
+			"style": {
+				"navigationBarTitleText": "课友群",
+				"enablePullDownRefresh": true,
+				"backgroundColor" : "#ffffff"
+			}
+		},
+		{
+			"path": "pages/findFriend/findClassmateTech",
+			"style": {
+				"navigationBarTitleText": "理工类",
+				"enablePullDownRefresh": true,
+				"backgroundColor": "#ffffff"
+			}
+		},
+		{
+			"path": "pages/findFriend/findClassmateArt",
+			"style": {
+				"navigationBarTitleText": "艺术类",
+				"enablePullDownRefresh": true,
+				"backgroundColor": "#ffffff"
+			}
+		},
+		{
+			"path": "pages/findFriend/findClassmateLitSoc",
+			"style": {
+				"navigationBarTitleText": "社科文学类",
+				"enablePullDownRefresh": true,
+				"backgroundColor": "#ffffff"
+			}
+		},
+		{
+			"path": "pages/findFriend/singlePostDetail",
+			"style": {
+				"navigationBarTitleText": "详情",
+				"enablePullDownRefresh": false,
+				"backgroundColor": "#ffffff"
+			}
+		}
     ],
     "condition" : {
         "current" : 0,
@@ -341,7 +354,31 @@
             {
                 "name" : "RestMap",
                 "path" : "pages/map/map"
-            }
+            },
+			{
+				"name": "findFriend",
+				"path": "pages/findFriend/findFriend"
+			},
+			{
+				"name": "findClassmate",
+				"path": "pages/findFriend/findClassmate"
+			},
+			{
+				"name": "findClassmateTech",
+				"path": "pages/findFriend/findClassmateTech"
+			},
+			{
+				"name": "findClassmateArt",
+				"path": "pages/findFriend/findClassmateArt"
+			},
+			{
+				"name": "findClassmateLitSoc",
+				"path": "pages/findFriend/findClassmateLitSoc"
+			},
+			{
+				"name": "singlePostDetail",
+				"path": "pages/findFriend/singlePostDetail"
+			}
         ]
     },
     "globalStyle" : {
@@ -363,6 +400,12 @@
                 "iconPath" : "./static/home.png",
                 "selectedIconPath" : "./static/home-selected.png"
             },
+/* 			{
+				"pagePath": "pages/findFriend/findFriend",
+				"text": "麦屯圈",
+				"iconPath": "./static/community.png",
+				"selectedIconPath": "./static/community-selected.png"
+			}, */
             {
                 "pagePath" : "pages/activity/act",
                 "text" : "活动",
