@@ -1,1 +1,0 @@
-<view class="name-page"><view class="title"></view><view class="name-input"><uni-easyinput wx:if="{{b}}" u-i="1ddcb1b7-0" bind:__l="__l" bindupdateModelValue="{{a}}" u-p="{{b}}"></uni-easyinput></view><button class="confirm-button" style="background-color:#9b0000;color:#ffffff" bindtap="{{c}}">确定</button></view>

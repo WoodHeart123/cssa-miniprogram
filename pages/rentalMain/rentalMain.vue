@@ -1,17 +1,5 @@
 <template>
 	<view id="rental-main">
-		<!-- <view class="menu row-container">
-			<view class="search-box" @click="toSearch">
-				<uni-icons type="search" size="30"></uni-icons>
-			</view>
-			<view class="menu-box row-container">
-				<view class="row-container rental-selection">
-					<text @click="clickMenu(0)" :class="{selected:menuIndex==0}">转租</text>
-					<text>/</text>
-					<text @click="clickMenu(1)" :class="{selected:menuIndex==1}">找室友</text>
-				</view>
-			</view>
-		</view> -->
 		<view class="row-container filter-box">
 			<view class="setting-icon" @click="popFilter('price')">
 				<uni-icons type="settings-filled" size="30"></uni-icons>
@@ -80,7 +68,7 @@
 					</view>
 				</view>
 				<view class="pop-button-box">
-					<button class="pop-button">搜索</button>
+					<button class="pop-button" @click="onClickSearch">搜索</button>
 				</view>
 			</view>
 		</uni-popup>
@@ -97,7 +85,7 @@
 				menuIndex: 0,
 				filter: {
 					priceLimit: 5000,
-					time: [0, 0],
+					time: [-1, -1],
 				},
 				floorplanList: ['Studio', '1B1B', '2B1B', '2B2B','3B1B','3B2B', '3B3B','4B1B','4B2B', "4B3B", '4B4B','Other'],
 				selectedFloorplan: ['Studio', '1B1B', '2B1B', '2B2B','3B1B','3B2B', '3B3B','4B1B','4B2B', "4B3B", '4B4B',"Other"],
@@ -117,7 +105,7 @@
 				contentText: {
 					contentdown: "上拉显示更多",
 					contentrefresh: "正在加载...",
-					contentnomore: "没有更多租房信息了。我们只会显示"
+					contentnomore: "没有更多租房信息了。我们只会显示转租开始日期大于现在的转租信息。"
 				},
 				
 			}
@@ -190,7 +178,7 @@
 					return;
 				}
 				uni.navigateTo({
-					url: "/pages/rental/rentalPost",
+					url: "/pages/rentalPost/rentalPost",
 				});
 			},
 			popFilter: function(e) {
@@ -218,7 +206,7 @@
 				if(e.detail.value){
 					this.filter.time = [moment().format("YYYY-MM-DD"), moment().add(1,"M").format("YYYY-MM-DD")];	
 				}else{
-					this.filter.time = [0,0];
+					this.filter.time = [-1,-1];
 				}
 				this.timeFilter = e.detail.value;			
 			},
@@ -232,12 +220,25 @@
 					return;
 				}
 				this.$refs.filter.close();
+				this.refresh();
+			},
+			onClickSearch: function(){
+				if(this.selectedFloorplan.length == 0){
+					uni.showToast({
+						title: '请至少选择一个户型',
+						duration: 2000,
+						icon:"none"
+					});
+					return;
+				}
+				this.$refs.filter.close();
+				this.refresh();
 			},
 			refresh:function(){
 				if (!this.triggered) {
 					this.triggered = true;
 					this.limit = 20;
-					this.offset = 1;
+					this.offset = 0;
 					this.rentalList = [];
 					this.status = "loading"
 					this.getRentalList();
@@ -248,7 +249,7 @@
 					return;
 				}
 				let temp = [0,0];
-				if(this.filter.time[0] != 0){
+				if(this.filter.time[0] != -1){
 					temp = [moment(this.filter.time[0],"YYYY-MM-DD").valueOf(),moment(this.filter.time[1],"YYYY-MM-DD").valueOf()]
 				}
 				const res = await wx.cloud.callContainer({

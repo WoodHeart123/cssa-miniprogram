@@ -1,1 +1,0 @@
-<view class="id-page"><view class="title"></view><input class="id-input" placeholder="请输入微信号" bindinput="{{a}}" value="{{b}}"/><button class="confirm-button" style="background-color:#9b0000;color:#ffffff" bindtap="{{c}}">确定</button></view>

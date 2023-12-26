@@ -1,8 +1,5 @@
 <template>
 	<view id="main" class="column-container">
-		<uni-popup ref="ad" background-color="#fff" type="message">
-			<div>aaa</div>
-		</uni-popup>
 		<view class="swiper-container">
 			<main-advertisement width="90vw" height="200px"></main-advertisement>
 		</view>
@@ -28,19 +25,19 @@
 			</view>
 		</view>
 		<view class="row-container function-box">
-			<view class="column-container function-button" @click="toSecond">
+			<view class="column-container function-button" @click="showGuide">
 				<img class="image" src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/main/handbook.png" />
 				<view class="column-container function-text">
 					<text>新生手册</text>
 				</view>
 			</view>
-			<view class="column-container function-button" @click="toRental">
+			<!-- <navigator class="column-container function-button" url='../findFriend/findClassmate'>
 				<img class="image" src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/main/community.png" />
 				<view class="column-container function-text">
 					<text>官方社群</text>
 				</view>
-			</view>
-<!-- 			<view class="row-container function-button">
+			</navigator> -->
+			<!-- 			<view class="row-container function-button">
 			<view class="row-container function-button" @click="toRide()">
 					<view class="column-container function-text">
 						<text>顺风车</text>
@@ -49,19 +46,6 @@
 				</view>
 			</view> -->
 		</view>
-		<!-- 		<view class="leader-list">
-			<text class="cssa-intro-text">CSSA介绍</text>
-			<scroll-view class="row-container leader-intro" :scroll-x="true">
-				<president-box v-for="(leader, index) in leaderInfo" :key="index" :index="index" :leader="leader" />
-			</scroll-view>
-		</view>
-		<uni-popup ref="leaderPopup" type="bottom" backgroundColor="#ffffff">
-			<image class="pop-img" :src="popupLeader.image" />
-			<view class="pop-name">{{popupLeader.name}}</view>
-			<view class="pop-div" />
-			<view class="pop-intro">{{popupLeader.intro}}</view>
-			<view style="height: 4vh;" />
-		</uni-popup> -->
 
 	</view>
 </template>
@@ -70,7 +54,6 @@
 	export default {
 		components: {
 			actBoxVue,
-			presidentBoxVue,
 			mainAdvertisementVue
 		},
 		data() {
@@ -83,6 +66,7 @@
 					selectedBackgroundColor: 'rgba(83, 200, 249,0.9)',
 					selectedBorder: '1px rgba(83, 200, 249,0.9) solid'
 				},
+				isLogin: true,
 			}
 		},
 		onLoad() {
@@ -90,14 +74,23 @@
 			uni.getStorage({
 				key: "userInfo-2",
 				fail: () => {
+					this.isLogin = false;
 					uni.switchTab({
 						url: "/pages/index/index"
 					})
+				},
+				success: (res) => {
+					this.isLogin = true;
 				}
 			});
 		},
 		onShow() {
-			//this.popMask("ad")
+			uni.getStorage({
+				key: "userInfo-2",
+				success: (res) => {
+					this.isLogin = true;
+				}
+			});
 		},
 		onShareAppMessage(res) {
 			return {
@@ -133,11 +126,23 @@
 				})
 			},
 			toSecond: function() {
+				if (!this.isLogin) {
+					uni.switchTab({
+						url: "/pages/index/index"
+					})
+					return;
+				}
 				uni.navigateTo({
 					url: "/pages/second/secondMain",
 				})
 			},
 			toRental: function() {
+				if (!this.isLogin) {
+					uni.switchTab({
+						url: "/pages/index/index"
+					});
+					return;
+				}
 				uni.navigateTo({
 					url: "/pages/rentalMain/rentalMain",
 				})
@@ -152,11 +157,41 @@
 					url: "/pages/restMain/restMain",
 				})
 			},
+			showGuide: function() {
+				uni.showLoading({
+					title: "正在加载：0%"
+				})
+				const task = wx.downloadFile({
+					url: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com/%E6%96%B0%E7%94%9F%E6%89%8B%E5%86%8C.pdf",
+					success: (event) => {
+						uni.hideLoading();
+						wx.openDocument({
+							filePath: event.tempFilePath,
+							showMenu: true,
+							fileType: "pdf"
+						})
+					},
+					fail: (event) => {
+						uni.showToast({
+							icon: "error",
+							title: "下载文件失败"
+						})
+					},
+					complete: () => {
+						uni.hideLoading()
+					}
+				});
+				task.onProgressUpdate((res) => {
+					uni.showLoading({
+						title: `正在加载：${res.progress}%`
+					})
+				})
+			},
 		}
 	}
 	import actBoxVue from '@/components/act-box/act-box.vue';
-	import presidentBoxVue from '../../components/president-box/president-box.vue'
-	import mainAdvertisementVue from '../../components/main-advertisement/main-advertisement.vue'
+	//import presidentBoxVue from '../../components/president-box/president-box.vue'
+	import mainAdvertisementVue from '@/components/main-advertisement/main-advertisement.vue'
 </script>
 
 <style>
@@ -288,7 +323,7 @@
 	}
 
 	.swiper-container {
-		height: 30vh;
+		height: 200px;
 		width: 90vw;
 		margin-left: 5vw;
 	}

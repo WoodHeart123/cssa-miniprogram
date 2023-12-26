@@ -71,7 +71,7 @@
 				if(res.data.status && res.data.status == 100){
 					this.userInfo.isStudent == true;
 					uni.setStorageSync("userInfo-2",this.userInfo);
-					uni.emit("authSuccess");
+					uni.$emit("authSuccess");
 					uni.navigateBack({
 						delta:1
 					})

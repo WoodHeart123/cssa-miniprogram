@@ -70,13 +70,13 @@
 						<input class="uni-input" v-model="rental.contact" maxlength="22" placeholder="请填写微信号以便联系"
 							placeholder-style="font-size:14px;color:gray" />
 					</view>
-					<view class="checkbox check_message" v-if="!hasID">
+<!-- 					<view class="checkbox check_message" v-if="!hasID">
 						<checkbox-group @change="checkBoxChange">
 							<checkbox value="save_contact" :checked="save" color="#9b0000"
 								style="transform:scale(0.8);" />
 							保存联系方式，方便后续使用
 						</checkbox-group>
-					</view>
+					</view> -->
 				</uni-forms-item>
 			</view>
 
@@ -307,11 +307,22 @@
 			},
 			uploadImage: async function() {
 				uni.showLoading({
-					title: "正在上传内容",
+					title: `上传图片,0/${this.rental.imageList.length}`,
 					mask: true
 				});
-				const uploadPromises = this.rental.imageList.map(image => {
-					uploadOSS(image);
+				let uploadedImageCount = 0;
+				const uploadPromises = this.rental.imageList.map(async (image) => {
+					try {
+						const uploadedImage = await uploadOSS(image);
+						uploadedImageCount++;
+						uni.showLoading({
+							title: `上传图片,${uploadedImageCount}/${this.rental.imageList.length}`,
+							mask: true
+						});
+						return uploadedImage;
+					} catch (error) {
+						throw new Error(`上传图片失败`);
+					}
 				});
 				try {
 					const uploadedImages = await Promise.all(uploadPromises);
@@ -329,6 +340,10 @@
 
 			postRental: async function() {
 				try {
+					uni.showLoading({
+						title: `发布信息中`,
+						mask: true
+					});
 					const res = await wx.cloud.callContainer({
 						config: {
 							env: 'prod-9gip97mx4bfa32a3',

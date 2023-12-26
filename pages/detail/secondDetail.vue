@@ -55,7 +55,7 @@
 					nickname: '小红豆',
 					avatar: 1,
 				},
-				condition: ['全新', '几乎全新', '明显使用痕迹', '部分损毁'],
+				condition: {"NEW":'全新', "ALMOST_NEW":'几乎全新', 'USED':'明显使用痕迹', "IMPAIRED":'部分损毁'},
 				delivery: {
 					'pickup': '自取',
 					'deliver': '送货',
@@ -147,7 +147,13 @@
 			},
 			setClipboardData: function() {
 				uni.setClipboardData({
-					data: " 微信号: " + this.product.contact
+					data: " 微信号: " + this.product.contact,
+					success: (res) => {
+						uni.showToast({
+							icon:'none',
+							title:'微信号复制成功'
+						})
+					}
 				});
 			},
 			getUserProfile: function() {

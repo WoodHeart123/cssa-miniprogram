@@ -2,15 +2,13 @@
 	<view>
 		<view class="topic-1">联系我们</view>
 		<view class = "gap"></view>
-		<view class="text-middle"> ->&nbsp&nbsp微信公众号: CSSAatUWMadison</view>
+		<view class="text-middle"> ->&nbsp&nbsp微信公众号:<text style="user-select: all;">CSSAatUWMadison</text></view>
 		<view class = "gap"></view>
-		<view class="text-middle"> ->&nbsp&nbspB站账户: CSSAATUWMADISON</view>
+		<view class="text-middle"> ->&nbsp&nbspB站账户: <text style="user-select: all;">CSSAATUWMADISON</text></view>
 		<view class = "gap"></view>
-		<view class="text-middle"> ->&nbsp&nbsp新浪微博: @威斯康星大学UW-CSSA</view>
+		<view class="text-middle"> ->&nbsp&nbsp小红书: <text style="user-select: all;">CSSAatUWMAdison</text></view>
 		<view class = "gap"></view>
-		<view class="text-middle"> ->&nbsp&nbsp小红书: CSSAatUWMAdison</view>
-		<view class = "gap"></view>
-		<view class="text-middle"> ->&nbsp&nbsp小助手微信: cssauwmadison</view>
+		<view class="text-middle">->&nbsp&nbsp小助手微信: <text style="user-select: all;">cssauwmadison</text> </view>
 		<view class = "gap"></view>
 	</view>
 </template>
