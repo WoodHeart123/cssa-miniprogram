@@ -1,21 +1,32 @@
 <template>
 	<view id="remark">
-		<uni-forms style="margin-bottom: 100px;" ref="activity-form" :modelValue="response" :rules="rules"
-			label-position="top">
-			<view class="act-segment" v-for="(info, index) in actDetail.additionalInfo.questions" :key="index">
-				<uni-forms-item :label="info.title" :required="!info.optional" :name="info.title">
-					<view class="placeholder" v-if="info.placeholder&&info.placeholder.length!=0&&info.type!=='input'">
-						<text>{{info.placeholder}}</text></view>
-					<uni-easyinput v-if="info.type==='input'" type="text" v-model="response[info.title]"
-						:placeholder="info.placeholder" />
-					<uni-data-checkbox mode="button" v-if="info.type==='single'" v-model="response[info.title]"
-						:localdata="info.localData"></uni-data-checkbox>
-					<uni-data-checkbox mode="button" v-if="info.type==='multiple'" multiple
-						v-model="response[info.title]" :localdata="info.localData"></uni-data-checkbox>
-					<uni-file-picker v-model="this.images[info.title]" v-if="info.type==='upload'" limit="1" fileMediatype="image" :auto-upload="false"
-						@select="(event)=>onSelectImage(event, info.title)" @delete="onDeleteImage"></uni-file-picker>
-				</uni-forms-item>
+		<view class="swiper-indicator">
+			<view v-for="(info, index) in actDetail.additionalInfo.questions" :key="index" class="swiper-dot"
+				:class="{'swiper-dot-selected': current == index}" @click="onClickIndicator(index)">
+				<text :class="{'swiper-dot-required': !info.optional}">{{index}}</text>
 			</view>
+		</view>
+		<uni-forms id="activity-form" ref="activity-form" :modelValue="response" :rules="rules" label-position="top">
+			<swiper class="swiper-box" @change="onSwipe" :current="current" vertical>
+				<swiper-item class="act-segment" v-for="(info, index) in actDetail.additionalInfo.questions"
+					:key="index">
+					<uni-forms-item :label="info.title" :name="info.title">
+						<view class="placeholder"
+							v-if="info.placeholder&&info.placeholder.length!=0&&info.type!=='input'">
+							<text>{{info.placeholder}}</text>
+						</view>
+						<uni-easyinput v-if="info.type==='input'" type="text" v-model="response[info.title]"
+							:placeholder="info.placeholder" @confirm="onInputConfirm" />
+						<uni-data-checkbox mode="button" v-if="info.type==='single'" v-model="response[info.title]"
+							:localdata="info.localData" @change="onInputConfirm"></uni-data-checkbox>
+						<uni-data-checkbox mode="button" v-if="info.type==='multiple'" multiple
+							v-model="response[info.title]" :localdata="info.localData"></uni-data-checkbox>
+						<uni-file-picker v-model="this.images[info.title]" v-if="info.type==='upload'" limit="1"
+							fileMediatype="image" :auto-upload="false"
+							@select="(event)=>onSelectImage(event, info.title)"></uni-file-picker>
+					</uni-forms-item>
+				</swiper-item>
+			</swiper>
 		</uni-forms>
 
 		<view class="submit-button">
@@ -41,8 +52,9 @@
 				response: {},
 				rules: {},
 				images: {
-					
-				}
+
+				},
+				current: 0,
 			}
 		},
 		onLoad(options) {
@@ -53,12 +65,12 @@
 				title: this.actDetail.title + "报名"
 			})
 			for (let el of this.actDetail.additionalInfo.questions) {
-				if(el.type === 'single' || el.type === 'input'){
+				if (el.type === 'single' || el.type === 'input') {
 					this.response[el.title] = '';
-				}else{
+				} else {
 					this.response[el.title] = [];
 				}
-				if(!el.optional){
+				if (!el.optional) {
 					this.rules[el.title] = {};
 					this.rules[el.title].rules = [{
 						required: true,
@@ -74,10 +86,17 @@
 					})
 				}
 			}
-			if(this.signupInfo.ifJoined){
+			if (this.actDetail.additionalInfo.questions.length >= 1) {
+				this.buttonGroup[0] = {
+					text: '下一个',
+					backgroundColor: "#1684FC",
+					color: '#fff'
+				}
+			}
+			if (this.signupInfo.ifJoined) {
 				this.response = JSON.parse(this.signupInfo.responseJSON)
 				for (let el of this.actDetail.additionalInfo.questions) {
-					if(el.type === 'upload'){
+					if (el.type === 'upload') {
 						this.images[el.title] = this.response[el.title].map((imageUrl) => {
 							return {
 								"url": imageUrl,
@@ -90,6 +109,22 @@
 			wx.cloud.init();
 		},
 		methods: {
+			onInputConfirm: function(e) {
+				if (this.current < this.actDetail.additionalInfo.questions.length - 1) {
+					this.current += 1
+				}
+			},
+			onClickIndicator: function(index) {
+				this.current = index;
+			},
+			onSwipe: function(e) {
+				this.current = e.detail.current;
+				if (this.current === this.actDetail.additionalInfo.questions.length - 1) {
+					this.buttonGroup[0].text = "提交"
+				} else {
+					this.buttonGroup[0].text = "下一个"
+				}
+			},
 			jumpToHomePage() {
 				wx.switchTab({
 					url: '/pages/activity/act'
@@ -133,31 +168,43 @@
 				uni.hideLoading();
 			},
 			async submit() {
-				this.$refs["activity-form"].validate().then(async function(event) {
-					uni.showLoading({
-						title: "记录信息中",
-						mask: true,
+				if (this.current < this.actDetail.additionalInfo.questions.length - 1) {
+					this.current += 1
+				} else {
+					this.$refs["activity-form"].validate().then(async function(e) {
+						uni.showLoading({
+							title: "记录信息中",
+							mask: true,
+						})
+						let bodyData = {
+							actID: this.actDetail.id,
+							responseJSON: JSON.stringify(this.response),
+						};
+						const res = await requestAPI({
+							path: '/activity/register',
+							type: "POST",
+							data: bodyData
+						})
+						uni.hideLoading()
+						if (res.data.status == 100) {
+							uni.reLaunch({
+								url: '/pages/activity/finished',
+							});
+						} else {
+							uni.showToast({
+								title: "服务出错"
+							});
+						}
+					}.bind(this)).catch((e) => {
+						let key = e[0].key;
+						this.actDetail.additionalInfo.questions.forEach((el, idx) => {
+							if (el.title === key) {
+								this.current = idx;
+							}
+						})
 					})
-					let bodyData = {
-						actID: this.actDetail.id,
-						responseJSON: JSON.stringify(this.response),
-					};
-					const res = await requestAPI({
-						path: '/activity/register',
-						type: "POST",
-						data: bodyData
-					})
-					uni.hideLoading()
-					if (res.data.status == 100) {
-						uni.reLaunch({
-							url: '/pages/activity/finished',
-						});
-					} else {
-						uni.showToast({
-							title: "服务出错"
-						});
-					}
-				}.bind(this))
+				}
+
 			},
 		}
 	}
@@ -170,6 +217,44 @@
 		width: 100vw;
 		height: 100vh;
 		overflow-y: scroll;
+		display: flex;
+		background-color: white;
+	}
+
+	.uni-forms {
+		width: 90vw;
+		height: 100vh;
+	}
+
+	.swiper-indicator {
+		width: 10vw;
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		border-right: 1px solid rgba(155, 155, 155, 0.2);
+
+		.swiper-dot {
+			width: 10vw;
+			height: 10vw;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			position: relative;
+			border-bottom: 1px solid rgba(155, 155, 155, 0.2);
+		}
+
+		.swiper-dot-required:before {
+			top: 2px;
+			left: 2px;
+			position: absolute;
+			content: '*';
+			color: rgb(155, 0, 0);
+		}
+
+		.swiper-dot-selected {
+			color: white;
+			background-color: rgba(155, 0, 0, 0.5);
+		}
 	}
 
 	.picker {
@@ -196,53 +281,62 @@
 		padding: 17upx 34upx;
 	}
 
+	.swiper-box {
+		width: 90vw;
+		height: 100vh;
+	}
+
 
 	.act-segment {
-		margin-top: 20px;
-		margin-bottom: 40px;
-		.uni-forms-item__label{
+		width: calc(90vw - 40px) !important;
+		height: calc(100vh - 40px) !important;
+		padding: 20px;
+		background-color: white;
+
+		.uni-forms-item__label {
 			margin-left: 15px;
 		}
-		
-			
-		.checklist-box{
+
+
+		.checklist-box {
 			margin: 0 !important;
 			padding: 10px 10px 10px 10px !important;
 			box-sizing: content-box !important;
-			
-			
+
+
 		}
-		
-		.uni-forms-item__label{
+
+		.uni-forms-item__label {
 			width: 50vw !important;
-			&::before{
+
+			&::before {
 				content: ' ';
 				width: 2px;
 				height: 100%;
 				background-color: #9b0000;
 				margin-right: 3px;
 			}
-			
-			.is-required{
+
+			.is-required {
 				margin-right: 2px;
 			}
-			
+
 		}
-		
+
 		.uni-forms-item__error {
 			margin-left: 5px;
 		}
-		
-		
-		.uni-data-checklist{
+
+
+		.uni-data-checklist {
 			margin: 0 !important;
 		}
-		
-		.uni-forms-item__content{
+
+		.uni-forms-item__content {
 			background-color: white;
 		}
-		
-		.uni-file-picker{
+
+		.uni-file-picker {
 			padding: 10px;
 		}
 	}
@@ -256,9 +350,8 @@
 		padding-left: 35px;
 		color: #999;
 		font-size: 12px;
-		background-color: #F5F5F5;
 		padding-bottom: 5px;
-		
+
 	}
 
 	.name {
@@ -278,11 +371,7 @@
 		bottom: 0;
 	}
 
-	.uni-forms {
-		margin-bottom: 100px;
-	}
-	
-	.uni-data-checklist .checklist-group .checklist-box.is--button{
+	.uni-data-checklist .checklist-group .checklist-box.is--button {
 		font-size: 20px;
 	}
 </style>
