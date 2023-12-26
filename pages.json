@@ -240,7 +240,47 @@
 			"style": {
 				"navigationBarTitleText": "找搭子",
 				"enablePullDownRefresh": true,
-				 "backgroundColor" : "#F5F5F5"
+				"backgroundColor" : "#ffffff"
+			}
+		},
+		{
+			"path": "pages/findFriend/findClassmate",
+			"style": {
+				"navigationBarTitleText": "课友群",
+				"enablePullDownRefresh": true,
+				"backgroundColor" : "#ffffff"
+			}
+		},
+		{
+			"path": "pages/findFriend/findClassmateTech",
+			"style": {
+				"navigationBarTitleText": "理工类",
+				"enablePullDownRefresh": true,
+				"backgroundColor": "#ffffff"
+			}
+		},
+		{
+			"path": "pages/findFriend/findClassmateArt",
+			"style": {
+				"navigationBarTitleText": "艺术类",
+				"enablePullDownRefresh": true,
+				"backgroundColor": "#ffffff"
+			}
+		},
+		{
+			"path": "pages/findFriend/findClassmateLitSoc",
+			"style": {
+				"navigationBarTitleText": "社科文学类",
+				"enablePullDownRefresh": true,
+				"backgroundColor": "#ffffff"
+			}
+		},
+		{
+			"path": "pages/findFriend/singlePostDetail",
+			"style": {
+				"navigationBarTitleText": "详情",
+				"enablePullDownRefresh": false,
+				"backgroundColor": "#ffffff"
 			}
 		}
     ],
@@ -318,6 +358,26 @@
 			{
 				"name": "findFriend",
 				"path": "pages/findFriend/findFriend"
+			},
+			{
+				"name": "findClassmate",
+				"path": "pages/findFriend/findClassmate"
+			},
+			{
+				"name": "findClassmateTech",
+				"path": "pages/findFriend/findClassmateTech"
+			},
+			{
+				"name": "findClassmateArt",
+				"path": "pages/findFriend/findClassmateArt"
+			},
+			{
+				"name": "findClassmateLitSoc",
+				"path": "pages/findFriend/findClassmateLitSoc"
+			},
+			{
+				"name": "singlePostDetail",
+				"path": "pages/findFriend/singlePostDetail"
 			}
         ]
     },
