@@ -10,17 +10,17 @@
 		
 		<div class="all-subject-cards">
 			<navigator url="./findClassmateArt" class="subject-card">
-				<image src="/pages/findFriend/images/art-logo.png" style="width: 6rem; height: 6rem;" mode="aspectFit" />
+				<image src="https://i.imgur.com/0Ew4dvW.png" style="width: 6rem; height: 6rem;" mode="aspectFit" />
 				<text>艺术类</text>
 			</navigator>
 			
 			<navigator url="./findClassmateTech" class="subject-card">
-				<image src="/pages/findFriend/images/tech-logo.png" style="width: 5rem; height: 5rem;" mode="aspectFit" />
+				<image src="https://i.imgur.com/sYfXkLL.png" style="width: 5rem; height: 5rem;" mode="aspectFit" />
 				<text>理工类</text>
 			</navigator>
 			
 			<navigator url="./findClassmateLitSoc" class="subject-card">
-				<image src="/pages/findFriend/images/lit-logo.png" style="width: 6rem; height: 7rem;" mode="aspectFit" />
+				<image src="https://i.imgur.com/E1jZzWO.png" style="width: 6rem; height: 7rem;" mode="aspectFit" />
 				<text>社科/文学类</text>
 			</navigator>
 		</div>

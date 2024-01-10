@@ -275,7 +275,7 @@
 			"style": {
 				"navigationBarTitleText": "找搭子",
 				"enablePullDownRefresh": true,
-				"backgroundColor" : "#ffffff"
+				"backgroundColor" : "#f5f5f5"
 			}
 		},
 		{

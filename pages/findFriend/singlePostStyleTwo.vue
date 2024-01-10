@@ -7,14 +7,14 @@
 			<image src="https://i.imgur.com/kWQpPbL.png" class="post-image" mode="aspectFill" />
 		</div>
 		
-		<div class="post-title">
-			<image v-bind:src="`${post.avatar}`" class="avatar" mode="aspectFill" />
-			<div style="font-weight: 500; font-size: 90%; width: 70%; text-align: right; overflow-wrap: break-word;">{{ postTitle }}</div>
-		</div>
+		<text class="post-title">{{ postTitle }}</text>
 		
-		<div class="post-title post-time">
-			<div>{{ postOP }}</div>
-			<div>{{ timeElapsedSincePost() }}</div>
+		<div class="post-info post-info-text">
+			<div style="display: flex; flex-direction: row; align-items: center;">
+				<image v-bind:src="`${post.avatar}`" class="avatar" mode="aspectFill" />
+				<text>{{ postOP }}</text>
+			</div>
+			<text>{{ timeElapsedSincePost() }}</text>
 		</div>
 	</div>
 </template>
@@ -39,15 +39,15 @@
 				}
 			},
 			postTitle() {
-				if (this.post.title.length > 12) {
-					return this.post.title.slice(0, 12) + " ..."
+				if (this.post.title.length > 22) {
+					return this.post.title.slice(0, 22) + " ..."
 				} else {
 					return this.post.title
 				}
 			},
 			postOP() {
-				if (this.post.OP.length > 9) {
-					return this.post.OP.slice(0, 9) + " ..."
+				if (this.post.OP.length > 7) {
+					return this.post.OP.slice(0, 7) + " ..."
 				} else {
 					return this.post.OP
 				}
@@ -72,35 +72,47 @@
 <style scoped>
 	.post {
 		width: 100%;
-		height: 13.5rem;
+		height: 14.5rem;
 		display: flex;
 		flex-direction: column;
 		flex-wrap: nowrap;
 		align-items: center;
+		background-color: white;
+		border-radius: 5px;
+	}
+	.post-image {
+		width: 100%; 
+		height: 10rem; 
+		border-top-left-radius: 5px;
+		border-top-right-radius: 5px;
 	}
 	.post-title {
-		width: 100%;
+		font-weight: 500; 
+		font-size: 85%; 
+		width: 90%; 
+		overflow-wrap: break-word;
+		height: 1.85rem;
+		margin-bottom: 0.5rem;
+	}
+	.post-info {
+		width: 90%;
 		display: flex;
 		flex-direction: row;
 		flex-wrap: nowrap;
 		justify-content: space-between;
 		align-items: center;
-		margin-bottom: 0.2rem;
+		margin: 0.2rem auto 0.2rem;
 	}
 	.avatar {
-		width: 2rem;
-		height: 2rem;
+		width: 1.2rem;
+		height: 1.2rem;
 		border-radius: 50%;
+		float: left;
+		margin-right: 0.5rem;
 	}
-	.post-time {
+	.post-info-text {
 		color: darkgray;
 		font-size: 0.7rem;
-	}
-	.post-image {
-		width: 100%; 
-		height: 8rem; 
-		border-radius: 10px;
-		margin-bottom: 0.5rem;
 	}
 	.show-border {}
 	.hide-border {}
