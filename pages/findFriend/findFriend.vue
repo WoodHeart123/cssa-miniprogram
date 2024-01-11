@@ -46,29 +46,29 @@
 		
 		<div class="bottom-bar">
 			<div style="display: flex; flex-direction: column; align-items: center; justify-content: space-around;">
-				<image src="/pages/findFriend/images/home.png" style="height: 1rem; width: 1rem;" mode="aspectFit" />
-				<text style="font-size: 60%; color: darkgray;">CSSA 主页</text>
+				<image src="/pages/findFriend/images/home.png" style="height: 1.2rem; width: 1.2rem; margin: 0.1rem 0rem;" mode="aspectFit" />
+				<text style="font-size: 60%; color: darkgray;">主页</text>
 			</div>
 			
 			<div style="display: flex; flex-direction: column; align-items: center; justify-content: space-around;">
-				<image v-if="unreadPostNotifications" src="/pages/findFriend/images/bell-notification.png" style="height: 2rem; width: 2rem;" mode="aspectFit" />
-				<image v-else src="/pages/findFriend/images/bell.png" style="height: 1rem; width: 1rem;" mode="aspectFit" />
-				<text style="font-size: 60%; color: darkgray;">帖子动态</text>
+				<image v-if="unreadPostNotifications" src="/pages/findFriend/images/bell-notification.png" style="height: 1.4rem; width: 1.4rem;" mode="aspectFit" />
+				<image v-else src="/pages/findFriend/images/bell.png" style="height: 1.4rem; width: 1.4rem; margin-top: 0.05rem;" mode="aspectFit" />
+				<text style="font-size: 60%; color: darkgray;">动态</text>
 			</div>
 			
-			<div style="height: 1rem; width: 1.5rem; border-radius: 3px; background-color: #C5050C; display: flex; justify-content: center; align-items: center;">
-				<uni-icons type="plusempty" size="20" color="white" />
+			<div style="height: 1.5rem; width: 2rem; border-radius: 3px; background-color: #C5050C; display: flex; justify-content: center; align-items: center;">
+				<uni-icons type="plusempty" size="15" color="white" />
 			</div>
 				
 			<div style="display: flex; flex-direction: column; align-items: center; justify-content: space-around;">
-				<image v-if="unreadDM" src="/pages/findFriend/images/incoming-DM.png" style="height: 2rem; width: 2rem;" mode="aspectFit" />
-				<image v-else src="/pages/findFriend/images/DM.png" style="height: 1rem; width: 1rem;" mode="aspectFit" />
+				<image v-if="unreadDM" src="/pages/findFriend/images/incoming-DM.png" style="height: 1.4rem; width: 1.4rem;" mode="aspectFit" />
+				<image v-else src="/pages/findFriend/images/DM.png" style="height: 1.4rem; width: 1.4rem;" mode="aspectFit" />
 				<text style="font-size: 60%; color: darkgray;">私信</text>
 			</div>
 			
 			<div style="display: flex; flex-direction: column; align-items: center; justify-content: space-around;">
-				<image src="/pages/findFriend/images/me.png" style="height: 1rem; width: 1rem;" mode="aspectFit" />
-				<text style="font-size: 60%; color: darkgray;">我的</text>
+				<image src="/pages/findFriend/images/me.png" style="height: 1.2rem; width: 1.2rem;" mode="aspectFit" />
+				<text style="font-size: 60%; color: darkgray; padding-top: 0.1rem;">我的</text>
 			</div>
 		</div>
 	</view>

@@ -39,8 +39,8 @@
 				}
 			},
 			postTitle() {
-				if (this.post.title.length > 22) {
-					return this.post.title.slice(0, 22) + " ..."
+				if (this.post.title.length > 25) {
+					return this.post.title.slice(0, 25) + " ..."
 				} else {
 					return this.post.title
 				}
