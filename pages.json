@@ -273,7 +273,7 @@
 		{
 			"path": "pages/findFriend/findFriend",
 			"style": {
-				"navigationBarTitleText": "找搭子",
+				"navigationBarTitleText": "麦屯圈",
 				"enablePullDownRefresh": true,
 				"backgroundColor" : "#f5f5f5"
 			}

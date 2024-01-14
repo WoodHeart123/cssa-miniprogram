@@ -1,16 +1,6 @@
 <template>
 	<view style="background-color: whitesmoke; height: 100vh; width: 100%;">
 		<div class="find-friend-navbar">
-			<!-- <image v-if="selectedTab == 0" src="/pages/findFriend/images/home-click.png" style="height: 2rem; width: 2rem;" mode="aspectFit" />
-			<image v-else src="/pages/findFriend/images/home.png" style="height: 2rem; width: 2rem;" mode="aspectFit" v-on:click="changeTab(0)" />
-			<image v-if="selectedTab == 1" src="/pages/findFriend/images/food-click.png" style="height: 2rem; width: 2rem;" mode="aspectFit" />
-			<image v-else src="/pages/findFriend/images/food.png" style="height: 2rem; width: 2rem;" mode="aspectFit" v-on:click="changeTab(1)" />
-			<image v-if="selectedTab == 2" src="/pages/findFriend/images/sports-click.png" style="height: 2rem; width: 2rem;" mode="aspectFit" />
-			<image v-else src="/pages/findFriend/images/sports.png" style="height: 2rem; width: 2rem;" mode="aspectFit" v-on:click="changeTab(2)" />
-			<image v-if="selectedTab == 3" src="/pages/findFriend/images/travel-click.png" style="height: 1.8rem; width: 1.8rem;" mode="aspectFit" />
-			<image v-else src="/pages/findFriend/images/travel.png" style="height: 1.8rem; width: 1.8rem;" mode="aspectFit" v-on:click="changeTab(3)" />
-			<image v-if="selectedTab == 4" src="/pages/findFriend/images/game-click.png" style="height: 1.8rem; width: 1.8rem;" mode="aspectFit" />
-			<image v-else src="/pages/findFriend/images/game.png" style="height: 1.8rem; width: 1.8rem;" mode="aspectFit" v-on:click="changeTab(4)" /> -->
 			<div v-for="(item, index) in navbarItems" v-bind:key="item">
 				<div class="find-friend-navbar-item" v-on:click="changeTab(index)">
 					<text v-bind:class="navBarItemTextStyle(index)">{{ item }}</text>
@@ -45,30 +35,28 @@
 		<div v-if="reachEnd" style="width: 100%; height: 5rem; background-color: whitesmoke;" />
 		
 		<div class="bottom-bar">
-			<div style="display: flex; flex-direction: column; align-items: center; justify-content: space-around;">
-				<image src="/pages/findFriend/images/home.png" style="height: 1.2rem; width: 1.2rem; margin: 0.1rem 0rem;" mode="aspectFit" />
-				<text style="font-size: 60%; color: darkgray;">主页</text>
-			</div>
-			
-			<div style="display: flex; flex-direction: column; align-items: center; justify-content: space-around;">
-				<image v-if="unreadPostNotifications" src="/pages/findFriend/images/bell-notification.png" style="height: 1.4rem; width: 1.4rem;" mode="aspectFit" />
-				<image v-else src="/pages/findFriend/images/bell.png" style="height: 1.4rem; width: 1.4rem; margin-top: 0.05rem;" mode="aspectFit" />
-				<text style="font-size: 60%; color: darkgray;">动态</text>
-			</div>
-			
-			<div style="height: 1.5rem; width: 2rem; border-radius: 3px; background-color: #C5050C; display: flex; justify-content: center; align-items: center;">
-				<uni-icons type="plusempty" size="15" color="white" />
+			<div class="bottom-bar-item" v-on:click="toggleNotification">
+				<uni-icons v-if="unreadPostNotifications" type="notification-filled" color="#C5050C" size="20" />
+				<uni-icons v-else type="notification" color="#C5050C" size="20" />
+				<text v-if="unreadPostNotifications" style="font-size: 60%; color: darkgray;">有新动态</text>
+				<text v-else style="font-size: 60%; color: darkgray;">无新动态</text>
 			</div>
 				
-			<div style="display: flex; flex-direction: column; align-items: center; justify-content: space-around;">
-				<image v-if="unreadDM" src="/pages/findFriend/images/incoming-DM.png" style="height: 1.4rem; width: 1.4rem;" mode="aspectFit" />
-				<image v-else src="/pages/findFriend/images/DM.png" style="height: 1.4rem; width: 1.4rem;" mode="aspectFit" />
-				<text style="font-size: 60%; color: darkgray;">私信</text>
+			<div class="bottom-bar-item" v-on:click="toggleDM">
+				<uni-icons v-if="unreadDM" type="email-filled" color="#C5050C" size="20" />
+				<uni-icons v-else type="mail-open" color="#C5050C" size="20" />
+				<text v-if="unreadDM" style="font-size: 60%; color: darkgray;">未读私信</text>
+				<text v-else style="font-size: 60%; color: darkgray;">私信已读</text>
 			</div>
 			
-			<div style="display: flex; flex-direction: column; align-items: center; justify-content: space-around;">
-				<image src="/pages/findFriend/images/me.png" style="height: 1.2rem; width: 1.2rem;" mode="aspectFit" />
-				<text style="font-size: 60%; color: darkgray; padding-top: 0.1rem;">我的</text>
+			<div class="bottom-bar-item">
+				<uni-icons type="person" color="#C5050C" size="20" />
+				<text style="font-size: 60%; color: darkgray;">我的</text>
+			</div>
+			
+			<div class="bottom-bar-item">
+				<uni-icons type="compose" color="#C5050C" size="20" />
+				<text style="font-size: 60%; color: darkgray;">发表动态</text>
 			</div>
 		</div>
 	</view>
@@ -84,11 +72,9 @@
 			return {
 				selectedTab: 0, 
 				navbarItems: ['全部', '吃饭', '运动', '旅游', '娱乐'], 
-				// navbarIcons: ['/pages/findFriend/images/home.png', '/pages/findFriend/images/food.png', '/pages/findFriend/images/sports.png', '/pages/findFriend/images/travel.png', '/pages/findFriend/images/game.png'], 
-				// navbarSelectedIcons: ['/pages/findFriend/images/home-click.png', '/pages/findFriend/images/food-click.png', '/pages/findFriend/images/sports-click.png', '/pages/findFriend/images/travel-click.png', '/pages/findFriend/images/game-click.png'], 
-				// TODO: Get whether the user has unread notifications from backend
+				// TODO: Check whether the user has unread post activities from backend
+				// TODO: Check whether the user has unread DM from backend
 				// TODO: Get the posts from backend in onLoad() function
-				// TODO: Get posts that have user's unread notifications
 				unreadPostNotifications: true, 
 				unreadDM: true, 
 				reachEnd: true, 
@@ -166,6 +152,12 @@
 				uni.navigateTo({
 					url: "./singlePostDetail?post=" + encodeURIComponent(JSON.stringify(post))
 				})
+			}, 
+			toggleNotification(e) {
+				this.unreadPostNotifications = !this.unreadPostNotifications;
+			}, 
+			toggleDM(e) {
+				this.unreadDM = !this.unreadDM;
 			}
 		}
 	}
@@ -242,6 +234,12 @@
 		padding-bottom: 1rem;
 		box-shadow: 0px 0px 15px 0px rgb(0 0 0 / 25%);
 		z-index: 3;
+	}
+	.bottom-bar-item {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-around;
+		align-items: center;
 	}
 	.unread-notification {
 		position: fixed;

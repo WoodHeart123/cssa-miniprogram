@@ -17,8 +17,15 @@
 					<div v-if="post.images.length % 3 == 1" class="individual-post-image" />
 				</div>
 				
-				<div class="leave-comment-button" v-on:click="addComment">
-					<uni-icons type="chat" size="25" color="cadetblue" style="float: right;" />
+				<div class="leave-message-button">
+					<uni-transition ref="ani" v-bind:mode-class="transitionAni" v-bind:show="leaveMessage">
+						<div class="leave-message-button-body">
+							<text style="color: cadetblue; font-size: 80%;" v-on:click="addComment">留言</text><text style="color: white;">|</text><text style="color: cadetblue; font-size: 80%;" v-on:click="addDM">私信</text>
+						</div>
+					</uni-transition>
+					<div v-on:click="addMessage">
+						<uni-icons type="chat" size="25" color="cadetblue" />
+					</div>
 				</div>
 				
 				<div class="post-divide-line">
@@ -26,47 +33,41 @@
 					<div style="font-size: 200%; vertical-align: middle; color: lightgray;">·</div>
 					<div style="width: 45%; height: 1px; background-color: lightgray;" />
 				</div>
-				
-				<div class="post-likes-comments" id="post-likes-comments-id">
-					<div style="width: 90%; padding-top: 1rem;">
-						<uni-icons v-if="!clickLike" type="heart" size="20" color="cadetblue" style="float: left; padding-right: 1rem;" v-on:click="likePost"/>
-						<uni-icons v-else type="heart-filled" size="20" color="cadetblue" style="float: left; padding-right: 1rem;" v-on:click="unlikePost" />
-						<div v-if="likes.length > 0" style="display: flex; flex-direction: row; flex-wrap: wrap; align-content: center;">
-							<div v-for="(name, index) in likes">
-								<div v-if="index < likes.length - 1" style="padding-right: 0.5rem;">{{ name + " ," }}</div>
-							</div>
-							<div>{{ likes[likes.length - 1] }}</div>
-						</div>
-					</div>
-					
-					<div v-if="comments.length > 0" class="post-comments">
-						<div v-for="(comment, index) in comments" class="individual-post-comment" v-bind:id="'individual-post-comment-' + index" v-on:click="reply(comment.userName, index)">
-							<div style="color: cadetblue; float: left; padding-right: 0.15rem;">{{ displayCommentName(comment) }}</div>
-							<div style="color: cadetblue;">: <span style="color: black;">{{ comment.comment }}</span></div>
-						</div>
-					</div>
-				</div>
-				
-				<div v-if="commentBox" class="add-comment" id="my-comment">
-					<div class="comment-text">
-						<uni-easyinput type="textarea" v-model="userComment" v-bind:placeholder="placeHolder" />
-					</div>
-					<div class="send-button" v-on:click="commitComment">
-						<div style="height: 100%; display: flex; justify-content: center; align-items: center;">
-							<!-- <uni-icons type="paperplane-filled" size="20" color="white" /> -->
-							<text style="color: white; font-size: 80%;">发布</text>
-						</div>
-					</div>
-					<div class="cancel-button" v-on:click="cancelComment">
-						<div style="height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
-							<!-- <uni-icons type="closeempty" size="11" color="white" /> -->
-							<text style="color: white; font-size: 80%;">取消</text>
-						</div>
-					</div>
-				</div>
-				
-				<div style="height: 3rem; width: 100vw; background-color: whitesmoke;" />
 			</div>
+			
+			<div class="post-likes-comments" id="post-likes-comments-id">
+				<div style="width: 90%;">
+					<uni-icons v-if="!clickLike" type="heart" size="20" color="cadetblue" style="float: left; padding-right: 1rem;" v-on:click="likePost"/>
+					<uni-icons v-else type="heart-filled" size="20" color="cadetblue" style="float: left; padding-right: 1rem;" v-on:click="unlikePost" />
+					<div v-if="likes.length > 0" style="display: flex; flex-direction: row; flex-wrap: wrap; align-content: center;">
+						<div v-for="(name, index) in likes">
+							<div v-if="index < likes.length - 1" style="padding-right: 0.5rem;">{{ name + " ," }}</div>
+						</div>
+						<div>{{ likes[likes.length - 1] }}</div>
+					</div>
+				</div>
+					
+				<div v-if="comments.length > 0" class="post-comments">
+					<div v-for="(comment, index) in comments" class="individual-post-comment" v-bind:id="'individual-post-comment-' + index" v-on:click="reply(comment.userName, index)">
+						<div style="color: cadetblue; float: left; padding-right: 0.15rem;">{{ displayCommentName(comment) }}</div>
+						<div style="color: cadetblue;">: <span style="color: black;">{{ comment.comment }}</span></div>
+					</div>
+				</div>
+			</div>
+				
+			<div v-if="commentBox" class="add-comment" id="my-comment">
+				<div class="comment-text">
+					<uni-easyinput type="textarea" v-model="userComment" v-bind:placeholder="placeHolder" />
+				</div>
+				<div class="send-button" v-on:click="commitComment">
+					<text style="color: white; font-size: 80%;">发布</text>
+				</div>
+				<div class="cancel-button" v-on:click="cancelComment">
+					<text style="color: darkgray; font-size: 80%;">取消</text>
+				</div>
+			</div>
+			
+			<div style="height: 3rem; width: 100vw; background-color: whitesmoke;" />
 		</scroll-view>
 		
 		<div v-if="showLargeImage && post.images.length > 0" class="large-images">
@@ -82,6 +83,18 @@
 				</swiper-item>
 			</swiper>
 		</div>
+		
+		<div v-if="composeDM" class="compose-DM">
+			<div class="DM-card">
+				<div style="width: 80%;">
+					<uni-easyinput type="textarea" v-model="userDM" v-bind:placeholder="`私信 @ ${post.OP}`" />
+				</div>
+				<div style="width: 40%;">
+					<div class="DM-send-button" v-on:click="commitDM">发送</div>
+					<div class="DM-cancel-button" v-on:click="cancelDM">取消</div>
+				</div>
+			</div>
+		</div>
 	</view>
 </template>
 
@@ -91,20 +104,23 @@
 			return {
 				userName: "", 
 				userComment: "", 
+				userDM: "", 
 				post: {}, 
 				likes: [], 
 				clickLike: false, 
 				comments: [], 
 				commentBox: false, 
+				leaveMessage: false, 
+				composeDM: false, 
 				showLargeImage: false, 
 				clickedImageIndex: -1, 
-				userInteraction: [], 
 				scrollTo: "", 
 				scrollBack: "post-likes-comments-id", 
 				isTyping: false, 
 				isReply: false, 
 				replyTo: "", 
-				placeHolder: "留言"
+				placeHolder: "留言", 
+				transitionAni: ['fade', 'slide-right']
 			}
 		},
 		onLoad(option) {
@@ -123,12 +139,6 @@
 			this.likes = ["用户 1", "用户 2"]
 			this.comments = [{userName: "用户 1", isReply: false, replyTo: null, comment: "评论评论"}, {userName: "用户 2", isReply: false, replyTo: null, comment: "互动一下, 互动一下, 互动一下, 互动一下, 互动一下, 互动一下, 互动一下, 互动一下, 互动一下, 互动一下, 互动一下, 互动一下, 互动一下, 互动一下"}]
 		},
-		
-		// TODO: update the comment section to the backend database when the user quits this page
-		onUnload() {
-			console.log("page unloaded")
-		}, 
-		
 		computed: {
 			eventTime() {
 				// TODO: is it possible that the backend sends back the string of date in format "yyyy-mm-dd"
@@ -155,6 +165,12 @@
 			unlikePost(e) {
 				this.likes.pop();
 				this.clickLike = false;
+			}, 
+			addMessage(e) {
+				this.leaveMessage = !this.leaveMessage;
+			}, 
+			addDM(e) {
+				this.composeDM = true;
 			}, 
 			addComment(e) {
 				this.commentBox = !this.commentBox;
@@ -185,6 +201,8 @@
 				this.isReply = false;
 				this.commentBox = false;
 				this.scrollTo = this.scrollBack;
+				
+				// TODO: send comment to backend
 			}, 
 			cancelComment(e) {
 				this.userComment = "";
@@ -213,6 +231,15 @@
 				} else {
 					return comment.userName;
 				}
+			}, 
+			commitDM(e) {
+				if (this.userDM != "") {
+					// TODO: send DM to backend
+					this.composeDM = false;
+				}
+			}, 
+			cancelDM(e) {
+				this.composeDM = false;
 			}, 
 			activateLargeImages(index) {
 				this.showLargeImage = true
@@ -295,9 +322,25 @@
 		z-index: 4;
 		background-color: whitesmoke;
 	}
-	.leave-comment-button {
+	.leave-message-button {
 		width: 90%;
-		margin-top: 1rem;
+		margin-top: 3rem;
+		display: flex; 
+		flex-direction: row; 
+		align-items: center; 
+		justify-content: flex-end; 
+		height: 2rem;
+	}
+	.leave-message-button-body {
+		display: flex; 
+		flex-direction: row; 
+		align-items: center; 
+		justify-content: space-evenly; 
+		height: 2rem; 
+		width: 7rem; 
+		background-color: whitesmoke; 
+		border-radius: 5px; 
+		margin-right: 0.5rem;
 	}
 	.post-divide-line {
 		width: 90%;
@@ -306,10 +349,11 @@
 		justify-content: space-around;
 		align-items: center;
 		margin-top: 2rem;
+		margin-bottom: 2rem;
 	}
 	.post-likes-comments {
 		width: 100vw;
-		margin-top: 2rem;
+		margin-top: 1rem;
 		display: flex;
 		flex-direction: column;
 		flex-wrap: nowrap;
@@ -328,7 +372,7 @@
 		width: 100%;
 	}
 	.add-comment {
-		width: 100%; 
+		width: 100vw; 
 		background-color: whitesmoke; 
 		display: flex; 
 		flex-direction: column; 
@@ -348,6 +392,9 @@
 		background-color: cadetblue; 
 		border-radius: 7px;
 		z-index: 3;
+		display: flex; 
+		justify-content: center; 
+		align-items: center;
 	}
 	.cancel-button {
 		position: relative;
@@ -355,8 +402,60 @@
 		left: 18%;
 		height: 1.5rem;
 		width: 3.5rem;
-		background-color: indianred;
+		border-style: solid;
+		border-color: cadetblue;
+		border-width: 1px;
 		border-radius: 7px;
 		z-index: 3;
+		display: flex; 
+		flex-direction: column; 
+		justify-content: center; 
+		align-items: center;
+	}
+	.compose-DM {
+		position: fixed; 
+		top: 0; 
+		width: 100vw; 
+		height: 100vh; 
+		background-color: rgba(0, 0, 0, 20%); 
+		display: flex; 
+		justify-content: center; 
+		align-items: center; 
+		z-index: 5;
+	}
+	.DM-card {
+		width: 70%; 
+		height: 14rem; 
+		display: flex; 
+		flex-direction: column; 
+		align-items: center; 
+		justify-content: space-around; 
+		background-color: rgb(255, 255, 255); 
+		border-radius: 10px;
+	}
+	.DM-send-button {
+		width: 100%; 
+		height: 1.5rem; 
+		border-radius: 10px; 
+		background-color: cadetblue; 
+		display: flex; 
+		justify-content: center; 
+		align-items: center; 
+		color: white; 
+		font-size: 80%; 
+		margin-bottom: 0.5rem;
+	}
+	.DM-cancel-button {
+		width: 100%; 
+		height: 1.5rem; 
+		border-radius: 10px; 
+		border-style: solid; 
+		border-color: cadetblue; 
+		border-width: 1px; 
+		display: flex; 
+		justify-content: center; 
+		align-items: center; 
+		color: darkgray; 
+		font-size: 80%;
 	}
 </style>
