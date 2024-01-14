@@ -35,28 +35,28 @@
 		<div v-if="reachEnd" style="width: 100%; height: 5rem; background-color: whitesmoke;" />
 		
 		<div class="bottom-bar">
+			<div class="bottom-bar-item" v-on:click="toggleDM">
+				<uni-icons v-if="unreadDM" type="email-filled" color="#C5050C90" size="20" />
+				<uni-icons v-else type="mail-open" color="#C5050C90" size="20" />
+				<text v-if="unreadDM" style="font-size: 60%; color: darkgray;">有新私信</text>
+				<text v-else style="font-size: 60%; color: darkgray;">无新私信</text>
+			</div>
+			
 			<div class="bottom-bar-item" v-on:click="toggleNotification">
-				<uni-icons v-if="unreadPostNotifications" type="notification-filled" color="#C5050C" size="20" />
-				<uni-icons v-else type="notification" color="#C5050C" size="20" />
+				<uni-icons v-if="unreadPostNotifications" type="notification-filled" color="#C5050C90" size="20" />
+				<uni-icons v-else type="notification" color="#C5050C90" size="20" />
 				<text v-if="unreadPostNotifications" style="font-size: 60%; color: darkgray;">有新动态</text>
 				<text v-else style="font-size: 60%; color: darkgray;">无新动态</text>
 			</div>
-				
-			<div class="bottom-bar-item" v-on:click="toggleDM">
-				<uni-icons v-if="unreadDM" type="email-filled" color="#C5050C" size="20" />
-				<uni-icons v-else type="mail-open" color="#C5050C" size="20" />
-				<text v-if="unreadDM" style="font-size: 60%; color: darkgray;">未读私信</text>
-				<text v-else style="font-size: 60%; color: darkgray;">私信已读</text>
-			</div>
 			
 			<div class="bottom-bar-item">
-				<uni-icons type="person" color="#C5050C" size="20" />
+				<uni-icons type="person" color="#C5050C90" size="20" />
 				<text style="font-size: 60%; color: darkgray;">我的</text>
 			</div>
 			
 			<div class="bottom-bar-item">
-				<uni-icons type="compose" color="#C5050C" size="20" />
-				<text style="font-size: 60%; color: darkgray;">发表动态</text>
+				<uni-icons type="compose" color="#C5050C90" size="20" />
+				<text style="font-size: 60%; color: darkgray;">发布动态</text>
 			</div>
 		</div>
 	</view>

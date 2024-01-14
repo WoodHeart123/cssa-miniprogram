@@ -120,7 +120,7 @@
 				isReply: false, 
 				replyTo: "", 
 				placeHolder: "留言", 
-				transitionAni: ['fade', 'slide-right']
+				transitionAni: ['fade']
 			}
 		},
 		onLoad(option) {
