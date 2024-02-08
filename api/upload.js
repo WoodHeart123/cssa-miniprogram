@@ -1,4 +1,4 @@
-const ossAccessKeySecret = "";
+const ossAccessKeySecret = import.meta.env.VITE_OSS_SECRET;
 export default async function(image, path = "cssa-rental") {
 	return new Promise((resolve, reject) => {
 		uni.uploadFile({
@@ -9,7 +9,7 @@ export default async function(image, path = "cssa-rental") {
 			formData: {
 				key: `${path}/${image.filename}`,
 				region: 'oss-us-west-1',
-				accessKeyId: 'LTAI5tG4Jt4WD77C1XSDTJAj',
+				accessKeyId: 'LTAI5tEL4HSNJXwj1DoNfCxe',
 				accessKeySecret: ossAccessKeySecret,
 				bucket: 'cssa-mini-na',
 				success_action_status: 200,

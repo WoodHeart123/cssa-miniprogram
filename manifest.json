@@ -59,7 +59,8 @@
         "uniStatistics" : {
             "enable" : true
         },
-		"__usePrivacyCheck__": true
+		"__usePrivacyCheck__": true,
+		"libVersion": "latest"  
     },
     "vueVersion" : "3"
 }

@@ -39,7 +39,7 @@
 		methods:{
 			toDetail:function(){
 				uni.navigateTo({
-					url: '/pages/detail/detail?actDetail=' + encodeURIComponent(JSON.stringify(this.actDetail)),
+					url: '/pages/activity/detail?actDetail=' + encodeURIComponent(JSON.stringify(this.actDetail)),
 				});
 			}
 		}
@@ -89,7 +89,7 @@
 
 	.icon {
 		margin-right: 10px;
-		color: #1684FC;
+		color: #9b0000;
 		margin-left: 10px;
 	}
 

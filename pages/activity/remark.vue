@@ -30,7 +30,7 @@
 		</uni-forms>
 
 		<view class="submit-button">
-			<uni-goods-nav :buttonGroup="buttonGroup" :options="options" fill="true" @buttonClick="submit" />
+			<uni-goods-nav :buttonGroup="buttonGroup" :options="options" :fill="true" @buttonClick="submit" />
 		</view>
 	</view>
 </template>

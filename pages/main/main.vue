@@ -76,7 +76,7 @@
 				fail: () => {
 					this.isLogin = false;
 					uni.switchTab({
-						url: "/pages/index/index"
+						url: "/pages/user/index"
 					})
 				},
 				success: (res) => {
@@ -122,13 +122,13 @@
 			},
 			toCourse: function() {
 				uni.navigateTo({
-					url: "/pages/courseMain/courseMain"
+					url: "/pages/coursePage/courseMain"
 				})
 			},
 			toSecond: function() {
 				if (!this.isLogin) {
 					uni.switchTab({
-						url: "/pages/index/index"
+						url: "/pages/user/index"
 					})
 					return;
 				}
@@ -139,22 +139,12 @@
 			toRental: function() {
 				if (!this.isLogin) {
 					uni.switchTab({
-						url: "/pages/index/index"
+						url: "/pages/user/index"
 					});
 					return;
 				}
 				uni.navigateTo({
-					url: "/pages/rentalMain/rentalMain",
-				})
-			},
-			toRide: function() {
-				uni.navigateTo({
-					url: "/pages/rideMain/rideMain",
-				})
-			},
-			toRest: function() {
-				uni.navigateTo({
-					url: "/pages/restMain/restMain",
+					url: "/pages/rental/main",
 				})
 			},
 			showGuide: function() {
@@ -190,7 +180,6 @@
 		}
 	}
 	import actBoxVue from '@/components/act-box/act-box.vue';
-	//import presidentBoxVue from '../../components/president-box/president-box.vue'
 	import mainAdvertisementVue from '@/components/main-advertisement/main-advertisement.vue'
 </script>
 
