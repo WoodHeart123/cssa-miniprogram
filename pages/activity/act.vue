@@ -19,7 +19,7 @@
 	export default {
 		onShareAppMessage(res) {
 			return {
-				title: "麦屯小助手",
+				title: "麦屯小助手-活动报名",
 				path: '/pages/activity/act'
 			}
 		},
@@ -73,6 +73,18 @@
 				}
 			},
 			async getActivityList() {
+<<<<<<< HEAD
+				const opts = {
+				    path: "/activity/events",
+				    type: 'GET',
+				};
+				
+				requestAPI(opts).then(response => {
+				    this.actDetailList = response.data.data;
+				    uni.stopPullDownRefresh();
+				}).catch(error => {
+				    console.error("Error fetching activity events:", error);
+=======
 				const res = await wx.cloud.callContainer({
 					config: {
 						env: 'prod-9gip97mx4bfa32a3', // 微信云托管的环境ID
@@ -82,12 +94,22 @@
 					header: {
 						'X-WX-SERVICE': 'springboot-ds71',
 					}
+>>>>>>> develop
 				});
-				this.actDetailList = res.data.data;
-				uni.stopPullDownRefresh();
 
 			},
 			async getRegisterList() {
+<<<<<<< HEAD
+				const opts = {
+				    path: "/activity/register",
+				    type: 'GET',
+				};
+				requestAPI(opts).then(response => {
+				    this.registerList = response.data.data;
+				    uni.stopPullDownRefresh();
+				}).catch(error => {
+				    console.error("Failed to fetch registration list:", error);
+=======
 				const res = await wx.cloud.callContainer({
 					config: {
 						env: 'prod-9gip97mx4bfa32a3',
@@ -97,14 +119,14 @@
 					header: {
 						'X-WX-SERVICE': 'springboot-ds71',
 					}
+>>>>>>> develop
 				});
-				this.registerList = res.data.data;
-				uni.stopPullDownRefresh();
 			},
 		}
 	}
 	import actBoxVue from '@/components/act-box/act-box.vue';
 	import moment from 'moment';
+	import requestAPI from '@/api/request.js'
 </script>
 
 <style>

@@ -9,14 +9,14 @@
             }
         },
         {
-            "path" : "pages/index/index",
+            "path" : "pages/user/index",
             "style" : {
                 "navigationBarTitleText" : "用户主页",
                 "backgroundColor" : "#F5F5F5"
             }
         },
         {
-            "path" : "pages/index/userInfo",
+            "path" : "pages/user/userInfo",
             "style" : {
                 "navigationBarTitleText" : "个人信息",
                 "backgroundColor" : "#f5f5f5"
@@ -31,10 +31,11 @@
             }
         },
         {
-            "path" : "pages/detail/detail",
+            "path" : "pages/activity/detail",
             "style" : {
                 "navigationBarTitleText" : "详情",
-                "backgroundColor" : "#F5F5F5"
+                "backgroundColor" : "#8c8c8c",
+				"disableScroll" : true
             }
         },
         {
@@ -52,15 +53,11 @@
             }
         },
        {
-            "path" : "pages/index/updateEmail",
             "style" : {
-                "navigationBarTitleText" : "更新邮箱",
-                "backgroundColor" : "#ffffff",
-                "disableScroll" : true
             }
         },
         {
-            "path" : "pages/courseMain/courseMain",
+            "path" : "pages/coursePage/courseMain",
             "style" : {
                 "navigationBarTitleText" : "课程吐槽",
                 "disableScroll" : true
@@ -75,7 +72,7 @@
             }
         },
         {
-            "path" : "pages/studentAuth/studentAuth",
+            "path" : "pages/user/studentAuth",
             "style" : {
                 "navigationBarTitleText" : "UW-Madison学生认证",
                 "enablePullDownRefresh" : false,
@@ -84,33 +81,24 @@
             }
         },
         {
-            "path" : "pages/index/updateName",
+            "path" : "pages/user/updateName",
             "style" : {
                 "navigationBarTitleText" : "更新昵称",
                 "enablePullDownRefresh" : false
             }
         },
        {
-            "path" : "pages/index/updateID",
+            "path" : "pages/user/updateID",
             "style" : {
                 "navigationBarTitleText" : "更新微信号",
                 "enablePullDownRefresh" : false
             }
         },
         {
-            "path" : "pages/postComment/postComment",
+            "path" : "pages/coursePage/postComment",
             "style" : {
                 "navigationBarTitleText" : "发布评论",
                 "enablePullDownRefresh" : false
-            }
-        },
-        {
-            "path" : "pages/community/com-main",
-            "style" : {
-                "navigationBarTitleText" : "社区广场",
-                "backgroundColor" : "#F5F5F5",
-                "enablePullDownRefresh" : true,
-                "onReachBottomDistance" : 100
             }
         },
         {
@@ -129,14 +117,14 @@
             }
         },
         {
-            "path" : "pages/changeAvatar/changeAvatar",
+            "path" : "pages/user/changeAvatar",
             "style" : {
                 "navigationBarTitleText" : "头像",
                 "enablePullDownRefresh" : false
             }
         },
         {
-            "path" : "pages/detail/secondDetail",
+            "path" : "pages/second/secondDetail",
             "style" : {
                 "navigationBarTitleText" : "二手页面",
                 "backgroundColor" : "#F5F5F5"
@@ -150,86 +138,64 @@
             }
         },
         {
-            "path" : "pages/myComment/myComment",
+            "path" : "pages/my/myComment",
             "style" : {
                 "navigationBarTitleText" : "我的吐槽",
                 "disableScroll" : true
             }
         },
         {
-            "path" : "pages/detail/houseDetail",
+            "path" : "pages/rental/rentalDetail",
             "style" : {
                 "navigationBarTitleText" : "转租详情",
                 "backgroundColor" : "#F5F5F5"
             }
         },
         {
-            "path" : "pages/mySecondhand/mySecondhand",
+            "path" : "pages/my/mySecondhand",
             "style" : {
                 "navigationBarTitleText" : "我的二手",
                 "enablePullDownRefresh" : true
             }
         },
         {
-            "path" : "pages/mySave/mySave",
-            "style" : {
-                "navigationBarTitleText" : "我的收藏",
-                "enablePullDownRefresh" : false
-            }
-        },
-        {
-            "path" : "pages/rentalPost/rentalPost",
+            "path" : "pages/rental/rentalPost",
             "style" : {
                 "navigationBarTitleText" : "发布转租",
                 "enablePullDownRefresh" : false,
                 "disableScroll" : true
             }
         },
-		{
-		    "path" : "pages/ride/ridePost",
-		    "style" : {
-		        "navigationBarTitleText" : "发布顺风车",
-		        "enablePullDownRefresh" : false,
-				"disableScroll" : true
-		    }
-		},
         {
-            "path" : "pages/rideMain/rideMain",
-            "style" : {
-                "navigationBarTitleText" : "顺风车",
-                "enablePullDownRefresh" : false
-            }
-        },
-        {
-            "path" : "pages/rentalMain/rentalMain",
+            "path" : "pages/rental/main",
             "style" : {
                 "navigationBarTitleText" : "转租",
                 "enablePullDownRefresh" : false
             }
         },
         {
-            "path" : "pages/aboutCSSA/aboutCSSA",
+            "path" : "pages/aboutCSSA/about",
             "style" : {
-                "navigationBarTitleText" : "",
+                "navigationBarTitleText" : "关于CSSA",
                 "enablePullDownRefresh" : false
             }
         },
         {
-            "path" : "pages/aboutCSSA/ContactUs",
+            "path" : "pages/aboutCSSA/contact",
             "style" : {
-                "navigationBarTitleText" : "",
+                "navigationBarTitleText" : "联系我们",
                 "enablePullDownRefresh" : false
             }
         },
         {
-            "path" : "pages/aboutCSSA/Guanyu",
+            "path" : "pages/aboutCSSA/intro",
             "style" : {
-                "navigationBarTitleText" : "",
+                "navigationBarTitleText" : "关于学联",
                 "enablePullDownRefresh" : false
             }
         },
         {
-            "path" : "pages/myRental/myRental",
+            "path" : "pages/my/myRental",
             "style" : {
                 "navigationBarTitleText" : "我的转租",
                 "enablePullDownRefresh" : true
@@ -279,6 +245,14 @@
 			"path": "pages/findFriend/singlePostDetail",
 			"style": {
 				"navigationBarTitleText": "详情",
+				"enablePullDownRefresh": false,
+				"backgroundColor": "#ffffff"
+			}
+		},
+		{
+			"path": "pages/coursePage/courseStat",
+			"style": {
+				"navigationBarTitleText": "课程统计",
 				"enablePullDownRefresh": false,
 				"backgroundColor": "#ffffff"
 			}
@@ -378,6 +352,10 @@
 			{
 				"name": "singlePostDetail",
 				"path": "pages/findFriend/singlePostDetail"
+			},
+			{
+				"path": "pages/coursePage/courseStat",
+				"name": "courseStat"
 			}
         ]
     },
@@ -413,7 +391,7 @@
                 "selectedIconPath" : "./static/act-selected.png"
             },
             {
-                "pagePath" : "pages/index/index",
+                "pagePath" : "pages/user/index",
                 "text" : "用户",
                 "iconPath" : "./static/user.png",
                 "selectedIconPath" : "./static/user-selected.png"

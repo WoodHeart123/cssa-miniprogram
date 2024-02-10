@@ -52,7 +52,7 @@
 		methods: {
 			toSecondDetail: function() {
 				uni.navigateTo({
-					url: '/pages/detail/secondDetail?product=' + encodeURIComponent(JSON.stringify(this.product)),
+					url: '/pages/second/secondDetail?product=' + encodeURIComponent(JSON.stringify(this.product)),
 				});
 			}
 		}

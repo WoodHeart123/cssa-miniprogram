@@ -107,61 +107,66 @@
 					return;
 				}
 				this.status = "loading"
-				const res = await wx.cloud.callContainer({
-					config: {
-						env: 'prod-9gip97mx4bfa32a3',
-					},
-					path: "/course/getCommentList?courseID=" + this.course.courseID + "&offset=" + this
-						.offset + "&limit=" + this.limit + "&order=" + this.orderType[this.key],
-					method: 'GET',
-					header: {
-						'X-WX-SERVICE': 'springboot-ds71',
-					},
+				const opts = {
+				    path: "/course/getCommentList?courseID=" + this.course.courseID +
+				          "&offset=" + this.offset + "&limit=" + this.limit +
+				          "&order=" + this.orderType[this.key],
+				    type: 'GET',
+				};
+				requestAPI(opts).then(response => {
+				    if (response.data.data.length < this.limit) {
+				        this.status = 'noMore';
+				    } else {
+				        this.status = "more";
+				    }
+				    if (response.data.status == 100 && this.limit <= 40) {
+				        this.offset += this.limit;
+				        if (this.limit <= 40) {
+				            this.limit *= 2; // Increase limit, but ensure it doesn't exceed 40
+				        }
+				        // Update 'liked' status for each comment based on local preferences
+				        response.data.data.forEach(comment => {
+				            comment.liked = this.likedComment.includes(comment.commentID);
+				        });
+				    } else {
+				        uni.showToast({
+				            title: '出现未知错误',
+				            duration: 2000,
+				            image: "../../static/wrong.png"
+				        });
+				    }
+				    // Append new comments to the existing list
+				    this.commentList = this.commentList.concat(response.data.data);
+				}).catch(error => {
+				    console.error("Error fetching comment list:", error);
+				    uni.showToast({
+				        title: '加载评论失败',
+				        icon: 'none',
+				        duration: 2000
+				    });
 				});
-				if (res.data.data.length < this.limit) {
-					this.status = 'noMore';
-				} else {
-					this.status = "more";
-				}
-				if (res.data.status == 100 && this.limit <= 40) {
-					this.offset += this.limit;
-					if(this.limit <= 40){
-						this.limit *= 2;
-					}
-					for(let i = 0;i < res.data.data.length;i++){
-						res.data.data[i].liked = (this.likedComment.indexOf(res.data.data[i].commentID) != -1)
-					}
-				}else {
-					/* 没有成功获取commentList */
-					uni.showToast({
-						title: '出现未知错误',
-						duration: 2000,
-						image: "../../static/wrong.png"
-					});
-				}
-				this.commentList = this.commentList.concat(res.data.data); /* commentList拼接到最近请求的数据 */
 
 			},
 			async login() {
 				uni.showLoading();
-				const res = await wx.cloud.callContainer({
-					config: {
-						env: 'prod-9gip97mx4bfa32a3',
-					},
-					path: "/user/login?nickname=" + encodeURI(this.userInfo.nickName),
-					method: 'GET',
-					header: {
-						'X-WX-SERVICE': 'springboot-ds71',
-					}
-				});
-				this.isLogin = true;
-				this.isStudent = res.data.data.isStudent;
-				uni.setStorage({
-					key: "userInfo-2",
-					data: res.data.data
-				});
+				const opts = {
+				    path: "/user/login?nickname=" + encodeURI(this.userInfo.nickName),
+				    type: 'GET',
+				};
+				
+				requestAPI(opts)
+				    .then(response => {
+				        this.isLogin = true;
+				        this.isStudent = response.data.data.isStudent;
+				        uni.setStorage({
+				            key: "userInfo-2",
+				            data: response.data.data
+				        });
+				    })
+				    .catch(error => {
+				        console.error("Login request failed:", error);
+				    });
 				uni.hideLoading();
-				this.toComment();
 			},
 			toComment: function() {
 				if(this.commentMap[this.course.courseID] != undefined && this.commentMap[this.course.courseID] >= 2){
@@ -176,6 +181,7 @@
 						desc: "获取用户信息",
 						success: (userProfile) => {
 							this.login(userProfile.userInfo.nickName);
+							this.toComment();
 						},
 						fail: () => {
 							uni.showToast({
@@ -190,7 +196,7 @@
 					this.course = data.course;
 				})
 				uni.navigateTo({
-					url: "/pages/postComment/postComment?course=" + encodeURIComponent(JSON.stringify(this.course)) + "&edit=false",
+					url: "/pages/coursePage/postComment?course=" + encodeURIComponent(JSON.stringify(this.course)) + "&edit=false",
 				});
 			}
 		},

@@ -333,7 +333,7 @@
 			},
 			uploadImage: async function() {
 				uni.showLoading({
-					title: `上传图片,0/${this.rental.imageList.length}`,
+					title: `上传图片,0/${this.product.imageList.length}`,
 					mask: true
 				});
 				let uploadedImageCount = 0;
@@ -368,31 +368,32 @@
 					title: `发布信息中`,
 					mask: true
 				});
-				const res = await wx.cloud.callContainer({
-					config: {
-						env: 'prod-9gip97mx4bfa32a3',
-					},
-					path: `/secondhand/saveProduct?save=${this.save}`,
-					method: 'POST',
-					header: {
-						'X-WX-SERVICE': 'springboot-ds71',
-					},
-					data: this.product
+				const opts = {
+				    path: `/secondhand/saveProduct?save=${this.save}`,
+				    type: 'POST',
+				    data: this.product,
+				};
+				
+				requestAPI(opts).then(response => {
+				    uni.hideLoading();
+				    if (response.data.status == 100) {
+				        uni.$emit("uploadSuccess");
+				        uni.navigateBack();
+				    } else {
+				        uni.showToast({
+				            title: "上传信息失败",
+				            icon: "error"
+				        });
+				    }
+				}).catch(error => {
+				    uni.hideLoading();
+				    console.error("Product save request failed:", error);
 				});
-				uni.hideLoading();
-				if (res.data.status == 100) {
-					uni.$emit("uploadSuccess");
-					uni.navigateBack();
-				} else {
-					uni.showToast({
-						title:"上传信息失败",
-						icon: "error"
-					});
-				}
 			},
 		}
 	}
 	import uploadOSS from '@/api/upload.js'
+	import requestAPI from '@/api/request.js'
 </script>
 
 <style>

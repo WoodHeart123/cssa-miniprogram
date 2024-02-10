@@ -76,7 +76,7 @@
 				fail: () => {
 					this.isLogin = false;
 					uni.switchTab({
-						url: "/pages/index/index"
+						url: "/pages/user/index"
 					})
 				},
 				success: (res) => {
@@ -122,13 +122,17 @@
 			},
 			toCourse: function() {
 				uni.navigateTo({
-					url: "/pages/courseMain/courseMain"
+					url: "/pages/coursePage/courseMain"
 				})
 			},
 			toSecond: function() {
 				if (!this.isLogin) {
 					uni.switchTab({
+<<<<<<< HEAD
+						url: "/pages/user/index"
+=======
 						url: "/pages/index/index"
+>>>>>>> develop
 					})
 					return;
 				}
@@ -139,14 +143,20 @@
 			toRental: function() {
 				if (!this.isLogin) {
 					uni.switchTab({
+<<<<<<< HEAD
+						url: "/pages/user/index"
+=======
 						url: "/pages/index/index"
+>>>>>>> develop
 					});
 					return;
 				}
 				uni.navigateTo({
-					url: "/pages/rentalMain/rentalMain",
+					url: "/pages/rental/main",
 				})
 			},
+<<<<<<< HEAD
+=======
 			toRide: function() {
 				uni.navigateTo({
 					url: "/pages/rideMain/rideMain",
@@ -157,6 +167,7 @@
 					url: "/pages/restMain/restMain",
 				})
 			},
+>>>>>>> develop
 			showGuide: function() {
 				uni.showLoading({
 					title: "正在加载：0%"
@@ -190,7 +201,6 @@
 		}
 	}
 	import actBoxVue from '@/components/act-box/act-box.vue';
-	//import presidentBoxVue from '../../components/president-box/president-box.vue'
 	import mainAdvertisementVue from '@/components/main-advertisement/main-advertisement.vue'
 </script>
 
