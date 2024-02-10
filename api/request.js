@@ -1,5 +1,9 @@
 const MODE = "DEV";
 export default async function requestAPI(opt, number = 0) {
+<<<<<<< HEAD
+=======
+	console.log(opt)
+>>>>>>> develop
 	wx.cloud.init()
 	try{
 		if(MODE === "DEV"){

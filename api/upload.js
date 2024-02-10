@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 const ossAccessKeySecret = import.meta.env.VITE_OSS_SECRET;
+=======
+const ossAccessKeySecret = "";
+>>>>>>> develop
 export default async function(image, path = "cssa-rental") {
 	return new Promise((resolve, reject) => {
 		uni.uploadFile({

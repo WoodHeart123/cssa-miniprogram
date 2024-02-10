@@ -6,6 +6,7 @@
 				<view class="title">隐私保护指引</view>
 				<view class="des">
 					在使用当前小程序服务之前，请仔细阅读
+<<<<<<< HEAD:pages/user/index.vue
 					<text class="link"
 						@click="handleOpenPrivacyContract">《麦屯小助手小程序隐私保护指引》</text>。如你同意《麦屯小助手小程序隐私保护指引》，请点击“同意”开始使用。
 				</view>
@@ -13,6 +14,13 @@
 					<button class="item reject" @click="exitMiniProgram">拒绝</button>
 					<button id="agree-btn" class="item agree" open-type="agreePrivacyAuthorization"
 						@click="handleAgreePrivacyAuthorization">同意</button>
+=======
+					<text class="link" @click="handleOpenPrivacyContract">《麦屯小助手小程序隐私保护指引》</text>。如你同意《麦屯小助手小程序隐私保护指引》，请点击“同意”开始使用。
+				</view>
+				<view class="btns">
+					<button class="item reject" @click="exitMiniProgram">拒绝</button>
+					<button id="agree-btn" class="item agree" open-type="agreePrivacyAuthorization" @click="handleAgreePrivacyAuthorization">同意</button>
+>>>>>>> develop:pages/index/index.vue
 				</view>
 			</view>
 		</view>
@@ -81,9 +89,15 @@
 			return {
 				userInfo: {},
 				isLogin: false,
+<<<<<<< HEAD:pages/user/index.vue
 				iconList: [{
 					text: ""
 				}],
+=======
+				iconList:[
+					{text: ""}
+				],
+>>>>>>> develop:pages/index/index.vue
 				showPrivacy: false,
 				needPrivacy: false,
 			}
@@ -91,8 +105,13 @@
 		onLoad() {
 			wx.cloud.init();
 			wx.onNeedPrivacyAuthorization((resolve, eventInfo) => {
+<<<<<<< HEAD:pages/user/index.vue
 				this.showPrivacy = true;
 				this.resolvePrivacyAuthorization = resolve
+=======
+				  this.showPrivacy = true;
+			      this.resolvePrivacyAuthorization = resolve
+>>>>>>> develop:pages/index/index.vue
 			})
 		},
 		onShow() {
@@ -128,11 +147,16 @@
 			}
 		},
 		methods: {
+<<<<<<< HEAD:pages/user/index.vue
 			handleAgreePrivacyAuthorization: function() {
+=======
+			handleAgreePrivacyAuthorization: function(){
+>>>>>>> develop:pages/index/index.vue
 				this.showPrivacy = false;
 				this.needPrivacy = false;
 				this.getUserProfile()
 			},
+<<<<<<< HEAD:pages/user/index.vue
 			handleOpenPrivacyContract: function() {
 				wx.openPrivacyContract({
 					success: () => {}, // 打开成功
@@ -143,6 +167,18 @@
 			exitMiniProgram: function() {
 				uni.showToast({
 					icon: "none",
+=======
+			handleOpenPrivacyContract: function(){
+				 wx.openPrivacyContract({
+				      success: () => {}, // 打开成功
+				      fail: () => {}, // 打开失败
+				      complete: () => {}
+				    })
+			},
+			exitMiniProgram: function(){
+				uni.showToast({
+					icon:"none",
+>>>>>>> develop:pages/index/index.vue
 					title: "需同意隐私策略才能进入个人信息页面"
 				});
 				this.showPrivacy = false;
@@ -176,7 +212,11 @@
 				})
 			},
 			getUserProfile: function() {
+<<<<<<< HEAD:pages/user/index.vue
 				if (this.needPrivacy === true) {
+=======
+				if(this.needPrivacy === true){
+>>>>>>> develop:pages/index/index.vue
 					this.showPrivacy = true;
 					return;
 				}
@@ -200,6 +240,7 @@
 			async login(nickname) {
 				const opts = {
 					path: "/user/login?nickname=" + encodeURI(nickname),
+<<<<<<< HEAD:pages/user/index.vue
 					type: "GET",
 				};
 				requestAPI(opts)
@@ -214,6 +255,19 @@
 					.catch(error => {
 						console.error("Login failed:", error);
 					});
+=======
+					method: 'GET',
+					header: {
+						'X-WX-SERVICE': 'springboot-ds71',
+					}
+				});
+				this.userInfo = res.data.data;
+				uni.setNavigationBarTitle({
+					title: `${this.userInfo.nickname}的主页`
+				});
+				this.isLogin = true;
+				uni.setStorageSync("userInfo-2", res.data.data);
+>>>>>>> develop:pages/index/index.vue
 
 			},
 			toChangeAvatar: function() {
@@ -429,6 +483,74 @@
 		color: #909399;
 	}
 
+	.btns .agree {
+		background: #07c160;
+		color: #fff;
+	}
+	.privacy {
+		position: fixed;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		background: rgba(0, 0, 0, .5);
+		z-index: 9999999;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	
+	.content {
+		width: 632rpx;
+		min-height: 200px;
+		padding: 48rpx;
+		box-sizing: border-box;
+		background: #fff;
+		border-radius: 16rpx;
+	}
+	
+	.content .title {
+		text-align: center;
+		color: #333;
+		font-weight: bold;
+		font-size: 32rpx;
+	}
+	
+	.content .des {
+		font-size: 26rpx;
+		color: #666;
+		margin-top: 40rpx;
+		text-align: justify;
+		line-height: 1.6;
+	}
+	
+	.content .des .link {
+		color: #07c160;
+		text-decoration: underline;
+	}
+	
+	.btns {
+		margin-top: 48rpx;
+		display: flex;
+	}
+	
+	.btns .item {
+		justify-content: space-between;
+		width: 244rpx;
+		height: 80rpx;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 16rpx;
+		box-sizing: border-box;
+		border: none;
+	}
+	
+	.btns .reject {
+		background: #f4f4f5;
+		color: #909399;
+	}
+	
 	.btns .agree {
 		background: #07c160;
 		color: #fff;

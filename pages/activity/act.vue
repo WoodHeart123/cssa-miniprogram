@@ -73,6 +73,7 @@
 				}
 			},
 			async getActivityList() {
+<<<<<<< HEAD
 				const opts = {
 				    path: "/activity/events",
 				    type: 'GET',
@@ -83,10 +84,22 @@
 				    uni.stopPullDownRefresh();
 				}).catch(error => {
 				    console.error("Error fetching activity events:", error);
+=======
+				const res = await wx.cloud.callContainer({
+					config: {
+						env: 'prod-9gip97mx4bfa32a3', // 微信云托管的环境ID
+					},
+					path: "/activity/events",
+					method: 'GET', // 按照自己的业务开发，选择对应的方法
+					header: {
+						'X-WX-SERVICE': 'springboot-ds71',
+					}
+>>>>>>> develop
 				});
 
 			},
 			async getRegisterList() {
+<<<<<<< HEAD
 				const opts = {
 				    path: "/activity/register",
 				    type: 'GET',
@@ -96,6 +109,17 @@
 				    uni.stopPullDownRefresh();
 				}).catch(error => {
 				    console.error("Failed to fetch registration list:", error);
+=======
+				const res = await wx.cloud.callContainer({
+					config: {
+						env: 'prod-9gip97mx4bfa32a3',
+					},
+					path: "/activity/register",
+					method: 'GET',
+					header: {
+						'X-WX-SERVICE': 'springboot-ds71',
+					}
+>>>>>>> develop
 				});
 			},
 		}

@@ -70,7 +70,11 @@
 						<input class="uni-input" v-model="rental.contact" maxlength="22" placeholder="请填写微信号以便联系"
 							placeholder-style="font-size:14px;color:gray" />
 					</view>
+<<<<<<< HEAD:pages/rental/rentalPost.vue
 					<!-- 					<view class="checkbox check_message" v-if="!hasID">
+=======
+<!-- 					<view class="checkbox check_message" v-if="!hasID">
+>>>>>>> develop:pages/rentalPost/rentalPost.vue
 						<checkbox-group @change="checkBoxChange">
 							<checkbox value="save_contact" :checked="save" color="#9b0000"
 								style="transform:scale(0.8);" />
