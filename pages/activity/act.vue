@@ -61,10 +61,6 @@
 					this.getRegisterList();
 				}
 			}
-			setTimeout(function() {
-				uni.stopPullDownRefresh();
-			}, 2000);
-
 		},
 		methods: {
 			onClickItem(e) {
