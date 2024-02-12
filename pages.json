@@ -52,10 +52,6 @@
                 "backgroundColor" : "#F5F5F5"
             }
         },
-       {
-            "style" : {
-            }
-        },
         {
             "path" : "pages/coursePage/courseMain",
             "style" : {

@@ -89,29 +89,6 @@
 				        icon: "error"
 				    });
 				});
-<<<<<<< HEAD:pages/user/studentAuth.vue
-=======
-				if(res.data.status && res.data.status == 100){
-					this.userInfo.isStudent == true;
-					uni.setStorageSync("userInfo-2",this.userInfo);
-					uni.$emit("authSuccess");
-					uni.navigateBack({
-						delta:1
-					})
-				}else if (res.data.status && res.data.status == 106){
-					uni.hideLoading();
-					uni.showToast({
-						title:"验证码错误",
-						icon:"error"
-					})
-				}else{
-					uni.hideLoading();
-					uni.showToast({
-						title:"服务出现错误",
-						icon:"error"
-					})
-				}
->>>>>>> develop:pages/studentAuth/studentAuth.vue
 			},
 			async getAuthCode(){
 				if(this.email.length == 0){

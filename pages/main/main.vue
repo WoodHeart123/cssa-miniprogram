@@ -128,11 +128,7 @@
 			toSecond: function() {
 				if (!this.isLogin) {
 					uni.switchTab({
-<<<<<<< HEAD
 						url: "/pages/user/index"
-=======
-						url: "/pages/index/index"
->>>>>>> develop
 					})
 					return;
 				}
@@ -143,11 +139,7 @@
 			toRental: function() {
 				if (!this.isLogin) {
 					uni.switchTab({
-<<<<<<< HEAD
 						url: "/pages/user/index"
-=======
-						url: "/pages/index/index"
->>>>>>> develop
 					});
 					return;
 				}
@@ -155,19 +147,6 @@
 					url: "/pages/rental/main",
 				})
 			},
-<<<<<<< HEAD
-=======
-			toRide: function() {
-				uni.navigateTo({
-					url: "/pages/rideMain/rideMain",
-				})
-			},
-			toRest: function() {
-				uni.navigateTo({
-					url: "/pages/restMain/restMain",
-				})
-			},
->>>>>>> develop
 			showGuide: function() {
 				uni.showLoading({
 					title: "正在加载：0%"

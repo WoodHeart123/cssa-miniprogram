@@ -209,19 +209,11 @@
 			select: function(floorplan) {
 				this.selectedFloorplan.push(floorplan);
 			},
-<<<<<<< HEAD:pages/rental/main.vue
 			switchTimePicker: function(e) {
 				if (e.detail.value) {
 					this.filter.time = [moment().format("YYYY-MM-DD"), moment().add(1, "M").format("YYYY-MM-DD")];
 				} else {
 					this.filter.time = [-1, -1];
-=======
-			switchTimePicker:function(e){
-				if(e.detail.value){
-					this.filter.time = [moment().format("YYYY-MM-DD"), moment().add(1,"M").format("YYYY-MM-DD")];	
-				}else{
-					this.filter.time = [-1,-1];
->>>>>>> develop:pages/rentalMain/rentalMain.vue
 				}
 				this.timeFilter = e.detail.value;
 			},
@@ -236,21 +228,6 @@
 				}
 				this.$refs.filter.close();
 				this.refresh();
-<<<<<<< HEAD:pages/rental/main.vue
-=======
-			},
-			onClickSearch: function(){
-				if(this.selectedFloorplan.length == 0){
-					uni.showToast({
-						title: '请至少选择一个户型',
-						duration: 2000,
-						icon:"none"
-					});
-					return;
-				}
-				this.$refs.filter.close();
-				this.refresh();
->>>>>>> develop:pages/rentalMain/rentalMain.vue
 			},
 			onClickSearch: function() {
 				if (this.selectedFloorplan.length == 0) {
@@ -278,16 +255,10 @@
 				if (this.status == "noMore") {
 					return;
 				}
-<<<<<<< HEAD:pages/rental/main.vue
 				let temp = [0, 0];
 				if (this.filter.time[0] != -1) {
 					temp = [moment(this.filter.time[0], "YYYY-MM-DD").valueOf(), moment(this.filter.time[1],
 						"YYYY-MM-DD").valueOf()]
-=======
-				let temp = [0,0];
-				if(this.filter.time[0] != -1){
-					temp = [moment(this.filter.time[0],"YYYY-MM-DD").valueOf(),moment(this.filter.time[1],"YYYY-MM-DD").valueOf()]
->>>>>>> develop:pages/rentalMain/rentalMain.vue
 				}
 				const opts = {
 					path: `/rental/getRentalList?limit=${this.limit}&offset=${this.offset}&floorPlanList=${this.selectedFloorplan}&priceLimit=${this.filter.priceLimit}&time=${temp}`,
