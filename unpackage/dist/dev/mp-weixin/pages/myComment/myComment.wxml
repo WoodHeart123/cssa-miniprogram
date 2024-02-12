@@ -1,1 +1,0 @@
-<view class="my-comment"><view wx:for="{{a}}" wx:for-item="comment" wx:key="c" class="box"><comment-box-vue wx:if="{{comment.b}}" u-i="{{comment.a}}" bind:__l="__l" u-p="{{comment.b}}"></comment-box-vue></view><uni-load-more wx:if="{{b}}" u-i="c4831344-1" bind:__l="__l" u-p="{{b}}"></uni-load-more></view>
