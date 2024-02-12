@@ -1,9 +1,0 @@
-{
-  "navigationBarTitleText": "顺风车",
-  "enablePullDownRefresh": false,
-  "usingComponents": {
-    "ride-box-vue": "../../components/ride-box/ride-box",
-    "uni-load-more": "../../uni_modules/uni-load-more/components/uni-load-more/uni-load-more",
-    "uni-fab": "../../uni_modules/uni-fab/components/uni-fab/uni-fab"
-  }
-}

@@ -1,9 +1,0 @@
-{
-  "navigationBarTitleText": "用户主页",
-  "backgroundColor": "#F5F5F5",
-  "usingComponents": {
-    "main-advertisement-vue": "../../components/main-advertisement/main-advertisement",
-    "welcome": "../../components/welcome/welcome",
-    "uni-popup": "../../uni_modules/uni-popup/components/uni-popup/uni-popup"
-  }
-}

@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 const ossAccessKeySecret = 'process.env.VUE_APP_OSS_ACCESS_KEY_SECRET;'
 export default async function(image) {
+=======
+const ossAccessKeySecret = import.meta.env.VITE_OSS_SECRET;
+export default async function(image, path = "cssa-rental") {
+>>>>>>> develop
 	return new Promise((resolve, reject) => {
 		uni.uploadFile({
 			url: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com",
@@ -7,9 +12,9 @@ export default async function(image) {
 			fileType: 'image',
 			name: 'file',
 			formData: {
-				key: `cssa-rental/${image.filename}`,
+				key: `${path}/${image.filename}`,
 				region: 'oss-us-west-1',
-				accessKeyId: 'LTAI5tG4Jt4WD77C1XSDTJAj',
+				accessKeyId: 'LTAI5tEL4HSNJXwj1DoNfCxe',
 				accessKeySecret: ossAccessKeySecret,
 				bucket: 'cssa-mini-na',
 				success_action_status: 200,
@@ -19,7 +24,7 @@ export default async function(image) {
 					reject("上传图片失败");
 				} else {
 					resolve(
-						`https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-rental/${image.filename}`
+						`https://cssa-mini-na.oss-us-west-1.aliyuncs.com/${path}/${image.filename}`
 					);
 				}
 			},

@@ -1,1 +1,0 @@
-<view><view class="finished-title"><text>您已完成活动注册</text><text>请查看邮箱获取付款信息</text></view><view class="finished-button"><button bindtap="{{a}}">返回活动首页</button></view></view>

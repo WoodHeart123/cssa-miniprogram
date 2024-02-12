@@ -44,7 +44,7 @@
 		methods:{
 			toRentalDetail:function(){
 				uni.navigateTo({
-					url:"/pages/detail/houseDetail?rentalInfo=" + encodeURIComponent(JSON.stringify(this.rentalInfo)),
+					url:"/pages/rental/rentalDetail?rentalInfo=" + encodeURIComponent(JSON.stringify(this.rentalInfo)),
 				})
 			}
 		},

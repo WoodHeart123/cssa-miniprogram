@@ -71,14 +71,14 @@
 						<input class="uni-input" v-model="product.contact" maxlength="22" placeholder="请填写微信号以便联系"
 							placeholder-style="font-size:14px;color:gray" @input="showCheckBox"/>
 					</view>
-					<view class="checkbox check_message" v-if="!hasID">
+<!-- 					<view class="checkbox check_message" v-if="!hasID">
 						<checkbox-group @change="checkBoxChange">
 							<checkbox value="save_contact" :checked="save" color="#9b0000"
 								style="transform:scale(0.8);" />
 
 							保存联系方式，方便后续使用
 						</checkbox-group>
-					</view>
+					</view> -->
 				</uni-forms-item>
 			</view>
 
@@ -333,76 +333,67 @@
 			},
 			uploadImage: async function() {
 				uni.showLoading({
-					title: "正在上传内容",
+					title: `上传图片,0/${this.product.imageList.length}`,
 					mask: true
 				});
-				for (let i = 0; i < this.product.imageList.length; i++) {
-					uni.uploadFile({
-						url: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com",
-						filePath: this.product.imageList[i].filepath,
-						fileType: 'image',
-						name: 'file',
-						formData: {
-							key: "cssa-secondhand/" + this.product.imageList[i].filename,
-							region: 'oss-us-west-1',
-							accessKeyId: 'LTAI5tG4Jt4WD77C1XSDTJAj',
-							accessKeySecret: 'HsXwO3QW67PBzpIV2CeE1uM6bU4sd7',
-							bucket: 'cssa-mini-na',
-							success_action_status:200,
-						},
-						success: res => {
-							console.log(res);
-							if (res.statusCode != 200) {
-								uni.hideLoading();
-								uni.showToast({
-									title: "上传图片失败",
-									icon: "error"
-								});
-								this.uploadFail = true;
-							}else{
-								this.uploadCount++;
-								this.images.push("https://cssa-mini-na.oss-us-west-1.aliyuncs.com" + "/cssa-secondhand/" + this.product.imageList[i].filename)
-							}
-							if (this.uploadCount == this.product.imageList.length) {
-								this.product.images = this.images,
-								this.postProduct();
-							}
-						},
-						fail: res => {
-							uni.hideLoading();
-							uni.showToast({
-								title: "上传图片失败",
-								icon: "error"
-							});
-						}
-					});
-				}
-			},
-			postProduct: async function() {
-				const res = await wx.cloud.callContainer({
-					config: {
-						env: 'prod-9gip97mx4bfa32a3',
-					},
-					path: `/secondhand/saveProduct?save=${this.save}`,
-					method: 'POST',
-					header: {
-						'X-WX-SERVICE': 'springboot-ds71',
-					},
-					data: this.product
+				let uploadedImageCount = 0;
+				const uploadPromises = this.product.imageList.map(async (image) => {
+					try {
+						const uploadedImage = await uploadOSS(image);
+						uploadedImageCount++;
+						uni.showLoading({
+							title: `上传图片,${uploadedImageCount}/${this.product.imageList.length}`,
+							mask: true
+						});
+						return uploadedImage;
+					} catch (error) {
+						throw new Error(`上传图片失败`);
+					}
 				});
-				uni.hideLoading();
-				if (res.data.status == 100) {
-					uni.$emit("uploadSuccess");
-					uni.navigateBack();
-				} else {
+				try {
+					const uploadedImages = await Promise.all(uploadPromises);
+					this.images = uploadedImages;
+					this.product.images = uploadedImages,
+					this.postProduct();
+				} catch (error) {
+					uni.hideLoading();
 					uni.showToast({
-						title: "上传信息失败",
+						title: error,
 						icon: "error"
 					});
 				}
 			},
+			postProduct: async function() {
+				uni.showLoading({
+					title: `发布信息中`,
+					mask: true
+				});
+				const opts = {
+				    path: `/secondhand/saveProduct?save=${this.save}`,
+				    type: 'POST',
+				    data: this.product,
+				};
+				
+				requestAPI(opts).then(response => {
+				    uni.hideLoading();
+				    if (response.data.status == 100) {
+				        uni.$emit("uploadSuccess");
+				        uni.navigateBack();
+				    } else {
+				        uni.showToast({
+				            title: "上传信息失败",
+				            icon: "error"
+				        });
+				    }
+				}).catch(error => {
+				    uni.hideLoading();
+				    console.error("Product save request failed:", error);
+				});
+			},
 		}
 	}
+	import uploadOSS from '@/api/upload.js'
+	import requestAPI from '@/api/request.js'
 </script>
 
 <style>
