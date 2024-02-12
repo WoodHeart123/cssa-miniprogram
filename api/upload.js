@@ -1,10 +1,5 @@
-<<<<<<< HEAD
-const ossAccessKeySecret = 'process.env.VUE_APP_OSS_ACCESS_KEY_SECRET;'
-export default async function(image) {
-=======
 const ossAccessKeySecret = import.meta.env.VITE_OSS_SECRET;
 export default async function(image, path = "cssa-rental") {
->>>>>>> develop
 	return new Promise((resolve, reject) => {
 		uni.uploadFile({
 			url: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com",
