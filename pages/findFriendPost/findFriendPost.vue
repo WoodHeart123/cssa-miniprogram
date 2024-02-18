@@ -44,6 +44,10 @@
 				friendPost: {
 					description: "",
 					title: "",
+					imageList: [],
+					id: "",
+					name: "",
+					time: Date.now(),
 				},
 				images: [],
 				rules: {
@@ -82,6 +86,14 @@
 				}
 			}
 		},
+		onLoad(options) {
+			wx.cloud.init();
+			console.log(options)
+			if (options.id != null && options.name != null) {
+				this.friendPost.id = options.id;
+				this.friendPost.name = options.name;
+			}
+		},
 		methods: {
 			onSelectImage: function(e) {
 				for (let i = 0; i < e.tempFilePaths.length && i < e.tempFiles.length; i++) {
@@ -92,7 +104,7 @@
 				}
 			},
 			onDeleteImage: function(e) {
-				for (let i = 0; i < this.rental.imageList.length; i++) {
+				for (let i = 0; i < this.friendPost.imageList.length; i++) {
 					if (this.friendPost.imageList[i].filename == e.tempFile.name) {
 						this.friendPost.imageList.splice(i, 1);
 						return;
