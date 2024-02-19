@@ -1,18 +1,18 @@
 <template>
 	<view id="findFriendPost">
 		<uni-forms ref="findFriendForm" :modelValue="friendPost" :rules="rules">
-			<view class="card uni-textarea textbox">
+			<view class="uni-input">
 				<uni-forms-item name="title">
-					<span class="span">标题</span>
+				    <!-- <span class="span">标题</span> -->
 					<uni-easyinput type="textarea" v-model="friendPost.title" placeholder="请输入标题"
 						maxlength="400" placeholderStyle="font-size:14px;color:gray" :clearable="clearable">
 					</uni-easyinput>
 				</uni-forms-item>
 			</view>
 			
-			<view class="card uni-textarea textbox">
+			<view class="uni-input-2">
 				<uni-forms-item name="description">
-					<span class="span">内容</span>
+					<!-- <span class="span">内容</span> -->
 					<uni-easyinput type="textarea" v-model="friendPost.description" placeholder="请描述找搭子详情,如/地点/日期等"
 						maxlength="400" placeholderStyle="font-size:14px;color:gray" :clearable="clearable">
 					</uni-easyinput>
@@ -192,17 +192,41 @@
 		background-color: white;
 		overflow-x: scroll;
 	}
-	.card {
-		box-shadow: 0 0 5px 1px rgba(0, 0, 0, .08);
-		border-radius: 5px;
-		padding: 12px 12px 18px 12px;
-		margin-bottom: 5px;
-		height: auto;
+	
+	.uni-input {
+	    border: 0cm;
+	    background: rgba(144, 144, 144, 0.075);  
+	    height: 90px;  
+	    /* border-radius: 5px; */
+		padding: 0; 
+		margin-left: -15px;
+		margin-right: -15px;
 	}
 	
-	.span {
-		margin-right: 10px;
-		font-size: 16px;
+	.uni-input-2 {
+	    border: 0cm;
+	    background: rgba(144, 144, 144, 0.075);  
+	    height: 200px;  
+	    /* border-radius: 5px; */
+		padding: 0; 
+		margin-left: -15px;
+		margin-right: -15px;
+	}
+	
+	.uni-input-2 .uni-easyinput textarea {
+		height: 180px;
+		min-height: 100px;
+	    /* height: 200%; /* Ensure the textarea fills the container height */
+	}
+	
+	.card {
+		box-shadow: 0 0 5px 1px rgba(152, 152, 152, 0.1);
+		/* border-radius: 5px; */
+		/* padding: 12px 12px 18px 12px; */
+		/* margin-bottom: 5px; */
+		height: auto;
+		margin-left: -15px;
+		margin-right: -15px;
 	}
 	
 	.confirm-button {
