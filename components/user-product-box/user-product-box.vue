@@ -24,7 +24,7 @@
 				<view class="button-text">编辑</view>
 			</view>
 			<view class="button row-container" @click="polishMySecondhand(1)"
-				v-if="product.time != 0 && Date.now() - this.product.UTCtimestamp >= 43200000">
+				v-if="product.time != 0 && Date.now() - this.product.timestamp >= 43200000">
 				<view class="icon iconfont">&#xe76f</view>
 				<view class="button-text">擦亮</view>
 			</view>
@@ -55,13 +55,13 @@
 			};
 		},
 		mounted() {
-			this.product.UTCtimestamp = moment(this.product.UTCtime).valueOf()
-			if (moment().year() - moment.utc(this.product.UTCtime).year() > 0) {
-				this.productPublishTime = moment.utc(this.product.UTCtime).format("YYYY-MM-DD");
-			} else if (Date.now() - moment.utc(this.product.UTCtime).valueOf() > 86400000 * 7) {
-				this.productPublishTime = moment.utc(this.product.UTCtime).format("MM-DD");
+			this.product.timestamp = moment(this.product.time).valueOf()
+			if (moment().year() - moment(this.product.time).year() > 0) {
+				this.productPublishTime = moment(this.product.time).format("YYYY-MM-DD");
+			} else if (Date.now() - moment(this.product.time).valueOf() > 86400000 * 7) {
+				this.productPublishTime = moment(this.product.time).format("MM-DD");
 			} else {
-				this.productPublishTime = moment.utc(this.product.UTCtime).locale('zh-cn').fromNow();
+				this.productPublishTime = moment(this.product.time).locale('zh-cn').fromNow();
 			}
 		},
 		methods: {

@@ -24,12 +24,12 @@
 		name:"rental-box",
 		props:["rentalInfo"],
 		mounted(){
-			if(moment().year() - moment.utc(this.rentalInfo.UTCPublishedTime).year() > 0){
-				this.rentalPublishTime = moment.utc(this.rentalInfo.UTCPublishedTime).format("YYYY-MM-DD");
-			}else if(Date.now() - moment.utc(this.rentalInfo.UTCPublishedTime).valueOf() > 86400000 * 7){
-				this.rentalPublishTime = moment.utc(this.rentalInfo.UTCPublishedTime).format("MM-DD");
+			if(moment().year() - moment(this.rentalInfo.publishedTime).year() > 0){
+				this.rentalPublishTime = moment(this.rentalInfo.publishedTime).format("YYYY-MM-DD");
+			}else if(Date.now() - moment(this.rentalInfo.publishedTime).valueOf() > 86400000 * 7){
+				this.rentalPublishTime = moment(this.rentalInfo.publishedTime).format("MM-DD");
 			}else{
-				this.rentalPublishTime = moment.utc(this.rentalInfo.UTCPublishedTime).locale('zh-cn').fromNow();
+				this.rentalPublishTime = moment(this.rentalInfo.publishedTime).locale('zh-cn').fromNow();
 			}
 		},
 		data() {
@@ -55,13 +55,13 @@
 		},
 		watch: {
 		    // whenever question changes, this function will run
-		    'rentalInfo.UTCPublishedTime': function (newVal, oldVal) {
-		     if(moment().year() - moment.utc(this.rentalInfo.UTCPublishedTime).year() > 0){
-		     	this.rentalPublishTime = moment.utc(newVal).format("YYYY-MM-DD");
+		    'rentalInfo.publishedTime': function (newVal, oldVal) {
+		     if(moment().year() - moment(this.rentalInfo.publishedTime).year() > 0){
+		     	this.rentalPublishTime = moment(this.rentalInfo.publishedTime).format("YYYY-MM-DD");
 		     }else if(Date.now() - moment.utc(this.rentalInfo.UTCPublishedTime).valueOf() > 86400000 * 7){
-		     	this.rentalPublishTime = moment.utc(newVal).format("MM-DD");
+		     	this.rentalPublishTime = moment(this.rentalInfo.publishedTime).format("MM-DD");
 		     }else{
-		     	this.rentalPublishTime = moment.utc(newVal).locale('zh-cn').fromNow();
+		     	this.rentalPublishTime = moment(this.rentalInfo.publishedTime).locale('zh-cn').fromNow();
 		     }
 		    }
 		}
