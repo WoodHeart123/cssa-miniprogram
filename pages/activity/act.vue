@@ -55,16 +55,12 @@
 				this.getRegisterList();
 				this.mode = "more";
 			} else {
-				if (current == 0) {
+				if (this.current == 0) {
 					this.getActivityList();
 				} else {
 					this.getRegisterList();
 				}
 			}
-			setTimeout(function() {
-				uni.stopPullDownRefresh();
-			}, 2000);
-
 		},
 		methods: {
 			onClickItem(e) {
