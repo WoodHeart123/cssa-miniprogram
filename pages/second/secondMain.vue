@@ -110,8 +110,10 @@
 				    if (response.data.status == 100) {
 				        this.productList = this.productList.concat(response.data.data);
 				        this.offset += response.data.data.length;
+						console.log(response.data.data.length)
 				        this.status = response.data.data.length != this.limit ? "noMore" : "more";
 				    }
+					console.log(this.status)
 				    this.triggered = false;
 				}).catch(error => {
 				    console.error("Fetch product list failed:", error);
@@ -148,6 +150,10 @@
 					animationType: "pop-in"
 				})
 			},
+			onScrollLower: function() {
+				this.status = "loading";
+				this.getProductList();
+			}
 
 		}
 	}
