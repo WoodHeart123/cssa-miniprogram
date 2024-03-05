@@ -46,6 +46,15 @@
 				</view>
 			</view> -->
 		</view>
+		
+		
+		<uni-popup ref="progress" type="center" :mask-click="false" background-color="#fff" >
+			<view style="width: 80vw;padding:5px;display: flex;flex-direction: row;flex-shrink: 0;">
+				<progress stroke-width="5" :percent="downloadProgress"></progress>
+				<icon style="margin-left: 2px;" type="cancel" size="26" @click="cancelTask"/>
+			</view>
+
+		</uni-popup>
 
 	</view>
 </template>
@@ -67,6 +76,9 @@
 					selectedBorder: '1px rgba(83, 200, 249,0.9) solid'
 				},
 				isLogin: true,
+				downloadProgress: 0,
+				isDownloaded: false,
+				abortTask: false,
 			}
 		},
 		onLoad() {
@@ -148,35 +160,51 @@
 				})
 			},
 			showGuide: function() {
-				uni.showLoading({
-					title: "正在加载：0%"
-				})
-				const task = wx.downloadFile({
+				if(this.isDownloaded){
+					wx.openDocument({
+						filePath: wx.env.USER_DATA_PATH + "/新生手册.pdf",
+						showMenu: true,
+						fileType: "pdf"
+					})
+					return;
+				}
+				this.downloadProgress = 0;
+				this.abortTask = false;
+				this.$refs.progress.open()
+				const downloadTask = wx.downloadFile({
 					url: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com/%E6%96%B0%E7%94%9F%E6%89%8B%E5%86%8C.pdf",
+					filePath: wx.env.USER_DATA_PATH + "/新生手册.pdf",
 					success: (event) => {
 						uni.hideLoading();
-						wx.openDocument({
-							filePath: event.tempFilePath,
-							showMenu: true,
-							fileType: "pdf"
-						})
+						if(!this.abortTask){
+							wx.openDocument({
+								filePath: wx.env.USER_DATA_PATH + "/新生手册.pdf",
+								showMenu: true,
+								fileType: "pdf"
+							})
+						}
+						this.isDownloaded = true;
 					},
 					fail: (event) => {
-						uni.showToast({
-							icon: "error",
-							title: "下载文件失败"
-						})
+						if(!this.abortTask){
+							uni.showToast({
+								icon: "error",
+								title: "下载文件失败"
+							})
+						}
 					},
 					complete: () => {
-						uni.hideLoading()
+						this.$refs.progress.close();
 					}
-				});
-				task.onProgressUpdate((res) => {
-					uni.showLoading({
-						title: `正在加载：${res.progress}%`
-					})
 				})
+				downloadTask.onProgressUpdate((res) => {
+					this.downloadProgress = res.progress;
+				});
 			},
+			cancelTask:function(){
+				this.abortTask = true;
+				this.$refs.progress.close();
+			}
 		}
 	}
 	import actBoxVue from '@/components/act-box/act-box.vue';
@@ -207,16 +235,6 @@
 		height: 100rpx;
 	}
 
-	.leader-list {
-		margin-top: 10vh;
-	}
-
-	.leader-intro {
-		white-space: nowrap;
-		width: 100%;
-		height: 180px;
-	}
-
 	.cssa-intro-text {
 		margin-left: 20rpx;
 		width: 50%;
@@ -224,40 +242,6 @@
 		font-weight: 700;
 		align-items: center;
 	}
-
-
-
-	.pop-img {
-		margin-left: 35vw;
-		margin-top: 5vh;
-		border-radius: 50%;
-		height: 30vw;
-		width: 30vw;
-	}
-
-	.pop-name {
-		margin-top: 2vh;
-		text-align: center;
-		font-weight: 700;
-	}
-
-	.pop-div {
-		background-color: lightgray;
-		height: 0.2vh;
-		width: 94vw;
-		margin-top: 4vh;
-		margin-left: 3vw;
-	}
-
-	.pop-intro {
-		margin-top: 4vh;
-		width: 92vw;
-		margin-left: 4vw;
-		font-weight: 200;
-		font-size: 30rpx;
-	}
-
-
 
 	.column-container {
 		display: flex;
@@ -321,12 +305,10 @@
 	.disabled {
 		color: #ccc !important;
 	}
-
-	.button {
-		margin: 20px 10px 20px 10px;
-		border-radius: 10px;
-		border: 1px solid #AAAAAA;
-		background-color: #1684FC;
-		color: white;
+	
+	.wx-progress-inner-bar {  border-radius: 5px;}
+	
+	progress {
+	    flex:1;
 	}
 </style>
