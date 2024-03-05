@@ -83,13 +83,13 @@
                 "enablePullDownRefresh" : false
             }
         },
-       {
+/*       {
             "path" : "pages/user/updateID",
             "style" : {
                 "navigationBarTitleText" : "更新微信号",
                 "enablePullDownRefresh" : false
             }
-        },
+        }, */
         {
             "path" : "pages/coursePage/postComment",
             "style" : {
@@ -196,8 +196,8 @@
                 "navigationBarTitleText" : "我的转租",
                 "enablePullDownRefresh" : true
             }
-        },
-		{
+        }
+		/* {
 			"path": "pages/findFriend/findFriend",
 			"style": {
 				"navigationBarTitleText": "找搭子",
@@ -252,7 +252,7 @@
 				"enablePullDownRefresh": false,
 				"backgroundColor": "#ffffff"
 			}
-		}
+		} */
     ],
     "condition" : {
         "current" : 0,

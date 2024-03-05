@@ -66,8 +66,8 @@
 			<view class="card">
 				<uni-forms-item name="contact">
 					<view class="uni-column row-view">
-						<span class="span_margin">微信号</span>
-						<input class="uni-input" v-model="rental.contact" maxlength="22" placeholder="请填写微信号以便联系"
+						<span class="span_margin">联系方式</span>
+						<input class="uni-input" v-model="rental.contact" maxlength="22" placeholder="请填写联系方式以便联系"
 							placeholder-style="font-size:14px;color:gray" />
 					</view>
 					<!-- 					<view class="checkbox check_message" v-if="!hasID">
@@ -359,6 +359,11 @@
 						uni.setStorageSync("userInfo-2", this.userInfo);
 						uni.$emit("uploadRentalSuccess");
 						uni.navigateBack();
+					} else if (response.data.status == 201) {
+						uni.showToast({
+							title: "信息中包含敏感内容",
+							icon: "none"
+						});
 					} else {
 						uni.showToast({
 							title: "上传信息失败",

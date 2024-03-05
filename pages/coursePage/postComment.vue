@@ -25,7 +25,8 @@
 						placeholder="可以从课程内容，作业量，需要的前置知识等方面进行评价" maxlength="400" />
 				</uni-forms-item>
 			</uni-forms>
-			<button class="button" style="background-color: #9b0000; color: #ffffff;" type="default" @click="submit">提交</button>
+			<button class="button" style="background-color: #9b0000; color: #ffffff;" type="default"
+				@click="submit">提交</button>
 		</view>
 
 	</scroll-view>
@@ -53,7 +54,7 @@
 					},
 
 				},
-				path:"/course/postcomment",
+				path: "/course/postcomment",
 				course: {},
 
 			}
@@ -96,9 +97,9 @@
 				this.comment.courseID = this.course.courseID;
 				this.comment.courseName = this.course.courseName;
 				this.comment.userAvatar = uni.getStorageSync("userInfo-2").avatar;
-			}else{
+			} else {
 				this.comment = JSON.parse(decodeURIComponent(options.comment));
-			}		
+			}
 			uni.getStorage({
 				key: "commentMap",
 				success: (res) => {
@@ -160,6 +161,13 @@
 					});
 					uni.hideLoading()
 					return;
+				} else if (res.data.status == 201) {
+					uni.showToast({
+						title: "信息中包含敏感内容",
+						icon: "none"
+					});
+					uni.hideLoading()
+					return;
 				} else if (res.data.status == 110) {
 					this.commentMap[this.comment.courseID] = 2;
 					uni.showToast({
@@ -182,18 +190,23 @@
 						this.commentMap[this.comment.courseID] += 1;
 					}
 					uni.setStorageSync("commentMap", this.commentMap);
-					this.course.avgPrefer = (this.course.avgPrefer * this.course.commentCount + this.comment.prefer) / (this.course.commentCount + 1);
-					this.course.avgDifficulty = (this.course.avgDifficulty * this.course.commentCount + this.comment.difficulty) / (this.course.commentCount + 1);
-					this.course.commentCount+=1;
+					this.course.avgPrefer = (this.course.avgPrefer * this.course.commentCount + this.comment.prefer) /
+						(this
+							.course.commentCount + 1);
+					this.course.avgDifficulty = (this.course.avgDifficulty * this.course.commentCount + this.comment
+						.difficulty) / (this.course.commentCount + 1);
+					this.course.commentCount += 1;
 				}
 				uni.hideLoading();
-				uni.$emit("updateCourse",{course:this.course});
+				uni.$emit("updateCourse", {
+					course: this.course
+				});
 				this.$emit("refreshPage");
 				uni.navigateBack();
 			},
-			submit: function() {	
+			submit: function() {
 				this.$refs["form"].validate().then(res => {
-						this.postComment();
+					this.postComment();
 				}).catch(err => {
 					console.log('err', err);
 				})
@@ -241,7 +254,7 @@
 	}
 
 	.blank {
-		margin-top:20px;
+		margin-top: 20px;
 		height: 1px;
 		background-color: #f5f5f5;
 		margin-bottom: 22px;
