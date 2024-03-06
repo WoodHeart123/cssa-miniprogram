@@ -42,7 +42,7 @@
 				userInfo: {},
 				buttonGroup: [{
 					text: '提交',
-					backgroundColor: "#1684FC",
+					backgroundColor: "#9b0000",
 					color: '#fff'
 				}],
 				actDetail: {},
@@ -89,7 +89,7 @@
 			if (this.actDetail.additionalInfo.questions.length >= 1) {
 				this.buttonGroup[0] = {
 					text: '下一个',
-					backgroundColor: "#1684FC",
+					backgroundColor: "#9b0000",
 					color: '#fff'
 				}
 			}

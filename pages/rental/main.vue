@@ -39,7 +39,7 @@
 				<view class="pop-sub-title">价格</view>
 				<view class="row-container price-filter-pop">
 					<view class="price-slider">
-						<slider :value="this.filter.priceLimit" min="0" max="5000" step="100" block-size="15"
+						<slider activeColor="#9b0000" :value="this.filter.priceLimit" min="0" max="5000" step="100" block-size="15"
 							@change="priceLimitChange" @changing="priceLimitChange" />
 					</view>
 					<view class="price-input">
@@ -51,7 +51,7 @@
 				<view class="time-picker">
 					<view style="margin-bottom: 5px;">
 						<text style="margin-right: 5px;">开启时间筛选</text>
-						<switch @change="switchTimePicker" style="transform:scale(0.7)" />
+						<switch color="#9b0000" @change="switchTimePicker" style="transform:scale(0.7)" />
 					</view>
 					<uni-datetime-picker v-show="this.timeFilter" v-model="this.filter.time" type="daterange"
 						:start="start" :end="end" :clear-icon=false />
@@ -61,8 +61,9 @@
 					<view class="floorplan-tag" v-for="(floorplan,index) in floorplanList" :key='index'>
 						<uni-tag v-show="this.selectedFloorplan.indexOf(floorplan)==-1" :text="floorplan"
 							@click="select(floorplan)"></uni-tag>
-						<uni-tag v-show="this.selectedFloorplan.indexOf(floorplan)!=-1" type='primary' :text="floorplan"
-							@click="remove(floorplan)"></uni-tag>
+						<uni-tag v-show="this.selectedFloorplan.indexOf(floorplan)!=-1"
+							custom-style="background-color: #9b0000; border-color: #9b0000; color: #fff;"
+							:text="floorplan" @click="remove(floorplan)"></uni-tag>
 					</view>
 					<view class="all-floorplan-tag"
 						v-show="this.selectedFloorplan.length==this.floorplanList.length||this.selectedFloorplan.length==0"
@@ -271,7 +272,7 @@
 						this.offset += res.data.data.length;
 						this.status = res.data.data.length != this.limit ? "noMore" : "more";
 					} else {
-						
+
 					}
 					this.$nextTick(() => {
 						this.triggered = false;
