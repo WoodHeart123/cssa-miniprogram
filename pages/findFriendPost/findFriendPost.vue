@@ -10,7 +10,24 @@
 				</uni-forms-item>
 			</view>
 			
+
+			<!-- <view class="card uni-form-item uni-column" v-if="!this.edit">
+				<uni-forms-item name="imageList">
+					<view class="image_upload">
+						<uni-file-picker limit="5" fileMediatype="image" :auto-upload="false" @select="onSelectImage"
+							@delete="onDeleteImage"></uni-file-picker>
+					</view>
+				</uni-forms-item>
+			</view> -->
+			
 			<view class="uni-input-2">
+				<uni-forms-item name="imageList">
+					<view class="image_upload">
+						<uni-file-picker limit="5" fileMediatype="image" :auto-upload="false" @select="onSelectImage"
+							@delete="onDeleteImage"></uni-file-picker>
+					</view>
+				</uni-forms-item>
+				
 				<uni-forms-item name="description">
 					<!-- <span class="span">内容</span> -->
 					<uni-easyinput type="textarea" v-model="friendPost.description" placeholder="请描述找搭子详情,如/地点/日期等"
@@ -19,14 +36,7 @@
 				</uni-forms-item>
 			</view>
 			
-			<view class="card uni-form-item uni-column" v-if="!this.edit">
-				<uni-forms-item name="imageList">
-					<view class="image_upload">
-						<uni-file-picker limit="5" fileMediatype="image" :auto-upload="false" @select="onSelectImage"
-							@delete="onDeleteImage"></uni-file-picker>
-					</view>
-				</uni-forms-item>
-			</view>
+			
 			
 			<view class="uni-padding-wrap uni-common-mt confirm-button">
 				<button type="default" style="background-color: #9b0000; color: #ffffff;" plain="true"
@@ -189,45 +199,42 @@
 		min-width: 100vw;
 		height: 100vh;
 		padding: 0 3vw 0 3vw;
-		background-color: white;
-		overflow-x: scroll;
+		background-image: url("https://i.imgur.com/5YBhd6S.png");
+		background-repeat: no-repeat;
+		background-position: bottom;
+		background-size: cover;
 	}
 	
 	.uni-input {
-	    border: 0cm;
-	    background: rgba(144, 144, 144, 0.075);  
-	    height: 90px;  
-	    /* border-radius: 5px; */
-		padding: 0; 
-		margin-left: -15px;
-		margin-right: -15px;
+	    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	    border-radius: 10px; 
+	    padding: 13px; 
+	    margin-bottom: 20px; 
+	    background-color: rgba(0, 0, 0, 0);
+		margin-top: 30px;
+		margin-bottom: 20px;
 	}
 	
 	.uni-input-2 {
-	    border: 0cm;
-	    background: rgba(144, 144, 144, 0.075);  
-	    height: 200px;  
-	    /* border-radius: 5px; */
-		padding: 0; 
-		margin-left: -15px;
-		margin-right: -15px;
+		box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+		border-radius: 10px;
+		padding: 13px; 
+		margin-bottom: 10px;
+		background-color: rgba(0, 0, 0, 0);
 	}
 	
-	.uni-input-2 .uni-easyinput textarea {
+	.uni-input-2 textarea {
 		height: 180px;
 		min-height: 100px;
-	    /* height: 200%; /* Ensure the textarea fills the container height */
+	    /* background-color: rgba(255, 255, 255, 0); */
+		background-color: rgba(0, 0, 0, 0);
 	}
 	
-	.card {
-		box-shadow: 0 0 5px 1px rgba(152, 152, 152, 0.1);
-		/* border-radius: 5px; */
-		/* padding: 12px 12px 18px 12px; */
-		/* margin-bottom: 5px; */
-		height: auto;
-		margin-left: -15px;
-		margin-right: -15px;
-	}
+	/* .card {
+	    padding: 20px;
+	    margin-bottom: 20px;
+	} */
+	
 	
 	.confirm-button {
 		margin-top: 20px;
