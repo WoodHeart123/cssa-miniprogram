@@ -242,6 +242,7 @@
 		}
 	}
 	import commentBoxVue from '@/components/comment-box/comment-box.vue'
+	import requestAPI from '@/api/request.js'
 </script>
 
 <style>

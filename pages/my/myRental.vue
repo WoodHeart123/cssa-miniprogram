@@ -3,22 +3,22 @@
 		<view class="my-rental-box" v-for="(rental, index) in myRental" :key="index">
 			<view class="my-rental-container">
 				<rental-box-vue :rentalInfo="rental"></rental-box-vue>
-				<view class="is-takeoff" v-if="rental.publishedTime == 0">已下架</view>
+				<view class="is-takeoff" v-if="rental.publishedTimestamp == 0">已下架</view>
 			</view>
 			<view class="row-container button-box">
-				<view class="button row-container" @click="editMyRental(index)" v-if="rental.publishedTime != 0">
+				<view class="button row-container" @click="editMyRental(index)" v-if="rental.publishedTimestamp != 0">
 					<view class="icon iconfont">&#xe646</view>
 					<view class="button-text">编辑</view>
 				</view>
-				<view class="button row-container" @click="setRentalTime(index,0)" v-if="rental.publishedTime != 0">
+				<view class="button row-container" @click="setRentalTime(index,0)" v-if="rental.publishedTimestamp != 0">
 					<view class="icon iconfont">&#xe620</view>
 					<view class="button-text">下架</view>
 				</view>
-				<view class="button row-container" @click="setRentalTime(index,1)" v-if="rental.publishedTime == 0">
+				<view class="button row-container" @click="setRentalTime(index,1)" v-if="rental.publishedTimestamp == 0">
 					<view class="icon iconfont">&#xe64b</view>
 					<view class="button-text">上架</view>
 				</view>
-				<view class="button row-container" @click="deleteShow(index)" v-if="rental.publishedTime != 0">
+				<view class="button row-container" @click="deleteShow(index)" v-if="rental.publishedTimestamp != 0">
 					<view class="icon iconfont">&#xe74b</view>
 					<view class="button-text">删除</view>
 				</view>
@@ -161,6 +161,7 @@
 						}
 						this.offset += this.limit;
 						response.data.data.forEach(item => {
+							item.publishedTimestamp = moment(item.publishedTime).valueOf();
 							item.sellerAvatar = this.userInfo.avatar;
 							item.sellerNickname = this.userInfo.nickname;
 						});

@@ -12,7 +12,7 @@
 			<view class="time-box">{{rentalTime}}</view>
 			<view class="price-box">${{this.rentalInfo.price}}</view>
 			<view class="description-box">{{this.rentalInfo.description}}</view>
-			<view class="publish-time-box">{{this.rentalPublishTime}}</view>
+			<view class="publish-time-box" v-if="showRentalTime">{{this.rentalPublishTime}}</view>
 		</view>
 	</view>
 </template>
@@ -24,7 +24,9 @@
 		name:"rental-box",
 		props:["rentalInfo"],
 		mounted(){
-			if(moment().year() - moment(this.rentalInfo.publishedTime).year() > 0){
+			if(moment(this.rentalInfo.publishedTime).valueOf() === 0){
+				this.showRentalTime = false;
+			}else if(moment().year() - moment(this.rentalInfo.publishedTime).year() > 0){
 				this.rentalPublishTime = moment(this.rentalInfo.publishedTime).format("YYYY-MM-DD");
 			}else if(Date.now() - moment(this.rentalInfo.publishedTime).valueOf() > 86400000 * 7){
 				this.rentalPublishTime = moment(this.rentalInfo.publishedTime).format("MM-DD");
@@ -38,7 +40,8 @@
 				houseInfo: {
 					imageList: ["/static/housing.jpg", "/static/housing.jpg", "/static/housing.jpg"],
 				},
-				rentalPublishTime:""
+				rentalPublishTime:"",
+				showRentalTime: true,
 			};
 		},
 		methods:{

@@ -9,9 +9,9 @@
 				<view class="row-container price-box">
 					<view class="price">{{'$' + product.price}}</view>
 				</view>
-				<view class="is-takeoff" v-if="product.time == 0">已下架</view>
+				<view class="is-takeoff" v-if="this.product.timestamp  == 0">已下架</view>
 				<view class="row-container price-box">
-					<view class="time" v-show="product.time!=0">
+					<view class="time" v-show="this.product.timestamp!=0">
 						<span>发布时间：</span>
 						<span style="color:#333">{{this.productPublishTime}}</span>
 					</view>
@@ -19,24 +19,24 @@
 			</view>
 		</view>
 		<view class="row-container button-box">
-			<view class="button row-container" @click="editMySecondhand()" v-if="product.time != 0">
+			<view class="button row-container" @click="editMySecondhand()" v-if="this.product.timestamp != 0">
 				<view class="icon iconfont">&#xe646</view>
 				<view class="button-text">编辑</view>
 			</view>
 			<view class="button row-container" @click="polishMySecondhand(1)"
-				v-if="product.time != 0 && Date.now() - this.product.timestamp >= 43200000">
+				v-if="this.product.timestamp != 0 && Date.now() - this.product.timestamp >= 43200000">
 				<view class="icon iconfont">&#xe76f</view>
 				<view class="button-text">擦亮</view>
 			</view>
-			<view class="button row-container" @click="takeoffMySecondhand" v-if="product.time != 0">
+			<view class="button row-container" @click="takeoffMySecondhand" v-if="this.product.timestamp != 0">
 				<view class="icon iconfont">&#xe620</view>
 				<view class="button-text">下架</view>
 			</view>
-			<view class="button row-container" @click="polishMySecondhand(2)" v-if="product.time == 0">
+			<view class="button row-container" @click="polishMySecondhand(2)" v-if="this.product.timestamp == 0">
 				<view class="icon iconfont">&#xe64b</view>
 				<view class="button-text">上架</view>
 			</view>
-			<view class="button row-container" @click="deleteShow" v-if="product.time != 0">
+			<view class="button row-container" @click="deleteShow" v-if="this.product.timestamp != 0">
 				<view class="icon iconfont">&#xe74b</view>
 				<view class="button-text">删除</view>
 			</view>
