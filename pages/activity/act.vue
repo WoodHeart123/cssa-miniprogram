@@ -1,8 +1,14 @@
 <template>
 	<view id="act">
-		<uni-segmented-control class="topBar" :current="current" :values="items" style-type="text"
-			active-color="#9b0000" @clickItem="onClickItem" />
-		<scroll-view class="scroll" scroll-top="0" scroll-y="true">
+		<top-bar text="CSSA官方活动"></top-bar>
+		<view class="segment">
+			<uni-segmented-control  :current="current" :values="items" style-type="text"
+				active-color="#9b0000" @clickItem="onClickItem" />
+		</view>
+
+		<scroll-view class="scroll" scroll-top="0" scroll-y="true" show-scrollbar="true" refresher-enabled="true" 
+				refresher-background="white" @refresherrefresh="refresh"
+					enable-back-to-top="true" :refresher-triggered="triggered" @scrolltolower="onScrollLower">
 			<view v-if="current == 0" v-for="(actDetail,index) in actDetailList" :key="index">
 				<act-box-vue class="act-box" :actDetail="actDetail" :ifJoined="false"></act-box-vue>
 			</view>
@@ -31,7 +37,7 @@
 				userInfo: {},
 				actDetailList: [],
 				registerList: [],
-				items: ['举办中', '已报名/已参加'],
+				items: ['最新活动', '往期活动'],
 				current: 0,
 				count: 0,
 				mode: "",
@@ -102,9 +108,6 @@
 </script>
 
 <style>
-	#act {
-		display: flex;
-	}
 
 	.avatar-box {
 		width: 100vw;
@@ -123,16 +126,13 @@
 		color: white;
 	}
 
-	.topBar {
+	.segment {
 		width: 100%;
-		height: 50px;
-		position: fixed;
 		z-index: 5;
-		background-color: #efeff4;
+		margin-top: 20px;
 	}
 
 	.scroll {
-		padding-top: 50px;
 		height: calc(100% - 30px);
 		z-index: 1;
 	}

@@ -4,18 +4,19 @@
 		<view v-for="(item, index) in values" :class="[ styleType === 'text' ? '': 'segmented-control__item--button',
 		index === currentIndex&&styleType === 'button' ? 'segmented-control__item--button--active': '',
 		index === 0&&styleType === 'button' ? 'segmented-control__item--button--first': '',
-			index === values.length - 1&&styleType === 'button' ? 'segmented-control__item--button--last': '' ]" :key="index"
-			:style="{ backgroundColor: index === currentIndex && styleType === 'button' ? activeColor : '',borderColor: index === currentIndex&&styleType === 'text'||styleType === 'button'?activeColor:'transparent' }"
+			index === values.length - 1&&styleType === 'button' ? 'segmented-control__item--button--last': '',
+			 styleType === 'text' && index === currentIndex ? 'segmented-control__item--text': '']" :key="index"
+			:style="{ backgroundColor: index === currentIndex && styleType === 'button' ? activeColor : '',borderColor: index === currentIndex&&styleType === 'text'||styleType === 'button'?activeColor:'' }"
 			class="segmented-control__item" @click="_onClick(index)">
 			<view>
 				<text :style="{color:
 				    index === currentIndex
 				      ? styleType === 'text'
-				        ? activeColor
-				        : '#fff'
+				        ? '#161616'
+				        : '#7C7C7C'
 				      : styleType === 'text'
-				        ? '#000'
-				        : activeColor}" class="segmented-control__text" :class="styleType === 'text' && index === currentIndex ? 'segmented-control__item--text': ''">{{ item }}</text>
+				        ? '#7C7C7C'
+				        : '#161616', fontWeight: index === currentIndex?'600':'400'}" class="segmented-control__text paragraph-1">{{ item }}</text>
 			</view>
 
 		</view>
@@ -52,7 +53,7 @@
 			},
 			activeColor: {
 				type: String,
-				default: '#2979FF'
+				default: '#161616'
 			},
 			styleType: {
 				type: String,
@@ -87,14 +88,14 @@
 	}
 </script>
 
-<style lang="scss" >
+<style lang="scss">
 	.segmented-control {
 		/* #ifndef APP-NVUE */
 		display: flex;
 		box-sizing: border-box;
 		/* #endif */
 		flex-direction: row;
-		height: 36px;
+		height: 40px;
 		overflow: hidden;
 		/* #ifdef H5 */
 		cursor: pointer;
@@ -109,7 +110,7 @@
 		position: relative;
 		flex: 1;
 		justify-content: center;
-		align-items: center;
+		border-bottom: 1px solid $main-secondary-color;
 	}
 
 	.segmented-control__item--button {
@@ -133,13 +134,13 @@
 
 	.segmented-control__item--text {
 		border-bottom-style: solid;
-		border-bottom-width: 2px;
-		padding: 6px 0;
+		border-bottom-width: 3px;
+		padding: 0 0 8px 0;
 	}
 
 	.segmented-control__text {
-		font-size: 14px;
-		line-height: 20px;
 		text-align: center;
+		margin: 6px;
+		color: $shade-darker-gray;
 	}
 </style>
