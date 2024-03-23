@@ -7,7 +7,7 @@
 		</view>
 
 		<scroll-view class="scroll" scroll-top="0" scroll-y="true" show-scrollbar="true" refresher-enabled="true" 
-				refresher-background="white" @refresherrefresh="refresh"
+				refresher-background="#F5F5F5" @refresherrefresh="refresh"
 					enable-back-to-top="true" :refresher-triggered="triggered" @scrolltolower="onScrollLower">
 			<view v-if="current == 0" v-for="(actDetail,index) in actDetailList" :key="index">
 				<act-box-vue class="act-box" :actDetail="actDetail" :ifJoined="false"></act-box-vue>
@@ -15,7 +15,6 @@
 			<view v-if="current == 1" v-for="(actDetail,index) in registerList" :key="index">
 				<act-box-vue class="act-box" :actDetail="actDetail" :ifJoined="true"></act-box-vue>
 			</view>
-			<view class="footnote"></view>
 		</scroll-view>
 		<view v-if="current == 1" v-for="(actDetail,index) in registerList" :key="index"></view>
 	</view>
@@ -41,6 +40,7 @@
 				current: 0,
 				count: 0,
 				mode: "",
+				triggered: false
 			}
 		},
 		onLoad() {
@@ -51,27 +51,32 @@
 					this.userInfo = res.data;
 				}
 			});
-			uni.$on("refreshAct", uni.startPullDownRefresh)
+			uni.$on("refreshAct", this.refresh)
 			this.mode = "first";
-			uni.startPullDownRefresh();
-		},
-		onPullDownRefresh() {
-			if (this.mode == "first") {
-				this.getActivityList();
-				this.getRegisterList();
-				this.mode = "more";
-			} else {
-				if (this.current == 0) {
-					this.getActivityList();
-				} else {
-					this.getRegisterList();
-				}
-			}
+			this.refresh();
 		},
 		methods: {
 			onClickItem(e) {
 				if (this.current !== e.currentIndex) {
 					this.current = e.currentIndex;
+				}
+			},
+			refresh: function(){
+				if (!this.triggered) {
+					this.triggered = true;
+				} else {
+					return;
+				}
+				if (this.mode == "first") {
+					this.getActivityList();
+					this.getRegisterList();
+					this.mode = "more";
+				} else {
+					if (this.current == 0) {
+						this.getActivityList();
+					} else {
+						this.getRegisterList();
+					}
 				}
 			},
 			async getActivityList() {
@@ -82,7 +87,9 @@
 				
 				requestAPI(opts).then(response => {
 				    this.actDetailList = response.data.data;
-				    uni.stopPullDownRefresh();
+				    this.$nextTick(() => {
+				    	this.triggered = false;
+				    });
 				}).catch(error => {
 				    console.error("Error fetching activity events:", error);
 				});
@@ -95,7 +102,9 @@
 				};
 				requestAPI(opts).then(response => {
 				    this.registerList = response.data.data;
-				    uni.stopPullDownRefresh();
+				    this.$nextTick(() => {
+				    	this.triggered = false;
+				    });
 				}).catch(error => {
 				    console.error("Failed to fetch registration list:", error);
 				});
@@ -108,23 +117,13 @@
 </script>
 
 <style>
-
-	.avatar-box {
+	#act{
 		width: 100vw;
-		height: 50px;
+		height: 100vh;
 		display: flex;
-		flex-direction: row;
-		align-items: center;
-		justify-content: center;
+		flex-direction: column;
 	}
 
-	.button {
-		margin: 20px 10px 20px 10px;
-		border-radius: 10px;
-		border: 1px solid #AAAAAA;
-		background-color: #1684FC;
-		color: white;
-	}
 
 	.segment {
 		width: 100%;
@@ -133,17 +132,8 @@
 	}
 
 	.scroll {
-		height: calc(100% - 30px);
+		flex-grow: 1;
 		z-index: 1;
-	}
-
-	.footnote {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		min-width: 100%;
-		min-height: 50px;
 	}
 
 	.central-text {

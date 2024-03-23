@@ -23,7 +23,8 @@
 		{
 			"path": "pages/activity/act",
 			"style": {
-				"navigationStyle": "custom"
+				"navigationStyle": "custom",
+				"disableScroll": true
 			}
 		},
 		{

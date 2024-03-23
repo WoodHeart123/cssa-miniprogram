@@ -1,15 +1,15 @@
 <template>
 	<view class="container" @click="toDetail">
 		<div class="box">
+			<div v-if="!ifJoined" class="image" :style="{'background-image': 'url(' + this.actDetail.images[0] +')' }" />
 			<div class="title">
-				<img class="avatar" src="@/static/cssalogo-red-sm.png" />
 				<span>{{this.actDetail.title}}</span>
 			</div>
-			<div v-if="!ifJoined" class="image" :style="{'background-image': 'url(' + this.actDetail.images[0] +')' }" />
 			<div class="row">
 				<span class="iconfont icon">&#xe65e;</span>
 				<span class="font-small">{{this.actDetail.location}}</span>
 			</div>
+			
 			<div class="row">
 				<span class="iconfont icon" style="margin-left: 12px;font-size: 13px;">&#xe8c5;</span>
 				<span class="font-small">{{actDateFormat}}</span>
@@ -54,7 +54,8 @@
 		width: 96vw;
 		margin-left: 2vw;
 		margin-top: 20px;
-		border-radius: 5px;
+		overflow: hidden;
+		border-radius: 18px;
 		box-shadow: rgba(0, 0, 0, 0.2) 0 0 5px;
 		background-color: white;
 	}
