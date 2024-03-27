@@ -1,30 +1,36 @@
 <template>
 	<view class="container" @click="toDetail">
 		<div class="box">
-			<div v-if="!ifJoined" class="image" :style="{'background-image': 'url(' + this.actDetail.images[0] +')' }" />
-			<div class="title">
-				<span>{{this.actDetail.title}}</span>
+			<div class="image"
+				:style="{'background-image': 'url(' + this.actDetail.images[0] +')' }" />
+			<div class="lower-box">
+				<div class="content-box">
+					<div class="title heading-3">
+						<span>{{this.actDetail.title}}</span>
+					</div>
+					<div class="row">
+						<image class="icon" src="@/static/act/time.svg"></image>
+						<span class="font-small paragraph-1">{{actDateFormat}}</span>
+					</div>
+					<div class="row">
+						<image class="icon" src="@/static/act/location.svg"></image>
+						<span class="font-small paragraph-1">{{this.actDetail.location}}</span>
+					</div>
+
+
+				</div>
+				<div class="button-box">
+					<view class="button" :class="{ 'disabled': ifJoined}"><text class="button-text">{{ifJoined?'已报名':'报名'}}</text></view>
+				</div>
 			</div>
-			<div class="row">
-				<span class="iconfont icon">&#xe65e;</span>
-				<span class="font-small">{{this.actDetail.location}}</span>
-			</div>
-			
-			<div class="row">
-				<span class="iconfont icon" style="margin-left: 12px;font-size: 13px;">&#xe8c5;</span>
-				<span class="font-small">{{actDateFormat}}</span>
-			</div>
-			<div class="row" v-if="ifJoined">
-				<span class="iconfont icon" style="margin-left: 10px;font-size: 15px;">&#xe70b;</span>
-				<span class="font-small">{{this.actDetail.price}}</span>
-			</div>
+
 		</div>
 	</view>
 </template>
 
 <script>
 	export default {
-		props: ['actDetail',"ifJoined"],
+		props: ['actDetail', "ifJoined"],
 		name: "act-box",
 		data() {
 			return {
@@ -33,26 +39,29 @@
 		},
 		computed: {
 			actDateFormat() {
-				return moment(this.actDetail.startDate).format("YYYY-MM-DD h:mm a");
+				return moment(this.actDetail.startDate).locale("cn").format("MM.DD/ddd H:mm - ") +
+				moment(this.actDetail.endDate).format("H:mm");
 			}
 		},
-		methods:{
-			toDetail:function(){
+		methods: {
+			toDetail: function() {
 				uni.navigateTo({
-					url: '/pages/activity/detail?actDetail=' + encodeURIComponent(JSON.stringify(this.actDetail)),
+					url: '/pages/activity/detail?actDetail=' + encodeURIComponent(JSON.stringify(this
+						.actDetail)),
 				});
 			}
 		}
 	}
-	import moment from 'moment';
+	import moment from "moment/min/moment-with-locales";
+	import 'moment/locale/zh-cn';
 </script>
 
-<style>
+<style lang="scss">
 	/* @import "@/static/iconfont.css"; */
 
 	.container {
-		width: 96vw;
-		margin-left: 2vw;
+		width: 90vw;
+		margin-left: 5vw;
 		margin-top: 20px;
 		overflow: hidden;
 		border-radius: 18px;
@@ -63,6 +72,32 @@
 	.box {
 		display: flex;
 		flex-direction: column;
+	}
+
+	.lower-box {
+		display: flex;
+		flex-direction: row;
+		margin-bottom: 10px;
+
+		.content-box {
+			width: 50%;
+			height: 100%;
+			padding-left: 7%;
+		}
+		
+		.button-box{
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			min-height: 100%;
+			width: 50%;
+			
+			.button{
+				margin: 15px 0 0 30%;
+				width: 50%;
+				height: 40px;
+			}
+		}
 	}
 
 	.row {
@@ -89,9 +124,9 @@
 	}
 
 	.icon {
+		width: 14px;
+		height: 14px;
 		margin-right: 10px;
-		color: #9b0000;
-		margin-left: 10px;
 	}
 
 	.column {
@@ -104,17 +139,16 @@
 
 	.title {
 		height: 30px;
-		margin: 6px;
 		display: flex;
 		flex-direction: row;
 		align-items: center;
-		font-size: 18px;
-		font-weight: 600;
 	}
-	.avatar{
-		width:20px;
+
+	.avatar {
+		width: 20px;
 		height: 20px;
 		border-radius: 100%;
-		margin-right:5px;
+		margin-right: 5px;
 	}
+	
 </style>

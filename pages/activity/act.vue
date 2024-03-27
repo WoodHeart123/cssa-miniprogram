@@ -5,7 +5,6 @@
 			<uni-segmented-control  :current="current" :values="items" style-type="text"
 				active-color="#9b0000" @clickItem="onClickItem" />
 		</view>
-
 		<scroll-view class="scroll" scroll-top="0" scroll-y="true" show-scrollbar="true" refresher-enabled="true" 
 				refresher-background="#F5F5F5" @refresherrefresh="refresh"
 					enable-back-to-top="true" :refresher-triggered="triggered" @scrolltolower="onScrollLower">
