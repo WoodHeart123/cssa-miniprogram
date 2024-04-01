@@ -11,7 +11,7 @@
 		
 		<div class="post-info post-info-text">
 			<div style="display: flex; flex-direction: row; align-items: center;">
-				<image v-bind:src="`${post.avatar}`" class="avatar" mode="aspectFill" />
+				<image v-bind:src="'https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/' + post.userAvatar + '.jpg'" class="avatar" mode="aspectFill" />
 				<text>{{ postOP }}</text>
 			</div>
 			<text>{{ timeElapsedSincePost() }}</text>
@@ -40,29 +40,29 @@
 			},
 			postTitle() {
 				if (this.post.title.length > 25) {
-					return this.post.title.slice(0, 25) + " ..."
+					return this.post.title.slice(0, 25) + " ...";
 				} else {
-					return this.post.title
+					return this.post.title;
 				}
 			},
 			postOP() {
-				if (this.post.OP.length > 7) {
-					return this.post.OP.slice(0, 7) + " ..."
+				if (this.post.userNickname.length > 7) {
+					return this.post.userNickname.slice(0, 7) + " ...";
 				} else {
-					return this.post.OP
+					return this.post.userNickname;
 				}
 			}
 		}, 
 		methods: {
 			timeElapsedSincePost() {
-				let now = new Date()
-				let elapsed = now - new Date(this.post.postTime)
+				let now = new Date();
+				let elapsed = now - new Date(this.post.createdAt);
 				if (elapsed > 24 * 60 * 60 * 1000) {
-					return (Math.round(elapsed / (24 * 60 * 60 * 1000))).toString() + " 天前"
+					return (Math.round(elapsed / (24 * 60 * 60 * 1000))).toString() + " 天前";
 				} else if (elapsed > 60 * 60 * 1000) {
-					return (Math.round(elapsed / (60 * 60 * 1000))).toString() + " 小时前"
+					return (Math.round(elapsed / (60 * 60 * 1000))).toString() + " 小时前";
 				} else {
-					return (Math.round(elapsed / (60 * 1000))).toString() + " 分钟前"
+					return (Math.round(elapsed / (60 * 1000))).toString() + " 分钟前";
 				}
 			}
 		}

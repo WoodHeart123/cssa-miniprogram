@@ -3,24 +3,24 @@
 		<scroll-view scroll-y="true" scroll-with-animation="true" v-bind:scroll-into-view="scrollTo" style="height: 100%;">
 			<div class="post-content">
 				<div class="post-meta-data">
-					<image v-bind:src="`${post.avatar}`" class="avatar" mode="aspectFit" />
+					<image v-bind:src="'https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/' + post.userAvatar + '.jpg'" class="avatar" mode="aspectFit" />
 					<div class="post-title">{{ post.title }}</div>
 				</div>
 				
-				<div class="post-OP">{{ post.OP }} <span style="font-size: 200%; vertical-align: middle; color: darkgray; padding-left: 0.25rem; padding-right: 0.1rem;">·</span> 于 {{ timeElapsedSincePost }}</div>
-				<div style="width: 90%; font-weight: 500;">( 活动时间：{{ post.eventTimeFrame }} )</div>
+				<div class="post-OP">{{ post.userNickname }} <span style="font-size: 200%; vertical-align: middle; color: darkgray; padding-left: 0.25rem; padding-right: 0.1rem;">·</span> 于 {{ timeElapsedSincePost }}</div>
 				
-				<div class="post-text">{{ post.text }}</div>
 				<div v-if="post.images.length > 0" class="post-images">
 					<image v-for="(image, index) in post.images" v-bind:src="image" class="individual-post-image" mode="aspectFill" v-on:click="activateLargeImages(index)" />
 					<div v-if="post.images.length % 3 >= 1" class="individual-post-image" />
 					<div v-if="post.images.length % 3 == 1" class="individual-post-image" />
 				</div>
 				
+				<div class="post-text">{{ post.description }}</div>
+				
 				<div class="leave-message-button">
 					<uni-transition ref="ani" v-bind:mode-class="transitionAni" v-bind:show="leaveMessage">
 						<div class="leave-message-button-body">
-							<text style="color: cadetblue; font-size: 80%;" v-on:click="addComment">留言</text><text style="color: white;">|</text><text style="color: cadetblue; font-size: 80%;" v-on:click="addDM">私信</text>
+							<text style="color: cadetblue; font-size: 80%;" v-on:click="addComment">留言</text><text style="color: white;">|</text><text style="color: cadetblue; font-size: 80%;" v-on:click="addLike">点赞</text>
 						</div>
 					</uni-transition>
 					<div v-on:click="addMessage">
@@ -37,8 +37,8 @@
 			
 			<div class="post-likes-comments" id="post-likes-comments-id">
 				<div style="width: 90%;">
-					<uni-icons v-if="!clickLike" type="heart" size="20" color="cadetblue" style="float: left; padding-right: 1rem;" v-on:click="likePost"/>
-					<uni-icons v-else type="heart-filled" size="20" color="cadetblue" style="float: left; padding-right: 1rem;" v-on:click="unlikePost" />
+					<uni-icons v-if="!clickLike" type="heart" size="20" color="cadetblue" style="float: left; padding-right: 1rem;" v-on:click="addLike"/>
+					<uni-icons v-else type="heart-filled" size="20" color="cadetblue" style="float: left; padding-right: 1rem;" v-on:click="" />
 					<div v-if="likes.length > 0" style="display: flex; flex-direction: row; flex-wrap: wrap; align-content: center;">
 						<div v-for="(name, index) in likes">
 							<div v-if="index < likes.length - 1" style="padding-right: 0.5rem;">{{ name + " ," }}</div>
@@ -48,13 +48,15 @@
 				</div>
 					
 				<div v-if="comments.length > 0" class="post-comments">
-					<div v-for="(comment, index) in comments" class="individual-post-comment" v-bind:id="'individual-post-comment-' + index" v-on:click="reply(comment.userName, index)">
-						<div style="color: cadetblue; float: left; padding-right: 0.15rem;">{{ displayCommentName(comment) }}</div>
-						<div style="color: cadetblue;">: <span style="color: black;">{{ comment.comment }}</span></div>
+					<div v-for="(comment, index) in comments" class="individual-post-comment" v-bind:id="'individual-post-comment-' + index" v-on:click="reply(comment.userNickname, index)">
+						<div v-if="comment.content != '点赞'">
+							<div style="color: cadetblue; float: left; padding-right: 0.15rem;">{{ comment.userNickname }}</div>
+							<div style="color: cadetblue;">: <span style="color: black;">{{ comment.content }}</span></div>
+						</div>
 					</div>
 				</div>
 			</div>
-				
+			
 			<div v-if="commentBox" class="add-comment" id="my-comment">
 				<div class="comment-text">
 					<uni-easyinput type="textarea" v-model="userComment" v-bind:placeholder="placeHolder" />
@@ -83,35 +85,22 @@
 				</swiper-item>
 			</swiper>
 		</div>
-		
-		<div v-if="composeDM" class="compose-DM">
-			<div class="DM-card">
-				<div style="width: 80%;">
-					<uni-easyinput type="textarea" v-model="userDM" v-bind:placeholder="`私信 @ ${post.OP}`" />
-				</div>
-				<div style="width: 40%;">
-					<div class="DM-send-button" v-on:click="commitDM">发送</div>
-					<div class="DM-cancel-button" v-on:click="cancelDM">取消</div>
-				</div>
-			</div>
-		</div>
 	</view>
 </template>
 
 <script>
+import requestAPI from '../../api/request';
 	export default {
 		data() {
 			return {
 				userName: "", 
 				userComment: "", 
-				userDM: "", 
 				post: {}, 
 				likes: [], 
-				clickLike: false, 
 				comments: [], 
+				clickLike: false, 
 				commentBox: false, 
 				leaveMessage: false, 
-				composeDM: false, 
 				showLargeImage: false, 
 				clickedImageIndex: -1, 
 				scrollTo: "", 
@@ -123,7 +112,7 @@
 				transitionAni: ['fade']
 			}
 		},
-		onLoad(option) {
+		async onLoad(option) {
 			this.post = JSON.parse(decodeURIComponent(option.post));
 			try {
 				const value = uni.getStorageSync('userInfo-2');
@@ -135,19 +124,27 @@
 				console.log(e)
 			}
 			
-			// TODO: get likes & comments info of this post from backend
-			this.likes = ["用户 1", "用户 2"]
-			this.comments = [{userName: "用户 1", isReply: false, replyTo: null, comment: "评论评论"}, {userName: "用户 2", isReply: false, replyTo: null, comment: "互动一下, 互动一下, 互动一下, 互动一下, 互动一下, 互动一下, 互动一下, 互动一下, 互动一下, 互动一下, 互动一下, 互动一下, 互动一下, 互动一下"}]
+			// get likes & comments info of this post from backend
+			this.comments = [];
+			const res = await requestAPI({
+				path: "/friendpost/getFriendComment?offset=0&limit=500&postID=" + this.post.id.toString(),
+				type: "GET"
+			});
+			if (res.data.status == 100) {
+				this.comments = res.data.data;
+			} else {
+				this.comments = [];
+			}
+			for (let i = 0; i < this.comments.length; i++) {
+				if (this.comments[i].content == "点赞") {
+					this.likes.push(this.comments[i].userNickname);
+				}
+			}
 		},
 		computed: {
-			eventTime() {
-				// TODO: is it possible that the backend sends back the string of date in format "yyyy-mm-dd"
-				return this.post.eventTimeFrame
-			},
-			
 			timeElapsedSincePost() {
 				let now = new Date()
-				let elapsed = now - new Date(this.post.postTime)
+				let elapsed = now - new Date(this.post.createdAt)
 				if (elapsed > 24 * 60 * 60 * 1000) {
 					return (Math.round(elapsed / (24 * 60 * 60 * 1000))).toString() + " 天前"
 				} else if (elapsed > 60 * 60 * 1000) {
@@ -169,30 +166,40 @@
 			addMessage(e) {
 				this.leaveMessage = !this.leaveMessage;
 			}, 
-			addDM(e) {
-				this.composeDM = true;
+			async addLike(e) {
+				this.clickLike = true;
+				this.likes.push(this.userName);
+				this.leaveMessage = false;
+				let newComment = {"id": 0, "userID": 0, "userAvatar": 0, "userNickname": this.userName, "postID": this.post.id, "content": "点赞", "createdAt": ""};
+				const res = await requestAPI({
+					path: "/friendpost/comment/create?x-wx-openid=" + this.userName,
+					type: "POST"
+				});
+				if (res.data.status != 100) {
+					console.log("failed to upload new like click");
+				}
 			}, 
 			addComment(e) {
-				this.commentBox = !this.commentBox;
-				if (this.commentBox) {
-					this.scrollTo = "my-comment";
-				} else {
-					this.scrollTo = "post-likes-comments-id";
-				}
+				this.commentBox = true;
+				this.leaveMessage = false;
+				this.scrollTo = "my-comment";
 				this.scrollBack = "post-likes-comments-id";
-				this.isTyping = this.commentBox;
+				this.isTyping = true;
 				this.isReply = false;
 				this.userComment = "";
 				this.placeHolder = "留言";
 			}, 
-			commitComment(e) {
+			async commitComment(e) {
 				if (this.userComment == "") {
 					return;
 				}
+				let newComment = {};
 				if (this.isReply) {
-					this.comments.push({userName: this.userName, isReply: true, replyTo: this.replyTo, comment: this.userComment});
+					newComment = {"id": 0, "userID": 0, "userAvatar": 0, "userNickname": this.userName + ' @ ' + this.replyTo, "postID": this.post.id, "content": this.userComment, "createdAt": ""};
+					this.comments.push(newComment);
 				} else {
-					this.comments.push({userName: this.userName, isReply: false, replyTo: null, comment: this.userComment});
+					newComment = {"id": 0, "userID": 0, "userAvatar": 0, "userNickname": this.userName, "postID": this.post.id, "content": this.userComment, "createdAt": ""};
+					this.comments.push(newComment);
 				}
 				this.userComment = "";
 				this.replyTo = "";
@@ -203,6 +210,13 @@
 				this.scrollTo = this.scrollBack;
 				
 				// TODO: send comment to backend
+				const res = await requestAPI({
+					path: "/friendpost/comment/create?x-wx-openid=" + this.userName,
+					type: "POST"
+				});
+				if (res.data.status != 100) {
+					console.log("failed to upload new comment");
+				}
 			}, 
 			cancelComment(e) {
 				this.userComment = "";
@@ -224,22 +238,6 @@
 					this.scrollTo = "my-comment";
 					this.scrollBack = "individual-post-comment-" + index.toString();
 				}
-			}, 
-			displayCommentName(comment) {
-				if (comment.isReply) {
-					return comment.userName + ' @ ' + comment.replyTo;
-				} else {
-					return comment.userName;
-				}
-			}, 
-			commitDM(e) {
-				if (this.userDM != "") {
-					// TODO: send DM to backend
-					this.composeDM = false;
-				}
-			}, 
-			cancelDM(e) {
-				this.composeDM = false;
 			}, 
 			activateLargeImages(index) {
 				this.showLargeImage = true
@@ -294,11 +292,11 @@
 		color: darkgray; 
 		font-size: 80%; 
 		overflow-wrap: break-word;
-		margin-bottom: 2rem;
+		margin-bottom: 1.5rem;
 	}
 	.post-text {
 		width: 90%;
-		margin-top: 1rem;
+		margin-top: 2rem;
 		margin-bottom: 2rem;
 	}
 	.post-images {
@@ -362,10 +360,11 @@
 	}
 	.post-comments {
 		width: 90%;
+		margin-top: 0.5rem;
 		display: flex;
 		flex-direction: column;
 		flex-wrap: nowrap;
-		padding-top: 1rem;
+		/*padding-top: 1rem;*/
 	}
 	.individual-post-comment {
 		margin-bottom: 0.5rem;

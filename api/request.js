@@ -1,5 +1,6 @@
 export default async function requestAPI(opt, number = 0) {
 	console.log(opt)
+	wx.cloud.init()
 	try{
 		return await wx.cloud.callContainer({
 			config: {

@@ -1,60 +1,21 @@
 <template>
 	<view style="background-color: whitesmoke; height: 100vh; width: 100%;">
-		<div class="find-friend-navbar">
-			<div v-for="(item, index) in navbarItems" v-bind:key="item">
-				<div class="find-friend-navbar-item" v-on:click="changeTab(index)">
-					<text v-bind:class="navBarItemTextStyle(index)">{{ item }}</text>
-					<div v-if="index == selectedTab" style="height: 1.5px; width: 2rem; margin-top: 0.2rem; background-color: #C5050C;" />
-				</div>
-			</div>
-		</div>
-		
 		<div class="find-friend-posts">
-			<div v-for="post in allPosts[selectedTab]" style="width: 48%; margin-bottom: 0.3rem;" v-on:click="gotoPostDetail(post)">
+			<div v-for="post in allPosts" style="width: 48%; margin-bottom: 0.3rem;" v-on:click="gotoPostDetail(post)">
 				<singlePostStyleTwo v-bind:post="post" useBorderStyle="show-border" />
 			</div>
-			<div v-if="allPosts[selectedTab].length % 2 == 1" style="width: 48%;" />
+			<div v-if="allPosts.length % 2 == 1" style="width: 48%;" />
 		</div>
-		
-		<!-- <div class="div-bottom">
-			<div class="div-line-bottom" />
-			<div style="color: darkgray;">到底啦</div>
-			<div class="div-line-bottom" />
-		</div> -->
-		
-		<!-- <div v-if="unreadNotifications" class="unread-notification" v-on:click="readNotifications()">
-			<text style="color: lightgray;">您互动的帖子有新消息</text>
-		</div>
-		
-		<div class="compose-button">
-			<div style="height: 100%; display: flex; justify-content: center; align-items: center;">
-				<uni-icons type="compose" size="25" color="white" style="left: 50%; top: 50%;" />
-			</div>
-		</div> -->
 		
 		<div v-if="reachEnd" style="width: 100%; height: 5rem; background-color: whitesmoke;" />
 		
 		<div class="bottom-bar">
-			<div class="bottom-bar-item" v-on:click="toggleDM">
-				<uni-icons v-if="unreadDM" type="email-filled" color="#C5050C90" size="20" />
-				<uni-icons v-else type="mail-open" color="#C5050C90" size="20" />
-				<text v-if="unreadDM" style="font-size: 60%; color: darkgray;">有新私信</text>
-				<text v-else style="font-size: 60%; color: darkgray;">无新私信</text>
-			</div>
-			
-			<div class="bottom-bar-item" v-on:click="toggleNotification">
-				<uni-icons v-if="unreadPostNotifications" type="notification-filled" color="#C5050C90" size="20" />
-				<uni-icons v-else type="notification" color="#C5050C90" size="20" />
-				<text v-if="unreadPostNotifications" style="font-size: 60%; color: darkgray;">有新动态</text>
-				<text v-else style="font-size: 60%; color: darkgray;">无新动态</text>
-			</div>
-			
 			<div class="bottom-bar-item">
-				<uni-icons type="person" color="#C5050C90" size="20" />
-				<text style="font-size: 60%; color: darkgray;">我的</text>
+				<uni-icons type="home" color="#C5050C90" size="20" />
+				<text style="font-size: 60%; color: darkgray;">刷新</text>
 			</div>
 			
-			<div class="bottom-bar-item">
+			<div class="bottom-bar-item" v-on:click="gotoPost()">
 				<uni-icons type="compose" color="#C5050C90" size="20" />
 				<text style="font-size: 60%; color: darkgray;">发布动态</text>
 			</div>
@@ -64,6 +25,7 @@
 
 <script>
 	import singlePostStyleTwo from './singlePostStyleTwo.vue'
+	import requestAPI from '@/api/request.js'
 	export default{
 		components: {
 			singlePostStyleTwo,
@@ -78,56 +40,58 @@
 				unreadPostNotifications: true, 
 				unreadDM: true, 
 				reachEnd: true, 
-				allPosts: [
+				verticalPos: [],
+				allPosts:
 					[
-						{
-							id: 1, 
-							OP: "用户 1", 
-							avatar: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/1.jpg", 
-							postTime: "2023-12-23", 
-							eventTimeFrame: "2023-12-23", 
-							title: "标题 1", 
-							text: "这是一个测试通告", 
-							images: ["https://i.imgur.com/xJCROfR.jpg"], 
-							tag: []
-						}, 
-						{ id: 2, OP: "用户 2", avatar: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/2.jpg", postTime: "2023-12-23", eventTimeFrame: "2023-12-23", title: "标题 2", text: "这还是一个测试通告", images: ["https://i.imgur.com/OK0SAIp.jpg"], tag: []},
-						{ id: 3, OP: "用户 3", avatar: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/3.jpg", postTime: "2023-12-23", eventTimeFrame: "2023-12-23", title: "标题 3", text: "这是一个特别长的测试通告这是一个特别长的测试通告这是一个特别长的测试通告这是一个特别长的测试通告这是一个特别长的测试通告这是一个特别长的测试通告这是一个特别长的测试通告这是一个特别长的测试通告这是一个特别长的测试通告这是一个特别长的测试通告这是一个特别长的测试通告这是一个特别长的测试通告这是一个特别长的测试通告这是一个特别长的测试通告", images: ["https://i.imgur.com/QvaszPR.png", "https://i.imgur.com/RayNQyw.png"], tag: []}, 
-						{ id: 4, OP: "用户 4", avatar: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/4.jpg", postTime: "2023-12-23", eventTimeFrame: "2023-12-23", title: "标题 4", text: "这还是一个测试通告", images: ["https://i.imgur.com/3PbyN51.jpg", "https://i.imgur.com/OK0SAIp.jpg", "https://i.imgur.com/rNEs9p4.jpg", "https://i.imgur.com/aT9fyff.png"], tag: []}, 
-						{ id: 5, OP: "用户 5", avatar: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/5.jpg", postTime: "2023-12-23", eventTimeFrame: "2023-12-23", title: "标题 5标题 5标题 5标题 5标题 5标题 5标题 5标题 5", text: "这还是一个测试通告", images: ["https://i.imgur.com/rNEs9p4.jpg"], tag: []}, 
-						{ id: 6, OP: "用户 6", avatar: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/6.jpg", postTime: "2023-12-23", eventTimeFrame: "2023-12-23", title: "标题 6", text: "这还是一个测试通告", images: ["https://i.imgur.com/aT9fyff.png"], tag: []}, 
-						{ id: 7, OP: "用户 7", avatar: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/7.jpg", postTime: "2023-12-23", eventTimeFrame: "2023-12-23", title: "标题 7", text: "这还是一个测试通告", images: ["https://i.imgur.com/nhTiMwb.jpg", "https://i.imgur.com/yz1KHBk.jpg", "https://i.imgur.com/slkAGmA.png"], tag: []}, 
-						{ id: 8, OP: "用户 8", avatar: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/8.jpg", postTime: "2023-12-23", eventTimeFrame: "2023-12-23", title: "一个很长的标题一个很长的标题一个很长的标题", text: "这还是一个测试通告", images: ["https://i.imgur.com/AoZTdk2.jpg", "https://i.imgur.com/yW82HKT.jpg"], tag: []}, 
-						{ id: 9, OP: "用户 9", avatar: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/9.jpg", postTime: "2023-12-23", eventTimeFrame: "2023-12-23", title: "标题 9", text: "这还是一个测试通告", images: ["https://i.imgur.com/ocmwopm.jpg", "https://i.imgur.com/r4yxUO4.jpg"], tag: []}, 
-						{ id: 10, OP: "用户 10", avatar: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/10.jpg", postTime: "2023-12-23", eventTimeFrame: "2023-12-23", title: "标题 10", text: "这还是一个测试通告", images: ["https://i.imgur.com/g6mPio7.jpg", "https://i.imgur.com/uKELo6M.jpg"], tag: []}, 
-						{ id: 11, OP: "用户 11", avatar: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/11.jpg", postTime: "2023-12-23", eventTimeFrame: "2023-12-23", title: "标题 11", text: "这还是一个测试通告", images: ["https://i.imgur.com/Qym9Nnk.png"], tag: []}, 
-						{ id: 12, OP: "用户 12", avatar: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/12.jpg", postTime: "2023-12-23", eventTimeFrame: "2023-12-23", title: "标题 12", text: "这还是一个测试通告", images: [], tag: []}
+											{
+												id: 1, 
+												userNickname: "用户 1", 
+												userAvatar: 1, 
+												postTime: "2023-12-23", 
+												createdAt: "2023-12-23", 
+												title: "标题 1", 
+												description: "这是一个测试通告", 
+												images: ["https://i.imgur.com/xJCROfR.jpg"], 
+											}, 
+											{ id: 2, userNickname: "用户 2", userAvatar: 2, createdAt: "2023-12-23", eventTimeFrame: "2023-12-23", title: "标题 2", description: "这还是一个测试通告", images: ["https://i.imgur.com/OK0SAIp.jpg"], tag: []},
+											{ id: 3, userNickname: "用户 3", userAvatar: 3, createdAt: "2023-12-23", eventTimeFrame: "2023-12-23", title: "标题 3", description: "这是一个特别长的测试通告这是一个特别长的测试通告这是一个特别长的测试通告这是一个特别长的测试通告这是一个特别长的测试通告这是一个特别长的测试通告这是一个特别长的测试通告这是一个特别长的测试通告这是一个特别长的测试通告这是一个特别长的测试通告这是一个特别长的测试通告这是一个特别长的测试通告这是一个特别长的测试通告这是一个特别长的测试通告", images: ["https://i.imgur.com/QvaszPR.png", "https://i.imgur.com/RayNQyw.png"], tag: []}, 
+											{ id: 4, userNickname: "用户 4", userAvatar: 4, createdAt: "2023-12-23", eventTimeFrame: "2023-12-23", title: "标题 4", description: "这还是一个测试通告", images: ["https://i.imgur.com/3PbyN51.jpg", "https://i.imgur.com/OK0SAIp.jpg", "https://i.imgur.com/rNEs9p4.jpg", "https://i.imgur.com/aT9fyff.png"], tag: []}, 
+											{ id: 5, userNickname: "用户 5", userAvatar: 5, createdAt: "2023-12-23", eventTimeFrame: "2023-12-23", title: "标题 5标题 5标题 5标题 5标题 5标题 5标题 5标题 5", description: "这还是一个测试通告", images: ["https://i.imgur.com/rNEs9p4.jpg"], tag: []}, 
+											{ id: 6, userNickname: "用户 6", userAvatar: 6, createdAt: "2023-12-23", eventTimeFrame: "2023-12-23", title: "标题 6", description: "这还是一个测试通告", images: ["https://i.imgur.com/aT9fyff.png"], tag: []}, 
+											{ id: 7, userNickname: "用户 7", userAvatar: 7, createdAt: "2023-12-23", eventTimeFrame: "2023-12-23", title: "标题 7", description: "这还是一个测试通告", images: ["https://i.imgur.com/nhTiMwb.jpg", "https://i.imgur.com/yz1KHBk.jpg", "https://i.imgur.com/slkAGmA.png"], tag: []}, 
+											{ id: 8, userNickname: "用户 8", userAvatar: 8, createdAt: "2023-12-23", eventTimeFrame: "2023-12-23", title: "一个很长的标题一个很长的标题一个很长的标题", description: "这还是一个测试通告", images: ["https://i.imgur.com/AoZTdk2.jpg", "https://i.imgur.com/yW82HKT.jpg"], tag: []}, 
+											{ id: 9, userNickname: "用户 9", userAvatar: 9, createdAt: "2023-12-23", eventTimeFrame: "2023-12-23", title: "标题 9", description: "这还是一个测试通告", images: ["https://i.imgur.com/ocmwopm.jpg", "https://i.imgur.com/r4yxUO4.jpg"], tag: []}, 
+											{ id: 10, userNickname: "用户 10", userAavatar: 10, createdAt: "2023-12-23", eventTimeFrame: "2023-12-23", title: "标题 10", description: "这还是一个测试通告", images: ["https://i.imgur.com/g6mPio7.jpg", "https://i.imgur.com/uKELo6M.jpg"], tag: []}, 
+											{ id: 11, userNickname: "用户 11", userAvatar: 11, createdAt: "2023-12-23", eventTimeFrame: "2023-12-23", title: "标题 11", description: "这还是一个测试通告", images: ["https://i.imgur.com/Qym9Nnk.png"], tag: []}, 
+											{ id: 12, userNickname: "用户 12", userAvatar: 12, createdAt: "2023-12-23", eventTimeFrame: "2023-12-23", title: "标题 12", description: "这还是一个测试通告", images: [], tag: []}
 					],
-					[
-						{ id: 2, OP: "用户 2", avatar: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/2.jpg", postTime: "2023-12-23", eventTimeFrame: "2023-12-23", title: "标题 2", text: "这还是一个测试通告", images: ["https://i.imgur.com/OK0SAIp.jpg"], tag: []}, 
-						{ id: 3, OP: "用户 3", avatar: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/3.jpg", postTime: "2023-12-23", eventTimeFrame: "2023-12-23", title: "标题 3", text: "这是一个特别长的测试通告这是一个特别长的测试通告这是一个特别长的测试通告这是一个特别长的测试通告这是一个特别长的测试通告这是一个特别长的测试通告这是一个特别长的测试通告这是一个特别长的测试通告这是一个特别长的测试通告这是一个特别长的测试通告这是一个特别长的测试通告这是一个特别长的测试通告这是一个特别长的测试通告这是一个特别长的测试通告", images: ["https://i.imgur.com/QvaszPR.png", "https://i.imgur.com/RayNQyw.png"], tag: []}
-					], 
-					[
-						{ id: 4, OP: "用户 4", avatar: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/4.jpg", postTime: "2023-12-23", eventTimeFrame: "2023-12-23", title: "标题 4", text: "这还是一个测试通告", images: ["https://i.imgur.com/3PbyN51.jpg", "https://i.imgur.com/OK0SAIp.jpg", "https://i.imgur.com/rNEs9p4.jpg", "https://i.imgur.com/aT9fyff.png"], tag: []}, 
-						{ id: 5, OP: "用户 5", avatar: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/5.jpg", postTime: "2023-12-23", eventTimeFrame: "2023-12-23", title: "标题 5标题 5标题 5标题 5标题 5标题 5标题 5标题 5", text: "这还是一个测试通告", images: ["https://i.imgur.com/rNEs9p4.jpg"], tag: []}, 
-						{ id: 6, OP: "用户 6", avatar: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/6.jpg", postTime: "2023-12-23", eventTimeFrame: "2023-12-23", title: "标题 6", text: "这还是一个测试通告", images: ["https://i.imgur.com/aT9fyff.png"], tag: []}
-					],
-					[
-						{ id: 8, OP: "用户 8", avatar: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/8.jpg", postTime: "2023-12-23", eventTimeFrame: "2023-12-23", title: "一个很长的标题一个很长的标题一个很长的标题", text: "这还是一个测试通告", images: ["https://i.imgur.com/AoZTdk2.jpg", "https://i.imgur.com/yW82HKT.jpg"], tag: []}, 
-						{ id: 9, OP: "用户 9", avatar: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/9.jpg", postTime: "2023-12-23", eventTimeFrame: "2023-12-23", title: "标题 9", text: "这还是一个测试通告", images: ["https://i.imgur.com/ocmwopm.jpg", "https://i.imgur.com/r4yxUO4.jpg"], tag: []}, 
-						{ id: 10, OP: "用户 10", avatar: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/10.jpg", postTime: "2023-12-23", eventTimeFrame: "2023-12-23", title: "标题 10", text: "这还是一个测试通告", images: ["https://i.imgur.com/g6mPio7.jpg", "https://i.imgur.com/uKELo6M.jpg"], tag: []}
-					],
-					[
-						{ id: 11, OP: "用户 11", avatar: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/11.jpg", postTime: "2023-12-23", eventTimeFrame: "2023-12-23", title: "标题 11", text: "这还是一个测试通告", images: ["https://i.imgur.com/Qym9Nnk.png"], tag: []}, 
-						{ id: 12, OP: "用户 12", avatar: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/12.jpg", postTime: "2023-12-23", eventTimeFrame: "2023-12-23", title: "标题 12", text: "这还是一个测试通告", images: [], tag: []}
-					], 
-					[
-						{ id: 8, OP: "用户 8", avatar: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/8.jpg", postTime: "2023-12-23", eventTimeFrame: "2023-12-23", title: "一个很长的标题一个很长的标题一个很长的标题", text: "这还是一个测试通告", images: ["https://i.imgur.com/AoZTdk2.jpg", "https://i.imgur.com/yW82HKT.jpg"], tag: []},
-						{ id: 9, OP: "用户 9", avatar: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/9.jpg", postTime: "2023-12-23", eventTimeFrame: "2023-12-23", title: "标题 9", text: "这还是一个测试通告", images: ["https://i.imgur.com/ocmwopm.jpg", "https://i.imgur.com/r4yxUO4.jpg"], tag: []}, 
-						{ id: 10, OP: "用户 10", avatar: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/10.jpg", postTime: "2023-12-23", eventTimeFrame: "2023-12-23", title: "标题 10", text: "这还是一个测试通告", images: ["https://i.imgur.com/g6mPio7.jpg", "https://i.imgur.com/uKELo6M.jpg"], tag: []}
-					]
-				]
+				hasMore: true,
+				userName: "",
+				userAvatar: ""
 			}
+		},
+		async onLoad(option) {
+			const res = await requestAPI({
+				path: "/friendpost/get?offset=0&limit=50",
+				type: "GET"
+			});
+			if (res.data.status == 100) {
+				// this.allPosts = res.data.data;
+			} else {
+				// this.allPosts = [];
+			}
+			
+			try {
+				const value = uni.getStorageSync('userInfo-2');
+				if (value) {
+					console.log(value)
+					this.userName = value.nickname
+				}
+			} catch (e) {
+				console.log(e)
+			}
+			
+			// TODO: compute vertical positions
 		},
 		methods: {
 			navBarItemTextStyle(index) {
@@ -158,6 +122,11 @@
 			}, 
 			toggleDM(e) {
 				this.unreadDM = !this.unreadDM;
+			},
+			gotoPost() {
+				uni.navigateTo({
+					url: "./findFriendPost?userName=" + this.userName + "&avatar=" + this.userAvatar
+				})
 			}
 		}
 	}
@@ -201,7 +170,7 @@
 		flex-wrap: wrap;
 		justify-content: space-evenly;
 		background-color: whitesmoke;
-		padding-top: 4rem;
+		padding-top: 1rem;
 	}
 	.div-bottom {
 		width: 100%;
