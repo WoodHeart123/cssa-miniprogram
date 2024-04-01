@@ -2,7 +2,7 @@
 	<view id="second-post">
 		<uni-forms ref="productForm" :model="product" :rules="rules">
 			<view class="card uni-form-item uni-column" v-if="!edit">
-				<uni-forms-item name="imageList">	
+				<uni-forms-item name="imageList">
 					<view class="image_upload">
 						<uni-file-picker limit="5" fileMediatype="image" :auto-upload="false" @select="onSelectImage"
 							@delete="onDeleteImage"></uni-file-picker>
@@ -19,16 +19,18 @@
 
 
 			<view class="card uni-textarea textbox">
-				<uni-forms-item name="productDescription"> 
-					<uni-easyinput type="textarea" v-model="product.productDescription" placeholder="请输入商品描述信息" maxlength="400"
-						placeholderStyle="font-size:14px;color:gray" :clearable="clearable"> </uni-easyinput>
+				<uni-forms-item name="productDescription">
+					<uni-easyinput type="textarea" v-model="product.productDescription" placeholder="请输入商品描述信息"
+						maxlength="400" placeholderStyle="font-size:14px;color:gray" :clearable="clearable">
+					</uni-easyinput>
 				</uni-forms-item>
 
 			</view>
 
 			<view class="card">
 				<uni-forms-item name="delivery">
-					<uni-data-checkbox selectedColor="#9B0000" v-model="product.delivery" :localdata="deliveryOption"></uni-data-checkbox>
+					<uni-data-checkbox selectedColor="#9B0000" v-model="product.delivery"
+						:localdata="deliveryOption"></uni-data-checkbox>
 				</uni-forms-item>
 			</view>
 
@@ -46,7 +48,8 @@
 
 			<view class="card label_group">
 				<uni-forms-item name="productCondition">
-					<uni-data-checkbox selectedColor="#9B0000" v-model="product.productCondition" :localdata="conditionOption"></uni-data-checkbox>
+					<uni-data-checkbox selectedColor="#9B0000" v-model="product.productCondition"
+						:localdata="conditionOption"></uni-data-checkbox>
 				</uni-forms-item>
 			</view>
 
@@ -67,18 +70,18 @@
 			<view class="card">
 				<uni-forms-item name="contact">
 					<view class="uni-column row-view">
-						<span class="span_margin">微信号</span>
-						<input class="uni-input" v-model="product.contact" maxlength="22" placeholder="请填写微信号以便联系"
-							placeholder-style="font-size:14px;color:gray" @input="showCheckBox"/>
+						<span class="span_margin">联系方式</span>
+						<input class="uni-input" v-model="product.contact" maxlength="22" placeholder="请填写联系方式以便联系"
+							placeholder-style="font-size:14px;color:gray" @input="showCheckBox" />
 					</view>
-					<view class="checkbox check_message" v-if="!hasID">
+					<!-- 					<view class="checkbox check_message" v-if="!hasID">
 						<checkbox-group @change="checkBoxChange">
 							<checkbox value="save_contact" :checked="save" color="#9b0000"
 								style="transform:scale(0.8);" />
 
 							保存联系方式，方便后续使用
 						</checkbox-group>
-					</view>
+					</view> -->
 				</uni-forms-item>
 			</view>
 
@@ -96,8 +99,8 @@
 	export default {
 		data() {
 			return {
-				edit:false,
-				hasID:false,
+				edit: false,
+				hasID: false,
 				save: true,
 				upLoadFail: false,
 				uploadCount: 0,
@@ -107,7 +110,7 @@
 					productDescription: "",
 					productTitle: ""
 				},
-				images:[],
+				images: [],
 				item_types: [{
 					text: "电子产品",
 					value: "ELECTRONIC"
@@ -230,28 +233,28 @@
 				},
 			}
 		},
-		onLoad(options){
+		onLoad(options) {
 			console.log(options)
-			if(options.product != null){
+			if (options.product != null) {
 				this.edit = true
 				this.product = JSON.parse(decodeURIComponent(options.product))
 				this.product.productCondition = this.conditionOption[this.product.productCondition].value
 				this.product.productType = this.item_types[this.product.productType].value
 			}
 		},
-		onShow(){
-			 wx.cloud.init();
-			 let userInfo = uni.getStorageSync("userInfo-2");
-			 this.product.sellerAvatar = userInfo.avatar;
-			 this.product.sellerNickname = userInfo.nickname;
-			 if(userInfo.wechatID != null){
-				 this.product.contact = userInfo.wechatID;
-				 this.save = false;
-				 this.hasID = true;
-			 }
+		onShow() {
+			wx.cloud.init();
+			let userInfo = uni.getStorageSync("userInfo-2");
+			this.product.sellerAvatar = userInfo.avatar;
+			this.product.sellerNickname = userInfo.nickname;
+			if (userInfo.wechatID != null) {
+				this.product.contact = userInfo.wechatID;
+				this.save = false;
+				this.hasID = true;
+			}
 		},
 		methods: {
-			showCheckBox:function(){
+			showCheckBox: function() {
 				this.save = true;
 				this.hasID = false;
 			},
@@ -296,19 +299,19 @@
 					uni.showLoading({
 						title: "请耐心等待信息上传"
 					});
-					if(!this.edit){
+					if (!this.edit) {
 						this.uploadImage();
-					}else{
+					} else {
 						this.updateProduct()
 					}
 				}).catch(err => {
 					uni.showToast({
 						title: err[0].errorMessage,
-						icon:"error"
+						icon: "error"
 					})
 				})
 			},
-			updateProduct: async function(){
+			updateProduct: async function() {
 				const res = await wx.cloud.callContainer({
 					config: {
 						env: 'prod-9gip97mx4bfa32a3',
@@ -324,6 +327,12 @@
 				if (res.data.status == 100) {
 					uni.$emit("updateSecondSuccess");
 					uni.navigateBack();
+				} else if (res.data.status == 201) {
+					uni.showToast({
+						title: "信息中包含敏感内容",
+						icon: "none"
+					});
+					console.log(res.data)
 				} else {
 					uni.showToast({
 						title: "更新信息失败",
@@ -333,7 +342,7 @@
 			},
 			uploadImage: async function() {
 				uni.showLoading({
-					title: `上传图片,0/${this.rental.imageList.length}`,
+					title: `上传图片,0/${this.product.imageList.length}`,
 					mask: true
 				});
 				let uploadedImageCount = 0;
@@ -354,7 +363,7 @@
 					const uploadedImages = await Promise.all(uploadPromises);
 					this.images = uploadedImages;
 					this.product.images = uploadedImages,
-					this.postProduct();
+						this.postProduct();
 				} catch (error) {
 					uni.hideLoading();
 					uni.showToast({
@@ -368,37 +377,44 @@
 					title: `发布信息中`,
 					mask: true
 				});
-				const res = await wx.cloud.callContainer({
-					config: {
-						env: 'prod-9gip97mx4bfa32a3',
-					},
+				const opts = {
 					path: `/secondhand/saveProduct?save=${this.save}`,
-					method: 'POST',
-					header: {
-						'X-WX-SERVICE': 'springboot-ds71',
-					},
-					data: this.product
+					type: 'POST',
+					data: this.product,
+				};
+
+				requestAPI(opts).then(response => {
+					uni.hideLoading();
+					if (response.data.status == 100) {
+						uni.$emit("uploadSuccess");
+						uni.navigateBack();
+					} else if (response.data.status == 201) {
+						uni.showToast({
+							title: "信息中包含敏感内容",
+							icon: "none"
+						});
+					} else {
+						uni.showToast({
+							title: "上传信息失败",
+							icon: "error"
+						});
+					}
+				}).catch(error => {
+					uni.hideLoading();
+					console.error("Product save request failed:", error);
 				});
-				uni.hideLoading();
-				if (res.data.status == 100) {
-					uni.$emit("uploadSuccess");
-					uni.navigateBack();
-				} else {
-					uni.showToast({
-						title:"上传信息失败",
-						icon: "error"
-					});
-				}
 			},
 		}
 	}
 	import uploadOSS from '@/api/upload.js'
+	import requestAPI from '@/api/request.js'
 </script>
 
 <style>
-	input{
+	input {
 		height: 35px;
 	}
+
 	#second-post {
 		position: absolute;
 		height: 100vh;

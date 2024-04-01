@@ -40,18 +40,19 @@
 			}
 		},
 		mounted(){
-			if(moment().year() - moment.utc(this.product.utctime).year() > 0){
-				this.productPublishTime = moment.utc(this.product.utctime).format("YYYY-MM-DD");
-			}else if(Date.now() - moment.utc(this.product.utctime).valueOf() > 86400000 * 7){
-				this.productPublishTime = moment.utc(this.product.utctime).format("MM-DD");
+			console.log(this.product)
+			if(moment().year() - moment(this.product.time).year() > 0){
+				this.productPublishTime = moment(this.product.time).format("YYYY-MM-DD");
+			}else if(Date.now() - moment(this.product.time).valueOf() > 86400000 * 7){
+				this.productPublishTime = moment(this.product.time).format("MM-DD");
 			}else{
-				this.productPublishTime = moment.utc(this.product.utctime).locale('zh-cn').fromNow();
+				this.productPublishTime = moment(this.product.time).locale('zh-cn').fromNow();
 			}
 		},
 		methods: {
 			toSecondDetail: function() {
 				uni.navigateTo({
-					url: '/pages/detail/secondDetail?product=' + encodeURIComponent(JSON.stringify(this.product)),
+					url: '/pages/second/secondDetail?product=' + encodeURIComponent(JSON.stringify(this.product)),
 				});
 			}
 		}

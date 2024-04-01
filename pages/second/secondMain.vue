@@ -1,19 +1,7 @@
 <template>
 	<view id="second-main">
-		<view class="menu row-container">
-			<view class="search-box" @click="toSearch">
-				<uni-icons type="search" size="30"></uni-icons>
-			</view>
-			<view class="menu-box row-container">
-				<view class="row-container product-type-item" v-for="(productType, index) in productTypeList"
-					:key="index" @click="onClickMenu(index)">
-					<text
-						:class="currentIndex==index?'product-text selected':'product-text'">{{productType.name}}</text>
-				</view>
-			</view>
-		</view>
 		<scroll-view scroll-y="true" show-scrollbar="true" refresher-enabled="true"
-			class="column-container comment-container" refresher-background="white" @refresherrefresh="refresh"
+			class="column-container secondhand-container" refresher-background="white" @refresherrefresh="refresh"
 			enable-back-to-top="true" :refresher-triggered="triggered" @scrolltolower="onScrollLower">
 			<view class="box">
 				<view v-for="(product,index) in productList" :key="index">
@@ -36,7 +24,6 @@
 			return {
 				offset:0,
 				limit: 20,
-				productTypeList: productTypeList,
 				currentIndex: 0,
 				pattern: {
 					buttonColor: "#9b0000"
@@ -114,27 +101,23 @@
 				if(this.status == "noMore"){
 					return;
 				}
-				const res = await wx.cloud.callContainer({
-					config: {
-						env: 'prod-9gip97mx4bfa32a3',
-					},
-					path: `/secondhand/getProductList?productType=${this.productTypeList[this.currentIndex].type}&limit=${this.limit}&offset=${this.offset}`,
-					method: 'GET',
-					header: {
-						'X-WX-SERVICE': 'springboot-ds71',
-					},
-				});
-				if(res.data.status == 100){
-					this.productList = this.productList.concat(res.data.data);
-				}
-				this.offset += res.data.data.length;
-				if(res.data.data.length != this.limit){
-					this.status = "noMore";
-				}else{
-					this.status = "more";
-				}
-				this.$nextTick(() => {
-					this.triggered = false;
+				const opts = {
+				    path: `/secondhand/getProductList?productType=all&limit=${this.limit}&offset=${this.offset}`,
+				    type: 'GET',
+				};
+				
+				requestAPI(opts).then(response => {
+				    if (response.data.status == 100) {
+				        this.productList = this.productList.concat(response.data.data);
+				        this.offset += response.data.data.length;
+						console.log(response.data.data.length)
+				        this.status = response.data.data.length != this.limit ? "noMore" : "more";
+				    }
+					console.log(this.status)
+				    this.triggered = false;
+				}).catch(error => {
+				    console.error("Fetch product list failed:", error);
+				    this.triggered = false; 
 				});
 			},
 			toPostProduct: function() {
@@ -167,11 +150,15 @@
 					animationType: "pop-in"
 				})
 			},
+			onScrollLower: function() {
+				this.status = "loading";
+				this.getProductList();
+			}
 
 		}
 	}
-	import productTypeList from './secondMain.js';
 	import productBoxVue from '@/components/product-box/product-box.vue';
+	import requestAPI from '@/api/request.js'
 </script>
 
 <style>
@@ -186,11 +173,11 @@
 		display: flex;
 	}
 
-	.comment-container {
-		margin-top: 55px;
-		height: calc(100vh - 55px);
+	.secondhand-container {
+		height: 100vh;
 		width: 100vw;
 		background-color: white;
+		padding-top: 10px;
 	}
 
 	.row-container {

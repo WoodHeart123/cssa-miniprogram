@@ -52,12 +52,15 @@
         "appid" : "wxb228506b8c666a11",
         "setting" : {
             "urlCheck" : false,
-            "postcss" : true
+            "postcss" : true,
+            "minified" : true
         },
         "usingComponents" : true,
         "uniStatistics" : {
             "enable" : true
-        }
+        },
+		"__usePrivacyCheck__": true,
+		"libVersion": "latest"  
     },
     "vueVersion" : "3"
 }

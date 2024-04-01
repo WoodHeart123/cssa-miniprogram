@@ -1,7 +1,14 @@
+const MODE = "DEV";
 export default async function requestAPI(opt, number = 0) {
 	console.log(opt)
 	wx.cloud.init()
 	try{
+		if(MODE === "DEV"){
+			uni.showToast({
+				title: "当前为dev环境",
+				icon: 'none'
+			})
+		}
 		return await wx.cloud.callContainer({
 			config: {
 				env: 'prod-9gip97mx4bfa32a3',
@@ -9,7 +16,7 @@ export default async function requestAPI(opt, number = 0) {
 			path: opt.path,
 			method: opt.type,
 			header: {
-				'X-WX-SERVICE': 'springboot-ds71',
+				'X-WX-SERVICE': MODE === "DEV"? "springboot-cssa-test":"springboot-ds71",
 			},
 			data: opt.type.toUpperCase()  == "GET" ? null : opt.data
 		});
@@ -19,8 +26,8 @@ export default async function requestAPI(opt, number = 0) {
 			return requestAPI(opt, number + 1)
 	    } else {
 			uni.showToast({
-				icon: "exception",
-				title: "当前网络状态不佳，请稍后尝试。"
+				icon: "error",
+				title: "服务加载失败"
 			})
 		}
 	}

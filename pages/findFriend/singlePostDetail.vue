@@ -35,7 +35,7 @@
 				</div>
 			</div>
 			
-			<div v-if="comments.length == 0 && likes.length == 0" class="empty-filler">
+			<div v-if="comments.length == 0 && likes.length == 0 && showEmptyFiller" class="empty-filler">
 				<image src="https://i.imgur.com/KxzmI5u.png" style="width: 100%; height: 100%;" mode="aspectFit" />
 			</div>
 			
@@ -53,9 +53,9 @@
 					
 				<div v-if="comments.length > 0" class="post-comments">
 					<div v-for="(comment, index) in comments" class="individual-post-comment" v-bind:id="'individual-post-comment-' + index" v-on:click="reply(comment.userNickname, index)">
-						<div v-if="comment.content != '点赞'">
-							<div style="color: cadetblue; float: left; padding-right: 0.15rem;">{{ comment.userNickname }}</div>
-							<div style="color: cadetblue;">: <span style="color: black;">{{ comment.content }}</span></div>
+						<div v-if="getCommentContent(comment) != '点赞'">
+							<div style="color: cadetblue; float: left; padding-right: 0.15rem;">{{ getCommentOP(comment) }}</div>
+							<div style="color: cadetblue;">: <span style="color: black;">{{ getCommentContent(comment) }}</span></div>
 						</div>
 					</div>
 				</div>
@@ -113,7 +113,8 @@
 				isReply: false, 
 				replyTo: "", 
 				placeHolder: "留言", 
-				transitionAni: ['fade']
+				transitionAni: ['fade'],
+				showEmptyFiller: false
 			}
 		},
 		async onLoad(option) {
@@ -128,7 +129,6 @@
 				console.log(e)
 			}
 			
-			// get likes & comments info of this post from backend
 			this.comments = [];
 			const res = await requestAPI({
 				path: "/friendpost/getFriendComment?offset=0&limit=500&postID=" + this.post.id.toString(),
@@ -142,7 +142,14 @@
 			for (let i = 0; i < this.comments.length; i++) {
 				if (this.comments[i].content == "点赞") {
 					this.likes.push(this.comments[i].userNickname);
+					if (this.comments[i].userNickname == this.userName) {
+						this.clickLike = true;
+					}
 				}
+			}
+			
+			if (this.likes.length == 0 && this.comments.length == 0) {
+				this.showEmptyFiller = true;
 			}
 		},
 		computed: {
@@ -179,9 +186,10 @@
 				this.clickLike = true;
 				this.likes.push(this.userName);
 				this.leaveMessage = false;
-				let newComment = {"id": 0, "userID": 0, "userAvatar": 0, "userNickname": this.userName, "postID": this.post.id, "content": "点赞", "createdAt": ""};
+				let newComment = {"userNickname": this.userName, "post_id": this.post.id, "content": "点赞"};
 				const res = await requestAPI({
-					path: "/friendpost/comment/create?x-wx-openid=" + this.userName,
+					path: "/friendpost/comment/create",
+					data: newComment,
 					type: "POST"
 				});
 				if (res.data.status != 100) {
@@ -204,10 +212,10 @@
 				}
 				let newComment = {};
 				if (this.isReply) {
-					newComment = {"userNickname": this.userName + ' @ ' + this.replyTo, "postID": this.post.id, "content": this.userComment};
+					newComment = {"userNickname": this.userName, "post_id": this.post.id, "content": this.userName + ' @ ' + this.replyTo + ':&:' + this.userComment};
 					this.comments.push(newComment);
 				} else {
-					newComment = {"userNickname": this.userName, "postID": this.post.id, "content": this.userComment};
+					newComment = {"userNickname": this.userName, "post_id": this.post.id, "content": this.userName + ':&:' + this.userComment};
 					this.comments.push(newComment);
 				}
 				this.userComment = "";
@@ -217,8 +225,6 @@
 				this.isReply = false;
 				this.commentBox = false;
 				this.scrollTo = this.scrollBack;
-				
-				// TODO: send comment to backend
 				const res = await requestAPI({
 					path: "/friendpost/comment/create",
 					data: newComment,
@@ -256,6 +262,18 @@
 			deactivateLargeImages() {
 				this.showLargeImage = false
 				this.clickedImageIndex = -1
+			},
+			getCommentOP(e) {
+				if (e.content.split(':&:').length == 1) {
+					return e.userNickname;
+				}
+				return e.content.split(':&:')[0];
+			},
+			getCommentContent(e) {
+				if (e.content.split(':&:').length == 1) {
+					return e.content;
+				}
+				return e.content.split(':&:')[1];
 			}
 		}
 	}
@@ -359,7 +377,6 @@
 		flex-direction: row;
 		justify-content: space-around;
 		align-items: center;
-		/* margin-bottom: 2rem; */
 	}
 	.post-likes-comments {
 		width: 100vw;
@@ -376,7 +393,6 @@
 		display: flex;
 		flex-direction: column;
 		flex-wrap: nowrap;
-		/*padding-top: 1rem;*/
 	}
 	.individual-post-comment {
 		margin-bottom: 0.5rem;
@@ -472,7 +488,7 @@
 	.empty-filler {
 		background-color: whitesmoke;
 		width: 100%;
-		height: 10rem;
+		height: 7rem;
 		display: flex;
 		flex-direction: row;
 		justify-content: center;
