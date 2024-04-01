@@ -3,11 +3,17 @@
 		<div v-if="post.images.length > 0" style="width: 100%;">
 			<image v-bind:src="`${post.images[0]}`" class="post-image" mode="aspectFill" />
 		</div>
+		<div v-else-if="post.description.length > 0" class="post-content">
+			<text style="width: 90%;">{{ postContent }}</text>
+		</div>
 		<div v-else style="width: 100%;">
-			<image src="https://i.imgur.com/kWQpPbL.png" class="post-image" mode="aspectFill" />
+			<image src="https://i.imgur.com/4BuEzrB.png" class="post-image" style="height: 5rem;" mode="aspectFit" />
 		</div>
 		
-		<text class="post-title">{{ postTitle }}</text>
+		<div class="post-title">
+			<text v-if="post.title.length > 13" style="height: 1.85rem;">{{ postTitle }}</text>
+			<text v-else style="height: 0.85rem;">{{ postTitle }}</text>
+		</div>
 		
 		<div class="post-info post-info-text">
 			<div style="display: flex; flex-direction: row; align-items: center;">
@@ -29,6 +35,10 @@
 			useBorderStyle: {
 				type: String,
 				required: true
+			},
+			postHeight: {
+				type: String,
+				required: true
 			}
 		},
 		computed: {
@@ -36,6 +46,7 @@
 				return {
 					"post": true,
 					[this.useBorderStyle]: true,
+					[this.postHeight]: true
 				}
 			},
 			postTitle() {
@@ -50,6 +61,13 @@
 					return this.post.userNickname.slice(0, 7) + " ...";
 				} else {
 					return this.post.userNickname;
+				}
+			},
+			postContent() {
+				if (this.post.description.length > 30) {
+					return this.post.description.slice(0, 30) + " ...";
+				} else {
+					return this.post.description;
 				}
 			}
 		}, 
@@ -70,9 +88,20 @@
 </script>
 
 <style scoped>
+	.post-height-1 {
+		height: 14.5rem;
+	}
+	.post-height-2 {
+		height: 13.5rem;
+	}
+	.post-height-3 {
+		height: 9.5rem;
+	}
+	.post-height-4 {
+		height: 8.5rem;
+	}
 	.post {
 		width: 100%;
-		height: 14.5rem;
 		display: flex;
 		flex-direction: column;
 		flex-wrap: nowrap;
@@ -86,12 +115,22 @@
 		border-top-left-radius: 5px;
 		border-top-right-radius: 5px;
 	}
+	.post-content {
+		width: 100%;
+		height: 5rem;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		overflow-wrap: break-word;
+		font-size: 90%;
+		font-family: 'Courier New', Courier, monospace;
+	}
 	.post-title {
 		font-weight: 500; 
 		font-size: 85%; 
 		width: 90%; 
 		overflow-wrap: break-word;
-		height: 1.85rem;
 		margin-bottom: 0.5rem;
 	}
 	.post-info {
@@ -101,7 +140,7 @@
 		flex-wrap: nowrap;
 		justify-content: space-between;
 		align-items: center;
-		margin: 0.2rem auto 0.2rem;
+		margin: 0.1rem auto 0.2rem;
 	}
 	.avatar {
 		width: 1.2rem;

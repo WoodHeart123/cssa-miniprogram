@@ -29,14 +29,18 @@
 				</div>
 				
 				<div class="post-divide-line">
-					<div style="width: 45%; height: 1px; background-color: lightgray;" />
-					<div style="font-size: 200%; vertical-align: middle; color: lightgray;">·</div>
-					<div style="width: 45%; height: 1px; background-color: lightgray;" />
+					<div style="width: 45%; height: 1px; background-color: white;" />
+					<div style="font-size: 200%; vertical-align: middle; color: white;">·</div>
+					<div style="width: 45%; height: 1px; background-color: white;" />
 				</div>
 			</div>
 			
+			<div v-if="comments.length == 0 && likes.length == 0" class="empty-filler">
+				<image src="https://i.imgur.com/KxzmI5u.png" style="width: 100%; height: 100%;" mode="aspectFit" />
+			</div>
+			
 			<div class="post-likes-comments" id="post-likes-comments-id">
-				<div style="width: 90%;">
+				<div v-if="likes.length > 0" style="width: 90%;">
 					<uni-icons v-if="!clickLike" type="heart" size="20" color="cadetblue" style="float: left; padding-right: 1rem;" v-on:click="addLike"/>
 					<uni-icons v-else type="heart-filled" size="20" color="cadetblue" style="float: left; padding-right: 1rem;" v-on:click="" />
 					<div v-if="likes.length > 0" style="display: flex; flex-direction: row; flex-wrap: wrap; align-content: center;">
@@ -89,7 +93,7 @@
 </template>
 
 <script>
-import requestAPI from '../../api/request';
+	import requestAPI from '@/api/request.js'
 	export default {
 		data() {
 			return {
@@ -167,6 +171,11 @@ import requestAPI from '../../api/request';
 				this.leaveMessage = !this.leaveMessage;
 			}, 
 			async addLike(e) {
+				for (let i = 0; i < this.likes.length; i++) {
+					if (this.likes[i] == this.userName) {
+						return;
+					}
+				}
 				this.clickLike = true;
 				this.likes.push(this.userName);
 				this.leaveMessage = false;
@@ -195,10 +204,10 @@ import requestAPI from '../../api/request';
 				}
 				let newComment = {};
 				if (this.isReply) {
-					newComment = {"id": 0, "userID": 0, "userAvatar": 0, "userNickname": this.userName + ' @ ' + this.replyTo, "postID": this.post.id, "content": this.userComment, "createdAt": ""};
+					newComment = {"userNickname": this.userName + ' @ ' + this.replyTo, "postID": this.post.id, "content": this.userComment};
 					this.comments.push(newComment);
 				} else {
-					newComment = {"id": 0, "userID": 0, "userAvatar": 0, "userNickname": this.userName, "postID": this.post.id, "content": this.userComment, "createdAt": ""};
+					newComment = {"userNickname": this.userName, "postID": this.post.id, "content": this.userComment};
 					this.comments.push(newComment);
 				}
 				this.userComment = "";
@@ -211,7 +220,8 @@ import requestAPI from '../../api/request';
 				
 				// TODO: send comment to backend
 				const res = await requestAPI({
-					path: "/friendpost/comment/create?x-wx-openid=" + this.userName,
+					path: "/friendpost/comment/create",
+					data: newComment,
 					type: "POST"
 				});
 				if (res.data.status != 100) {
@@ -265,6 +275,9 @@ import requestAPI from '../../api/request';
 		align-items: center;
 		flex-wrap: nowrap;
 		padding-top: 3rem;
+		border-bottom-left-radius: 30px;
+		border-bottom-right-radius: 30px;
+		box-shadow: 0px 0px 15px 0px rgb(0 0 0 / 25%);
 	}
 	.post-meta-data {
 		width: 90%;
@@ -346,8 +359,7 @@ import requestAPI from '../../api/request';
 		flex-direction: row;
 		justify-content: space-around;
 		align-items: center;
-		margin-top: 2rem;
-		margin-bottom: 2rem;
+		/* margin-bottom: 2rem; */
 	}
 	.post-likes-comments {
 		width: 100vw;
@@ -456,5 +468,15 @@ import requestAPI from '../../api/request';
 		align-items: center; 
 		color: darkgray; 
 		font-size: 80%;
+	}
+	.empty-filler {
+		background-color: whitesmoke;
+		width: 100%;
+		height: 10rem;
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+		margin-top: 3rem;
 	}
 </style>

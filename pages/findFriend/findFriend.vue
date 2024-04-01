@@ -1,10 +1,10 @@
 <template>
 	<view style="background-color: whitesmoke; height: 100vh; width: 100%;">
 		<div class="find-friend-posts">
-			<div v-for="post in allPosts" style="width: 48%; margin-bottom: 0.3rem;" v-on:click="gotoPostDetail(post)">
-				<singlePostStyleTwo v-bind:post="post" useBorderStyle="show-border" />
+			<div ref="findFriendPosts" v-for="post in allPosts" style="width: 47%; position: absolute;" v-on:click="gotoPostDetail(post)">
+				<singlePostStyleTwo v-bind:post="post" useBorderStyle="show-border" v-bind:postHeight="computePostHeight(post)" />
 			</div>
-			<div v-if="allPosts.length % 2 == 1" style="width: 48%;" />
+			<!-- <div v-if="allPosts.length % 2 == 1" style="width: 48%;" /> -->
 		</div>
 		
 		<div v-if="reachEnd" style="width: 100%; height: 5rem; background-color: whitesmoke;" />
@@ -40,7 +40,7 @@
 				unreadPostNotifications: true, 
 				unreadDM: true, 
 				reachEnd: true, 
-				verticalPos: [],
+				verticalPos: [1, 1],
 				allPosts:
 					[
 											{
@@ -55,15 +55,15 @@
 											}, 
 											{ id: 2, userNickname: "用户 2", userAvatar: 2, createdAt: "2023-12-23", eventTimeFrame: "2023-12-23", title: "标题 2", description: "这还是一个测试通告", images: ["https://i.imgur.com/OK0SAIp.jpg"], tag: []},
 											{ id: 3, userNickname: "用户 3", userAvatar: 3, createdAt: "2023-12-23", eventTimeFrame: "2023-12-23", title: "标题 3", description: "这是一个特别长的测试通告这是一个特别长的测试通告这是一个特别长的测试通告这是一个特别长的测试通告这是一个特别长的测试通告这是一个特别长的测试通告这是一个特别长的测试通告这是一个特别长的测试通告这是一个特别长的测试通告这是一个特别长的测试通告这是一个特别长的测试通告这是一个特别长的测试通告这是一个特别长的测试通告这是一个特别长的测试通告", images: ["https://i.imgur.com/QvaszPR.png", "https://i.imgur.com/RayNQyw.png"], tag: []}, 
-											{ id: 4, userNickname: "用户 4", userAvatar: 4, createdAt: "2023-12-23", eventTimeFrame: "2023-12-23", title: "标题 4", description: "这还是一个测试通告", images: ["https://i.imgur.com/3PbyN51.jpg", "https://i.imgur.com/OK0SAIp.jpg", "https://i.imgur.com/rNEs9p4.jpg", "https://i.imgur.com/aT9fyff.png"], tag: []}, 
+											{ id: 4, userNickname: "用户 4", userAvatar: 4, createdAt: "2023-12-23", eventTimeFrame: "2023-12-23", title: "标题 4", description: "这还是一个测试通告这还是一个测试通告这还是一个测试通告这还是一个测试通告这还是一个测试通告这还是一个测试通告这还是一个测试通告这还是一个测试通告这还是一个测试通告这还是一个测试通告这还是一个测试通告这还是一个测试通告这还是一个测试通告这还是一个测试通告这还是一个测试通告这还是一个测试通告这还是一个测试通告这还是一个测试通告这还是一个测试通告这还是一个测试通告这还是一个测试通告这还是一个测试通告这还是一个测试通告这还是一个测试通告这还是一个测试通告", images: ["https://i.imgur.com/3PbyN51.jpg", "https://i.imgur.com/OK0SAIp.jpg", "https://i.imgur.com/rNEs9p4.jpg", "https://i.imgur.com/aT9fyff.png"], tag: []}, 
 											{ id: 5, userNickname: "用户 5", userAvatar: 5, createdAt: "2023-12-23", eventTimeFrame: "2023-12-23", title: "标题 5标题 5标题 5标题 5标题 5标题 5标题 5标题 5", description: "这还是一个测试通告", images: ["https://i.imgur.com/rNEs9p4.jpg"], tag: []}, 
 											{ id: 6, userNickname: "用户 6", userAvatar: 6, createdAt: "2023-12-23", eventTimeFrame: "2023-12-23", title: "标题 6", description: "这还是一个测试通告", images: ["https://i.imgur.com/aT9fyff.png"], tag: []}, 
 											{ id: 7, userNickname: "用户 7", userAvatar: 7, createdAt: "2023-12-23", eventTimeFrame: "2023-12-23", title: "标题 7", description: "这还是一个测试通告", images: ["https://i.imgur.com/nhTiMwb.jpg", "https://i.imgur.com/yz1KHBk.jpg", "https://i.imgur.com/slkAGmA.png"], tag: []}, 
 											{ id: 8, userNickname: "用户 8", userAvatar: 8, createdAt: "2023-12-23", eventTimeFrame: "2023-12-23", title: "一个很长的标题一个很长的标题一个很长的标题", description: "这还是一个测试通告", images: ["https://i.imgur.com/AoZTdk2.jpg", "https://i.imgur.com/yW82HKT.jpg"], tag: []}, 
 											{ id: 9, userNickname: "用户 9", userAvatar: 9, createdAt: "2023-12-23", eventTimeFrame: "2023-12-23", title: "标题 9", description: "这还是一个测试通告", images: ["https://i.imgur.com/ocmwopm.jpg", "https://i.imgur.com/r4yxUO4.jpg"], tag: []}, 
-											{ id: 10, userNickname: "用户 10", userAavatar: 10, createdAt: "2023-12-23", eventTimeFrame: "2023-12-23", title: "标题 10", description: "这还是一个测试通告", images: ["https://i.imgur.com/g6mPio7.jpg", "https://i.imgur.com/uKELo6M.jpg"], tag: []}, 
+											{ id: 10, userNickname: "用户 10", userAvatar: 10, createdAt: "2023-12-23", eventTimeFrame: "2023-12-23", title: "标题 10", description: "这还是一个测试通告", images: ["https://i.imgur.com/g6mPio7.jpg", "https://i.imgur.com/uKELo6M.jpg"], tag: []}, 
 											{ id: 11, userNickname: "用户 11", userAvatar: 11, createdAt: "2023-12-23", eventTimeFrame: "2023-12-23", title: "标题 11", description: "这还是一个测试通告", images: ["https://i.imgur.com/Qym9Nnk.png"], tag: []}, 
-											{ id: 12, userNickname: "用户 12", userAvatar: 12, createdAt: "2023-12-23", eventTimeFrame: "2023-12-23", title: "标题 12", description: "这还是一个测试通告", images: [], tag: []}
+											{ id: 12, userNickname: "用户 12", userAvatar: 12, createdAt: "2023-12-23", eventTimeFrame: "2023-12-23", title: "标题 12", description: "", images: [], tag: []}
 					],
 				hasMore: true,
 				userName: "",
@@ -90,10 +90,37 @@
 			} catch (e) {
 				console.log(e)
 			}
-			
-			// TODO: compute vertical positions
+		},
+		mounted() {
+			this.getWaterfall();
 		},
 		methods: {
+			getAbovePostHeight(post) {
+				if (post.images.length > 0 && post.title.length > 13) {
+					return 14.5;
+				} else if (post.images.length > 0) {
+					return 13.5;
+				} else if (post.title.length > 13) {
+					return 9.5;
+				} else {
+					return 8.5;
+				}
+			},
+			getWaterfall() {
+				console.log(this.$refs);
+				let item = this.$refs['findFriendPosts'];
+				console.log("here");
+				console.log(item);
+				for (let i = 0; i < item.length; i++) {
+					item[i].style.left = (i == 0 ? '1rem' : '20rem');
+					if (i < 2) {
+						item[i].style.top = this.verticalPos[i] + 'rem';
+					} else {
+						this.verticalPos.push(this.verticalPos[i - 2] + this.getAbovePostHeight(this.allPosts[i - 2]) + 0.3);
+						item[i].style.top = this.verticalPos[i] + 'rem';
+					}
+				}
+			},
 			navBarItemTextStyle(index) {
 				if (index == this.selectedTab) {
 					return {
@@ -127,6 +154,17 @@
 				uni.navigateTo({
 					url: "./findFriendPost?userName=" + this.userName + "&avatar=" + this.userAvatar
 				})
+			},
+			computePostHeight(post) {
+				if (post.images.length > 0 && post.title.length > 13) {
+					return "post-height-1";
+				} else if (post.images.length > 0 && post.title.length <= 13) {
+					return "post-height-2";
+				} else if (post.images.length == 0 && post.title.length > 13) {
+					return "post-height-3";
+				} else {
+					return "post-height-4";
+				}
 			}
 		}
 	}
@@ -165,12 +203,7 @@
 	}
 	.find-friend-posts {
 		width: 100%;
-		display: flex;
-		flex-direction: row;
-		flex-wrap: wrap;
-		justify-content: space-evenly;
 		background-color: whitesmoke;
-		padding-top: 1rem;
 	}
 	.div-bottom {
 		width: 100%;
