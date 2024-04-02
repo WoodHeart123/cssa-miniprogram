@@ -1,5 +1,5 @@
 <template>
-	<div v-bind:class="borderStyle" v-bind:key="post.id">
+	<div v-bind:class="getPostStyle" v-bind:key="post.id">
 		<div v-if="post.images.length > 0" style="width: 100%;">
 			<image v-bind:src="`${post.images[0]}`" class="post-image" mode="aspectFill" />
 		</div>
@@ -32,20 +32,15 @@
 				type: Object,
 				required: true
 			},
-			useBorderStyle: {
-				type: String,
-				required: true
-			},
 			postHeight: {
 				type: String,
 				required: true
 			}
 		},
 		computed: {
-			borderStyle() {
+			getPostStyle() {
 				return {
 					"post": true,
-					[this.useBorderStyle]: true,
 					[this.postHeight]: true
 				}
 			},
@@ -153,6 +148,4 @@
 		color: darkgray;
 		font-size: 0.7rem;
 	}
-	.show-border {}
-	.hide-border {}
 </style>

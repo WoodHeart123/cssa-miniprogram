@@ -1,21 +1,35 @@
 <template>
 	<view style="background-color: whitesmoke; height: 100vh; width: 100%;">
-		<div class="find-friend-posts">
-			<div ref="findFriendPosts" v-for="post in allPosts" style="width: 47%; position: absolute;" v-on:click="gotoPostDetail(post)">
-				<singlePostStyleTwo v-bind:post="post" useBorderStyle="show-border" v-bind:postHeight="computePostHeight(post)" />
-			</div>
-			<!-- <div v-if="allPosts.length % 2 == 1" style="width: 48%;" /> -->
+		<div v-if="loading" style="width: 100vw; height: 3rem; display: flex; justify-content: center; align-items: center;">
+			<text style="color: darkgray;">
+				正在加载，请稍后。。。
+			</text>
 		</div>
 		
-		<div v-if="reachEnd" style="width: 100%; height: 5rem; background-color: whitesmoke;" />
+		<div style="height: 0.7rem;" />
+		
+		<div class="find-friend-posts">
+			<div class="find-friend-posts-pane">
+				<div v-for="i in leftPosts" style="width: 100%; margin-bottom: 0.3rem;" v-on:click="gotoPostDetail(allPosts[i])">
+					<singlePostStyleTwo v-bind:post="allPosts[i]" v-bind:postHeight="getPostHeightStyle(getPostHeightIdx(allPosts[i]))" />
+				</div>
+			</div>
+			<div class="find-friend-posts-pane">
+				<div v-for="i in rightPosts" style="width: 100%; margin-bottom: 0.3rem;" v-on:click="gotoPostDetail(allPosts[i])">
+					<singlePostStyleTwo v-bind:post="allPosts[i]" v-bind:postHeight="getPostHeightStyle(getPostHeightIdx(allPosts[i]))" />
+				</div>
+			</div>
+		</div>
+		
+		<div style="height: 7rem;" />
 		
 		<div class="bottom-bar">
-			<div class="bottom-bar-item">
+			<div class="bottom-bar-item" v-on:click="reload">
 				<uni-icons type="home" color="#C5050C90" size="20" />
 				<text style="font-size: 60%; color: darkgray;">刷新</text>
 			</div>
 			
-			<div class="bottom-bar-item" v-on:click="gotoPost()">
+			<div class="bottom-bar-item" v-on:click="gotoUploadPost">
 				<uni-icons type="compose" color="#C5050C90" size="20" />
 				<text style="font-size: 60%; color: darkgray;">发布动态</text>
 			</div>
@@ -26,21 +40,20 @@
 <script>
 	import singlePostStyleTwo from './singlePostStyleTwo.vue'
 	import requestAPI from '@/api/request.js'
-	export default{
+	export default {
 		components: {
 			singlePostStyleTwo,
 		},
 		data() {
 			return {
-				selectedTab: 0, 
-				navbarItems: ['全部', '吃饭', '运动', '旅游', '娱乐'], 
-				// TODO: Check whether the user has unread post activities from backend
-				// TODO: Check whether the user has unread DM from backend
-				// TODO: Get the posts from backend in onLoad() function
-				unreadPostNotifications: true, 
-				unreadDM: true, 
-				reachEnd: true, 
-				verticalPos: [1, 1],
+		 		loading: true,
+		 		leftY: 0,
+		 		rightY: 0,
+		 		leftPosts: [],
+		 		rightPosts: [],
+		 		currentPostIdx: 0,
+		 		postHeightValue: [14.5, 13.5, 9.5, 8.5],
+		 		postHeightStyle: ['post-height-1', 'post-height-2', 'post-height-3', 'post-height-4'],
 				allPosts:
 					[
 											{
@@ -64,10 +77,7 @@
 											{ id: 10, userNickname: "用户 10", userAvatar: 10, createdAt: "2023-12-23", eventTimeFrame: "2023-12-23", title: "标题 10", description: "这还是一个测试通告", images: ["https://i.imgur.com/g6mPio7.jpg", "https://i.imgur.com/uKELo6M.jpg"], tag: []}, 
 											{ id: 11, userNickname: "用户 11", userAvatar: 11, createdAt: "2023-12-23", eventTimeFrame: "2023-12-23", title: "标题 11", description: "这还是一个测试通告", images: ["https://i.imgur.com/Qym9Nnk.png"], tag: []}, 
 											{ id: 12, userNickname: "用户 12", userAvatar: 12, createdAt: "2023-12-23", eventTimeFrame: "2023-12-23", title: "标题 12", description: "", images: [], tag: []}
-					],
-				hasMore: true,
-				userName: "",
-				userAvatar: ""
+					]
 			}
 		},
 		async onLoad(option) {
@@ -90,138 +100,79 @@
 			} catch (e) {
 				console.log(e)
 			}
-		},
-		mounted() {
+			
 			this.getWaterfall();
+			this.loading = false;
 		},
 		methods: {
-			getAbovePostHeight(post) {
+			getPostHeightIdx(post) {
 				if (post.images.length > 0 && post.title.length > 13) {
-					return 14.5;
+					return 0;
 				} else if (post.images.length > 0) {
-					return 13.5;
+					return 1;
 				} else if (post.title.length > 13) {
-					return 9.5;
+					return 2;
 				} else {
-					return 8.5;
+					return 3;
 				}
+			},
+			getPostHeightStyle(i) {
+				return this.postHeightStyle[i];
+			},
+			getPostHeightValue(i) {
+				return this.postHeightValue[i];
 			},
 			getWaterfall() {
-				console.log(this.$refs);
-				let item = this.$refs['findFriendPosts'];
-				console.log("here");
-				console.log(item);
-				for (let i = 0; i < item.length; i++) {
-					item[i].style.left = (i == 0 ? '1rem' : '20rem');
-					if (i < 2) {
-						item[i].style.top = this.verticalPos[i] + 'rem';
+				for (let i = this.currentPostIdx; i < this.allPosts.length; i++) {
+					if (this.leftY <= this.rightY) {
+						this.leftPosts.push(i);
+						this.leftY += this.getPostHeightValue(this.getPostHeightIdx(this.allPosts[i]));
 					} else {
-						this.verticalPos.push(this.verticalPos[i - 2] + this.getAbovePostHeight(this.allPosts[i - 2]) + 0.3);
-						item[i].style.top = this.verticalPos[i] + 'rem';
+						this.rightPosts.push(i);
+						this.rightY += this.getPostHeightValue(this.getPostHeightIdx(this.allPosts[i]));
 					}
 				}
+				this.currentPostIdx = this.allPosts.length;
 			},
-			navBarItemTextStyle(index) {
-				if (index == this.selectedTab) {
-					return {
-						"find-friend-navbar-selected-item-text": true
-					}
-				} else {
-					return {
-						"find-friend-navbar-item-text": true
-					}
-				}
-			},
-			changeTab(index) {
-				this.selectedTab = index;
-			}, 
-			readNotifications() {
-				this.unreadNotifications = false;
-				this.selectedTab = 5;
-			}, 
 			gotoPostDetail(post) {
 				uni.navigateTo({
 					url: "./singlePostDetail?post=" + encodeURIComponent(JSON.stringify(post))
 				})
-			}, 
-			toggleNotification(e) {
-				this.unreadPostNotifications = !this.unreadPostNotifications;
-			}, 
-			toggleDM(e) {
-				this.unreadDM = !this.unreadDM;
 			},
-			gotoPost() {
+			gotoUploadPost() {
 				uni.navigateTo({
-					url: "./findFriendPost?userName=" + this.userName + "&avatar=" + this.userAvatar
+					url: "./findFriendPost?name=" + this.userName
 				})
 			},
-			computePostHeight(post) {
-				if (post.images.length > 0 && post.title.length > 13) {
-					return "post-height-1";
-				} else if (post.images.length > 0 && post.title.length <= 13) {
-					return "post-height-2";
-				} else if (post.images.length == 0 && post.title.length > 13) {
-					return "post-height-3";
-				} else {
-					return "post-height-4";
-				}
+			async reload() {
+				this.loading = true;
+				const res = await requestAPI({
+					path: "/friendpost/get?offset=0&limit=20",
+					type: "GET"
+				});
+				console.log('reload finished');
+				console.log(res.data.data);
+				this.loading = false;
+				this.allPosts = res.data.data;
 			}
 		}
 	}
 </script>
 
 <style scoped>
-	.find-friend-navbar {
-		position: fixed;
-		display: flex;
-		flex-direction: row;
-		flex-wrap: wrap;
-		justify-content: space-between;
-		align-items: center;
-		top: 0;
-		padding-top: 1rem;
-		padding-left: 1.5rem;
-		padding-right: 1.5rem;
-		padding-bottom: 0.5rem;
-		width: 100%;
-		background-color: white;
-		box-shadow: 0px 0px 15px 0px rgb(0 0 0 / 15%);
-	}
-	.find-friend-navbar-item {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		flex-wrap: nowrap;
-	}
-	.find-friend-navbar-item-text {
-		color: darkgray;
-	}
-	.find-friend-navbar-selected-item-text {
-		color: black;
-		font-size: 110%;
-		font-weight: 500;
-	}
 	.find-friend-posts {
 		width: 100%;
 		background-color: whitesmoke;
-	}
-	.div-bottom {
-		width: 100%;
 		display: flex;
 		flex-direction: row;
 		flex-wrap: nowrap;
-		justify-content: center;
-		align-items: center;
-		padding-top: 1.5rem;
-		padding-bottom: 7rem;
-		background-color: whitesmoke;
+		justify-content: space-evenly;
 	}
-	.div-line-bottom {
-		width: 30%;
-		height: 1px;
-		background-color: lightgray;
-		margin-left: 1rem;
-		margin-right: 1rem;
+	.find-friend-posts-pane {
+		width: 47%;
+		background-color: whitesmoke;
+		display: flex;
+		flex-direction: column;
 	}
 	.bottom-bar {
 		position: fixed;
@@ -242,35 +193,5 @@
 		flex-direction: column;
 		justify-content: space-around;
 		align-items: center;
-	}
-	.unread-notification {
-		position: fixed;
-		bottom: 2rem;
-		left: 10%;
-		width: 60%;
-		height: 3rem;
-		border-top-left-radius: 1.5rem;
-		border-top-right-radius: 1.5rem;
-		border-bottom-left-radius: 1.5rem;
-		border-bottom-right-radius: 1.5rem;
-		background-color: #D3D3D370;
-		backdrop-filter: blur(8px);
-		display: flex;
-		flex-direction: row;
-		flex-wrap: nowrap;
-		justify-content: center;
-		align-items: center;
-		padding-left: 1rem;
-		padding-right: 1rem;
-	}
-	.compose-button {
-		position: fixed; 
-		height: 3rem; 
-		width: 3rem; 
-		bottom: 2rem; 
-		right: 2rem; 
-		background-color: rgb(196, 90, 101); 
-		backdrop-filter: blur(8px);
-		border-radius: 50%;
 	}
 </style>

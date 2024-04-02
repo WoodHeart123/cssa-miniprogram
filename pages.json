@@ -205,6 +205,14 @@
 				"enablePullDownRefresh": false,
 				"backgroundColor": "#ffffff"
 			}
+		},
+		{
+			"path": "pages/findFriend/findFriendPost",
+			"style": {
+				"navigationBarTitleText": "发布",
+				"enablePullDownRefresh": false,
+				"backgroundColor": "#f5f5f5"
+			}
 		}
     ],
     "condition" : {
@@ -293,6 +301,10 @@
 			{
 				"path": "pages/coursePage/courseStat",
 				"name": "courseStat"
+			},
+			{
+				"name": "findFriendPost",
+				"path": "pages/findFriend/findFriendPost"
 			}
         ]
     },
