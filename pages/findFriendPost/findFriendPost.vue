@@ -3,13 +3,13 @@
 		<uni-forms ref="findFriendForm" :modelValue="friendPost" :rules="rules">
 			<view class="uni-input">
 				<uni-forms-item name="title">
-				    <!-- <span class="span">标题</span> -->
-					<uni-easyinput type="textarea" v-model="friendPost.title" placeholder="请输入标题"
+					<!-- <span class="span">标题</span> -->
+					<uni-easyinput :inputBorder="false" type="textarea-1" v-model="friendPost.title" placeholder="请输入标题"
 						maxlength="400" placeholderStyle="font-size:14px;color:gray" :clearable="clearable">
 					</uni-easyinput>
 				</uni-forms-item>
 			</view>
-			
+
 
 			<!-- <view class="card uni-form-item uni-column" v-if="!this.edit">
 				<uni-forms-item name="imageList">
@@ -19,7 +19,7 @@
 					</view>
 				</uni-forms-item>
 			</view> -->
-			
+
 			<view class="uni-input-2">
 				<uni-forms-item name="imageList">
 					<view class="image_upload">
@@ -27,17 +27,18 @@
 							@delete="onDeleteImage"></uni-file-picker>
 					</view>
 				</uni-forms-item>
-				
+
 				<uni-forms-item name="description">
 					<!-- <span class="span">内容</span> -->
-					<uni-easyinput type="textarea" v-model="friendPost.description" placeholder="请描述找搭子详情,如/地点/日期等"
-						maxlength="400" placeholderStyle="font-size:14px;color:gray" :clearable="clearable">
+					<uni-easyinput :inputBorder="false" type="textarea" v-model="friendPost.description"
+						placeholder="请描述找搭子详情,如/地点/日期等" maxlength="400" placeholderStyle="font-size:14px;color:gray"
+						:clearable="clearable">
 					</uni-easyinput>
 				</uni-forms-item>
 			</view>
-			
-			
-			
+
+
+
 			<view class="uni-padding-wrap uni-common-mt confirm-button">
 				<button type="default" style="background-color: #9b0000; color: #ffffff;" plain="true"
 					@click="submit('findFriendForm')">发布</button>
@@ -69,8 +70,7 @@
 						}]
 					},
 					description: {
-						rules: [
-							{
+						rules: [{
 								required: true,
 								errorMessage: '请填写找搭子详情',
 							},
@@ -166,7 +166,7 @@
 					});
 				}
 			},
-			
+
 			updateRental: async function() {
 				const res = await requestAPI({
 					path: `/findPost/updateFindPost`,
@@ -185,15 +185,17 @@
 				}
 			}
 		}
-		
+
 	}
 </script>
 
-<style>
+<style lang="scss">
 	input {
 		height: 35px;
+		background-color: transparent !important;
 	}
-	
+
+
 	#findFriendPost {
 		position: absolute;
 		min-width: 100vw;
@@ -204,41 +206,48 @@
 		background-position: bottom;
 		background-size: cover;
 	}
-	
+
 	.uni-input {
-	    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-	    border-radius: 10px; 
-	    padding: 13px; 
-	    margin-bottom: 20px; 
-	    background-color: rgba(0, 0, 0, 0);
+		box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+		border-radius: 3px;
+		padding: 13px;
+		margin-bottom: 20px;
+		background-color: rgba(255, 255, 255, 0.3);
 		margin-top: 30px;
 		margin-bottom: 20px;
 	}
-	
+
 	.uni-input-2 {
 		box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 		border-radius: 10px;
-		padding: 13px; 
+		padding: 13px;
 		margin-bottom: 10px;
-		background-color: rgba(0, 0, 0, 0);
+		background-color: rgba(255, 255, 255, 0.3);
+		height: 400px;
 	}
-	
-	.uni-input-2 textarea {
-		height: 180px;
-		min-height: 100px;
-	    /* background-color: rgba(255, 255, 255, 0); */
-		background-color: rgba(0, 0, 0, 0);
+
+	.textarea-1 {
+		height: 100px;
+		/* background-color: rgba(255, 255, 255, 0); */
+		color: '#000000';
+		/* border-color: '#000000'; */
+		/*background-color: rgba(0, 0, 0, 0);*/
 	}
-	
-	/* .card {
-	    padding: 20px;
-	    margin-bottom: 20px;
-	} */
-	
-	
+
+	.textarea {
+		height: 300px;
+		/* background-color: rgba(255, 255, 255, 0); */
+		color: '#000000';
+		/* border-color: '#000000'; */
+		/*background-color: rgba(0, 0, 0, 0);*/
+	}
+
 	.confirm-button {
 		margin-top: 20px;
 		margin-bottom: 20px;
 	}
-	
+
+	.uni-easyinput__content {
+		background-color: rgba(255, 255, 255, 0) !important;
+	}
 </style>
