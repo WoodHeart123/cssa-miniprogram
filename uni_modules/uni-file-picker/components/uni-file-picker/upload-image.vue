@@ -207,7 +207,7 @@
 		bottom: 0;
 		left: 0;
 		margin: 5px;
-		border: 1px #eee solid;
+		border: 1.5px darkslategray dashed;
 		border-radius: 5px;
 		overflow: hidden;
 	}
