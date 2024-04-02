@@ -1,27 +1,28 @@
 <template>
 	<view style="background-color: whitesmoke; height: 100vh; width: 100%;">
-		<div v-if="loading" style="width: 100vw; height: 3rem; display: flex; justify-content: center; align-items: center;">
-			<text style="color: darkgray;">
-				正在加载，请稍后。。。
-			</text>
-		</div>
-		
-		<div style="height: 0.7rem;" />
-		
-		<div class="find-friend-posts">
-			<div class="find-friend-posts-pane">
-				<div v-for="i in leftPosts" style="width: 100%; margin-bottom: 0.3rem;" v-on:click="gotoPostDetail(allPosts[i])">
-					<singlePostStyleTwo v-bind:post="allPosts[i]" v-bind:postHeight="getPostHeightStyle(getPostHeightIdx(allPosts[i]))" />
+		<scroll-view scroll-y="true" scroll-with-animation="true" v-bind:scroll-into-view="scrollTo" style="height: 100%;">
+			<div id="top" style="height: 0.7rem;" />
+			<div v-if="loading" style="width: 100vw; height: 3rem; display: flex; justify-content: center; align-items: center;">
+				<text style="color: darkgray;">
+					正在加载，请稍后。。。
+				</text>
+			</div>
+			
+			<div class="find-friend-posts">
+				<div class="find-friend-posts-pane">
+					<div v-for="i in leftPosts" style="width: 100%; margin-bottom: 0.3rem;" v-on:click="gotoPostDetail(allPosts[i])">
+						<singlePostStyleTwo v-bind:post="allPosts[i]" v-bind:postHeight="getPostHeightStyle(getPostHeightIdx(allPosts[i]))" />
+					</div>
+				</div>
+				<div class="find-friend-posts-pane">
+					<div v-for="i in rightPosts" style="width: 100%; margin-bottom: 0.3rem;" v-on:click="gotoPostDetail(allPosts[i])">
+						<singlePostStyleTwo v-bind:post="allPosts[i]" v-bind:postHeight="getPostHeightStyle(getPostHeightIdx(allPosts[i]))" />
+					</div>
 				</div>
 			</div>
-			<div class="find-friend-posts-pane">
-				<div v-for="i in rightPosts" style="width: 100%; margin-bottom: 0.3rem;" v-on:click="gotoPostDetail(allPosts[i])">
-					<singlePostStyleTwo v-bind:post="allPosts[i]" v-bind:postHeight="getPostHeightStyle(getPostHeightIdx(allPosts[i]))" />
-				</div>
-			</div>
-		</div>
-		
-		<div style="height: 7rem;" />
+			
+			<div style="height: 7rem;" />
+		</scroll-view>
 		
 		<div class="bottom-bar">
 			<div class="bottom-bar-item" v-on:click="reload">
@@ -52,6 +53,7 @@
 		 		leftPosts: [],
 		 		rightPosts: [],
 		 		currentPostIdx: 0,
+				scrollTo: "",
 		 		postHeightValue: [14.5, 13.5, 9.5, 8.5],
 		 		postHeightStyle: ['post-height-1', 'post-height-2', 'post-height-3', 'post-height-4'],
 				allPosts:
@@ -154,6 +156,11 @@
 				console.log(res.data.data);
 				this.loading = false;
 				this.allPosts = res.data.data;
+				this.currentPostIdx = 0;
+				this.leftPosts = [];
+				this.rightPosts = [];
+				this.getWaterfall();
+				this.scrollTo = "top";
 			}
 		}
 	}

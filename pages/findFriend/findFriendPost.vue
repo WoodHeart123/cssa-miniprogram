@@ -26,7 +26,7 @@
 					<div style="margin-top: 1.7rem;">
 						<uni-forms-item name="description">
 							<uni-easyinput :inputBorder="false" type="textarea" v-model="friendPost.description"
-								placeholder="请描述找搭子详情,如/地点/日期等" maxlength="400" placeholderStyle="font-size:14px; color:darkgray"
+								placeholder="帖子详情,如/地点/日期等" maxlength="400" placeholderStyle="font-size:14px; color:darkgray"
 								:clearable="clearable">
 							</uni-easyinput>
 						</uni-forms-item>
@@ -74,7 +74,7 @@
 							{
 								minLength: 0,
 								maxLength: 400,
-								errorMessage: '长度在 1 到 400 个字符之间',
+								errorMessage: '长度在 0 到 400 个字符之间',
 							},
 						]
 					},
@@ -194,13 +194,11 @@
 
 
 	#findFriendPost {
-		position: absolute;
-		min-width: 100vw;
-		height: 100vh;
-		padding: 0 3vw 0 3vw;
+		width: 100vw;
+		height: 100%;
 		background-image: url("https://i.imgur.com/1EY6wzL.jpg");
 		background-repeat: no-repeat;
-		background-position: bottom;
+		background-position: center center;
 		background-size: cover;
 	}
 	
@@ -217,7 +215,7 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+		box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 		border-radius: 20px;
 		background-color: rgba(255, 255, 255);
 		// backdrop-filter: blur(8px);
@@ -238,8 +236,8 @@
 		border-radius: 10px;
 		padding: 15px;
 		margin-bottom: 15px;
-		background-color: rgba(255, 255, 255, 0.3);
-		backdrop-filter: blur(8px);
+		background-color: rgba(255, 255, 255, 0.5);
+		backdrop-filter: blur(9px);
 		height: 100%;
 	}
 	
@@ -247,6 +245,7 @@
 		width: 80%;
 		height: 3rem;
 		margin-top: 1rem;
+		margin-bottom: 3rem;
 		border-radius: 30px;
 		background-color: rgba(70, 130, 180, 0.7);
 		backdrop-filter: blur(8px);
@@ -262,7 +261,7 @@
 	}
 
 	.uni-easyinput__content {
-		background-color: rgba(255, 255, 255, 0.7) !important;
+		background-color: rgba(255, 255, 255, 0.8) !important;
 		border-radius: 20px !important;
 	}
 	
