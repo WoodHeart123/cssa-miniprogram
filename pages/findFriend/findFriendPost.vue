@@ -26,7 +26,7 @@
 					<div style="margin-top: 1.7rem;">
 						<uni-forms-item name="description">
 							<uni-easyinput :inputBorder="false" type="textarea" v-model="friendPost.description"
-								placeholder="帖子详情,如/地点/日期等" maxlength="400" placeholderStyle="font-size:14px; color:darkgray"
+								placeholder="wanna say something?" maxlength="400" placeholderStyle="font-size:14px; color:darkgray"
 								:clearable="clearable">
 							</uni-easyinput>
 						</uni-forms-item>
@@ -196,6 +196,7 @@
 	#findFriendPost {
 		width: 100vw;
 		height: 100%;
+		min-height: 100vh;
 		background-image: url("https://i.imgur.com/1EY6wzL.jpg");
 		background-repeat: no-repeat;
 		background-position: center center;
