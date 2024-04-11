@@ -83,7 +83,7 @@
 			return {
 				title: "【转租】" + this.houseInfo.location,
 				imageUrl: this.houseInfo.images[0],
-				path: '/pages/detail/houseDetail?rentalInfo=' + encodeURIComponent(JSON.stringify(this.houseInfo))
+				path: '/pages/rental/rentalDetail?rentalInfo=' + encodeURIComponent(JSON.stringify(this.houseInfo))
 			}
 		},
 
@@ -96,7 +96,7 @@
 				desc: "CSSA转租分享平台",
 				content:"转租",
 				imageUrl: this.houseInfo.images[0],
-				path: '/pages/detail/housedDetail?rentalInfo=' + encodeURIComponent(JSON.stringify(this.houseInfo))
+				path: '/pages/rental/rentalDetail?rentalInfo=' + encodeURIComponent(JSON.stringify(this.houseInfo))
 			}
 		},
 		methods: {
