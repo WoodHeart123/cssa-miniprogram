@@ -1,6 +1,6 @@
 <template>
 	<view style="background-color: whitesmoke; height: 100vh; width: 100%;">
-		<scroll-view scroll-y="true" scroll-with-animation="true" v-bind:scroll-into-view="scrollTo" style="height: 100%;">
+		<scroll-view scroll-y="true" scroll-with-animation="true" v-bind:scroll-into-view="scrollTo" style="height: 100%;" @scrolltolower="onReachBottom">
 			<div id="top" style="height: 0.7rem;" />
 			<div v-if="loading" style="width: 100vw; height: 3rem; display: flex; justify-content: center; align-items: center;">
 				<text style="color: darkgray;">
@@ -35,6 +35,10 @@
 				<text style="font-size: 60%; color: darkgray;">发布动态</text>
 			</div>
 		</div>
+		
+		<div v-if="reachBottom" class="showReachBottomLoading">
+			<text style="color: darkgray;">正在加载。。</text>
+		</div>
 	</view>
 </template>
 
@@ -56,6 +60,7 @@
 				scrollTo: "",
 		 		postHeightValue: [14.5, 13.5, 9.5, 8.5],
 		 		postHeightStyle: ['post-height-1', 'post-height-2', 'post-height-3', 'post-height-4'],
+				reachBottom: false,
 				allPosts:
 					[
 											{
@@ -84,13 +89,13 @@
 		},
 		async onLoad(option) {
 			const res = await requestAPI({
-				path: "/friendpost/get?offset=0&limit=50",
+				path: "/friendpost/get?offset=0&limit=10",
 				type: "GET"
 			});
 			if (res.data.status == 100) {
-				// this.allPosts = res.data.data;
+				this.allPosts = res.data.data;
 			} else {
-				// this.allPosts = [];
+				this.allPosts = [];
 			}
 			
 			try {
@@ -125,6 +130,7 @@
 				return this.postHeightValue[i];
 			},
 			getWaterfall() {
+				// console.log(this.currentPostIdx)
 				for (let i = this.currentPostIdx; i < this.allPosts.length; i++) {
 					if (this.leftY <= this.rightY) {
 						this.leftPosts.push(i);
@@ -147,21 +153,50 @@
 				})
 			},
 			async reload() {
+				// console.log("here here!");
 				this.loading = true;
 				const res = await requestAPI({
-					path: "/friendpost/get?offset=0&limit=20",
+					path: "/friendpost/get?offset=0&limit=10",
 					type: "GET"
 				});
-				console.log('reload finished');
+				// console.log('reload finished');
 				console.log(res.data.data);
 				this.loading = false;
-				this.allPosts = res.data.data;
+				if (res.data.data == null) {
+					this.allPosts = [];
+				} else {
+					this.allPosts = res.data.data;
+				}
 				this.currentPostIdx = 0;
 				this.leftPosts = [];
 				this.rightPosts = [];
 				this.getWaterfall();
 				this.scrollTo = "top";
-			}
+			},
+			async onReachBottom() {
+				// console.log('用户滑到底了');
+				this.reachBottom = true;
+				const res = await requestAPI({
+					path: "/friendpost/get?offset=" + this.allPosts.length + "&limit=10",
+					type: "GET"
+				});
+				if (res.data.status == 100) {
+					if (res.data.data.length == 0) {
+						uni.showToast({
+							title: '没有更多啦',
+							icon: 'none',
+							duration: 2000
+						})
+					}
+					this.allPosts = this.allPosts.concat(res.data.data);
+					// console.log(res.data.data)
+					// console.log(this.allPosts)
+				} else {
+					console.log("failed to retrieve more posts");
+				}
+				this.getWaterfall();
+				this.reachBottom = false;
+			},
 		}
 	}
 </script>
@@ -200,5 +235,18 @@
 		flex-direction: column;
 		justify-content: space-around;
 		align-items: center;
+	}
+	.showReachBottomLoading {
+		position: fixed;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		background-color: whitesmoke;
+		border-radius: 10px;
+		width: 30%;
+		height: 7%;
 	}
 </style>
