@@ -28,7 +28,10 @@
 		</view>
 		
 		<scroll-view class="event-scroll-area">
-			<event-box></event-box>
+			<div class="event-frame">
+				<event-box ></event-box>
+			</div>
+
 		</scroll-view>
 	</view>
 </template>
@@ -196,5 +199,12 @@
 	.event-scroll-area{
 		display:flex;
 		flex: 1 1 auto;
+		
+		.event-frame{
+			width: 86vw;
+			height: 15vh;
+			margin:0 7vw;
+			
+		}
 	}
 </style>
