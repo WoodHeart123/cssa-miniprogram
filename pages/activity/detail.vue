@@ -1,5 +1,18 @@
 <template>
 	<view class="act-detail">
+		<view class="top-bar" :style="{
+					marginTop:menuButtonInfo.top + 'px',
+					 marginLeft: menuButtonInfo.height + 'px',
+					 height: menuButtonInfo.height + 'px'}">
+			<view class="top-icon" :style="{
+					width: menuButtonInfo.height + 'px', 
+					height: menuButtonInfo.height + 'px'}">
+				<image src="@/static/top/back-white.svg"></image>
+			</view>
+			<view class="heading-3 top-text">
+				<text style="color: white">活动详情</text>
+			</view>
+		</view>
 		<view class="privacy" v-show="showPrivacy">
 			<view class="privacy-content">
 				<view class="privacy-title">隐私保护指引</view>
@@ -21,12 +34,6 @@
 			</swiper-item>
 		</swiper>
 		<view class="content-box">
-			<view class="upper-box">
-				<view class="countdown-label">
-					<text>报名倒计时</text>
-				</view>
-				<uni-countdown :font-size="16" :day="elapsed.day" :hour="elapsed.hour" :minute="elapsed.minute" :second="elapsed.second" color="#FFFFFF" />
-			</view>
 			<view class="lower-box">
 				<view class="price">
 					<text v-if="this.actDetail.price != 0" class="dollar-sign">$</text><text
@@ -96,10 +103,12 @@
 				weekday: ["", "周一", "周二", "周三", "周四", "周五", "周六", "周天"],
 				showPrivacy: false,
 				needPrivacy: false,
-				elapsed:{}
+				elapsed:{},
+				menuButtonInfo: {}
 			}
 		},
 		onLoad(options) {
+			this.menuButtonInfo = wx.getMenuButtonBoundingClientRect();
 			this.actDetail = JSON.parse(decodeURIComponent(options.actDetail));
 			this.actDetail.additonalInfo = JSON.parse(this.actDetail.additionalInfoJSON);
 			const now = new Date();
@@ -341,40 +350,42 @@
 
 <style>
 	@import '@/static/iconfont/iconfont.css';
-</style>vw
+</style>
 <style lang="scss">
+	.top-bar {
+		background-color: transparent;
+		position: fixed;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		z-index: 10;
+	
+		.top-icon {
+			image {
+				width: 100%;
+				height: 100%;
+			}
+		}
+	
+		.top-text {
+			margin-left: 20px;
+			height: 100%;
+			color: white;
+			display: flex;
+			align-items: center;
+		}
+	}
+	
+	
 	.content-box {
+		position: fixed;
+		top: calc(50vh - 70px);
 		background-color: white;
 		width: 96vw;
 		margin-left: 2vw;
-		position: relative;
 		border-radius: 5px;
 		height: 140px;
 		margin-top: 5px;
-
-		.upper-box {
-			top: 0;
-			position: absolute;
-			height: 60px;
-			padding-bottom: 10px;
-			background-color: rgba(155, 0, 0, 0.9);
-			width: 100%;
-			border-radius: 10px;
-			z-index: 5;
-			display: flex;
-			flex-direction: row;
-			align-items: center;
-			justify-content: space-around;
-		}
-		
-		.countdown-label{
-			font-size: 23px;
-			font-weight: 700;
-			display: flex;
-			align-items: center;
-			color: white;
-			width: 60%;
-		}
 
 		.lower-box {
 			width: 100%;

@@ -6,9 +6,9 @@
 		<view class="top-icon" v-show="navigateBack" :style="{
 				width: menuButtonInfo.height + 'px', 
 				height: menuButtonInfo.height + 'px'}">
-			<image src="@/static/cssa-logo-black.png"></image>
+			{{"<"}}
 		</view>
-		<view class="heading-3 top-text">
+		<view class="heading-3 top-text" :style="{color: themeColor}">
 			<text>{{text}}</text>
 		</view>
 	</view>
@@ -26,9 +26,9 @@
 				type: Boolean,
 				default: false
 			},
-			activeColor: {
+			themeColor: {
 				type: String,
-				default: '#2979FF'
+				default: '#161616'
 			},
 			styleType: {
 				type: String,

@@ -32,6 +32,11 @@
 				<text class="paragraph-1">Subleasing</text>
 				<text class="heading-3">公寓转租</text>
 			</view>
+			<view class="column-container function-button" @click="toEvent">
+				<img style="width: 32px;height: 30px; margin-bottom:10px;" src="@/static/main/second-hand.svg" />
+				<text class="paragraph-1">Events Hub</text>
+				<text class="heading-3">麦屯社交圈</text>
+			</view>
 			<!-- <navigator class="column-container function-button" url='../findFriend/findClassmate'>
 				<img class="image" src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/main/community.png" />
 				<view class="column-container function-text">
@@ -149,6 +154,11 @@
 				uni.switchTab({
 					url: '/pages/activity/act'
 				});
+			},
+			toEvent: function(){
+				uni.navigateTo({
+					url: "/pages/event/main"
+				})
 			},
 			toCourse: function() {
 				uni.navigateTo({

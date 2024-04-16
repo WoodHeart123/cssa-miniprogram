@@ -30,8 +30,7 @@
 		{
 			"path": "pages/activity/detail",
 			"style": {
-				"navigationBarTitleText": "详情",
-				"backgroundColor": "#8c8c8c",
+				"navigationStyle": "custom",
 				"disableScroll": true
 			}
 		},
@@ -249,6 +248,13 @@
 				"enablePullDownRefresh": false,
 				"backgroundColor": "#ffffff"
 			}
+		},
+		{
+			"path" : "pages/event/main",
+			"style" : 
+			{
+				"navigationStyle": "custom"
+			}
 		}
 	],
 	"condition": {
@@ -348,6 +354,10 @@
 			{
 				"path": "pages/coursePage/courseStat",
 				"name": "courseStat"
+			},
+			{
+				"path": "pages/event/main",
+				"name": "event hub"
 			}
 		]
 	},
