@@ -134,23 +134,33 @@
 					title: "正在上传内容",
 					mask: true
 				});
-				
+
+				const uploadPromises = this.friendPost.imageList.map(async (image) => {
+					try {
+						console.log(image)
+						const uploadedImage = await uploadOSS(image);
+						uni.showLoading({
+							title: `上传图片`,
+							mask: true
+						});
+						return uploadedImage;
+					} catch (error) {
+						console.log(`上传图片失败 ....`)
+						console.log(error)
+						throw new Error(`上传图片失败`);
+					}
+				});
 				try {
-					const uploadPromises = this.friendPost.imageList.map(image => {
-						uploadOSS(image);
-					});
 					const uploadedImages = await Promise.all(uploadPromises);
-					this.images = uploadedImages;
-					this.friendPost.images = this.images;
+					//this.images = uploadedImages;
+					//this.rental.images = this.images;
 					this.postFriend();
-					console.log(this.friendPost);
 				} catch (error) {
-					console.log(this.friendPost)
-					console.log(error);
-					//console.log("上传图片失败 abc”);
 					uni.hideLoading();
+					console.log('error here')
+					console.log(error.message)
 					uni.showToast({
-						title: '上传图片失败 abc',
+						title: error.message,
 						icon: "error"
 					});
 				}
@@ -199,7 +209,7 @@
 				}
 				this.$refs[ref].validate().then(res => {
 					this.uploading = true;
-					this.images = [];
+					//this.images = [];
 					uni.showLoading({
 						title: "请耐心等待信息上传"
 					});
