@@ -17,7 +17,7 @@
 		<view class="search-bar">
 			<uni-icons type="search" size="20"></uni-icons>
 			<input placeholder-class="search-placeholder" placeholder="Search" />
-			<image src="@/static/event/filter-circle.svg"></image>
+			<image src="@/static/event/filter-circle.svg" @click="onClickFilter"></image>
 		</view>
 
 		<view class="type-filter-bar">
@@ -26,13 +26,36 @@
 				<text>{{event.name}}</text>
 			</view>
 		</view>
-		
-		<scroll-view class="event-scroll-area">
-			<div class="event-frame">
-				<event-box ></event-box>
-			</div>
 
+		<scroll-view scroll-y="true" show-scrollbar="true" refresher-enabled="true" class="event-scroll-area">
+			<div v-for="(num, index) in 20" :key="index" class="event-frame">
+				<event-box></event-box>
+			</div>
+			<div style="min-height: 10vh;"></div>
 		</scroll-view>
+
+		<uni-popup ref="filter" type="bottom" border-radius="30px 30px 0 0" :safe-area="false">
+			<view class="popup-window">
+				<view class="heading-box">
+					<text class="heading-3">Filters</text>
+				</view>
+				<view class="category-filter-box">
+					<view><text class="heading-3">Categories</text></view>
+					<view class="category-filter-wrap">
+						<view v-for="(event, index) in list" class="event-box">
+							<image :src="'/static/svg-icons/' + event.image"></image>
+						</view>
+					</view>
+				</view>
+				
+			</view>
+			<zui-svg-icon icon="board"></zui-svg-icon>
+
+		</uni-popup>
+		
+		<event-tab-bar></event-tab-bar>
+
+
 	</view>
 </template>
 
@@ -65,28 +88,39 @@
 					type: "FOOD"
 				}],
 				eventIndex: 0,
+				events: list
 			}
 		},
-		components:{
+		components: {
+			eventTabBarVue,
 			eventBoxVue
+
 		},
 		methods: {
 			bindLangChange: function(e) {
 				console.log('picker发送选择改变，携带值为', e.detail.value)
 				this.langIndex = e.detail.value
 			},
-			bindEventTypeChange: function(index){
+			bindEventTypeChange: function(index) {
 				console.log(index)
 				this.eventIndex = index;
+			},
+			onClickFilter: function() {
+				this.$refs.filter.open()
 			}
 		}
 	}
 	import eventBoxVue from '@/components/event-box/event-box.vue'
+	import eventTabBarVue from '@/components/event-tab-bar/event-tab-bar.vue'
+	import list from './event.js'
 </script>
 
 <style lang="scss">
 	.event-main {
 		background-color: $main-background-color;
+		width: 100vw;
+		height: calc(100vh - 75px);
+		overflow: hidden;
 	}
 
 	.top-bar {
@@ -150,9 +184,9 @@
 		}
 
 	}
-	
+
 	.type-filter-bar::-webkit-scrollbar {
-	  display: none;
+		display: none;
 	}
 
 	.type-filter-bar {
@@ -172,9 +206,9 @@
 			margin: 0 10px 0 0;
 			border-radius: 1000px;
 			white-space: nowrap;
-			-ms-overflow-style: none;  
+			-ms-overflow-style: none;
 			scrollbar-width: none;
-			
+
 
 			text {
 				font-size: 14px;
@@ -183,7 +217,7 @@
 				color: $main-secondary-color;
 			}
 		}
-		
+
 
 
 		.type-filter-box.selected {
@@ -193,18 +227,42 @@
 				color: $main-background-color-2;
 			}
 		}
-		
+
 	}
-	
-	.event-scroll-area{
-		display:flex;
-		flex: 1 1 auto;
-		
-		.event-frame{
+
+	.event-scroll-area {
+		display: flex;
+		margin-top: 10px;
+		height: 70vh;
+		.event-frame {
 			width: 86vw;
 			height: 15vh;
-			margin:0 7vw;
+			margin: 0 7vw 1vh 7vw;
+
+		}
+	
+	}
+
+	.popup-window {
+		background-color: $main-background-color;
+		border-radius: 30px 30px 0 0;
+		min-height: 70vh;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		padding: 0 10vw;
+
+		.heading-box {
+			margin: 10px 0;
+		}
+
+		.category-filter-box {
+			width: 100%;
 			
+			.category-filter-wrap{
+				display: flex;
+				flex-wrap: wrap;
+			}
 		}
 	}
 </style>
