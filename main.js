@@ -17,11 +17,11 @@ app.$mount()
 import { createSSRApp } from 'vue'
 import App from './App.vue'
 import './static/iconfont/iconfont.css'
-import uView from './uni_modules/vk-uview-ui';
+import uviewPlus from './uni_modules/uview-plus'
 
 export function createApp() {
   const app = createSSRApp(App)
-  app.use(uView)
+  app.use(uviewPlus)
   return {
     app
   }

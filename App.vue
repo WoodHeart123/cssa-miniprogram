@@ -20,7 +20,6 @@
 	/*每个页面公共css */
 	@import '@/uni_modules/uni-scss/index.scss';
 	@import './static/iconfont/iconfont.css';
-	@import "@/uni_modules/vk-uview-ui/index.scss";
 	@import '@/static/customicons.css';
 	
 	.heading-1{

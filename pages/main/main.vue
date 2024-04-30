@@ -13,6 +13,8 @@
 			</view>
 		</view>
 
+		<view class="background-image">
+		</view>
 		<view class="row-container function-box" style="margin-top: 30vh">
 			<view class="column-container function-button" @click="toCourse">
 				<img style="width: 29px;height: 26px; margin-bottom:10px;" src="@/static/main/course-rate.svg" />
@@ -32,11 +34,11 @@
 				<text class="paragraph-1">Subleasing</text>
 				<text class="heading-3">公寓转租</text>
 			</view>
-			<view class="column-container function-button" @click="toEvent">
+			<!-- <view class="column-container function-button" @click="toEvent">
 				<img style="width: 32px;height: 30px; margin-bottom:10px;" src="@/static/main/second-hand.svg" />
 				<text class="paragraph-1">Events Hub</text>
 				<text class="heading-3">麦屯社交圈</text>
-			</view>
+			</view> -->
 			<!-- <navigator class="column-container function-button" url='../findFriend/findClassmate'>
 				<img class="image" src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/main/community.png" />
 				<view class="column-container function-text">
@@ -200,7 +202,7 @@
 				this.abortTask = false;
 				this.$refs.progress.open()
 				const downloadTask = wx.downloadFile({
-					url: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com/%E6%96%B0%E7%94%9F%E6%89%8B%E5%86%8C.pdf",
+					url: "https://7072-prod-9gip97mx4bfa32a3-1312104819.tcb.qcloud.la/%E6%96%B0%E7%94%9F%E6%89%8B%E5%86%8C.pdf",
 					filePath: wx.env.USER_DATA_PATH + "/新生手册.pdf",
 					success: (event) => {
 						uni.hideLoading();
@@ -246,12 +248,20 @@
 		width: 100vw;
 		overflow-x: hidden;
 	}
+	
+	.background-image{
+		background-image: url("https://7072-prod-9gip97mx4bfa32a3-1312104819.tcb.qcloud.la/asset/main/background.jpg");
+		min-height: 40vh;min-width: 100vw;position: fixed;top:0;
+		background-size: 100% 100%;
+		z-index: 0;
+	}
 
 	.top-bar {
 		position: relative;
 		display: flex;
 		flex-direction: row;
 		align-items: center;
+		z-index: 12;
 
 		.top-icon {
 			image {
@@ -301,6 +311,7 @@
 		justify-content: space-around;
 		align-items: center;
 		background-color: $main-background-color-2;
+		z-index: 10;
 		
 		.image-box{
 			width: 40%;
@@ -353,6 +364,7 @@
 		width: 86vw;
 		margin: 0 7vw 17px 7vw;
 		justify-content: space-between;
+		z-index: 10;
 
 		.function-button {
 			min-width: 47%;

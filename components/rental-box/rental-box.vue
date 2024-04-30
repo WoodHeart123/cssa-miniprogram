@@ -1,7 +1,11 @@
 <template>
 	<view class="rental-box row-container" @click="toRentalDetail">
 		<view class="image-box">
-			<image mode="widthFix" class="image" :src="this.rentalInfo.images[0]"/>
+				<u--image :src="this.rentalInfo.images[0]" mode='widthFix' height="80%" width="30vw">
+					<template v-slot:loading>
+						<u-loading-icon color="red"></u-loading-icon>
+					</template>
+				</u--image>
 		</view>
 		<view class="column-container content-box">
 			<view class="row-container title-box">

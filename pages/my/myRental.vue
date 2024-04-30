@@ -177,7 +177,7 @@
 			},
 			editMyRental: async function(index) {
 				uni.navigateTo({
-					url: "pages/rentalPost/rentalPost?rental=" + encodeURIComponent(JSON.stringify(this
+					url: "pages/rental/rentalPost?rental=" + encodeURIComponent(JSON.stringify(this
 						.myRental[index]))
 				})
 			},
