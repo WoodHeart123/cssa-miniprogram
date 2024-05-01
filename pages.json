@@ -255,6 +255,30 @@
 			{
 				"navigationStyle": "custom"
 			}
+		},
+		{
+			"path" : "pages/event/detail",
+			"style" : 
+			{
+				"navigationStyle": "custom",
+				"enablePullDownRefresh" : false
+			}
+		},
+		{
+			"path" : "pages/event/profile",
+			"style" : 
+			{
+				"navigationStyle": "custom",
+				"enablePullDownRefresh" : false
+			}
+		},
+		{
+			"path" : "pages/event/post",
+			"style" : 
+			{
+				"navigationStyle": "custom",
+				"enablePullDownRefresh" : false
+			}
 		}
 	],
 	"condition": {
@@ -358,6 +382,14 @@
 			{
 				"path": "pages/event/main",
 				"name": "event hub"
+			},
+			{
+				"path": "pages/event/detail",
+				"name": "event detail"
+			},
+			{
+				"path" : "pages/event/profile?isVisitor=true",
+				"name" : "event profile"
 			}
 		]
 	},

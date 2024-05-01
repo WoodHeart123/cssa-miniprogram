@@ -5,12 +5,12 @@
 				<view class="uni-date-editor--x" :class="{'uni-date-editor--x__disabled': disabled,
 		'uni-date-x--border': border}">
 					<view v-if="!isRange" class="uni-date-x uni-date-single">
-						<uni-icons type="calendar" color="#e1e1e1" size="22"></uni-icons>
+						<uni-icons type="calendar" color="#7F0019" size="22"></uni-icons>
 						<input class="uni-date__x-input" type="text" v-model="singleVal"
 							:placeholder="singlePlaceholderText" :disabled="true" />
 					</view>
 					<view v-else class="uni-date-x uni-date-range">
-						<uni-icons type="calendar" color="#e1e1e1" size="22"></uni-icons>
+						<uni-icons type="calendar" color="#7F0019" size="22"></uni-icons>
 						<input class="uni-date__x-input t-c" type="text" v-model="range.startDate"
 							:placeholder="startPlaceholderText" :disabled="true" />
 						<slot>
@@ -20,7 +20,7 @@
 							:placeholder="endPlaceholderText" :disabled="true" />
 					</view>
 					<view v-if="showClearIcon" class="uni-date__icon-clear" @click.stop="clear">
-						<uni-icons type="clear" color="#e1e1e1" size="18"></uni-icons>
+						<uni-icons type="clear" color="#7F0019" size="18"></uni-icons>
 					</view>
 				</view>
 			</slot>
@@ -933,7 +933,7 @@
 
 	.popup-x-footer .confirm {
 		margin-left: 20px;
-		color: #007aff;
+		color: $main-primary-color;
 	}
 
 	.uni-date-changed {

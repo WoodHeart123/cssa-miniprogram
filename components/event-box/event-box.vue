@@ -1,11 +1,11 @@
 <template>
-	<view class="event-box">
+	<view class="event-box" @click="toEventDetail">
 		<view class="image-box">
 			<image src="https://7072-prod-9gip97mx4bfa32a3-1312104819.tcb.qcloud.la/cssa-event/mahjong.png"></image>
 		</view>
 		<view class="content-box">
 			<view class="header-row"><text class="heading-3">Mahjong Night</text></view>
-			<div class="row">
+			<div class="row" style="margin-top: 5px">
 				<image class="icon" src="@/static/act/time.svg"></image>
 				<text class="time-text paragraph-1">Fri, Apr 16 7:30</text>
 			</div>
@@ -14,18 +14,24 @@
 				<text class="location-text paragraph-1">Washington Ave, Madison, WI</text>
 			</div>
 			<view class="sub-row">
-				<view class="category-box" >
+				<view class="button joined disabled" v-if="ifJoined">
+					<text>Joined</text>
+				</view>
+				<view class="category-box" v-if="!isHost&&!ifJoined">
 					<image v-for="(category, index) in categories" :src="translate(category)" />
 				</view>
-				<view class="user-avatar-box">
+				<view class="user-avatar-box" v-if="!ifJoined">
 					<view class="avatar-box">
 						<div v-for="(avatar, index) in userAvatar" :style="{'left': calculateOffset(index), 'z-index': 10-index}" class="image-wrapper">
-							<image   :src="translateAvatar(avatar)" />
+							<image :src="translateAvatar(avatar)" />
 						</div>
 					</view>
 					<view class="capacity-box">
 						<text class="capacity-text">6/14</text>
 					</view>
+				</view>
+				<view v-if="isHost||ifJoined">
+					<button class="button invite"><text>Invite</text></button>
 				</view>
 			</view>
 		</view>
@@ -42,17 +48,31 @@
 				userAvatar: [1, 2]
 			};
 		},
+		props: {
+			isHost: {
+				type: Boolean,
+				default: false,
+			},
+			ifJoined: {
+				type: Boolean,
+				default: false,
+			},
+		},
 		methods:{
 			translate: function(text){
 				console.log(text)
 				return "/static/event/" + text.toLowerCase() + ".svg";
 			},
 			translateAvatar(index){
-				//return 'https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/' + index + '.jpg'
-				return "/static/user.png"
+				return 'https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/' + index + '.jpg'
 			},
 			calculateOffset(index){
 				return `${index * 5}px`;
+			},
+			toEventDetail(){
+				uni.navigateTo({
+					url: "/pages/event/detail"
+				})
 			}
 		}
 	}
@@ -60,7 +80,7 @@
 
 <style lang="scss">
 	.event-box{
-		width: 86vw;
+		width: 90vw;
 		height: 100%;
 		display: flex;
 		align-items: center;
@@ -81,7 +101,7 @@
 		}
 		
 		.content-box{
-			width: calc(86vw * 0.65);
+			width: calc(90vw * 0.65);
 			height: 100%;
 			padding: 10px 5px;
 			display:flex;
@@ -110,16 +130,18 @@
 				.location-text{
 					color: $main-secondary-color;
 					line-height: 24px;
+					white-space: nowrap;
+					overflow: hidden;
 				}
 			}
 			
 			.sub-row{
-				height: 30%;
+				height: 30px;
 				width: 100%;
-				margin-top: 10px;
 				display: flex;
 				justify-content: space-between;
 				align-items: center;
+				margin-top: 5px;
 				
 				.category-box{
 					width: 30%;
@@ -133,19 +155,19 @@
 				}
 				
 				.user-avatar-box{
-					height: 34px;
+					height: 30px;
 					background-color: $main-background-color;
 					border-radius: 25px;
 					align-items: center;
 					display: flex;
 					padding: 2 2px;
-					margin: 0 10px;
+					margin: 0 10px 0 0;
 					
 					.avatar-box{
 						position: relative;
 						display: flex;
-						width: 30px;
-						height: 30px;
+						width: 28px;
+						height: 28px;
 						margin: 0 5px;
 						align-items: center;
 						
@@ -184,5 +206,13 @@
 				}
 			}
 		}
+	}
+	
+	.button.invite{
+		padding: 3px 28px;
+	}
+	
+	.button.joined{
+		padding: 3px 15px;
 	}
 </style>

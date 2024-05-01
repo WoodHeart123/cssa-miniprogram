@@ -55,6 +55,8 @@
 		justify-content: center;
 		align-items: center;
 		border-radius: 100vh;
+		padding: 7px 28px 7px 28px;
+		border: $main-primary-color solid 1px;
 		text{
 			line-height: 24px;
 			font-size: 14px;
@@ -68,6 +70,7 @@
 	
 	.button.disabled{
 		background-color: $main-secondary-color;
+		border: none;
 	}
 	
 

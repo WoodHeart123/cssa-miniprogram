@@ -2,15 +2,15 @@
 	<view class="tab-bar-box">
 		<view class="main-area">
 			<view class="icon-box left">
-				<uni-icons type="home-filled" size="30" :color="clicked==='home'?'#7F0019':'#A9A9A9'"></uni-icons>
-				<uni-icons type="location-filled" size="30" color="#A9A9A9"></uni-icons>
+				<uni-icons type="home-filled" size="25" :color="clicked==='main'?'#7F0019':'#A9A9A9'"  @click="switchTab('main')"></uni-icons>
+				<uni-icons type="location-filled" size="25" :color="clicked==='map'?'#7F0019':'#A9A9A9'" ></uni-icons>
 			</view>
-			<view class="mid-button">
-				<uni-icons type="plusempty" size="30" color="white"></uni-icons>
+			<view class="mid-button" @click="createPost">
+				<uni-icons type="plusempty" size="25" color="white"></uni-icons>
 			</view>
 			<view class="icon-box right">
-				<uni-icons type="notification-filled" size="30" color="#A9A9A9"></uni-icons>
-				<uni-icons type="person-filled" size="30" color="#A9A9A9"></uni-icons>
+				<uni-icons type="notification-filled" size="25" :color="clicked==='notification'?'#7F0019':'#A9A9A9'"></uni-icons>
+				<uni-icons type="person-filled" size="25" :color="clicked==='profile'?'#7F0019':'#A9A9A9'" @click="switchTab('profile')"></uni-icons>
 			</view>
 		</view>
 
@@ -23,12 +23,24 @@
 		props: {
 			clicked: {
 				type: String,
-				default: 'home'
+				default: 'main'
 			},
+		},
+		methods:{
+			switchTab(name){
+				uni.redirectTo({
+					url: `/pages/event/${name}`
+				})
+			},
+			createPost(){
+				uni.navigateTo({
+					url: '/pages/event/post'
+				});
+			}
 		},
 		data() {
 			return {
-				
+				tabs:[""]
 			};
 		}
 	}
@@ -40,7 +52,8 @@
 		position:fixed;
 		bottom: 0;
 		width: 100vw;
-		height: 75px;
+		height: 65px;
+		left: 0;
 		background-color: $main-background-color-2;
 		z-index: 100;
 		
@@ -58,7 +71,7 @@
 				width: 60px;
 				height: 60px;
 				border-radius: 60px;
-				top: -10px;
+				top: -20px;
 				left: calc(50vw - 25px);
 				background-color: $main-primary-color;
 			}

@@ -39,20 +39,60 @@
 				<view class="heading-box">
 					<text class="heading-3">Filters</text>
 				</view>
+				<view class="title-box"><text class="heading-3">Categories</text></view>
 				<view class="category-filter-box">
-					<view><text class="heading-3">Categories</text></view>
 					<view class="category-filter-wrap">
-						<view v-for="(event, index) in list" class="event-box">
-							<image :src="'/static/svg-icons/' + event.image"></image>
+						<view v-for="(event, index) in events">
+							<view class="event-box" :key="index" v-if="event.row==0">
+								<image :src="'/static/svg-icons/' + event.image"></image>
+								<text>{{event.name}}</text>
+							</view>
+						</view>
+					</view>
+					<view class="category-filter-wrap">
+						<view v-for="(event, index) in events">
+							<view class="event-box" :key="index" v-if="event.row==1">
+								<image :src="'/static/svg-icons/' + event.image"></image>
+								<text>{{event.name}}</text>
+							</view>
 						</view>
 					</view>
 				</view>
-				
+				<view class="title-box" style="margin-top: 25px;"><text class="heading-3">Date&Time</text></view>
+				<view class="date-filter-box">
+					<view class="date-filter-box" :class="{'selected': index==dateIndex}"
+						v-for="(date, index) in dateType" @click="bindDateFilterChange(index)">
+						<text>{{date}}</text>
+					</view>
+				</view>
+				<view class="title-box" style="margin-top: 25px;"><text class="heading-3">Only Show</text></view>
+				<view class="toggle-bar">
+					<view class="text-box">
+						<text>Category Tags I Subscribed</text>
+					</view>
+					<view class="toggle-box">
+						<switch checked color="#7F0019" style="transform:scale(0.8)" />
+					</view>
+				</view>
+				<view class="toggle-bar">
+					<view class="text-box">
+						<text>Created by Friends</text>
+					</view>
+					<view class="toggle-box">
+						<switch checked color="#7F0019" style="transform:scale(0.8)" />
+					</view>
+				</view>
+				<view class="toggle-bar">
+					<view class="text-box">
+						<text>Ticket Free</text>
+					</view>
+					<view class="toggle-box">
+						<switch color="#7F0019" style="transform:scale(0.8)" />
+					</view>
+				</view>
 			</view>
-			<zui-svg-icon icon="board"></zui-svg-icon>
-
 		</uni-popup>
-		
+
 		<event-tab-bar></event-tab-bar>
 
 
@@ -87,8 +127,10 @@
 					name: "Food",
 					type: "FOOD"
 				}],
+				dateType: ["Today", "Tommorrow", "This Week"],
 				eventIndex: 0,
-				events: list
+				events: list,
+				dateIndex: -1,
 			}
 		},
 		components: {
@@ -104,6 +146,10 @@
 			bindEventTypeChange: function(index) {
 				console.log(index)
 				this.eventIndex = index;
+			},
+			bindDateFilterChange: function(index) {
+				console.log(index)
+				this.dateIndex = index;
 			},
 			onClickFilter: function() {
 				this.$refs.filter.open()
@@ -124,7 +170,7 @@
 	}
 
 	.top-bar {
-		margin: 7vh 0 0 5vw;
+		margin: 6vh 0 0 5vw;
 
 		.sub-heading-bar {
 			display: flex;
@@ -155,8 +201,8 @@
 		display: flex;
 		align-items: center;
 		height: 55px;
-		width: 86vw;
-		margin: 10px 7vw 0 7vw;
+		width: 90vw;
+		margin: 10px 5vw 0 5vw;
 		background-color: $main-background-color-2;
 		border-radius: 10000px;
 
@@ -193,7 +239,7 @@
 		display: flex;
 		flex-direction: row;
 		align-items: center;
-		margin: 15px 0 0 7vw;
+		margin: 15px 0 0 5vw;
 		overflow-x: scroll;
 		height: 32px;
 
@@ -234,34 +280,129 @@
 		display: flex;
 		margin-top: 10px;
 		height: 70vh;
+
 		.event-frame {
-			width: 86vw;
+			width: 90vw;
 			height: 15vh;
-			margin: 0 7vw 1vh 7vw;
+			margin: 0 5vw 1vh 5vw;
 
 		}
-	
+
 	}
 
 	.popup-window {
 		background-color: $main-background-color;
 		border-radius: 30px 30px 0 0;
-		min-height: 70vh;
+		min-height: 80vh;
+		max-height: 80vh;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		padding: 0 10vw;
+		padding: 0 0 0 5vw;
+
+		.toggle-bar {
+			width: 100%;
+			display: flex;
+			border-radius: 30px;
+			height: 60px;
+			background-color: $main-background-color-2;
+			align-items: center;
+			margin-bottom: 10px;
+			justify-content: space-between;
+
+			.text-box {
+				padding: 20px;
+
+				text {
+					line-height: 24px;
+					font-size: 14px;
+				}
+			}
+
+			.toggle-box {
+				padding: 20px;
+			}
+		}
 
 		.heading-box {
 			margin: 10px 0;
 		}
 
+		.title-box {
+			width: 100%;
+			margin-bottom: 10px;
+		}
+
+		.date-filter-box {
+			width: 100%;
+			display: flex;
+			-ms-overflow-style: none;
+			scrollbar-width: none;
+
+			.date-filter-box {
+				display: flex;
+				align-items: center;
+				height: 32px;
+				width: fit-content;
+				background-color: $main-background-color-2;
+				margin: 0 10px 0 0;
+				border-radius: 1000px;
+				white-space: nowrap;
+
+				text {
+					font-size: 14px;
+					padding: 2px 28px;
+					line-height: 24px;
+					color: $main-secondary-color;
+				}
+			}
+
+
+
+			.date-filter-box.selected {
+				background-color: $main-primary-color;
+
+				text {
+					color: $main-background-color-2;
+				}
+			}
+		}
+
 		.category-filter-box {
 			width: 100%;
-			
-			.category-filter-wrap{
+			overflow: scroll;
+
+			.category-filter-wrap {
 				display: flex;
-				flex-wrap: wrap;
+				height: 75px;
+				margin-top: 2px;
+				flex: 0;
+				-ms-overflow-style: none;
+				scrollbar-width: none;
+
+
+				.event-box {
+					height: 65px;
+					width: fit-content;
+					background-color: $main-background-color-2;
+					display: flex;
+					align-items: center;
+					border-radius: 20px;
+					padding: 10px;
+					margin: 0 10px 0 0;
+					flex: 0;
+					white-space: nowrap;
+
+					image {
+						width: 30px;
+						height: 30px;
+						margin-right: 5px;
+					}
+
+					text {
+						color: $main-secondary-color;
+					}
+				}
 			}
 		}
 	}
