@@ -14,8 +14,9 @@
 					<view class="swiper-item">
 						<view class="title"><text class="heading-3">Choose Categories</text></view>
 						<view class="category-grid">
-							<view class="category-box" v-for="(event, index) in eventList">
-								<image :src="'/static/svg-icons/' + event.image"></image>
+							<view class="category-box" v-for="(event, index) in eventList" :class="{'clicked': selectedEvent.indexOf(event.name) != -1}" @click="onClickCategory(event.name)">
+								<image v-show="selectedEvent.indexOf(event.name) == -1" :src="'/static/svg-icons/' + event.image"></image>
+								<image v-show="selectedEvent.indexOf(event.name) != -1" :src="'/static/svg-icons/' + event.imageSelected"></image>
 								<view><text class="event-name" :style="{color: event.color}">{{event.name}}</text></view>
 							</view>
 						</view>
@@ -62,10 +63,20 @@
 			<button class="button back" @click="onClickBack" v-show="current==1">
 				<text>Back</text>
 			</button>
-			<button class="button create" @click="onClickNext" v-show="current==1">
+			<button class="button create" @click="onClickCreate" v-show="current==1">
 				<text>Create</text>
 			</button>
 		</view>
+		<uni-popup ref="confirm" type="center" border-radius="30px" >
+			<view class="confirm-popup">
+				<image src="../../static/event/Illustrations.png"></image>
+				<view><text class="heading-3">Event Created Successfully</text></view>
+				<view class="button-box">
+					<button class="button invite" @click="onClickInvite"><text>Invite Friends</text></button>
+					<button class="button done" @click="onClickDone"><text>Done</text></button>
+				</view>
+			</view>
+		</uni-popup>
 	</view>
 </template>
 
@@ -75,9 +86,14 @@
 			return {
 				current: 0,
 				dotStyles:{
-					bottom: 'calc(93vh - 140px)'
+					bottom: 'calc(93vh - 160px)',
+					backgroundColor: "#FFFFFF",
+					selectedBackgroundColor: "#7F0019",
+					height: 12,
+					width: 12
 				},
 				eventList: list,
+				selectedEvent: [],
 				form: {
 					participantNum: 1,
 					dateRange: []
@@ -101,6 +117,26 @@
 			},
 			onCalendarChange(e){
 				console.log(e)
+			},
+			onClickCreate(){
+				this.$refs.confirm.open()
+			},
+			onClickDone(){
+				uni.navigateBack({
+					delta: 1,
+				})
+			},
+			onClickInvite(){
+				uni.redirectTo({
+					url: "/pages/event/detail?isHost=true"
+				})
+			},
+			onClickCategory(name){
+				if(this.selectedEvent.indexOf(name) != -1){
+					this.selectedEvent.splice(this.selectedEvent.indexOf(name), 1);
+				}else{
+					this.selectedEvent.push(name);
+				}
 			}
 		}
 	}
@@ -147,7 +183,7 @@
 		input{
 			background-color: $main-background-color;
 			border-radius: 30px;
-			width: 140px;
+			width: 40%;
 		}
 		
 		uni-datetime-picker{
@@ -175,6 +211,48 @@
 			}
 		}
 
+	}
+	
+	.confirm-popup{
+		width: 90vw;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		background-color: $main-background-color-2;
+		border-radius: 30px;
+		
+		image{
+			width: 70vw;
+			height: 40vw;
+		}
+		
+		.button-box{
+			display: flex;
+			width: 100%;
+			align-items: center;
+			margin-top: 20px;
+			margin-bottom: 20px;
+			
+			
+			.button.invite{
+				width: 40%;
+				height: 40px;
+				padding: 5px 10px;
+				background-color: $main-background-color-2;
+				
+				text{
+					color: $main-primary-color;
+				}
+			}
+			
+			.button.done{
+				width: 40%;
+				
+				text{
+					color: $main-background-color-2;
+				}
+			}
+		}
 	}
 	.form-row.number-box{
 		display: flex;
@@ -235,6 +313,13 @@
 			flex-wrap: wrap;
 			width: 100%;
 			
+			.category-box.clicked{
+				background-color: $main-primary-color;
+				
+				.event-name{
+					color: $main-background-color-2 !important;
+				}
+			}
 			.category-box{
 				display: flex;
 				flex-direction: column;
@@ -257,6 +342,7 @@
 					font-size: 14px;
 					line-height: 24px;
 					font-weight: 500;
+					white-space: nowrap;
 				}
 			}
 			

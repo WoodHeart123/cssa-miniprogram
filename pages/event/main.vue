@@ -43,16 +43,18 @@
 				<view class="category-filter-box">
 					<view class="category-filter-wrap">
 						<view v-for="(event, index) in events">
-							<view class="event-box" :key="index" v-if="event.row==0">
-								<image :src="'/static/svg-icons/' + event.image"></image>
+							<view class="event-box" :key="index" v-if="event.row==0" :class="{'clicked': selectedEvent.indexOf(event.name) != -1}" @click="onClickCategory(event.name)">
+								<image v-show="selectedEvent.indexOf(event.name) == -1" :src="'/static/svg-icons/' + event.image"></image>
+								<image v-show="selectedEvent.indexOf(event.name) != -1" :src="'/static/svg-icons/' + event.imageSelected"></image>
 								<text>{{event.name}}</text>
 							</view>
 						</view>
 					</view>
 					<view class="category-filter-wrap">
 						<view v-for="(event, index) in events">
-							<view class="event-box" :key="index" v-if="event.row==1">
-								<image :src="'/static/svg-icons/' + event.image"></image>
+							<view class="event-box" :key="index" v-if="event.row==1" :class="{'clicked': selectedEvent.indexOf(event.name) != -1}" @click="onClickCategory(event.name)">
+								<image v-show="selectedEvent.indexOf(event.name) == -1" :src="'/static/svg-icons/' + event.image"></image>
+								<image v-show="selectedEvent.indexOf(event.name) != -1" :src="'/static/svg-icons/' + event.imageSelected"></image>
 								<text>{{event.name}}</text>
 							</view>
 						</view>
@@ -131,6 +133,7 @@
 				eventIndex: 0,
 				events: list,
 				dateIndex: -1,
+				selectedEvent: [],
 			}
 		},
 		components: {
@@ -153,6 +156,13 @@
 			},
 			onClickFilter: function() {
 				this.$refs.filter.open()
+			},
+			onClickCategory(name){
+				if(this.selectedEvent.indexOf(name) != -1){
+					this.selectedEvent.splice(this.selectedEvent.indexOf(name), 1);
+				}else{
+					this.selectedEvent.push(name);
+				}
 			}
 		}
 	}
@@ -242,7 +252,9 @@
 		margin: 15px 0 0 5vw;
 		overflow-x: scroll;
 		height: 32px;
+		
 
+		
 		.type-filter-box {
 			display: flex;
 			align-items: center;
@@ -379,6 +391,15 @@
 				flex: 0;
 				-ms-overflow-style: none;
 				scrollbar-width: none;
+				
+				
+				.event-box.clicked{
+					background-color: $main-primary-color;
+					
+					text{
+						color: $main-background-color-2;
+					}
+				}
 
 
 				.event-box {

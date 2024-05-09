@@ -42,9 +42,9 @@
 		</view>
 		<view class="section-box">
 			<view class="title"><text class="heading-3">Who's going?</text></view>
-			<view class="section-bar" @click="viewUserProfile">
+			<view class="section-bar">
 				<view class="row">
-					<view class="avatar-box" style="position: relative;">
+					<view class="avatar-box" style="position: relative;"  @click="viewUserProfile">
 						<div class="image-wrapper">
 							<image  :src="translateAvatar(1)" />
 						</div>
@@ -54,10 +54,9 @@
 					</view>
 				</view>
 				<view class="button-box">
-					<button class="button icon-button">
-						<uni-icons type="personadd" size="20" color="#7F0019"></uni-icons>
-
-						<text>Follow</text>
+					<button class="button icon-button"  @click="onClickProfile"> 
+						<uni-icons type="personadd" size="20" color="#7F0019" v-show="!isHost"></uni-icons>
+						<text>{{isHost?"My Profile": "Follow"}}</text>
 					</button>
 				</view>
 			</view>
@@ -93,13 +92,13 @@
 			</button>
 		</view>
 		
-		<view class="bottom-bar joined" v-show="ifJoined">
+		<view class="bottom-bar joined" v-show="ifJoined||isHost">
 			<button class="share-button" open-type="share" >
 				<image src="../../static/event/share-white.svg"></image>
 			</button>
-			<text class="heading-3" style="color:white">You're Going</text>
+			<text class="heading-3" style="color:white">{{isHost?"You're the Holder":"You're Going"}}</text>
 			<button class="button" @click="onClickCancelEvent">
-				<text>Cancel RSVP</text>
+				<text>{{isHost?'Edit Event':'Cancel RSVP'}}</text>
 			</button>
 		</view>
 	</view>
@@ -110,8 +109,13 @@
 		data() {
 			return {
 				avatarList: [1, 2, 3],
-				ifJoined: false
+				ifJoined: false,
+				isHost: true,
 			}
+		},
+		onLoad(options) {
+			this.isHost = Boolean(options.isHost);
+			console.log(this.isHost)
 		},
 		methods: {
 			translateAvatar(index){
@@ -133,15 +137,31 @@
 				})
 			},
 			viewUserProfile(){
-				uni.navigateTo({
-					url: "/pages/event/profile?isVisitor=true"
-				})
+				if(!this.isHost){
+					uni.navigateTo({
+						url: "/pages/event/profile?isVisitor=true"
+					})
+				}else{
+					uni.redirectTo({
+						url: "/pages/event/profile"
+					})
+				}
+
 			},
 			onClickJoinEvent(){
 				this.ifJoined = true;
 			},
+			onClickProfile(){
+				
+			},
 			onClickCancelEvent(){
-				this.ifJoined = false;
+				if(this.isHost){
+					uni.navigateTo({
+						url: "/pages/event/post"
+					})
+				}else{
+					this.ifJoined = false;
+				}
 			}
 		}
 	}

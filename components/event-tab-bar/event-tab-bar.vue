@@ -28,9 +28,11 @@
 		},
 		methods:{
 			switchTab(name){
-				uni.redirectTo({
-					url: `/pages/event/${name}`
-				})
+				if(this.clicked != name){
+					uni.redirectTo({
+						url: `/pages/event/${name}`
+					})
+				}
 			},
 			createPost(){
 				uni.navigateTo({

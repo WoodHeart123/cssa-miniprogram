@@ -70,9 +70,15 @@
 				return `${index * 5}px`;
 			},
 			toEventDetail(){
-				uni.navigateTo({
-					url: "/pages/event/detail"
-				})
+				if(this.isHost){
+					uni.navigateTo({
+						url: "/pages/event/detail?isHost=true"
+					})
+				}else{
+					uni.navigateTo({
+						url: "/pages/event/detail"
+					})
+				}
 			}
 		}
 	}
