@@ -56,7 +56,7 @@
 		</view>
 		<view class="row-container function-box whole">
 			<view class="image-box">
-				<img style="width: 100%;height: 100%;" class="image" src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/main/badger-book.png" />
+				<img style="width: 100%;height: 100%;" class="image" src="https://7072-prod-9gip97mx4bfa32a3-1312104819.tcb.qcloud.la/asset/main/badger-book.png" />
 			</view>
 
 			<view class="right-function-box">

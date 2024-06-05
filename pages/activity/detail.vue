@@ -479,6 +479,7 @@
 			swiper-item {
 				display: flex;
 				justify-content: center;
+				align-items: center;
 			}
 
 			image {

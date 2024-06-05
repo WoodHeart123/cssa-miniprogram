@@ -21,9 +21,9 @@
 				<img class="avatar"
 					:src="'https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/' + product.sellerAvatar + '.jpg'">
 				<text class="nickname">{{product.sellerNickname}}</text>
-				<view class="copy-box">
+				<view class="copy-box"  @click="setClipboardData">
 					<text>复制</text>
-					<img class="copy-img" src="/static/fuzhi.png" @click="setClipboardData">
+					<img class="copy-img" src="/static/fuzhi.png">
 				</view>
 			</view>
 			<view class="weixin" v-show="this.isLogin">微信号：{{product.contact}}</view>
@@ -66,6 +66,23 @@
 		onLoad(options) {
 			wx.cloud.init();
 			this.product = JSON.parse(decodeURIComponent(options.product));
+			let launchOptions = wx.getLaunchOptionsSync()
+			if(launchOptions.scene === 1007 || launchOptions.scene === 1154){
+				uni.showLoading()
+				const opts = {
+					path: "/secondhand/getProduct?productID=" + encodeURI(this.product.productID),
+					type: 'GET',
+				};
+				requestAPI(opts)
+					.then(response => {
+						this.product = response.data.data;
+						console.log(response)
+					})
+					.catch(error => {
+						console.error("failed to get new product info", error);
+					});
+				uni.hideLoading()
+			}
 		},
 
 		onShow() {
@@ -117,11 +134,11 @@
 		methods: {
 			setClipboardData: function() {
 				uni.setClipboardData({
-					data: " 微信号: " + this.product.contact,
+					data: this.product.contact,
 					success: (res) => {
 						uni.showToast({
 							icon:'none',
-							title:'微信号复制成功'
+							title:'联系方式复制成功'
 						})
 					}
 				});

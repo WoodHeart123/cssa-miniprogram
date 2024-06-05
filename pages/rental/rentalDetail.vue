@@ -31,7 +31,7 @@
 					<img class="copy-img" src="/static/fuzhi.png">
 				</view>
 			</view>
-			<view class="weixin">微信号：{{houseInfo.contact}}</view>
+			<view class="weixin">联系方式：{{houseInfo.contact}}</view>
 			<view class="contact-overlay" v-show="!this.isLogin">
 				<button class="login-button" plain="true"
 					@click="getUserProfile">点击登录可查看联系方式</button>
@@ -61,12 +61,31 @@
 		},
 		
 		onLoad(options){
+			console.log(options)
 			wx.cloud.init();
+			let launchOptions = wx.getLaunchOptionsSync()
 			this.houseInfo = JSON.parse(decodeURIComponent(options.rentalInfo));
-			console.log(this.houseInfo)
+			if(launchOptions.scene === 1007 || launchOptions.scene === 1154){
+				uni.showLoading()
+				const opts = {
+					path: "/rental/getRental?rentalID=" + encodeURI(this.houseInfo.rentalID),
+					type: 'GET',
+				};
+				requestAPI(opts)
+					.then(response => {
+						this.houseInfo = response.data.data;
+						console.log(response)
+					})
+					.catch(error => {
+						console.error("failed to get new house info", error);
+					});
+				uni.hideLoading()
+			}else{
+				this.houseInfo = JSON.parse(decodeURIComponent(options.rentalInfo));
+			}
 		},
 
-	   	onShow() {
+	   	onShow(opt) {
 	   		uni.getStorage({
 	   			key: 'userInfo-2',
 				success: (res) => {
@@ -83,7 +102,7 @@
 			return {
 				title: "【转租】" + this.houseInfo.location,
 				imageUrl: this.houseInfo.images[0],
-				path: '/pages/detail/houseDetail?rentalInfo=' + encodeURIComponent(JSON.stringify(this.houseInfo))
+				path: '/pages/rental/rentalDetail?rentalInfo=' + encodeURIComponent(JSON.stringify(this.houseInfo))
 			}
 		},
 
@@ -96,7 +115,7 @@
 				desc: "CSSA转租分享平台",
 				content:"转租",
 				imageUrl: this.houseInfo.images[0],
-				path: '/pages/detail/housedDetail?rentalInfo=' + encodeURIComponent(JSON.stringify(this.houseInfo))
+				path: '/pages/rental/rentalDetail?rentalInfo=' + encodeURIComponent(JSON.stringify(this.houseInfo))
 			}
 		},
 		methods: {
@@ -108,7 +127,7 @@
 					success: (res) => {
 						uni.showToast({
 							icon:'none',
-							title:'微信号复制成功'
+							title:'联系方式复制成功'
 						})
 					},
 					fail: (res) => {
@@ -138,7 +157,7 @@
 				};
 				requestAPI(opts)
 					.then(response => {
-						this.userInfo = res.data.data;
+						this.userInfo = response.data.data;
 						this.isLogin = true;
 						uni.setStorageSync("userInfo-2", response.data.data);
 					})
