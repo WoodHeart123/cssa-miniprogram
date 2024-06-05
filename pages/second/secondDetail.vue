@@ -1,9 +1,14 @@
 <template>
 	<view class="second-detail">
+		<top-bar text="物品信息" navigate-back></top-bar>
 		<swiper class="swiper" indicator-dots>
 			<swiper-item style="display:flex;align-items: center;justify-content: center;"
 				v-for="(image, index) in product.images" @click="previewImage">
-				<image mode="heightFix" :src="image"></image>
+				<u--image mode="widthFix" :src="image">
+					<template v-slot:loading>
+						<u-loading-icon color="red"></u-loading-icon>
+					</template>
+				</u--image>
 			</swiper-item>
 		</swiper>
 		<view class="basic">
@@ -341,6 +346,7 @@
 	}
 
 	.swiper {
+		margin-top: 7vh;
 		height: 500rpx;
 
 		image {

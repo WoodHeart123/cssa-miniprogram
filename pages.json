@@ -118,7 +118,7 @@
 		{
 			"path": "pages/second/secondDetail",
 			"style": {
-				"navigationBarTitleText": "二手页面",
+				"navigationStyle": "custom",
 				"backgroundColor": "#F5F5F5"
 			}
 		},
@@ -193,69 +193,6 @@
 				"enablePullDownRefresh": true
 			}
 		},
-		{
-			"path": "pages/findFriend/findFriend",
-			"style": {
-				"navigationBarTitleText": "找搭子",
-				"enablePullDownRefresh": true,
-				"backgroundColor": "#ffffff"
-			}
-		},
-		{
-			"path": "pages/findFriend/findClassmate",
-			"style": {
-				"navigationBarTitleText": "课友群",
-				"enablePullDownRefresh": true,
-				"backgroundColor": "#ffffff"
-			}
-		},
-		{
-			"path": "pages/findFriend/findClassmateTech",
-			"style": {
-				"navigationBarTitleText": "理工类",
-				"enablePullDownRefresh": true,
-				"backgroundColor": "#ffffff"
-			}
-		},
-		{
-			"path": "pages/findFriend/findClassmateArt",
-			"style": {
-				"navigationBarTitleText": "艺术类",
-				"enablePullDownRefresh": true,
-				"backgroundColor": "#ffffff"
-			}
-		},
-		{
-			"path": "pages/findFriend/findClassmateLitSoc",
-			"style": {
-				"navigationBarTitleText": "社科文学类",
-				"enablePullDownRefresh": true,
-				"backgroundColor": "#ffffff"
-			}
-		},
-		{
-			"path": "pages/findFriend/singlePostDetail",
-			"style": {
-				"navigationBarTitleText": "详情",
-				"enablePullDownRefresh": false,
-				"backgroundColor": "#ffffff"
-			}
-		},
-		{
-			"path": "pages/coursePage/courseStat",
-			"style": {
-				"navigationBarTitleText": "课程统计",
-				"enablePullDownRefresh": false,
-				"backgroundColor": "#ffffff"
-			}
-		},
-		{
-			"path" : "pages/event/main",
-			"style" : 
-			{
-				"navigationStyle": "custom"
-			}
-		}
 	],
 	"condition": {
 		"current": 0,

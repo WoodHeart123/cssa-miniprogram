@@ -314,7 +314,30 @@
 				let uploadedImageCount = 0;
 				const uploadPromises = this.rental.imageList.map(async (image) => {
 					try {
-						const uploadedImage = await uploadOSS(image);
+						let uploadedImage;
+						await new Promise((resolve, reject) => {
+							wx.compressImage({
+								src: image.filepath, // 图片路径  
+								quality: 30,
+								success(res) {
+									console.log(res)
+									uploadOSS({
+										filename: image.filename,
+										filepath: res.tempFilePath
+									}).then((result) => {
+										uploadedImage = result;
+										resolve(); 
+									}).catch(reject); 
+								},
+								fail(err) {
+									console.log(err)
+									uploadOSS(image).then((result) => {
+										uploadedImage = result;
+										resolve(); 
+									}).catch(reject);
+								}
+							});
+						});
 						uploadedImageCount++;
 						uni.showLoading({
 							title: `上传图片,${uploadedImageCount}/${this.rental.imageList.length}`,
