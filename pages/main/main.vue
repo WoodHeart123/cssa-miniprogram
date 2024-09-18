@@ -63,7 +63,7 @@
 				<img style="width: 40%;height: 23%;" class="image" src="@/static/cssa.jpg" />
 				<text class="badger-book-text">2024新生手册</text>
 				<view class="gradient-border"></view>
-				<view class="button" @click="showGuide"><text class="button-text">领取新生手册</text></view>
+				<view class="button" @click="showBadgerBook"><text class="button-text">领取新生手册</text></view>
 			</view>
 
 
@@ -72,10 +72,24 @@
 
 		<uni-popup ref="progress" type="center" :mask-click="false" background-color="#fff">
 			<view style="width: 80vw;padding:5px;display: flex;flex-direction: row;flex-shrink: 0;">
-				<progress stroke-width="5" :percent="downloadProgress"></progress>
+				<progress stroke-width="8" :percent="downloadProgress" show-info active-color="#7F0019"></progress>
 				<icon style="margin-left: 2px;" type="cancel" size="26" @click="cancelTask" />
 			</view>
 
+		</uni-popup>
+		
+		<uni-popup ref="badgerbook" type="bottom" borderRadius="20px 20px 0 0" :safe-area="false">
+			<view style="width: 100vw;display: flex;flex-direction: row;flex-shrink: 0;background-color: white;border-radius: 20px 20px 0 0;">
+				<view class="badger-button-box" @click="showGuide">
+					<uni-icons type="download-filled" size="35" color="#7F0019"></uni-icons>
+					<text class="heading-3">下载</text>
+				</view>
+<!-- 				<view class="badger-button-box">
+					<uni-icons type="eye-filled" size="35" color="#7F0019"></uni-icons>
+					<text class="heading-3">预览</text>
+				</view> -->
+			</view>
+		
 		</uni-popup>
 
 	</view>
@@ -189,13 +203,21 @@
 					url: "/pages/rental/main",
 				})
 			},
+			showBadgerBook: function(){
+				this.$refs.badgerbook.open()
+			},
 			showGuide: function() {
+				this.$refs.badgerbook.close()
 				if (this.isDownloaded) {
 					wx.openDocument({
 						filePath: wx.env.USER_DATA_PATH + "/新生手册.pdf",
 						showMenu: true,
 						fileType: "pdf"
 					})
+					return;
+				}
+				if(this.downloadProgress != 0){
+					this.$refs.progress.open()
 					return;
 				}
 				this.downloadProgress = 0;
@@ -254,6 +276,21 @@
 		min-height: 40vh;min-width: 100vw;position: fixed;top:0;
 		background-size: 100% 100%;
 		z-index: 0;
+	}
+	
+	.badger-button-box{
+		width: 25vw;
+		height: 20vw;
+		padding: 20px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: space-around;
+		
+		image{
+			width: 10vw;
+			height: 10vw;
+		}
 	}
 
 	.top-bar {

@@ -4,7 +4,7 @@
 
         <!-- a BIG title indicating YOU FINISHED -->
         <view class="finished-title">
-            <text>您已完成活动注册</text>
+            <text>您已完成活动报名</text>
         </view>
 
         <!-- A BUTTON REDIRECT TO HOME PAGE -->

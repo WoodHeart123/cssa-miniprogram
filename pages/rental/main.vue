@@ -54,7 +54,7 @@
 						<switch color="#9b0000" @change="switchTimePicker" style="transform:scale(0.7)" />
 					</view>
 					<uni-datetime-picker v-show="this.timeFilter" v-model="this.filter.time" type="daterange"
-						:start="start" :end="end" :clear-icon=false />
+						:start="start" :clear-icon=false />
 				</view>
 				<view class="pop-sub-title">户型</view>
 				<view class="floorplan-filter-pop">
@@ -98,7 +98,6 @@
 					'4B4B', "Other"
 				],
 				start: Date.now(),
-				end: Date.now() + 10000000000,
 				timeFilter: false,
 				status: "loading",
 				safeArea: false,
