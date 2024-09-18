@@ -4,14 +4,14 @@
 			<view class="image-box">
 				<image mode="aspectFill" class="photo" :src="product.images[0]"></image>
 			</view>
-			<view class="content"  @click="toDetail">
+			<view class="content" @click="toDetail">
 				<view class="product-title">{{product.productTitle}}</view>
 				<view class="row-container price-box">
 					<view class="price">{{'$' + product.price}}</view>
 				</view>
-				<view class="is-takeoff" v-if="product.time == 0">已下架</view>
+				<view class="is-takeoff" v-if="this.product.timestamp  == 0">已下架</view>
 				<view class="row-container price-box">
-					<view class="time" v-show="product.time!=0">
+					<view class="time" v-show="this.product.timestamp!=0">
 						<span>发布时间：</span>
 						<span style="color:#333">{{this.productPublishTime}}</span>
 					</view>
@@ -19,23 +19,24 @@
 			</view>
 		</view>
 		<view class="row-container button-box">
-			<view class="button row-container" @click="editMySecondhand()" v-if="product.time != 0">
+			<view class="button row-container" @click="editMySecondhand()" v-if="this.product.timestamp != 0">
 				<view class="icon iconfont">&#xe646</view>
 				<view class="button-text">编辑</view>
 			</view>
-			<view class="button row-container" @click="polishMySecondhand(1)" v-if="product.time != 0 && Date.now() - this.product.UTCtimestamp >= 43200000">
+			<view class="button row-container" @click="polishMySecondhand(1)"
+				v-if="this.product.timestamp != 0 && Date.now() - this.product.timestamp >= 43200000">
 				<view class="icon iconfont">&#xe76f</view>
 				<view class="button-text">擦亮</view>
 			</view>
-			<view class="button row-container" @click="takeoffMySecondhand" v-if="product.time != 0">
+			<view class="button row-container" @click="takeoffMySecondhand" v-if="this.product.timestamp != 0">
 				<view class="icon iconfont">&#xe620</view>
 				<view class="button-text">下架</view>
 			</view>
-			<view class="button row-container" @click="polishMySecondhand(2)" v-if="product.time == 0">
+			<view class="button row-container" @click="polishMySecondhand(2)" v-if="this.product.timestamp == 0">
 				<view class="icon iconfont">&#xe64b</view>
 				<view class="button-text">上架</view>
 			</view>
-			<view class="button row-container" @click="deleteShow" v-if="product.time != 0">
+			<view class="button row-container" @click="deleteShow" v-if="this.product.timestamp != 0">
 				<view class="icon iconfont">&#xe74b</view>
 				<view class="button-text">删除</view>
 			</view>
@@ -54,19 +55,20 @@
 			};
 		},
 		mounted() {
-			this.product.UTCtimestamp = moment(this.product.UTCtime).valueOf()
-			if (moment().year() - moment.utc(this.product.UTCtime).year() > 0) {
-				this.productPublishTime = moment.utc(this.product.UTCtime).format("YYYY-MM-DD");
-			} else if (Date.now() - moment.utc(this.product.UTCtime).valueOf() > 86400000 * 7) {
-				this.productPublishTime = moment.utc(this.product.UTCtime).format("MM-DD");
+			this.product.timestamp = moment(this.product.time).valueOf()
+			if (moment().year() - moment(this.product.time).year() > 0) {
+				this.productPublishTime = moment(this.product.time).format("YYYY-MM-DD");
+			} else if (Date.now() - moment(this.product.time).valueOf() > 86400000 * 7) {
+				this.productPublishTime = moment(this.product.time).format("MM-DD");
 			} else {
-				this.productPublishTime = moment.utc(this.product.UTCtime).locale('zh-cn').fromNow();
+				this.productPublishTime = moment(this.product.time).locale('zh-cn').fromNow();
 			}
 		},
 		methods: {
 			toDetail: function() {
 				uni.navigateTo({
-					url: '/pages/detail/secondDetail?product=' + encodeURIComponent(JSON.stringify(this.product)),
+					url: '/pages/second/secondDetail?product=' + encodeURIComponent(JSON.stringify(this
+						.product)),
 				});
 			},
 			deleteShow: function() {
@@ -84,100 +86,97 @@
 				uni.showLoading({
 					mask: true
 				})
-				const res = await wx.cloud.callContainer({
-					config: {
-						env: 'prod-9gip97mx4bfa32a3',
-					},
+				const opts = {
 					path: `/user/deleteMyItem?itemID=${this.product.productID}&service=secondhand`,
-					method: 'DELETE',
-					header: {
-						'X-WX-SERVICE': 'springboot-ds71',
-					},
-				});
-				uni.hideLoading()
-				if (res.data.status == 100) {
+					type: 'DELETE',
+				};
+
+				requestAPI(opts).then(res => {
+					uni.hideLoading();
+					if (res.data.status === 100) {
+						uni.showToast({
+							title: "成功删除"
+						});
+						uni.$emit("mySecondhandDelete", this.index);
+					} else {
+						uni.showToast({
+							title: "删除失败",
+							icon: "error"
+						});
+					}
+				}).catch(error => {
+					uni.hideLoading();
+					console.error("Item deletion failed:", error);
 					uni.showToast({
-						title: "成功删除",
-					});
-					uni.$emit("mySecondhandDelete", this.index)
-				} else {
-					uni.showToast({
-						title: "删除失败",
+						title: "请求失败",
 						icon: "error"
 					});
-				}
+				});
 			},
 			polishMySecondhand: async function(index) {
 				uni.showLoading({
 					mask: true
 				});
-				const res = await wx.cloud.callContainer({
-					config: {
-						env: 'prod-9gip97mx4bfa32a3',
-					},
+				const opts = {
 					path: `/user/setProductTime?UTCtime=${moment.utc().format()}&productID=${this.product.productID}&service=product`,
-					method: 'GET',
-					header: {
-						'X-WX-SERVICE': 'springboot-ds71',
-					},
+					type: 'GET',
+				};
+
+				requestAPI(opts).then(res => {
+					uni.hideLoading();
+					if (res.data.status === 100) {
+						let toastTitle = index === 1 ? "擦亮成功" : "上架成功";
+						uni.showToast({
+							title: toastTitle,
+							icon: "success"
+						});
+						uni.$emit("mySecondhandRefresh", this.index);
+					} else {
+						let toastTitle = index === 1 ? "擦亮失败" : "上架失败";
+						uni.showToast({
+							title: toastTitle,
+							icon: "error"
+						});
+					}
+				}).catch(error => {
+					uni.hideLoading();
+					console.error("Product time set failed:", error);
+					uni.showToast({
+						title: "请求失败",
+						icon: "error"
+					});
 				});
-				uni.hideLoading();
-				if (index == 1) {
-					if (res.data.status == 100) {
-						uni.showToast({
-							title: "擦亮成功",
-							icon: "success"
-						})
-						uni.$emit("mySecondhandRefresh", this.index);
-					} else {
-						uni.showToast({
-							title: "擦亮失败",
-							icon: "error"
-						});
-					}
-				}
-				if (index == 2) {
-					if (res.data.status == 100) {
-						uni.showToast({
-							title: "上架成功",
-							icon: "success"
-						});
-						uni.$emit("mySecondhandRefresh", this.index);
-					} else {
-						uni.showToast({
-							title: "上架失败",
-							icon: "error"
-						});
-					}
-				}
 			},
 			takeoffMySecondhand: async function() {
 				uni.showLoading({
 					mask: true
 				});
-				const res = await wx.cloud.callContainer({
-					config: {
-						env: 'prod-9gip97mx4bfa32a3',
-					},
+				const opts = {
 					path: `/user/setProductTime?UTCtime=1970-01-01T00:00:00Z&productID=${this.product.productID}`,
-					method: 'GET',
-					header: {
-						'X-WX-SERVICE': 'springboot-ds71',
-					},
-				});
-				uni.hideLoading();
-				if (res.data.status == 100) {
+					type: 'GET',
+				};
+				requestAPI(opts).then(res => {
+					uni.hideLoading();
+					if (res.data.status === 100) {
+						uni.showToast({
+							title: "下架成功",
+							icon: "success"
+						});
+						this.product.time = 0;
+					} else {
+						uni.showToast({
+							title: "下架失败",
+							icon: "error"
+						});
+					}
+				}).catch(error => {
+					uni.hideLoading();
+					console.error("Product time setting failed:", error);
 					uni.showToast({
-						title: "下架成功",
-						icon: "success"
-					});
-					this.product.time = 0
-				} else {
-					uni.showToast({
-						title: "下架失败",
+						title: "请求失败",
 						icon: "error"
 					});
-				}
+				});
 			},
 			editMySecondhand: async function() {
 				uni.navigateTo({
@@ -186,6 +185,7 @@
 			},
 		}
 	}
+	import requestAPI from '@/api/request.js'
 </script>
 
 <style>

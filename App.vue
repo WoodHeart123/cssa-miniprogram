@@ -1,6 +1,7 @@
 <script>
 	export default {
 		onLaunch: function() {
+			moment.locale('zh-cn');
 			console.warn('当前组件仅支持 uni_modules 目录结构 ，请升级 HBuilderX 到 3.1.0 版本以上！')
 			console.log('App Launch')
 		},
@@ -11,29 +12,74 @@
 			console.log('App Hide')
 		}
 	}
+	import moment from "moment/min/moment-with-locales";
+	import 'moment/locale/zh-cn';
 </script>
 
 <style lang="scss">
 	/*每个页面公共css */
 	@import '@/uni_modules/uni-scss/index.scss';
 	@import './static/iconfont/iconfont.css';
-	@import "@/uni_modules/vk-uview-ui/index.scss";
-	/* #ifndef APP-NVUE */
 	@import '@/static/customicons.css';
-	// 设置整个项目的背景色
 	
-	@font-face{
-		font-family: Ali;
-		src:"@/static/font/Alimama_ShuHeiTi_Bold.ttf"
+	.heading-1{
+		line-height: 50px;
+		font-size: 34px;
+		font-weight: 600;
 	}
-	//@import 'wxcomponents/vant-weapp/common/index.wxss';
+	.heading-2{
+		line-height: 38px;
+		font-size: 28px;
+		font-weight: 600;
+	}
+	.heading-3{
+		line-height: 22px;
+		font-size: 18px;
+		font-weight: 600;
+	}
+	.paragraph-1{
+		line-height: 24px;
+		font-size: 14px;
+		font-weight: 400;
+	}
+	.paragraph-2{
+		line-height: 10px;
+		font-size: 8px;
+		font-weight: 400;
+	}
+	
+	.button{
+		background-color: $main-primary-color;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		border-radius: 100vh;
+		text{
+			line-height: 24px;
+			font-size: 14px;
+			color: $main-background-color-2;
+		}
+	}
+	
+	.button:hover{
+		background-color: $shade-badger-red;
+	}
+	
+	.button.disabled{
+		background-color: $main-secondary-color;
+	}
+	
+
+	@font-face{
+		font-family: Roboto;
+		src:"@/static/font/roboto.ttf"
+	}
 	page {
-		
-		background-color: #f5f5f5;
+		background-color: $main-background-color !important;
 	}
 
 	text{
-		font-family: Ali;
+		font-family: Roboto;
+		color: $main-primary-font-color;
 	}
-	/* #endif */
 </style>

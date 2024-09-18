@@ -1,15 +1,19 @@
 <template>
 	<view id="act">
-		<uni-segmented-control class="topBar" :current="current" :values="items" style-type="text"
-			active-color="#9b0000" @clickItem="onClickItem" />
-		<scroll-view class="scroll" scroll-top="0" scroll-y="true">
+		<top-bar text="CSSA官方活动"></top-bar>
+		<view class="segment">
+			<uni-segmented-control  :current="current" :values="items" style-type="text"
+				active-color="#9b0000" @clickItem="onClickItem" />
+		</view>
+		<scroll-view class="scroll" scroll-top="0" scroll-y="true" show-scrollbar="true" refresher-enabled="true" 
+				refresher-background="#F5F5F5" @refresherrefresh="refresh"
+					enable-back-to-top="true" :refresher-triggered="triggered" @scrolltolower="onScrollLower">
 			<view v-if="current == 0" v-for="(actDetail,index) in actDetailList" :key="index">
 				<act-box-vue class="act-box" :actDetail="actDetail" :ifJoined="false"></act-box-vue>
 			</view>
 			<view v-if="current == 1" v-for="(actDetail,index) in registerList" :key="index">
 				<act-box-vue class="act-box" :actDetail="actDetail" :ifJoined="true"></act-box-vue>
 			</view>
-			<view class="footnote"></view>
 		</scroll-view>
 		<view v-if="current == 1" v-for="(actDetail,index) in registerList" :key="index"></view>
 	</view>
@@ -19,7 +23,7 @@
 	export default {
 		onShareAppMessage(res) {
 			return {
-				title: "麦屯小助手",
+				title: "麦屯小助手-活动报名",
 				path: '/pages/activity/act'
 			}
 		},
@@ -31,10 +35,11 @@
 				userInfo: {},
 				actDetailList: [],
 				registerList: [],
-				items: ['举办中', '已报名/已参加'],
+				items: ['最新活动', '往期活动'],
 				current: 0,
 				count: 0,
 				mode: "",
+				triggered: false
 			}
 		},
 		onLoad() {
@@ -45,26 +50,9 @@
 					this.userInfo = res.data;
 				}
 			});
-			uni.$on("refreshAct", uni.startPullDownRefresh)
+			uni.$on("refreshAct", this.refresh)
 			this.mode = "first";
-			uni.startPullDownRefresh();
-		},
-		onPullDownRefresh() {
-			if (this.mode == "first") {
-				this.getActivityList();
-				this.getRegisterList();
-				this.mode = "more";
-			} else {
-				if (current == 0) {
-					this.getActivityList();
-				} else {
-					this.getRegisterList();
-				}
-			}
-			setTimeout(function() {
-				uni.stopPullDownRefresh();
-			}, 2000);
-
+			this.refresh();
 		},
 		methods: {
 			onClickItem(e) {
@@ -72,84 +60,79 @@
 					this.current = e.currentIndex;
 				}
 			},
-			async getActivityList() {
-				const res = await wx.cloud.callContainer({
-					config: {
-						env: 'prod-9gip97mx4bfa32a3', // 微信云托管的环境ID
-					},
-					path: "/activity/events",
-					method: 'GET', // 按照自己的业务开发，选择对应的方法
-					header: {
-						'X-WX-SERVICE': 'springboot-ds71',
+			refresh: function(){
+				if (!this.triggered) {
+					this.triggered = true;
+				} else {
+					return;
+				}
+				if (this.mode == "first") {
+					this.getActivityList();
+					this.getRegisterList();
+					this.mode = "more";
+				} else {
+					if (this.current == 0) {
+						this.getActivityList();
+					} else {
+						this.getRegisterList();
 					}
+				}
+			},
+			async getActivityList() {
+				const opts = {
+				    path: "/activity/events",
+				    type: 'GET',
+				};
+				
+				requestAPI(opts).then(response => {
+				    this.actDetailList = response.data.data;
+				    this.$nextTick(() => {
+				    	this.triggered = false;
+				    });
+				}).catch(error => {
+				    console.error("Error fetching activity events:", error);
 				});
-				this.actDetailList = res.data.data;
-				uni.stopPullDownRefresh();
 
 			},
 			async getRegisterList() {
-				const res = await wx.cloud.callContainer({
-					config: {
-						env: 'prod-9gip97mx4bfa32a3',
-					},
-					path: "/activity/register",
-					method: 'GET',
-					header: {
-						'X-WX-SERVICE': 'springboot-ds71',
-					}
+				const opts = {
+				    path: "/activity/register",
+				    type: 'GET',
+				};
+				requestAPI(opts).then(response => {
+				    this.registerList = response.data.data;
+				    this.$nextTick(() => {
+				    	this.triggered = false;
+				    });
+				}).catch(error => {
+				    console.error("Failed to fetch registration list:", error);
 				});
-				this.registerList = res.data.data;
-				uni.stopPullDownRefresh();
 			},
 		}
 	}
 	import actBoxVue from '@/components/act-box/act-box.vue';
 	import moment from 'moment';
+	import requestAPI from '@/api/request.js'
 </script>
 
 <style>
-	#act {
-		display: flex;
-	}
-
-	.avatar-box {
+	#act{
 		width: 100vw;
-		height: 50px;
+		height: 100vh;
 		display: flex;
-		flex-direction: row;
-		align-items: center;
-		justify-content: center;
+		flex-direction: column;
 	}
 
-	.button {
-		margin: 20px 10px 20px 10px;
-		border-radius: 10px;
-		border: 1px solid #AAAAAA;
-		background-color: #1684FC;
-		color: white;
-	}
 
-	.topBar {
+	.segment {
 		width: 100%;
-		height: 50px;
-		position: fixed;
 		z-index: 5;
-		background-color: #efeff4;
+		margin-top: 20px;
 	}
 
 	.scroll {
-		padding-top: 50px;
-		height: calc(100% - 30px);
+		flex-grow: 1;
 		z-index: 1;
-	}
-
-	.footnote {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		min-width: 100%;
-		min-height: 50px;
 	}
 
 	.central-text {

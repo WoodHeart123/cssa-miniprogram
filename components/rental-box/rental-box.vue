@@ -1,7 +1,11 @@
 <template>
 	<view class="rental-box row-container" @click="toRentalDetail">
 		<view class="image-box">
-			<image mode="widthFix" class="image" :src="this.rentalInfo.images[0]"/>
+				<u--image :src="this.rentalInfo.images[0]" mode='widthFix' height="80%" width="30vw">
+					<template v-slot:loading>
+						<u-loading-icon color="red"></u-loading-icon>
+					</template>
+				</u--image>
 		</view>
 		<view class="column-container content-box">
 			<view class="row-container title-box">
@@ -12,7 +16,7 @@
 			<view class="time-box">{{rentalTime}}</view>
 			<view class="price-box">${{this.rentalInfo.price}}</view>
 			<view class="description-box">{{this.rentalInfo.description}}</view>
-			<view class="publish-time-box">{{this.rentalPublishTime}}</view>
+			<view class="publish-time-box" v-if="showRentalTime">{{this.rentalPublishTime}}</view>
 		</view>
 	</view>
 </template>
@@ -24,12 +28,14 @@
 		name:"rental-box",
 		props:["rentalInfo"],
 		mounted(){
-			if(moment().year() - moment.utc(this.rentalInfo.UTCPublishedTime).year() > 0){
-				this.rentalPublishTime = moment.utc(this.rentalInfo.UTCPublishedTime).format("YYYY-MM-DD");
-			}else if(Date.now() - moment.utc(this.rentalInfo.UTCPublishedTime).valueOf() > 86400000 * 7){
-				this.rentalPublishTime = moment.utc(this.rentalInfo.UTCPublishedTime).format("MM-DD");
+			if(moment(this.rentalInfo.publishedTime).valueOf() === 0){
+				this.showRentalTime = false;
+			}else if(moment().year() - moment(this.rentalInfo.publishedTime).year() > 0){
+				this.rentalPublishTime = moment(this.rentalInfo.publishedTime).format("YYYY-MM-DD");
+			}else if(Date.now() - moment(this.rentalInfo.publishedTime).valueOf() > 86400000 * 7){
+				this.rentalPublishTime = moment(this.rentalInfo.publishedTime).format("MM-DD");
 			}else{
-				this.rentalPublishTime = moment.utc(this.rentalInfo.UTCPublishedTime).locale('zh-cn').fromNow();
+				this.rentalPublishTime = moment(this.rentalInfo.publishedTime).locale('zh-cn').fromNow();
 			}
 		},
 		data() {
@@ -38,13 +44,14 @@
 				houseInfo: {
 					imageList: ["/static/housing.jpg", "/static/housing.jpg", "/static/housing.jpg"],
 				},
-				rentalPublishTime:""
+				rentalPublishTime:"",
+				showRentalTime: true,
 			};
 		},
 		methods:{
 			toRentalDetail:function(){
 				uni.navigateTo({
-					url:"/pages/detail/houseDetail?rentalInfo=" + encodeURIComponent(JSON.stringify(this.rentalInfo)),
+					url:"/pages/rental/rentalDetail?rentalInfo=" + encodeURIComponent(JSON.stringify(this.rentalInfo)),
 				})
 			}
 		},
@@ -55,13 +62,13 @@
 		},
 		watch: {
 		    // whenever question changes, this function will run
-		    'rentalInfo.UTCPublishedTime': function (newVal, oldVal) {
-		     if(moment().year() - moment.utc(this.rentalInfo.UTCPublishedTime).year() > 0){
-		     	this.rentalPublishTime = moment.utc(newVal).format("YYYY-MM-DD");
+		    'rentalInfo.publishedTime': function (newVal, oldVal) {
+		     if(moment().year() - moment(this.rentalInfo.publishedTime).year() > 0){
+		     	this.rentalPublishTime = moment(this.rentalInfo.publishedTime).format("YYYY-MM-DD");
 		     }else if(Date.now() - moment.utc(this.rentalInfo.UTCPublishedTime).valueOf() > 86400000 * 7){
-		     	this.rentalPublishTime = moment.utc(newVal).format("MM-DD");
+		     	this.rentalPublishTime = moment(this.rentalInfo.publishedTime).format("MM-DD");
 		     }else{
-		     	this.rentalPublishTime = moment.utc(newVal).locale('zh-cn').fromNow();
+		     	this.rentalPublishTime = moment(this.rentalInfo.publishedTime).locale('zh-cn').fromNow();
 		     }
 		    }
 		}

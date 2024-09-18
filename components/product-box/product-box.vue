@@ -1,9 +1,16 @@
 <template>
 	<view class='product-box' @click="toSecondDetail">
-		<image class='photo' :src="product.images[0]" mode='aspectFill' lazy-load="true"></image>
+		<div class="photo">
+			<u--image class='photo' :src="product.images[0]" mode='aspectFill' height="144px" width="100%">
+				<template v-slot:loading>
+					<u-loading-icon color="red"></u-loading-icon>
+				</template>
+			</u--image>
+		</div>
+
 		<view class='row-container product-name-box'>
 			<view class='row-container delivery'>
-				<text>{{this.delivery[product.delivery]}}</text>
+				<text class="tag-text">{{this.delivery[product.delivery]}}</text>
 			</view>
 			<view class="product-name">
 				<text>{{product.productTitle}}</text>
@@ -15,7 +22,9 @@
 			<view class='condition'><text>{{this.condition[product.productCondition]}}</text></view>
 		</view>
 		<view class='seller row-container'>
-			<image class='avatar' :src="'https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/' + this.product.sellerAvatar + '.jpg'"></image>
+			<image class='avatar'
+				:src="'https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/' + this.product.sellerAvatar + '.jpg'">
+			</image>
 			<view class='seller-name'><text>{{product.sellerNickname}}</text></view>
 			<view class='time'><text>{{this.productPublishTime}}</text></view>
 		</view>
@@ -28,38 +37,50 @@
 	export default {
 		props: ["product"],
 		name: "product-box",
+		components: {
+			uImage,
+			uLoadingIcon
+		},
 		data() {
 			return {
-				condition: {"NEW":'全新', "ALMOST_NEW":'几乎全新', 'USED':'明显使用痕迹', "IMPAIRED":'部分损毁'},
+				condition: {
+					"NEW": '全新',
+					"ALMOST_NEW": '几乎全新',
+					'USED': '明显使用痕迹',
+					"IMPAIRED": '部分损毁'
+				},
 				delivery: {
 					'pickup': '自取',
 					'deliver': '送货',
 					'all': '送/取',
 				},
-				productPublishTime:""
+				productPublishTime: ""
 			}
 		},
-		mounted(){
+		mounted() {
 			console.log(this.product)
-			if(moment().year() - moment.utc(this.product.UTCtime).year() > 0){
-				this.productPublishTime = moment.utc(this.product.UTCtime).format("YYYY-MM-DD");
-			}else if(Date.now() - moment.utc(this.product.UTCtime).valueOf() > 86400000 * 7){
-				this.productPublishTime = moment.utc(this.product.UTCtime).format("MM-DD");
-			}else{
-				this.productPublishTime = moment.utc(this.product.UTCtime).locale('zh-cn').fromNow();
+			if (moment().year() - moment(this.product.time).year() > 0) {
+				this.productPublishTime = moment(this.product.time).format("YYYY-MM-DD");
+			} else if (Date.now() - moment(this.product.time).valueOf() > 86400000 * 7) {
+				this.productPublishTime = moment(this.product.time).format("MM-DD");
+			} else {
+				this.productPublishTime = moment(this.product.time).locale('zh-cn').fromNow();
 			}
 		},
 		methods: {
 			toSecondDetail: function() {
 				uni.navigateTo({
-					url: '/pages/detail/secondDetail?product=' + encodeURIComponent(JSON.stringify(this.product)),
+					url: '/pages/second/secondDetail?product=' + encodeURIComponent(JSON.stringify(this
+						.product)),
 				});
 			}
 		}
 	}
+	import uImage from "@/uni_modules/uview-plus/components/u-image/u-image.vue";
+	import uLoadingIcon from "@/uni_modules/uview-plus/components/u-loading-icon/u-loading-icon.vue"
 </script>
 
-<style>
+<style lang="scss">
 	.row-container {
 		display: flex;
 		flex-direction: row;
@@ -80,6 +101,7 @@
 		height: 144px;
 		border-radius: 10px 10px 0px 0px;
 		overflow: hidden;
+		margin-bottom: 5px;
 	}
 
 	.product-name-box {
@@ -119,6 +141,10 @@
 		margin-left: auto;
 		color: darkgrey;
 		height: 12px;
+	}
+	
+	.tag-text{
+		color: white;
 	}
 
 	.condition {

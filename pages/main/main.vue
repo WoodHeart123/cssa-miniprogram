@@ -1,36 +1,44 @@
 <template>
 	<view id="main" class="column-container">
-		<view class="swiper-container">
-			<main-advertisement width="90vw" height="200px"></main-advertisement>
+		<view class="top-bar" :style="{
+					top:menuButtonInfo.top + 'px',
+					 left: menuButtonInfo.height + 'px'}">
+			<view class="top-icon" :style="{
+					width: menuButtonInfo.height + 'px', 
+					height: menuButtonInfo.height + 'px'}">
+				<image src="@/static/cssa-logo-black.png"></image>
+			</view>
+			<view class="heading-3 top-text">
+				<text>CSSA麦屯圈</text>
+			</view>
 		</view>
-		<view class="row-container function-box">
+
+		<view class="background-image">
+		</view>
+		<view class="row-container function-box" style="margin-top: 30vh">
 			<view class="column-container function-button" @click="toCourse">
-				<img class="image" mode="aspectFit"
-					src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/main/course.png" />
-				<view class="column-container function-text">
-					<text>课程吐槽</text>
-				</view>
+				<img style="width: 29px;height: 26px; margin-bottom:10px;" src="@/static/main/course-rate.svg" />
+				<text class="paragraph-1">Course Rate</text>
+				<text class="heading-3">课程吐槽</text>
 			</view>
 			<view class="column-container function-button" @click="toSecond">
-				<img class="image" src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/main/secondhand.png" />
-				<view class="column-container function-text">
-					<text>二手市场</text>
-				</view>
+				<img style="width: 32px;height: 30px; margin-bottom:10px;" src="@/static/main/second-hand.svg" />
+				<text class="paragraph-1">Second Hand</text>
+				<text class="heading-3">二手市场</text>
 			</view>
-			<view class="column-container function-button" @click="toRental">
-				<img class="image" src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/main/rental.png" />
-				<view class="column-container function-text">
-					<text>公寓转租</text>
-				</view>
-			</view>
+
 		</view>
 		<view class="row-container function-box">
-			<view class="column-container function-button" @click="showGuide">
-				<img class="image" src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/main/handbook.png" />
-				<view class="column-container function-text">
-					<text>新生手册</text>
-				</view>
+			<view class="column-container function-button" @click="toRental">
+				<img style="width: 30px;height: 32px; margin-bottom:10px;" src="@/static/main/subleasing.svg" />
+				<text class="paragraph-1">Subleasing</text>
+				<text class="heading-3">公寓转租</text>
 			</view>
+			<!-- <view class="column-container function-button" @click="toEvent">
+				<img style="width: 32px;height: 30px; margin-bottom:10px;" src="@/static/main/second-hand.svg" />
+				<text class="paragraph-1">Events Hub</text>
+				<text class="heading-3">麦屯社交圈</text>
+			</view> -->
 			<!-- <navigator class="column-container function-button" url='../findFriend/findClassmate'>
 				<img class="image" src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/main/community.png" />
 				<view class="column-container function-text">
@@ -46,6 +54,29 @@
 				</view>
 			</view> -->
 		</view>
+		<view class="row-container function-box whole">
+			<view class="image-box">
+				<img style="width: 100%;height: 100%;" class="image" src="https://7072-prod-9gip97mx4bfa32a3-1312104819.tcb.qcloud.la/asset/main/badger-book.png" />
+			</view>
+
+			<view class="right-function-box">
+				<img style="width: 40%;height: 23%;" class="image" src="@/static/cssa.jpg" />
+				<text class="badger-book-text">2024新生手册</text>
+				<view class="gradient-border"></view>
+				<view class="button" @click="showGuide"><text class="button-text">领取新生手册</text></view>
+			</view>
+
+
+		</view>
+
+
+		<uni-popup ref="progress" type="center" :mask-click="false" background-color="#fff">
+			<view style="width: 80vw;padding:5px;display: flex;flex-direction: row;flex-shrink: 0;">
+				<progress stroke-width="5" :percent="downloadProgress"></progress>
+				<icon style="margin-left: 2px;" type="cancel" size="26" @click="cancelTask" />
+			</view>
+
+		</uni-popup>
 
 	</view>
 </template>
@@ -67,16 +98,22 @@
 					selectedBorder: '1px rgba(83, 200, 249,0.9) solid'
 				},
 				isLogin: true,
+				downloadProgress: 0,
+				isDownloaded: false,
+				abortTask: false,
+				menuButtonInfo: {}
 			}
 		},
 		onLoad() {
+			this.menuButtonInfo = wx.getMenuButtonBoundingClientRect();
+			console.log(this.menuButtonInfo)
 			wx.cloud.init();
 			uni.getStorage({
 				key: "userInfo-2",
 				fail: () => {
 					this.isLogin = false;
 					uni.switchTab({
-						url: "/pages/index/index"
+						url: "/pages/user/index"
 					})
 				},
 				success: (res) => {
@@ -120,15 +157,20 @@
 					url: '/pages/activity/act'
 				});
 			},
+			toEvent: function(){
+				uni.navigateTo({
+					url: "/pages/event/main"
+				})
+			},
 			toCourse: function() {
 				uni.navigateTo({
-					url: "/pages/courseMain/courseMain"
+					url: "/pages/coursePage/courseMain"
 				})
 			},
 			toSecond: function() {
 				if (!this.isLogin) {
 					uni.switchTab({
-						url: "/pages/index/index"
+						url: "/pages/user/index"
 					})
 					return;
 				}
@@ -139,72 +181,101 @@
 			toRental: function() {
 				if (!this.isLogin) {
 					uni.switchTab({
-						url: "/pages/index/index"
+						url: "/pages/user/index"
 					});
 					return;
 				}
 				uni.navigateTo({
-					url: "/pages/rentalMain/rentalMain",
-				})
-			},
-			toRide: function() {
-				uni.navigateTo({
-					url: "/pages/rideMain/rideMain",
-				})
-			},
-			toRest: function() {
-				uni.navigateTo({
-					url: "/pages/restMain/restMain",
+					url: "/pages/rental/main",
 				})
 			},
 			showGuide: function() {
-				uni.showLoading({
-					title: "正在加载：0%"
-				})
-				const task = wx.downloadFile({
-					url: "https://cssa-mini-na.oss-us-west-1.aliyuncs.com/%E6%96%B0%E7%94%9F%E6%89%8B%E5%86%8C.pdf",
+				if (this.isDownloaded) {
+					wx.openDocument({
+						filePath: wx.env.USER_DATA_PATH + "/新生手册.pdf",
+						showMenu: true,
+						fileType: "pdf"
+					})
+					return;
+				}
+				this.downloadProgress = 0;
+				this.abortTask = false;
+				this.$refs.progress.open()
+				const downloadTask = wx.downloadFile({
+					url: "https://7072-prod-9gip97mx4bfa32a3-1312104819.tcb.qcloud.la/%E6%96%B0%E7%94%9F%E6%89%8B%E5%86%8C.pdf",
+					filePath: wx.env.USER_DATA_PATH + "/新生手册.pdf",
 					success: (event) => {
 						uni.hideLoading();
-						wx.openDocument({
-							filePath: event.tempFilePath,
-							showMenu: true,
-							fileType: "pdf"
-						})
+						if (!this.abortTask) {
+							wx.openDocument({
+								filePath: wx.env.USER_DATA_PATH + "/新生手册.pdf",
+								showMenu: true,
+								fileType: "pdf"
+							})
+						}
+						this.isDownloaded = true;
 					},
 					fail: (event) => {
-						uni.showToast({
-							icon: "error",
-							title: "下载文件失败"
-						})
+						if (!this.abortTask) {
+							uni.showToast({
+								icon: "error",
+								title: "下载文件失败"
+							})
+						}
 					},
 					complete: () => {
-						uni.hideLoading()
+						this.$refs.progress.close();
 					}
-				});
-				task.onProgressUpdate((res) => {
-					uni.showLoading({
-						title: `正在加载：${res.progress}%`
-					})
 				})
+				downloadTask.onProgressUpdate((res) => {
+					this.downloadProgress = res.progress;
+				});
 			},
+			cancelTask: function() {
+				this.abortTask = true;
+				this.$refs.progress.close();
+			}
 		}
 	}
 	import actBoxVue from '@/components/act-box/act-box.vue';
-	//import presidentBoxVue from '../../components/president-box/president-box.vue'
 	import mainAdvertisementVue from '@/components/main-advertisement/main-advertisement.vue'
 </script>
 
-<style>
+<style lang="scss">
 	@import '@/static/iconfont/iconfont.css';
 
 	#main {
 		width: 100vw;
-		height: 100vh;
-		background-image: url("https://cssa-mini-na.oss-us-west-1.aliyuncs.com/main/main-background.png");
-		background-position: bottom;
-		background-size: cover;
-		background-repeat: no-repeat;
+		overflow-x: hidden;
 	}
+	
+	.background-image{
+		background-image: url("https://7072-prod-9gip97mx4bfa32a3-1312104819.tcb.qcloud.la/asset/main/background.jpg");
+		min-height: 40vh;min-width: 100vw;position: fixed;top:0;
+		background-size: 100% 100%;
+		z-index: 0;
+	}
+
+	.top-bar {
+		position: relative;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		z-index: 12;
+
+		.top-icon {
+			image {
+				width: 100%;
+				height: 100%;
+			}
+		}
+
+		.top-text {
+			margin-left: 5px;
+		}
+	}
+
+
 
 	.intro-box {
 		position: absolute;
@@ -218,16 +289,6 @@
 		height: 100rpx;
 	}
 
-	.leader-list {
-		margin-top: 10vh;
-	}
-
-	.leader-intro {
-		white-space: nowrap;
-		width: 100%;
-		height: 180px;
-	}
-
 	.cssa-intro-text {
 		margin-left: 20rpx;
 		width: 50%;
@@ -235,40 +296,6 @@
 		font-weight: 700;
 		align-items: center;
 	}
-
-
-
-	.pop-img {
-		margin-left: 35vw;
-		margin-top: 5vh;
-		border-radius: 50%;
-		height: 30vw;
-		width: 30vw;
-	}
-
-	.pop-name {
-		margin-top: 2vh;
-		text-align: center;
-		font-weight: 700;
-	}
-
-	.pop-div {
-		background-color: lightgray;
-		height: 0.2vh;
-		width: 94vw;
-		margin-top: 4vh;
-		margin-left: 3vw;
-	}
-
-	.pop-intro {
-		margin-top: 4vh;
-		width: 92vw;
-		margin-left: 4vw;
-		font-weight: 200;
-		font-size: 30rpx;
-	}
-
-
 
 	.column-container {
 		display: flex;
@@ -280,33 +307,76 @@
 		flex-direction: row;
 	}
 
+	.function-box.whole {
+		justify-content: space-around;
+		align-items: center;
+		background-color: $main-background-color-2;
+		z-index: 10;
+		
+		.image-box{
+			width: 40%;
+			height: 65%;
+		}
+
+		.right-function-box {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			width: 35%;
+			height: 80%;
+			
+			.gradient-border {
+			  border-bottom: 1px solid transparent;
+			  border-image-slice: 1;
+			  border-image-source: linear-gradient(90deg, #FFFFFF 0%, #7F0019 49.25%, #FFFFFF 100%);
+			  width: 80%;
+			  margin-bottom: 10%;
+			}
+			
+			.badger-book-text {
+				font-size: 10px;
+				line-height: 24px;
+				font-weight: 600;
+			}
+
+			.button {
+				width: 100%;
+				height: 25%;
+				
+				text{
+					font-size: 8px;
+					font-weight: 500;
+					line-height: 24px;
+				}
+
+			}
+		}
+	}
+
+
+
 
 
 	.function-box {
-		height: 140px;
-		width: 90vw;
-		margin: 2vh 5vw 2vh 5vw;
+		flex-shrink: 0;
+		height: 160px;
+		width: 86vw;
+		margin: 0 7vw 17px 7vw;
 		justify-content: space-between;
-	}
+		z-index: 10;
 
-	.function-button {
-		flex: 0;
-		width: 25vw;
-		min-width: 25vw;
-		border-radius: 10px;
-		background-color: white;
-		box-shadow: 0 0px 6px 1px rgba(165, 165, 165, 0.2);
-		transition: width 0.05s;
-		align-items: center;
-		justify-content: space-around;
+		.function-button {
+			min-width: 47%;
+			border-radius: 5px;
+			background-color: $main-background-color-2;
+			align-items: center;
+			justify-content: center;
+		}
 	}
 
 
-	.image {
-		margin-top: 10px;
-		width: 54px;
-		height: 54px;
-	}
+
 
 	.function-text {
 		font-size: 16px;
@@ -333,11 +403,11 @@
 		color: #ccc !important;
 	}
 
-	.button {
-		margin: 20px 10px 20px 10px;
-		border-radius: 10px;
-		border: 1px solid #AAAAAA;
-		background-color: #1684FC;
-		color: white;
+	.wx-progress-inner-bar {
+		border-radius: 5px;
+	}
+
+	progress {
+		flex: 1;
 	}
 </style>
