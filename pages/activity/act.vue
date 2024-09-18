@@ -129,10 +129,23 @@
 		z-index: 5;
 		margin-top: 20px;
 	}
+	
 
 	.scroll {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		height: 75vh;
 		flex-grow: 1;
 		z-index: 1;
+	}
+	
+	.act-box{
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-top: 20px;
+		margin-bottom: 20px;
 	}
 
 	.central-text {

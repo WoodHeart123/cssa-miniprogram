@@ -192,7 +192,7 @@
 				"navigationBarTitleText": "我的转租",
 				"enablePullDownRefresh": true
 			}
-		},
+		}
 	],
 	"condition": {
 		"current": 0,

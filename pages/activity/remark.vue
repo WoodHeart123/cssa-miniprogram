@@ -12,11 +12,13 @@
 					:key="index">
 					<uni-forms-item :label="info.title" :name="info.title">
 						<view class="placeholder"
-							v-if="info.placeholder&&info.placeholder.length!=0&&info.type!=='input'">
+							v-if="info.placeholder&&info.placeholder.length!=0&&info.type!=='input'&&info.type!=='textarea'">
 							<text>{{info.placeholder}}</text>
 						</view>
 						<uni-easyinput v-if="info.type==='input'" type="text" v-model="response[info.title]"
 							:placeholder="info.placeholder" @confirm="onInputConfirm" />
+						<uni-easyinput v-if="info.type==='textarea'" type="textarea" v-model="response[info.title]"
+								:placeholder="info.placeholder" @confirm="onInputConfirm" auto-height maxlength="1000"/>
 						<uni-data-checkbox mode="button" v-if="info.type==='single'" v-model="response[info.title]"
 							:localdata="info.localData" @change="onInputConfirm"></uni-data-checkbox>
 						<uni-data-checkbox mode="button" v-if="info.type==='multiple'" multiple
@@ -30,7 +32,7 @@
 		</uni-forms>
 
 		<view class="submit-button">
-			<uni-goods-nav :buttonGroup="buttonGroup" :options="options" :fill="true" @buttonClick="submit" />
+			<uni-goods-nav :buttonGroup="buttonGroup" :options="options" :fill="true" @buttonClick="submit"/>
 		</view>
 	</view>
 </template>
@@ -64,6 +66,7 @@
 			uni.setNavigationBarTitle({
 				title: this.actDetail.title + "报名"
 			})
+			console.log(this.actDetail)
 			for (let el of this.actDetail.additionalInfo.questions) {
 				if (el.type === 'single' || el.type === 'input') {
 					this.response[el.title] = '';
@@ -366,6 +369,10 @@
 		display: flex;
 		flex-direction: column;
 		position: fixed;
+		padding-bottom: constant(safe-area-inset-bottom);
+		padding-bottom: env(safe-area-inset-bottom);
+		background-color: white;
+		z-index: 1000;
 		left: 0;
 		right: 0;
 		bottom: 0;
