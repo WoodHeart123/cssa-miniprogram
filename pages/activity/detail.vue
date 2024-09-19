@@ -22,11 +22,11 @@
 			</swiper-item>
 		</swiper>
 		<view class="content-box">
-			<view class="upper-box">
+			<view class="upper-box" > 
 				<view class="countdown-label">
-					<text style="color: white;">截止于</text>
+					<text style="color: white;">{{isEnd?"已截止":"截止于"}}</text>
 				</view>
-				<view style="margin-bottom: 20px;">
+				<view style="margin-bottom: 20px;" v-if="!isEnd">
 					<uni-countdown :show-colon="false" :font-size="16" :day="elapsed.day" :hour="elapsed.hour" :minute="elapsed.minute" :second="elapsed.second" color="#FFFFFF" />
 				</view>
 			</view>
@@ -36,7 +36,7 @@
 						v-if="this.actDetail.price != 0" class="new-price">{{actDetail.price}}</text>
 					<text v-if="this.actDetail.price == 0" class="new-price">免费</text>
 				</view>
-				<view class="act-count">
+				<view class="act-count" v-if="!isEnd">
 					<view class="number">{{actDetail.userJoinedNum}}/{{actDetail.capacity}}</view>
 				</view>
 				<view class="weekday-box">
@@ -99,6 +99,7 @@
 				weekday: ["", "周一", "周二", "周三", "周四", "周五", "周六", "周天"],
 				showPrivacy: false,
 				needPrivacy: false,
+				isEnd: false,
 				elapsed:{}
 			}
 		},
@@ -107,13 +108,18 @@
 			this.actDetail.additonalInfo = JSON.parse(this.actDetail.additionalInfoJSON);
 			const now = new Date();
 			const targetDate = new Date(this.actDetail.deadline);
-			const difference = targetDate - now;
-			this.elapsed = {
-			  day: Math.floor(difference / (1000 * 60 * 60 * 24)),
-			  hour: Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-			  minute: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
-			  second: Math.floor((difference % (1000 * 60)) / 1000)
-			};
+			if(targetDate < now){
+				this.isEnd = true
+			}else{
+				const difference = targetDate - now;
+				this.elapsed = {
+				  day: Math.floor(difference / (1000 * 60 * 60 * 24)),
+				  hour: Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+				  minute: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
+				  second: Math.floor((difference % (1000 * 60)) / 1000)
+				};
+				this.isEnd = false
+			}
 			wx.cloud.init();
 			uni.setNavigationBarTitle({
 				title: this.actDetail.title
@@ -162,7 +168,9 @@
 					this.buttonGroup[0].text = "已参加";
 					this.buttonGroup[0].backgroundColor = "#A8A8A8";
 					this.buttonGroup[0].color = "#101010";
-				} else if (this.signupInfo.ifJoined && Object.keys(this.actDetail.additonalInfo) !== 0) {
+				} else if(this.isEnd && this.signupInfo.ifJoined){
+					this.buttonGroup[0].text = "查看报名"
+				}else if (this.signupInfo.ifJoined && Object.keys(this.actDetail.additonalInfo) !== 0) {
 					this.buttonGroup[0].text = "修改报名"
 					this.buttonGroup.push({
 						text: "取消报名",
