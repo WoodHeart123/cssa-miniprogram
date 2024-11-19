@@ -193,6 +193,30 @@
 				"enablePullDownRefresh": true
 			}
 		},
+		{
+			"path" : "pages/user/subscribe",
+			"style" : 
+			{
+				"navigationBarTitleText" : "邮件订阅",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path" : "pages/adsAndActivityWebPage/webView",
+			"style" : 
+			{
+				"navigationBarTitleText" : "活动详情",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path" : "pages/ride/main",
+			"style" : 
+			{
+				"navigationBarTitleText" : "顺风车",
+				"enablePullDownRefresh": true
+			}
+		}
 	],
 	"condition": {
 		"current": 0,

@@ -15,7 +15,18 @@
 
 		<view class="background-image">
 		</view>
-		<view class="row-container function-box" style="margin-top: 30vh">
+		
+		<!-- 广告轮播部分 -->
+		<view class="ads-swiper-container" style="margin-top: 10vh">
+		    <swiper autoplay="true" interval="3000" circular="true" indicator-dots="true" class="swiper">
+		        <swiper-item v-for="(ad, index) in ads" :key="index" @click="openAdLink(ad.link)">
+		            <image :src="ad.imgUrl" mode="scaleToFill" class="ad-image" />
+		        </swiper-item>
+		    </swiper>
+		</view>
+		
+		<!-- 功能部分 -->
+		<view class="row-container function-box" style="margin-top: 3vh">
 			<view class="column-container function-button" @click="toCourse">
 				<img style="width: 29px;height: 26px; margin-bottom:10px;" src="@/static/main/course-rate.svg" />
 				<text class="paragraph-1">Course Rate</text>
@@ -26,13 +37,19 @@
 				<text class="paragraph-1">Second Hand</text>
 				<text class="heading-3">二手市场</text>
 			</view>
-
 		</view>
+		
 		<view class="row-container function-box">
 			<view class="column-container function-button" @click="toRental">
 				<img style="width: 30px;height: 32px; margin-bottom:10px;" src="@/static/main/subleasing.svg" />
 				<text class="paragraph-1">Subleasing</text>
 				<text class="heading-3">公寓转租</text>
+			</view>
+			
+			<view class="column-container function-button" @click="toRide">
+				<img style="width: 32px;height: 32px; margin-bottom:10px;" src="@/static/main/ride.svg" />
+				<text class="paragraph-1">Ride</text>
+				<text class="heading-3">顺风车</text>
 			</view>
 			<!-- <view class="column-container function-button" @click="toEvent">
 				<img style="width: 32px;height: 30px; margin-bottom:10px;" src="@/static/main/second-hand.svg" />
@@ -45,14 +62,6 @@
 					<text>官方社群</text>
 				</view>
 			</navigator> -->
-			<!-- 			<view class="row-container function-button">
-			<view class="row-container function-button" @click="toRide()">
-					<view class="column-container function-text">
-						<text>顺风车</text>
-					</view>
-					<img class="image" src="" />这里补一个顺风车的图片
-				</view>
-			</view> -->
 		</view>
 		<view class="row-container function-box whole">
 			<view class="image-box">
@@ -101,7 +110,15 @@
 				downloadProgress: 0,
 				isDownloaded: false,
 				abortTask: false,
-				menuButtonInfo: {}
+				menuButtonInfo: {},
+				ads: [
+					{imgUrl:'https://prod-9gip97mx4bfa32a3-1312104819.tcloudbaseapp.com/ads/main%20page%20ads/2025%E6%98%A5%E6%99%9A%E4%B8%BB%E6%8C%81%E4%BA%BA%E6%8B%9B%E5%8B%9F.png?sign=b9aa28b04686b9cb2dc41e85d3c001a9&t=1731120159',
+					 link: 'https://mp.weixin.qq.com/s/r21LNuaNVVmwSr09VOamcA'},
+					{imgUrl: 'https://prod-9gip97mx4bfa32a3-1312104819.tcloudbaseapp.com/ads/main%20page%20ads/ad%20test%201.png?sign=b6464c3631544f6ba9453ca2856a71b8&t=1731033041',
+					 link: ''},
+					{imgUrl: 'https://prod-9gip97mx4bfa32a3-1312104819.tcloudbaseapp.com/ads/main%20page%20ads/ad%20test%202.png?sign=d1fe262d2972c82f3f1c82c37e21157b&t=1731033076',
+					 link: ''}
+				]
 			}
 		},
 		onLoad() {
@@ -189,6 +206,17 @@
 					url: "/pages/rental/main",
 				})
 			},
+			toRide: function() {
+				if (!this.isLogin) {
+					uni.switchTab({
+						url: "/pages/user/index"
+					});
+					return;
+				}
+				uni.navigateTo({
+					url: "/pages/ride/main",
+				})
+			},
 			showGuide: function() {
 				if (this.isDownloaded) {
 					wx.openDocument({
@@ -234,6 +262,13 @@
 			cancelTask: function() {
 				this.abortTask = true;
 				this.$refs.progress.close();
+			},
+			openAdLink(link) {
+			    if (link) {
+			        uni.navigateTo({
+						url: `/pages/adsAndActivityWebPage/webView?link=${encodeURIComponent(link)}`
+			        });
+			    }
 			}
 		}
 	}
@@ -274,8 +309,6 @@
 			margin-left: 5px;
 		}
 	}
-
-
 
 	.intro-box {
 		position: absolute;
@@ -354,10 +387,6 @@
 		}
 	}
 
-
-
-
-
 	.function-box {
 		flex-shrink: 0;
 		height: 160px;
@@ -375,9 +404,6 @@
 		}
 	}
 
-
-
-
 	.function-text {
 		font-size: 16px;
 		justify-content: center;
@@ -392,13 +418,6 @@
 		height: 25vh;
 	}
 
-	.swiper-container {
-		height: 200px;
-		width: 90vw;
-		margin-left: 5vw;
-	}
-
-
 	.disabled {
 		color: #ccc !important;
 	}
@@ -410,4 +429,27 @@
 	progress {
 		flex: 1;
 	}
+	
+	.ads-swiper-container {
+	    width: 95vw;
+	    height: 50vw;
+	    margin-left: 2.5vw;
+	    border-radius: 8px;
+	    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+	    overflow: hidden;
+	    position: relative;
+	}
+	
+	.swiper {
+	    width: 100%;
+	    height: 100%;
+	}
+	
+	.ad-image {
+	    width: 100%;
+	    height: 100%;
+	    object-fit: cover; /* 确保图片按比例填满容器 */
+	    border-radius: 8px;
+	}
+
 </style>
