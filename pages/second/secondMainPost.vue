@@ -59,7 +59,7 @@
 				<uni-forms-item name="price">
 					<view class="uni-column row-view">
 						<span class="span_margin">$</span>
-						<uni-easyinput type="number" v-model="product.price" placeholder="请填写价格"
+						<uni-easyinput type="digit" v-model="product.price" placeholder="请填写价格"
 							placeholder-style="font-size:14px;color:gray" :clearable="clearable" />
 					</view>
 				</uni-forms-item>
