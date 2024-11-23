@@ -17,7 +17,7 @@
 		</view>
 
 		<!-- 广告轮播部分 -->
-		<view class="ads-swiper-container" style="margin-top: 10vh">
+		<view class="ads-swiper-container" style="margin-top: 8vh">
 		    <swiper autoplay="true" interval="3000" circular="true" indicator-dots="true" class="swiper">
 		        <swiper-item v-for="(ad, index) in ads" :key="index" @click="openAdLink(ad.link)">
 		            <image :src="ad.imgUrl" mode="scaleToFill" class="ad-image" />
@@ -26,7 +26,7 @@
 		</view>
 		
 		<!-- 功能部分 -->
-		<view class="row-container function-box" style="margin-top: 5vh">
+		<view class="row-container function-box" style="margin-top: 3vh">
 			<view class="column-container function-button" @click="toCourse">
 				<img style="width: 29px;height: 26px; margin-bottom:10px;" src="@/static/main/course-rate.svg" />
 				<text class="paragraph-1">Course Rate</text>
