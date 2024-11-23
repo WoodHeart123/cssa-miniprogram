@@ -1,11 +1,12 @@
 <template>
 	<view class="top-bar" :style="{
 				marginTop:menuButtonInfo.top + 'px',
-				 marginLeft:  '12px',
-				 height: menuButtonInfo.height + 'px'}">
-		<view class="top-icon" v-show="navigateBack" :style="{
+				marginLeft:  '12px',
+				height: menuButtonInfo.height + 'px',
+				position: position}">
+		<view class="top-icon" v-if="navigateBack" :style="{
 				width: menuButtonInfo.height + 'px', 
-				height: menuButtonInfo.height + 'px'}" @click="navigateBack">
+				height: menuButtonInfo.height + 'px'}" @click="onClickNavigateBack">
 			<uni-icons type="arrowleft" size="25"></uni-icons>
 		</view>
 		<view class="heading-3 top-text" :style="{color: themeColor}">
@@ -34,6 +35,10 @@
 				type: String,
 				default: 'button'
 			},
+			position: {
+				type: String,
+				default: 'relative'
+			}
 		},
 		data() {
 			return {
@@ -45,7 +50,7 @@
 			console.log(this.menuButtonInfo)
 		},
 		methods: {
-			navigateBack: function(){
+			onClickNavigateBack: function(){
 				uni.navigateBack({
 					delta: 1
 				})
@@ -57,7 +62,6 @@
 <style lang='scss'>
 	.top-bar {
 		z-index: 1000;
-		position: fixed;
 		top:0;
 		left: 0;
 		display: flex;

@@ -1,4 +1,4 @@
-const MODE = "DEV";
+const MODE = "";
 export default async function requestAPI(opt, number = 0) {
 	wx.cloud.init()
 	try{

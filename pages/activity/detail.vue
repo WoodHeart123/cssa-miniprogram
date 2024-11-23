@@ -1,5 +1,6 @@
 <template>
 	<view class="act-detail">
+		<top-bar text="活动信息" navigate-back position="fixed"></top-bar>
 		<view class="privacy" v-show="showPrivacy">
 			<view class="privacy-content">
 				<view class="privacy-title">隐私保护指引</view>
@@ -21,11 +22,13 @@
 			</swiper-item>
 		</swiper>
 		<view class="content-box">
-			<view class="upper-box">
+			<view class="upper-box" > 
 				<view class="countdown-label">
-					<text>报名倒计时</text>
+					<text style="color: white;">{{isEnd?"已截止":"截止于"}}</text>
 				</view>
-				<uni-countdown :font-size="16" :day="elapsed.day" :hour="elapsed.hour" :minute="elapsed.minute" :second="elapsed.second" color="#FFFFFF" />
+				<view style="margin-bottom: 20px;" v-if="!isEnd">
+					<uni-countdown :show-colon="false" :font-size="16" :day="elapsed.day" :hour="elapsed.hour" :minute="elapsed.minute" :second="elapsed.second" color="#FFFFFF" />
+				</view>
 			</view>
 			<view class="lower-box">
 				<view class="price">
@@ -33,7 +36,7 @@
 						v-if="this.actDetail.price != 0" class="new-price">{{actDetail.price}}</text>
 					<text v-if="this.actDetail.price == 0" class="new-price">免费</text>
 				</view>
-				<view class="act-count">
+				<view class="act-count" v-if="!isEnd">
 					<view class="number">{{actDetail.userJoinedNum}}/{{actDetail.capacity}}</view>
 				</view>
 				<view class="weekday-box">
@@ -57,7 +60,7 @@
 		<view class="description">
 			<rich-text :nodes="actDetail.description" class="content">{{actDetail.description}}</rich-text>
 		</view>
-		<view class="act_buy">
+		<view class="act-buy">
 			<uni-goods-nav class="buy" :buttonGroup="buttonGroup" :options="options" fill="true"
 				@buttonClick="toPay"></uni-goods-nav>
 		</view>
@@ -96,6 +99,7 @@
 				weekday: ["", "周一", "周二", "周三", "周四", "周五", "周六", "周天"],
 				showPrivacy: false,
 				needPrivacy: false,
+				isEnd: false,
 				elapsed:{}
 			}
 		},
@@ -104,13 +108,18 @@
 			this.actDetail.additonalInfo = JSON.parse(this.actDetail.additionalInfoJSON);
 			const now = new Date();
 			const targetDate = new Date(this.actDetail.deadline);
-			const difference = targetDate - now;
-			this.elapsed = {
-			  day: Math.floor(difference / (1000 * 60 * 60 * 24)),
-			  hour: Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-			  minute: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
-			  second: Math.floor((difference % (1000 * 60)) / 1000)
-			};
+			if(targetDate < now){
+				this.isEnd = true
+			}else{
+				const difference = targetDate - now;
+				this.elapsed = {
+				  day: Math.floor(difference / (1000 * 60 * 60 * 24)),
+				  hour: Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+				  minute: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
+				  second: Math.floor((difference % (1000 * 60)) / 1000)
+				};
+				this.isEnd = false
+			}
 			wx.cloud.init();
 			uni.setNavigationBarTitle({
 				title: this.actDetail.title
@@ -159,7 +168,9 @@
 					this.buttonGroup[0].text = "已参加";
 					this.buttonGroup[0].backgroundColor = "#A8A8A8";
 					this.buttonGroup[0].color = "#101010";
-				} else if (this.signupInfo.ifJoined && Object.keys(this.actDetail.additonalInfo) !== 0) {
+				} else if(this.isEnd && this.signupInfo.ifJoined){
+					this.buttonGroup[0].text = "查看报名"
+				}else if (this.signupInfo.ifJoined && Object.keys(this.actDetail.additonalInfo) !== 0) {
 					this.buttonGroup[0].text = "修改报名"
 					this.buttonGroup.push({
 						text: "取消报名",
@@ -327,8 +338,8 @@
 			},
 			actDateDurationFormat() {
 				return moment(this.actDetail.startDate).format("MM-DD ") + this.weekday[moment(this.actDetail.startDate)
-					.isoWeekday()] + moment(this.actDetail.startDate).format(" HH:MM - ") + moment(this.actDetail
-					.endDate).format("HH:MM");
+					.isoWeekday()] + moment(this.actDetail.startDate).format(" HH:mm - ") + moment(this.actDetail
+					.endDate).format("HH:mm");
 			},
 			startDateWeekDay() {
 				return this.weekday[moment(this.actDetail.startDate).isoWeekday()]
@@ -356,7 +367,6 @@
 			top: 0;
 			position: absolute;
 			height: 60px;
-			padding-bottom: 10px;
 			background-color: rgba(155, 0, 0, 0.9);
 			width: 100%;
 			border-radius: 10px;
@@ -368,12 +378,14 @@
 		}
 		
 		.countdown-label{
-			font-size: 23px;
+			font-size: 20px;
 			font-weight: 700;
 			display: flex;
+			padding-bottom: 20px;
 			align-items: center;
 			color: white;
-			width: 60%;
+			width: 40%;
+			margin-left: 2%;
 		}
 
 		.lower-box {
@@ -471,8 +483,9 @@
 		background-color: rgba(220, 220, 220, 0.5);
 
 		swiper {
-			background-color: white;
+			background-color: transparent;
 			overflow: auto !important;
+			margin-top: 4vh;
 			min-height: 50vh;
 			max-height: 80vh;
 
@@ -535,22 +548,26 @@
 
 
 		.description {
-			width: 96vw;
+			width: calc(96vw - 30px);
 			margin-left: 2vw;
 			background-color: white;
 			border-radius: 10px;
 			margin-top: 10px;
-			padding: 10px;
+			padding: 15px;
 			margin-bottom: 100px;
 		}
 
-		.act_buy {
+		.act-buy {
 			display: flex;
 			flex-direction: column;
 			position: fixed;
 			left: 0;
 			right: 0;
 			bottom: 0;
+			padding-bottom: constant(safe-area-inset-bottom);
+			padding-bottom: env(safe-area-inset-bottom);
+			background-color: white;
+			z-index: 1000;
 		}
 	}
 

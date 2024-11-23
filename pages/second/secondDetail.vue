@@ -1,6 +1,7 @@
 <template>
 	<view class="second-detail">
-		<top-bar text="物品信息" navigate-back></top-bar>
+		<top-bar text="物品信息" navigate-back position="fixed"></top-bar>
+
 		<swiper class="swiper" indicator-dots>
 			<swiper-item style="display:flex;align-items: center;justify-content: center;"
 				v-for="(image, index) in product.images" @click="previewImage">

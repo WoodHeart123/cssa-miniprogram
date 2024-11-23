@@ -1,5 +1,6 @@
 <template>
 	<view class="ride-box row-container" @click="toRideDetail">
+		<!-- 顺风车box左侧图片 -->
 		<view class="image-box">
 			<u--image 
 				:src="this.rideInfo.images && this.rideInfo.images.length > 0 
@@ -13,21 +14,31 @@
 				</template>
 			</u--image>
 		</view>
+		
+		<!--顺风车信息box-->
 		<view class="column-container content-box">
+			
+			<!--顺风车标签-->
 			<view class="row-container title-box">
 				<view class="row-container tag requestType">{{ requestTypeConstrainValue[this.rideInfo.requestType] }}</view>
 				<view class="row-container tag rideType">{{ rideTypeContraintValue[this.rideInfo.rideType] }}</view>
 			</view>
+			
+			<!--标题-->
 			<view class="ride-title">
 				{{ this.rideInfo.origin }} 
 				<span v-if="this.rideInfo.rideType === 2">⇄</span>
 				<span v-else>→</span>
 				{{ this.rideInfo.destination }}
 			</view>
+			
+			<!--出发/返回日期时间-->
 			<view class="time-box">
 				<view>{{ formatDepartureTime }}</view>
 				<view v-if="this.rideInfo.rideType === 2">{{ formatReturnTime }}</view>
 			</view>
+			
+			<!--价格，可用/空余座位-->
 			<view class="price-box">
 				<span class="price">${{ this.rideInfo.price }} 每人每程</span>
 				<span class="separator">|</span>
@@ -80,7 +91,7 @@
 					: "返回时间未设置";
 			},
 			trimmedDescription() {
-				const maxLength = 50; // 限制一行的最大长度
+				const maxLength = 50;
 				return this.rideInfo.description.length > maxLength
 					? this.rideInfo.description.substring(0, maxLength) + "..."
 					: this.rideInfo.description;
@@ -179,8 +190,8 @@
 	}
 	.separator {
 		font-size: 14px;
-		color: #000; /* 黑色 */
-		margin: 0 8px; /* 左右间距相等 */
+		color: #000;
+		margin: 0 8px;
 		text-align: center;
 	}
 	.seating-info {

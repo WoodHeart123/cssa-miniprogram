@@ -21,7 +21,7 @@
 					</div>
 					<div class="row">
 						<image class="icon" src="@/static/act/location.svg"></image>
-						<text class="font-small paragraph-1">{{this.actDetail.location}}</text>
+						<text class="font-small paragraph-1" style="white-space: nowrap;overflow: hidden;">{{this.actDetail.location}}</text>
 					</div>
 
 				</div>
@@ -75,8 +75,6 @@
 	.container {
 		position: relative;
 		width: 90vw;
-		margin-left: 5vw;
-		margin-top: 20px;
 		overflow: hidden;
 		border-radius: 18px;
 		box-shadow: rgba(0, 0, 0, 0.2) 0 0 5px;
@@ -121,7 +119,6 @@
 		margin-bottom: 10px;
 
 		.content-box {
-			width: 50%;
 			height: 100%;
 			padding-left: 7%;
 		}
@@ -132,6 +129,7 @@
 			justify-content: center;
 			min-height: 100%;
 			width: 50%;
+			flex: 1;
 
 			.button {
 				margin: 15px 0 0 30%;
@@ -148,6 +146,10 @@
 		height: 20px;
 		margin-bottom: 1px;
 		align-items: center;
+		overflow: hidden;
+		white-space: nowrap;
+		flex-shrink: 0;
+		max-width: 60vw;
 	}
 
 	.image {
@@ -168,6 +170,7 @@
 		width: 14px;
 		height: 14px;
 		margin-right: 10px;
+		flex-shrink: 0;
 	}
 
 	.column {

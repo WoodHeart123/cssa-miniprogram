@@ -12,25 +12,27 @@
 					:key="index">
 					<uni-forms-item :label="info.title" :name="info.title">
 						<view class="placeholder"
-							v-if="info.placeholder&&info.placeholder.length!=0&&info.type!=='input'">
+							v-if="info.placeholder&&info.placeholder.length!=0&&info.type!=='input'&&info.type!=='textarea'">
 							<text>{{info.placeholder}}</text>
 						</view>
 						<uni-easyinput v-if="info.type==='input'" type="text" v-model="response[info.title]"
-							:placeholder="info.placeholder" @confirm="onInputConfirm" />
+							:placeholder="info.placeholder" @confirm="onInputConfirm" :disabled="isEnd"/>
+						<uni-easyinput v-if="info.type==='textarea'" type="textarea" v-model="response[info.title]"
+								:placeholder="info.placeholder" @confirm="onInputConfirm" auto-height maxlength="1000" :disabled="isEnd"/>
 						<uni-data-checkbox mode="button" v-if="info.type==='single'" v-model="response[info.title]"
 							:localdata="info.localData" @change="onInputConfirm"></uni-data-checkbox>
 						<uni-data-checkbox mode="button" v-if="info.type==='multiple'" multiple
 							v-model="response[info.title]" :localdata="info.localData"></uni-data-checkbox>
 						<uni-file-picker v-model="this.images[info.title]" v-if="info.type==='upload'" limit="1"
-							fileMediatype="image" :auto-upload="false"
+							fileMediatype="image" :auto-upload="false" :readonly="isEnd"
 							@select="(event)=>onSelectImage(event, info.title)"></uni-file-picker>
 					</uni-forms-item>
 				</swiper-item>
 			</swiper>
 		</uni-forms>
 
-		<view class="submit-button">
-			<uni-goods-nav :buttonGroup="buttonGroup" :options="options" :fill="true" @buttonClick="submit" />
+		<view class="submit-button" v-if="!isEnd">
+			<uni-goods-nav :buttonGroup="buttonGroup" :options="options" :fill="true" @buttonClick="submit"/>
 		</view>
 	</view>
 </template>
@@ -55,15 +57,24 @@
 
 				},
 				current: 0,
+				isEnd: false,
 			}
 		},
 		onLoad(options) {
 			this.actDetail = JSON.parse(decodeURIComponent(options.actDetail));
 			this.signupInfo = JSON.parse(decodeURIComponent(options.signupInfo));
 			this.actDetail.additionalInfo = JSON.parse(this.actDetail.additionalInfoJSON);
+			const now = new Date();
+			const targetDate = new Date(this.actDetail.deadline);
+			if(targetDate < now){
+				this.isEnd = true
+			}else{
+				this.isEnd = false
+			}
 			uni.setNavigationBarTitle({
 				title: this.actDetail.title + "报名"
 			})
+			console.log(this.actDetail)
 			for (let el of this.actDetail.additionalInfo.questions) {
 				if (el.type === 'single' || el.type === 'input') {
 					this.response[el.title] = '';
@@ -81,7 +92,8 @@
 					el.localData = el.choices.map((element) => {
 						return {
 							value: element,
-							text: element
+							text: element,
+							disable: this.isEnd
 						}
 					})
 				}
@@ -366,6 +378,10 @@
 		display: flex;
 		flex-direction: column;
 		position: fixed;
+		padding-bottom: constant(safe-area-inset-bottom);
+		padding-bottom: env(safe-area-inset-bottom);
+		background-color: white;
+		z-index: 1000;
 		left: 0;
 		right: 0;
 		bottom: 0;

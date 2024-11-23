@@ -15,7 +15,7 @@
 
 		<view class="background-image">
 		</view>
-		
+
 		<!-- 广告轮播部分 -->
 		<view class="ads-swiper-container" style="margin-top: 10vh">
 		    <swiper autoplay="true" interval="3000" circular="true" indicator-dots="true" class="swiper">
@@ -26,7 +26,7 @@
 		</view>
 		
 		<!-- 功能部分 -->
-		<view class="row-container function-box" style="margin-top: 3vh">
+		<view class="row-container function-box" style="margin-top: 5vh">
 			<view class="column-container function-button" @click="toCourse">
 				<img style="width: 29px;height: 26px; margin-bottom:10px;" src="@/static/main/course-rate.svg" />
 				<text class="paragraph-1">Course Rate</text>
@@ -37,6 +37,7 @@
 				<text class="paragraph-1">Second Hand</text>
 				<text class="heading-3">二手市场</text>
 			</view>
+
 		</view>
 		
 		<view class="row-container function-box">
@@ -51,6 +52,7 @@
 				<text class="paragraph-1">Ride</text>
 				<text class="heading-3">顺风车</text>
 			</view>
+
 			<!-- <view class="column-container function-button" @click="toEvent">
 				<img style="width: 32px;height: 30px; margin-bottom:10px;" src="@/static/main/second-hand.svg" />
 				<text class="paragraph-1">Events Hub</text>
@@ -72,21 +74,33 @@
 				<img style="width: 40%;height: 23%;" class="image" src="@/static/cssa.jpg" />
 				<text class="badger-book-text">2024新生手册</text>
 				<view class="gradient-border"></view>
-				<view class="button" @click="showGuide"><text class="button-text">领取新生手册</text></view>
+				<view class="button" @click="showBadgerBook"><text class="button-text">领取新生手册</text></view>
 			</view>
 
 
 		</view>
 
-
 		<uni-popup ref="progress" type="center" :mask-click="false" background-color="#fff">
 			<view style="width: 80vw;padding:5px;display: flex;flex-direction: row;flex-shrink: 0;">
-				<progress stroke-width="5" :percent="downloadProgress"></progress>
+				<progress stroke-width="8" :percent="downloadProgress" show-info active-color="#7F0019"></progress>
 				<icon style="margin-left: 2px;" type="cancel" size="26" @click="cancelTask" />
 			</view>
 
 		</uni-popup>
-
+		
+		<uni-popup ref="badgerbook" type="bottom" borderRadius="20px 20px 0 0" :safe-area="false">
+			<view style="width: 100vw;display: flex;flex-direction: row;flex-shrink: 0;background-color: white;border-radius: 20px 20px 0 0;">
+				<view class="badger-button-box" @click="showGuide">
+					<uni-icons type="download-filled" size="35" color="#7F0019"></uni-icons>
+					<text class="heading-3">下载</text>
+				</view>
+<!-- 				<view class="badger-button-box">
+					<uni-icons type="eye-filled" size="35" color="#7F0019"></uni-icons>
+					<text class="heading-3">预览</text>
+				</view> -->
+			</view>
+		
+		</uni-popup>
 	</view>
 </template>
 
@@ -206,6 +220,7 @@
 					url: "/pages/rental/main",
 				})
 			},
+
 			toRide: function() {
 				if (!this.isLogin) {
 					uni.switchTab({
@@ -217,13 +232,21 @@
 					url: "/pages/ride/main",
 				})
 			},
+			showBadgerBook: function(){
+				this.$refs.badgerbook.open()
+			},
 			showGuide: function() {
+				this.$refs.badgerbook.close()
 				if (this.isDownloaded) {
 					wx.openDocument({
 						filePath: wx.env.USER_DATA_PATH + "/新生手册.pdf",
 						showMenu: true,
 						fileType: "pdf"
 					})
+					return;
+				}
+				if(this.downloadProgress != 0){
+					this.$refs.progress.open()
 					return;
 				}
 				this.downloadProgress = 0;
@@ -309,6 +332,47 @@
 			margin-left: 5px;
 		}
 	}
+	
+	.background-image{
+		background-image: url("https://7072-prod-9gip97mx4bfa32a3-1312104819.tcb.qcloud.la/asset/main/background.jpg");
+		min-height: 40vh;min-width: 100vw;position: fixed;top:0;
+		background-size: 100% 100%;
+		z-index: 0;
+	}
+	
+	.badger-button-box{
+		width: 25vw;
+		height: 20vw;
+		padding: 20px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: space-around;
+		
+		image{
+			width: 10vw;
+			height: 10vw;
+		}
+	}
+
+	.top-bar {
+		position: relative;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		z-index: 12;
+
+		.top-icon {
+			image {
+				width: 100%;
+				height: 100%;
+			}
+		}
+
+		.top-text {
+			margin-left: 5px;
+		}
+	}
 
 	.intro-box {
 		position: absolute;
@@ -350,7 +414,6 @@
 			width: 40%;
 			height: 65%;
 		}
-
 		.right-function-box {
 			display: flex;
 			flex-direction: column;
@@ -429,7 +492,7 @@
 	progress {
 		flex: 1;
 	}
-	
+
 	.ads-swiper-container {
 	    width: 95vw;
 	    height: 50vw;
@@ -451,5 +514,4 @@
 	    object-fit: cover; /* 确保图片按比例填满容器 */
 	    border-radius: 8px;
 	}
-
 </style>
