@@ -1,31 +1,11 @@
 <template>
     <view id="ride-main">
-        <view class="row-container filter-box">
-            <!-- 出发日期筛选 -->
-            <view class="row-container filter-item" @click="popFilter('departureDate')">
-                <view class="filter-tag">出发日期：</view>
-                <view class="filter-value">{{ filter.departureDate || "不限" }}</view>
-            </view>
-
-            <!-- 回程日期筛选 -->
-            <view class="row-container filter-item" @click="popFilter('returnDate')">
-                <view class="filter-tag">回程日期：</view>
-                <view class="filter-value">{{ filter.returnDate || "不限" }}</view>
-            </view>
-
-            <!-- 始发地筛选 -->
-            <view class="row-container filter-item" @click="popFilter('origin')">
-                <view class="filter-tag">始发地：</view>
-                <view class="filter-value">{{ filter.origin || "不限" }}</view>
-            </view>
-
-            <!-- 目的地筛选 -->
-            <view class="row-container filter-item" @click="popFilter('destination')">
-                <view class="filter-tag">目的地：</view>
-                <view class="filter-value">{{ filter.destination || "不限" }}</view>
-            </view>
+        <!-- 顶部筛选按钮 -->
+        <view class="filter-header">
+            <text class="filter-text" @click="openFilterPopup">筛选</text>
         </view>
 
+        <!-- 顺风车信息列表 -->
         <scroll-view
             scroll-y="true"
             show-scrollbar="true"
@@ -37,41 +17,54 @@
             :refresher-triggered="triggered"
             @scrolltolower="onScrollLower"
         >
-            <!-- 顺风车信息列表 -->
+            <!-- 顺风车卡片 -->
             <view class="ride-box-container" v-for="(rideInfo, index) in filteredRideList" :key="index">
                 <rideBoxVue :rideInfo="rideInfo" @rideClick="toRideDetail"></rideBoxVue>
             </view>
 
-            <!-- 加载更多提示 -->
-            <uni-load-more :content-text="contentText" :status="status">
-                <view v-if="status === 'noMore'" class="no-more-container">
-                    <text class="no-more-line">没有更多顺风车信息</text>
-                    <text class="no-more-line">我们只会显示出发时间或者返回时间不晚于当前CST时间的顺风车信息。</text>
-                </view>
-            </uni-load-more>
+            <!-- 加载状态 -->
+            <uni-load-more :content-text="contentText" :status="status"></uni-load-more>
             <view style="height: 100px;"></view>
         </scroll-view>
 
         <!-- 发布顺风车按钮 -->
-        <uni-fab :pattern="pattern" horizontal="right" vertical="bottom" popMene="false" @fabClick="toPostRide" />
+        <uni-fab :pattern="fabPattern" horizontal="right" vertical="bottom" popMenu="false" @fabClick="toPostRide" />
 
         <!-- 筛选弹窗 -->
-        <uni-popup ref="filter" type="bottom" background-color="#fff" :safeArea="safeArea" @maskClick="maskClick">
-            <view class="column-container filter-popup">
-                <view v-if="currentFilter === 'departureDate'">
+        <uni-popup ref="filterPopup" type="left" background-color="#fff">
+            <view class="filter-popup">
+                <view class="filter-title">筛选条件</view>
+
+                <!-- 筛选项 -->
+                <view class="filter-item">
+                    <text>请求类型：</text>
+                    <uni-segmented-control v-model="filter.requestType" :values="['不限', '出顺风车', '求顺风车']" />
+                </view>
+                <view class="filter-item">
+                    <text>顺风车类型：</text>
+                    <uni-segmented-control v-model="filter.rideType" :values="['不限', '单程', '往返']" />
+                </view>
+                <view class="filter-item">
+                    <text>出发日期：</text>
                     <uni-datetime-picker v-model="filter.departureDate" type="date" :start="startDate" :end="endDate" />
                 </view>
-                <view v-if="currentFilter === 'returnDate'">
+                <view class="filter-item" v-if="filter.rideType === '往返'">
+                    <text>返回日期：</text>
                     <uni-datetime-picker v-model="filter.returnDate" type="date" :start="startDate" :end="endDate" />
                 </view>
-                <view v-if="currentFilter === 'origin'">
+                <view class="filter-item">
+                    <text>始发地：</text>
                     <uni-easyinput v-model="filter.origin" placeholder="输入始发地" />
                 </view>
-                <view v-if="currentFilter === 'destination'">
+                <view class="filter-item">
+                    <text>目的地：</text>
                     <uni-easyinput v-model="filter.destination" placeholder="输入目的地" />
                 </view>
-                <view class="pop-button-box">
-                    <button class="pop-button" @click="onClickSearch">搜索</button>
+
+                <!-- 操作按钮 -->
+                <view class="filter-buttons">
+                    <button class="confirm-button" @click="applyFilters">确定</button>
+                    <button class="reset-button" @click="resetFilters">重置</button>
                 </view>
             </view>
         </uni-popup>
@@ -84,106 +77,114 @@
     import rideBoxVue from "@/components/ride-box/ride-box.vue";
 
     export default {
-        components: {
-            rideBoxVue
-        },
+        components: { rideBoxVue },
         data() {
             return {
                 filter: {
+                    requestType: "不限", // 默认值为“不限”
+                    rideType: "不限", // 默认值为“不限”
                     departureDate: "", // 出发日期
-                    returnDate: "", // 回程日期
+                    returnDate: "", // 返回日期
                     origin: "", // 始发地
                     destination: "" // 目的地
                 },
-                currentFilter: "", // 当前激活的筛选条件
-                startDate: moment().format("YYYY-MM-DD"), // 筛选日期开始范围
-                endDate: moment().add(1, "year").format("YYYY-MM-DD"), // 筛选日期结束范围
+                startDate: moment().format("YYYY-MM-DD"), // 日期范围开始
+                endDate: moment().add(1, "year").format("YYYY-MM-DD"), // 日期范围结束
                 offset: 0, // 当前数据偏移量
                 limit: 20, // 每次加载的数据数量
-                rideList: [], // 全部顺风车信息列表
-                triggered: false, // 下拉刷新触发状态
-                status: "loading", // 加载状态
-                pattern: {
-                    buttonColor: "#9b0000"
-                },
-                isLogin: false, // 用户是否已登录
+                rideList: [], // 全部顺风车列表
+                triggered: false,
+                status: "loading",
                 contentText: {
                     contentdown: "上拉显示更多",
                     contentrefresh: "正在加载...",
                     contentnomore: "没有更多顺风车信息"
+                },
+                fabPattern: {
+                    buttonColor: "#9b0000"
                 }
             };
         },
         computed: {
-            // 前端筛选后的顺风车列表
             filteredRideList() {
                 return this.rideList.filter(ride => {
+                    // 修复 requestType 筛选逻辑
+                    const requestTypeMatch =
+                        this.filter.requestType === "不限" ||
+                        ride.requestType === (this.filter.requestType === "出顺风车" ? 1 : 2);
+            
+                    // 修复 rideType 筛选逻辑
+                    const rideTypeMatch =
+                        this.filter.rideType === "不限" ||
+                        ride.rideType === (this.filter.rideType === "单程" ? 1 : 2);
+            
                     const departureDateMatch =
                         !this.filter.departureDate ||
-                        moment(ride.departureTime).isSame(moment(this.filter.departureDate), "day");
+                        moment(ride.departureTime).isSame(this.filter.departureDate, "day");
+            
                     const returnDateMatch =
                         !this.filter.returnDate ||
-                        (ride.returnTime && moment(ride.returnTime).isSame(moment(this.filter.returnDate), "day"));
+                        moment(ride.returnTime).isSame(this.filter.returnDate, "day");
+            
                     const originMatch =
-                        !this.filter.origin || ride.origin.toLowerCase().includes(this.filter.origin.toLowerCase());
+                        !this.filter.origin || ride.origin.includes(this.filter.origin);
+            
                     const destinationMatch =
-                        !this.filter.destination ||
-                        ride.destination.toLowerCase().includes(this.filter.destination.toLowerCase());
-
-                    return departureDateMatch && returnDateMatch && originMatch && destinationMatch;
+                        !this.filter.destination || ride.destination.includes(this.filter.destination);
+            
+                    return (
+                        requestTypeMatch &&
+                        rideTypeMatch &&
+                        departureDateMatch &&
+                        returnDateMatch &&
+                        originMatch &&
+                        destinationMatch
+                    );
                 });
             }
         },
         onLoad() {
-            // 初始化时加载数据并检查登录状态
+            this.resetFilters();
             this.refresh();
-            uni.getStorage({
-                key: "userInfo",
-                success: () => {
-                    this.isLogin = true;
-                },
-                fail: () => {
-                    this.isLogin = false;
-                }
-            });
         },
         onShow() {
-            // 页面重新显示时刷新数据
+			this.resetFilters();
             this.refresh();
         },
         methods: {
-            toRideDetail(rideId) {
-                uni.navigateTo({
-                    url: "/pages/ride/rideDetail?rideId=${rideId}"
-                });
+            openFilterPopup() {
+                this.$refs.filterPopup.open();
             },
-            popFilter(type) {
-                this.currentFilter = type;
-                this.$refs.filter.open();
+            applyFilters() {
+                this.$refs.filterPopup.close();
+				this.refresh();
             },
-            maskClick() {
-                this.$refs.filter.close();
-            },
-            onClickSearch() {
-                this.$refs.filter.close();
+            resetFilters() {
+                this.filter = {
+                    requestType: "不限",
+                    rideType: "不限",
+                    departureDate: "",
+                    returnDate: "",
+                    origin: "",
+                    destination: ""
+                };
             },
             refresh() {
-                if (!this.triggered) {
-                    this.triggered = true;
-                    this.offset = 0;
-                    this.rideList = [];
-                    this.status = "loading";
-                    this.getRideList();
-                }
+                this.triggered = true; // 开始下拉刷新
+                this.offset = 0; // 重置偏移量
+                this.status = "loading"; // 重置加载状态
+				this.rideList = []; //重置顺风车列表
+                this.getRideList(); // 加载顺风车信息
             },
-            getRideList() {
+            async getRideList() {
                 const opts = {
                     path: `/ride/getRideList?offset=${this.offset}&limit=${this.limit}`,
-                    type: 'GET'
+                    type: "GET"
                 };
                 requestAPI(opts)
                     .then(res => {
                         if (res.data.status === 100) {
+                            // 如果是刷新操作，覆盖已有列表；否则追加到列表中
                             this.rideList = this.rideList.concat(res.data.data);
                             this.offset += res.data.data.length;
                             this.status = res.data.data.length !== this.limit ? "noMore" : "more";
@@ -193,7 +194,7 @@
                                 icon: "none"
                             });
                         }
-                        this.triggered = false;
+                        this.triggered = false; // 结束下拉刷新
                     })
                     .catch(error => {
                         console.error("Failed to fetch ride list:", error);
@@ -205,11 +206,19 @@
                     });
             },
             onScrollLower() {
-                if (this.status === "loading" || this.status === "noMore") {
-                    return;
-                }
+                if (this.status === "loading" || this.status === "noMore") return;
                 this.status = "loading";
                 this.getRideList();
+            },
+            toPostRide() {
+                uni.navigateTo({
+                    url: "/pages/ride/ridePost"
+                });
+            },
+            toRideDetail(rideId) {
+                uni.navigateTo({
+                    url: `/pages/ride/rideDetail?rideId=${rideId}`
+                });
             }
         }
     };
@@ -217,72 +226,74 @@
 
 <style>
     #ride-main {
-        position: absolute;
         width: 100vw;
         height: 100vh;
-        top: 0;
-        background-color: white;
-        scroll-y: false;
-    }
-
-    .column-container {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .row-container {
-        display: flex;
-        flex-direction: row;
-    }
-
-    .filter-box {
-        padding-top: 2px;
         position: relative;
-        height: 42px;
+        background-color: white;
+    }
+
+    .filter-header {
         width: 100%;
-        overflow-y: scroll;
+        height: 30px;
+        background-color: #f2f0f0;
+        display: flex;
         align-items: center;
-        background-color: rgba(255, 255, 255, 0.9);
-        box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 5px;
-        box-sizing: border-box;
-        flex-shrink: 0 !important;
+        padding: 0 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
 
-    .filter-item {
-        border: 0.5px solid rgb(111, 111, 111, 0.2);
-        background-color: rgba(22, 132, 253, 0.05);
-        margin: 0 7px 0 7px;
-        border-radius: 15px;
-        padding: 0 8px 0 8px;
-        font-size: 14px;
-    }
-
-    .ride-box-container {
-        width: 100vw;
-        height: 160px;
-        margin-bottom: 10px;
+    .filter-text {
+        font-size: 13px;
+        color: #fa6969;
+        cursor: pointer;
     }
 
     .ride-scroll {
-        height: calc(100vh - 92px);
-        width: 100%;
-        background-color: white;
+        height: calc(100vh - 50px);
         overflow-y: scroll;
     }
 
-    .no-more-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center; /* 水平居中 */
-        justify-content: center; /* 垂直居中 */
-        width: 100%;
-        padding: 20px 0;
+    .ride-box-container {
+        margin-bottom: 10px;
     }
 
-    .no-more-line {
+    .filter-popup {
+        padding: 15px;
+    }
+
+    .filter-title {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .filter-item {
+        margin-bottom: 15px;
+    }
+
+    .filter-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+
+    .confirm-button {
+        background-color: red;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
         font-size: 14px;
-        color: #666;
-        text-align: center; /* 居中对齐 */
-        line-height: 1.5;
+        cursor: pointer;
+    }
+
+    .reset-button {
+        background-color: white;
+        color: red;
+        padding: 10px 20px;
+        border: 1px solid red;
+        border-radius: 5px;
+        font-size: 14px;
+        cursor: pointer;
     }
 </style>

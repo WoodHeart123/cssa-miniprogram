@@ -72,8 +72,8 @@
 		props: ["rideInfo"],
 		data() {
 			return {
-				requestTypeConstrainValue: ["未知", "出顺风车", "求顺风车"],
-				rideTypeContraintValue: ["未知", "单程", "往返"],
+				requestTypeConstrainValue: ["出顺风车", "求顺风车"],
+				rideTypeContraintValue: ["单程", "往返"],
 				ridePublishTime: "",
 				showRideTime: true,
 				defaultRideImage:
@@ -87,6 +87,9 @@
 			};
 		},
 		mounted() {
+			// 获取用户信息
+			this.fetchPostUserInfo();
+			
 			// 初始化发布时间显示逻辑
 			if (moment(this.rideInfo.publishedTime).valueOf() === 0) {
 				this.showRideTime = false;
@@ -97,9 +100,6 @@
 			} else {
 				this.ridePublishTime = moment(this.rideInfo.publishedTime).locale("zh-cn").fromNow();
 			}
-
-			// 获取用户信息
-			this.fetchPostUserInfo();
 		},
 		computed: {
 			formatDepartureTime() {
@@ -117,9 +117,9 @@
 					: this.rideInfo.description;
 			},
 			requestTypeSeatingInfo() {
-				if (this.rideInfo.requestType === 1) {
+				if (this.rideInfo.requestType === 0) {
 					return `可用座位：${this.rideInfo.availableSeats || 0}个`;
-				} else if (this.rideInfo.requestType === 2) {
+				} else if (this.rideInfo.requestType === 1) {
 					return `需要座位：${this.rideInfo.requestedSeats || 0}个`;
 				}
 				return "";
@@ -127,7 +127,7 @@
 		},
 		methods: {
 			// 获取发布用户头像和昵称
-			fetchPostUserInfo() {
+			async fetchPostUserInfo() {
 				requestAPI({
 					path: "/user/getUserInfo",
 					type: "GET",
