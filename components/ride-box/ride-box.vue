@@ -46,8 +46,18 @@
 					{{ requestTypeSeatingInfo }}
 				</span>
 			</view>
+			
+			<!--描述-->
 			<view class="description-box">{{ trimmedDescription }}</view>
-			<view class="publish-time-box" v-if="showRideTime">发布于：{{ ridePublishTime }}</view>
+
+			<!-- 发布信息 -->
+			<view class="row-container publish-info-box">
+				<view class="row-container user-info">
+					<image class="avatar" :src="postUserInfo.avatarUrl || defaultAvatarUrl" mode="aspectFill" />
+					<text class="nickname">{{ postUserInfo.nickname || "匿名" }}</text>
+				</view>
+				<view class="publish-time">发布于：{{ ridePublishTime }}</view>
+			</view>
 		</view>
 	</view>
 </template>
@@ -55,6 +65,7 @@
 <script>
 	import moment from "moment/min/moment-with-locales";
 	import "moment/locale/zh-cn";
+	import requestAPI from "@/api/request.js";
 
 	export default {
 		name: "ride-box",
@@ -66,7 +77,13 @@
 				ridePublishTime: "",
 				showRideTime: true,
 				defaultRideImage:
-					"https://prod-9gip97mx4bfa32a3-1312104819.tcloudbaseapp.com/ride/%E9%A1%BA%E9%A3%8E%E8%BD%A6%E9%BB%98%E8%AE%A4%E5%9B%BE%E7%89%87.jpg?sign=ff829501d8241dc11edbf64ca3850ca8&t=1731883928"
+					"https://prod-9gip97mx4bfa32a3-1312104819.tcloudbaseapp.com/ride/%E9%A1%BA%E9%A3%8E%E8%BD%A6%E9%BB%98%E8%AE%A4%E5%9B%BE%E7%89%87.jpg?sign=ff829501d8241dc11edbf64ca3850ca8&t=1731883928",
+				defaultAvatarUrl:
+					"https://prod-9gip97mx4bfa32a3-1312104819.tcloudbaseapp.com/default-avatar.png",
+				postUserInfo: {
+					avatarUrl: "",
+					nickname: "匿名"
+				}
 			};
 		},
 		mounted() {
@@ -80,6 +97,9 @@
 			} else {
 				this.ridePublishTime = moment(this.rideInfo.publishedTime).locale("zh-cn").fromNow();
 			}
+
+			// 获取用户信息
+			this.fetchPostUserInfo();
 		},
 		computed: {
 			formatDepartureTime() {
@@ -106,9 +126,27 @@
 			}
 		},
 		methods: {
+			// 获取发布用户头像和昵称
+			fetchPostUserInfo() {
+				requestAPI({
+					path: "/user/getUserInfo",
+					type: "GET",
+					header: { "x-wx-openid": this.rideInfo.userId }
+				}).then(response => {
+					if (response.data.status === 100) {
+						this.postUserInfo = response.data.data;
+					} else {
+						console.warn("获取发布用户信息失败:", response.data.message);
+						console.log(this.rideInfo.userId);
+					}
+				}).catch(error => {
+					console.error("获取发布用户信息出错:", error);
+				});
+			},
+			// 跳转到详情页
 			toRideDetail() {
 				uni.navigateTo({
-					url: "/pages/ride/rideDetail?rideInfo=" + encodeURIComponent(JSON.stringify(this.rideInfo))
+					url: `/pages/ride/rideDetail?rideId=${this.rideInfo.rideId}`
 				});
 			}
 		}
@@ -207,10 +245,29 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
-	.publish-time-box {
+	.publish-info-box {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-top: 10px;
+	}
+	.user-info {
+		display: flex;
+		align-items: center;
+	}
+	.avatar {
+		width: 30px;
+		height: 30px;
+		border-radius: 50%;
+		margin-right: 10px;
+	}
+	.nickname {
+		font-size: 12px;
+		color: #333;
+	}
+	.publish-time {
 		font-size: 12px;
 		color: #555;
 		text-align: right;
-		margin-top: 10px;
 	}
 </style>

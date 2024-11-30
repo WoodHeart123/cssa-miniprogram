@@ -39,7 +39,7 @@
         >
             <!-- 顺风车信息列表 -->
             <view class="ride-box-container" v-for="(rideInfo, index) in filteredRideList" :key="index">
-                <rideBoxVue :rideInfo="rideInfo"></rideBoxVue>
+                <rideBoxVue :rideInfo="rideInfo" @rideClick="toRideDetail"></rideBoxVue>
             </view>
 
             <!-- 加载更多提示 -->
@@ -152,16 +152,9 @@
             this.refresh();
         },
         methods: {
-            toPostRide() {
-                if (!this.isLogin) {
-                    uni.showToast({
-                        title: "请先登录",
-                        icon: "none"
-                    });
-                    return;
-                }
+            toRideDetail(rideId) {
                 uni.navigateTo({
-                    url: "/pages/ride/ridePost"
+                    url: "/pages/ride/rideDetail?rideId=${rideId}"
                 });
             },
             popFilter(type) {
@@ -186,7 +179,7 @@
             getRideList() {
                 const opts = {
                     path: `/ride/getRideList?offset=${this.offset}&limit=${this.limit}`,
-                    type: "GET"
+                    type: 'GET'
                 };
                 requestAPI(opts)
                     .then(res => {

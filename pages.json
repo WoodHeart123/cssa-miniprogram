@@ -216,6 +216,20 @@
 				"navigationBarTitleText" : "顺风车",
 				"enablePullDownRefresh": true
 			}
+		},
+		{
+			"path" : "pages/ride/rideDetail",
+			"style" : 
+			{
+				"navigationBarTitleText" : "顺风车详情"
+			}
+		},
+		{
+			"path" : "pages/ride/ridePost",
+			"style" : 
+			{
+				"navigationBarTitleText" : "发布顺风车"
+			}
 		}
 	],
 	"condition": {
