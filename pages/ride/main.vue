@@ -243,7 +243,7 @@
     }
 
     .filter-text {
-        font-size: 13px;
+        font-size: 15px;
         color: #fa6969;
         cursor: pointer;
     }

@@ -5,7 +5,7 @@
             <view class="card uni-form-item uni-column">
                 <uni-forms-item name="imageList">
                     <view class="image_upload">
-                        <text class="required">* </text>图片上传：
+                        <text>图片上传：</text>
                         <uni-file-picker
                             limit="5"
                             fileMediatype="image"
@@ -221,7 +221,7 @@
         </uni-forms>
 
         <!-- 退出弹窗 -->
-        <uni-popup ref="exitPopup" type="center" background-color="#fff">
+        <!-- <uni-popup ref="exitPopup" type="center" background-color="#fff">
             <view class="popup-header">
                 <text>退出提示</text>
                 <text class="popup-close" @click="closeExitPopup">×</text>
@@ -230,10 +230,10 @@
                 <text>编辑内容将会丢失，确定要退出吗？</text>
             </view>
             <view class="popup-footer">
-                <button class="popup-button" @click="confirmExit">确定退出</button>
-                <button class="popup-button" @click="closeExitPopup">返回编辑</button>
+                <button class="popup-button confirm" @click="confirmExit">确定退出</button>
+                <button class="popup-button cancel" @click="closeExitPopup">返回编辑</button>
             </view>
-        </uni-popup>
+        </uni-popup> -->
 		
 		 <!-- 必填字段未填写提示弹窗 -->
         <uni-popup ref="errorPopup" type="center" background-color="#fff">
@@ -257,9 +257,9 @@
 					imageList: [],
 					origin: "",
 					destination: "",
-					departureTime: "",
-					estimatedArrivalTime: "",
-					returnTime: "",
+					departureTime: null,
+					estimatedArrivalTime: null,
+					returnTime: null,
 					rideType: "",
 					requestType: "",
 					availableSeats: "",
@@ -272,6 +272,7 @@
 					},
 					description: "",
 				},
+				expiredRide: null,
 				errorMessage: "", // 错误提示信息
 				requestTypeOptions: [
 					{ text: "出顺风车", value: "0" },
@@ -301,31 +302,28 @@
 			if (options.ride) {
 				this.edit = true;
 				this.ride = JSON.parse(decodeURIComponent(options.ride));
+				this.expiredRide = JSON.parse(decodeURIComponent(options.ride)); // 复制一份已过期的顺风车信息
 			} else {
 				this.edit = false;
 				this.initializeRide();
 			}
-			uni.onBackPress(this.onBackPress); // 页面加载时注册返回事件
 		},
-		onUnload() {
-			uni.offBackPress(this.onBackPress); // 页面卸载时移除事件监听
-		},
-		onBackPress(event) {
-			if (event.from === "navigateBack") {
-				this.showExitPopup();
-				return true; // Prevent default back navigation
-			}
-			return false;
-		},
+		// onUnload() {
+		// 	console.log("this.checkIfRideUpdated() returns " + this.checkIfRideUpdated());
+		// 	if (this.checkIfRideUpdated()) {
+		// 		this.showExitPopup();
+		// 		return false; // 阻止页面卸载
+		// 	}
+		// },
 		methods: {
 			initializeRide() {
 				this.ride = {
 					imageList: [],
 					origin: "",
 					destination: "",
-					estimatedArrivalTime: "",
-					departureTime: "",
-					returnTime: "",
+					estimatedArrivalTime: null,
+					departureTime: null,
+					returnTime: null,
 					rideType: "",
 					requestType: "",
 					availableSeats: "",
@@ -338,22 +336,93 @@
 					},
 					description: "",
 				};
+			},				
+			checkIfRideUpdated() {
+			    const fieldsToCheck = [
+			        "origin",
+			        "destination",
+			        "estimatedArrivalTime",
+			        "departureTime",
+			        "returnTime",
+			        "rideType",
+			        "requestType",
+			        "availableSeats",
+			        "price",
+			        "make",
+			        "model",
+			        "description"
+			    ];
+			
+			    if (this.expiredRide) {            
+			        // 比较普通字段
+			        for (const field of fieldsToCheck) {
+			            if (this.ride[field] !== "" && this.ride[field] !== this.expiredRide[field]) {
+			                return true; // 如果任意字段被更新，返回 true
+			            }
+			        }
+			
+			        // 比较 imageList
+			        if (this.ride.imageList.length !== 0) {
+			            if (
+			                this.expiredRide.imageList.length === 0 ||
+			                this.ride.imageList.length !== this.expiredRide.imageList.length
+			            ) {
+			                return true; // 图片数量不一致
+			            }
+			            for (let i = 0; i < this.ride.imageList.length; i++) {
+			                if (this.ride.imageList[i] !== this.expiredRide.imageList[i]) {
+			                    return true; // 图片内容不一致
+			                }
+			            }
+			        }
+			
+			        // 比较 contactInfo
+			        const contactFieldsToCheck = ["weChatId", "phoneNumber"];
+			        for (const field of contactFieldsToCheck) {
+			            if (
+			                this.ride.contactInfo[field] !== "" &&
+			                this.ride.contactInfo[field] !== this.expiredRide.contactInfo[field]
+			            ) {
+			                return true; // 联系方式不一致
+			            }
+			        }
+			    } else {
+			        // 如果没有 expiredRide，检查是否有非默认值
+			        for (const field of fieldsToCheck) {
+			            if (this.ride[field] !== "") {
+			                return true; // 任意字段非默认值
+			            }
+			        }
+			
+			        // 检查 imageList 和 contactInfo 是否有非默认值
+			        if (this.ride.imageList.length !== 0) {
+			            return true;
+			        }
+			        const contactFieldsToCheck = ["weChatId", "phoneNumber"];
+			        for (const field of contactFieldsToCheck) {
+			            if (this.ride.contactInfo[field] !== "") {
+			                return true; // 联系方式有填写
+			            }
+			        }
+			    }
+			
+			    return false;
 			},
 			async submit(ref) {
 				// 检查未填写的必填字段
-				const missingFields = [];
+				const missingFields = [];				
 				for (const key in this.rules) {
-					if (
-						this.rules[key].required &&
-						(!this.ride[key] || (typeof this.ride[key] === "string" && this.ride[key].trim() === ""))
-					) {
-						missingFields.push(this.rules[key].errorMessage);
-					}
+				    if (
+				        this.rules[key].required &&
+				        (!this.ride[key] || (typeof this.ride[key] === "string" && this.ride[key].trim() === ""))
+				    ) {
+				        missingFields.push(this.rules[key].errorMessage);
+				    }
 				}
 
 				// 如果有未填写的字段，弹出提示
 				if (missingFields.length > 0) {
-					this.errorMessage = `以下字段未填写：\n${missingFields.join("\n")}`;
+					this.errorMessage = `以下字段未填写\n(弹窗5秒后自动关闭)\n--------------------\n${missingFields.join("\n")}`;
 					this.showErrorPopup();
 					return;
 				}
@@ -398,34 +467,45 @@
 				}
 			},
 			showErrorPopup() {
-			        if (this.$refs.errorPopup) {
-			            this.$refs.errorPopup.open();
-			            setTimeout(() => {
-			                this.$refs.errorPopup.close();
-			            }, 5000); // 3秒后自动关闭
-			        }
-			    },
+			    if (this.$refs.errorPopup) {
+			        this.$refs.errorPopup.open();
+			        let timeoutId=setTimeout(() => {
+						clearTimeout(timeoutId);
+			            this.$refs.errorPopup.close();
+			        }, 5000);
+			    }
+		    },
 			onRideTypeChange(value) {
-				if (value === "1") {
-					this.rules.returnTime.required = true;
-				} else {
-						this.rules.returnTime.required = false;
-				}
+			    // 动态修改规则
+			    this.rules.returnTime.required = String(value) === "1";
+			
+			    // 如果必填并未填写，触发校验
+			    if (value === "1") {
+			        this.$refs.rideForm.validateField("returnTime");
+			    } else {
+			        // 非必填时，清除校验状态
+			        this.$refs.rideForm.clearValidate("returnTime");
+			    }
 			},
-			showExitPopup() {
-				if (this.$refs.exitPopup) {
-					this.$refs.exitPopup.open(); // 打开弹窗
-				}
-			},
-			closeExitPopup() {
-				if (this.$refs.exitPopup) {
-					this.$refs.exitPopup.close(); // 关闭弹窗
-				}
-			},
-			confirmExit() {
-				this.closeExitPopup();
-				uni.navigateBack();
-			},
+			// showExitPopup() {
+			// 	console.log("showExitPopup() is called.");
+			// 	if (this.$refs.exitPopup) {
+			// 		console.log("exitPopup ref exists.");
+			// 		this.$refs.exitPopup.open(); // Open the exit popup
+			// 		console.log("exitPopup opened.");
+			// 	} else {
+			// 		console.error("exitPopup ref is undefined.");
+			// 	}
+			// },
+			// closeExitPopup() {
+			// 	if (this.$refs.exitPopup) {
+			// 		this.$refs.exitPopup.close(); // 关闭弹窗
+			// 	}
+			// },
+			// confirmExit() {
+			// 	this.closeExitPopup();
+			// 	uni.navigateBack();
+			// },
 		},
 	};
 </script>
@@ -468,42 +548,66 @@
 	}
 
 	.popup-header {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		padding: 10px;
-		border-bottom: 1px solid #eee;
+	    display: flex;
+	    justify-content: space-between;
+	    align-items: center;
+	    padding: 10px;
+	    border-bottom: 1px solid #eee;
 	}
+	
 	.popup-body {
-		padding: 15px;
+	    padding: 15px;
+	    text-align: center;
 	}
+	
 	.popup-footer {
-		display: flex;
-		justify-content: space-between;
-		padding: 15px;
+	    display: flex;
+	    justify-content: space-between;
+	    padding: 15px;
 	}
+	
 	.popup-close {
-		cursor: pointer;
-		font-size: 18px;
+	    cursor: pointer;
+	    font-size: 18px;
+	    color: #333;
 	}
+	
 	.popup-button {
-		flex: 1;
-		padding: 10px;
-		margin: 0 5px;
-		text-align: center;
-		background-color: #9b0000;
-		color: #fff;
-		border-radius: 5px;
-		
+	    flex: 1;
+	    padding: 10px;
+	    margin: 0 5px;
+	    text-align: center;
+	    border-radius: 5px;
+	    cursor: pointer;
+	}
+	
+	.popup-button.confirm {
+	    background-color: #9b0000;
+	    color: #fff;
+	}
+	
+	.popup-button.cancel {
+	    background-color: #fff;
+	    color: #333;
+	    border: 1px solid #ddd;
 	}
 
 	.popup-content {
-		padding: 20px;
-		text-align: center;
-		font-size: 16px;
-		color: #ff0000;
-		background-color: #fff;
-		border-radius: 8px;
-		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+	    width: 80%; /* 设置宽度 */
+	    max-width: 300px; /* 最大宽度 */
+	    padding: 20px; /* 内边距 */
+	    text-align: center; /* 文本居中 */
+	    font-size: 15px; /* 字体大小 */
+	    color: #333; /* 文本颜色 */
+	    background-color: #fff; /* 背景颜色 */
+	    border-radius: 10px; /* 圆角 */
+	    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* 阴影 */
+	    position: fixed; /* 固定定位 */
+	    top: 50%; /* 距离顶部50% */
+	    left: 50%; /* 距离左侧50% */
+	    transform: translate(-50%, -50%); /* 通过平移居中 */
+	    z-index: 1000; /* 确保显示在顶部 */
+	    border: 1px solid #ddd; /* 边框 */
 	}
+
 </style>
