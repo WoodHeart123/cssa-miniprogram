@@ -117,6 +117,7 @@
 					: this.rideInfo.description;
 			},
 			requestTypeSeatingInfo() {
+				console.log("this.rideInfo.availableSeats is" + this.rideInfo.availableSeats);
 				if (this.rideInfo.requestType === 0) {
 					return `可用座位：${this.rideInfo.availableSeats || 0}个`;
 				} else if (this.rideInfo.requestType === 1) {

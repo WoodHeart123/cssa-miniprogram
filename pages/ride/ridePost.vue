@@ -22,10 +22,9 @@
                 <uni-forms-item name="requestType">
                     <text class="required">* </text>请求类型：
                     <uni-data-checkbox
-                        selectedColor="#9B0000"
+						v-model="ride.requestType"
                         :localdata="requestTypeOptions"
-                        v-model="ride.requestType"
-                        @change="toggleRequestType"
+                        selectedColor="#9B0000"
                     ></uni-data-checkbox>
                 </uni-forms-item>
             </view>
@@ -38,6 +37,7 @@
                         v-model="ride.rideType"
                         :localdata="rideTypeOptions"
                         selectedColor="#9B0000"
+						@change="onRideTypeChange"
                     ></uni-data-checkbox>
                 </uni-forms-item>
             </view>
@@ -100,19 +100,20 @@
 			    </uni-forms-item>
 			</view>
 
-            <!-- 返回时间（可选） -->
-            <view class="card" v-if="ride.rideType === '1'">
+            <!-- 返回时间（动态必填） -->
+            <view class="card" v-if="ride.rideType === 1">
                 <uni-forms-item name="returnTime">
                     <text class="required">* </text>返回时间：
                     <uni-datetime-picker
                         v-model="ride.returnTime"
                         type="datetime"
-						returnType="string"
-						format="yyyy-MM-dd HH:mm:ss"
+                        returnType="string"
+                        format="yyyy-MM-dd HH:mm:ss"
                         placeholder="请选择返回时间(默认CST)"
                     ></uni-datetime-picker>
                 </uni-forms-item>
             </view>
+
 
             <!-- 座位数和价格 -->
             <view class="card">
@@ -120,11 +121,11 @@
                     <view class="row-view">
                         <view style="flex: 1;">
                             <text class="required">* </text>
-                            {{ ride.requestType === "1" ? "需要座位数：" : "可用座位数：" }}
+                            {{ ride.requestType === 1 ? "需要座位数：" : "可用座位数：" }}
                             <uni-easyinput
                                 type="number"
-								trim="all"
-                                v-model="ride.availableSeats"
+                                trim="all"
+                                v-model="seatsBinding"
                                 placeholder="请输入座位数"
                                 placeholder-style="font-size:14px;color:gray"
                             />
@@ -144,7 +145,7 @@
             </view>
 
             <!-- 车辆品牌和类型 -->
-            <view class="card" v-if="ride.requestType === '0'">
+            <view class="card" v-if="ride.requestType === 0">
                 <uni-forms-item name="vehicle">
                     <text>车辆品牌与类型（选填）：</text>
                     <view class="row-view">
@@ -201,7 +202,7 @@
                         type="textarea"
                         v-model="ride.description"
                         placeholder="请填写顺风车描述（选填）"
-                        maxlength="300"
+                        maxlength="500"
                         placeholder-style="font-size:14px;color:gray"
                     />
                 </uni-forms-item>
@@ -262,7 +263,8 @@
 					returnTime: null,
 					rideType: "",
 					requestType: "",
-					availableSeats: "",
+					availableSeats: 0,
+					requestedSeats: 0,
 					price: "",
 					make: "",
 					model: "",
@@ -275,12 +277,12 @@
 				expiredRide: null,
 				errorMessage: "", // 错误提示信息
 				requestTypeOptions: [
-					{ text: "出顺风车", value: "0" },
-					{ text: "求顺风车", value: "1" },
+					{ text: "出顺风车", value: 0 },
+					{ text: "求顺风车", value: 1 },
 				],
 				rideTypeOptions: [
-					{ text: "单程", value: "0" },
-					{ text: "往返", value: "1" },
+					{ text: "单程", value: 0 },
+					{ text: "往返", value: 1 },
 				],
 				rules: {
 					requestType: {required: true, errorMessage: "- 请求类型"},
@@ -289,13 +291,13 @@
 					destination: { required: true, errorMessage: "- 目的地" },
 					departureTime: { required: true, errorMessage: "- 出发时间" },
 					returnTime: {
-						required: true,
+						required: false,
 						errorMessage: "- 返回时间",
 						trigger: "blur",
 					},
 					availableSeats: { required: true, errorMessage: "- 座位数" },
 					price: { required: true, errorMessage: "- 价格" },
-				},
+				}
 			};
 		},
 		onLoad(options) {
@@ -308,13 +310,34 @@
 				this.initializeRide();
 			}
 		},
-		// onUnload() {
-		// 	console.log("this.checkIfRideUpdated() returns " + this.checkIfRideUpdated());
-		// 	if (this.checkIfRideUpdated()) {
-		// 		this.showExitPopup();
-		// 		return false; // 阻止页面卸载
-		// 	}
-		// },
+		watch: {
+		    "ride.rideType"(newValue) {
+		        // Dynamically update the validation rule for returnTime
+		        this.rules.returnTime.required = String(newValue) === "1";
+		
+		        // Validate or clear validation for returnTime based on the new rule
+		        if (newValue === "1") {
+		            this.$refs.rideForm.validateField("returnTime");
+		        } else {
+		            this.$refs.rideForm.clearValidate("returnTime");
+		        }
+		    }
+		},
+		computed: {
+		    seatsBinding: {
+		        get() {
+		            return this.ride.requestType === 1 ? this.ride.requestedSeats : this.ride.availableSeats;
+		        },
+		        set(value) {
+		            if (this.ride.requestType === 1) {
+		                this.ride.requestedSeats = value;
+		            } else {
+		                this.ride.availableSeats = value;
+		            }
+		        }
+		    },
+			
+		},
 		methods: {
 			initializeRide() {
 				this.ride = {
@@ -326,7 +349,8 @@
 					returnTime: null,
 					rideType: "",
 					requestType: "",
-					availableSeats: "",
+					availableSeats: 0,
+					requestedSeats: 0,
 					price: "",
 					make: "",
 					model: "",
@@ -475,18 +499,6 @@
 			        }, 5000);
 			    }
 		    },
-			onRideTypeChange(value) {
-			    // 动态修改规则
-			    this.rules.returnTime.required = String(value) === "1";
-			
-			    // 如果必填并未填写，触发校验
-			    if (value === "1") {
-			        this.$refs.rideForm.validateField("returnTime");
-			    } else {
-			        // 非必填时，清除校验状态
-			        this.$refs.rideForm.clearValidate("returnTime");
-			    }
-			},
 			// showExitPopup() {
 			// 	console.log("showExitPopup() is called.");
 			// 	if (this.$refs.exitPopup) {

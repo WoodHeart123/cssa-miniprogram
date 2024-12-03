@@ -141,7 +141,7 @@ export default {
         // 获取发布用户信息
         fetchPostUserInfo() {
             const opts = {
-                path: "/getUserInfo",
+                path: "/user/getUserInfo",
                 type: "GET",
                 header: {
                     "x-wx-openid": this.rideInfo.userId,
