@@ -87,19 +87,42 @@
 			};
 		},
 		mounted() {
-			// 获取用户信息
-			this.fetchPostUserInfo();
-			
-			// 初始化发布时间显示逻辑
-			if (moment(this.rideInfo.publishedTime).valueOf() === 0) {
-				this.showRideTime = false;
-			} else if (moment().year() - moment(this.rideInfo.publishedTime).year() > 0) {
-				this.ridePublishTime = moment(this.rideInfo.publishedTime).format("YYYY-MM-DD");
-			} else if (Date.now() - moment(this.rideInfo.publishedTime).valueOf() > 86400000 * 7) {
-				this.ridePublishTime = moment(this.rideInfo.publishedTime).format("MM-DD");
-			} else {
-				this.ridePublishTime = moment(this.rideInfo.publishedTime).locale("zh-cn").fromNow();
-			}
+		    // 获取用户信息
+		    this.fetchPostUserInfo();
+		
+		    // 将 publishedTime 转换为 CST 时间
+		    const publishedCST = moment(this.rideInfo.publishedTime).utcOffset("-0600");
+		    const nowCST = moment().utcOffset("-0600");
+		
+		    // 初始化发布时间显示逻辑
+		    if (publishedCST.isSameOrBefore(moment(0))) {
+		        this.showRideTime = false; // 没有发布时间
+		    } else {
+		        const minutesAgo = nowCST.diff(publishedCST, "minutes");
+		        const hoursAgo = nowCST.diff(publishedCST, "hours");
+		        const daysAgo = nowCST.diff(publishedCST, "days");
+		        const yearsAgo = nowCST.diff(publishedCST, "years");
+		
+		        if (minutesAgo < 1) {
+		            // 不到1分钟
+		            this.ridePublishTime = "刚刚";
+		        } else if (minutesAgo < 60) {
+		            // 1分钟到59分钟
+		            this.ridePublishTime = `${minutesAgo} 分钟前`;
+		        } else if (hoursAgo < 24) {
+		            // 1小时到23小时
+		            this.ridePublishTime = `${hoursAgo} 小时前`;
+		        } else if (daysAgo < 7) {
+		            // 1天到6天
+		            this.ridePublishTime = `${daysAgo} 天前`;
+		        } else if (yearsAgo > 0) {
+		            // 跨年
+		            this.ridePublishTime = publishedCST.format("YYYY-MM-DD");
+		        } else {
+		            // 超过7天但在同一年
+		            this.ridePublishTime = publishedCST.format("MM-DD");
+		        }
+		    }
 		},
 		computed: {
 			formatDepartureTime() {
