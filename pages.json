@@ -230,6 +230,13 @@
 			{
 				"navigationBarTitleText" : "发布顺风车"
 			}
+		},
+		{
+			"path" : "pages/my/myRide",
+			"style" : 
+			{
+				"navigationBarTitleText" : "我的顺风车"
+			}
 		}
 	],
 	"condition": {

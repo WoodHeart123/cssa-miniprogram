@@ -47,9 +47,10 @@
 				<text class="heading-3">公寓转租</text>
 			</view>
 			
+			<!-- 主页显示是Carpool，但实际数据等都用Ride-->
 			<view class="column-container function-button" @click="toRide">
-				<img style="width: 32px;height: 32px; margin-bottom:10px;" src="@/static/main/ride.svg" />
-				<text class="paragraph-1">Ride</text>
+				<img style="width: 35px;height: 35px; margin-bottom:10px;" src="@/static/main/ride.svg" />
+				<text class="paragraph-1">Carpool</text> 
 				<text class="heading-3">顺风车</text>
 			</view>
 
@@ -127,11 +128,14 @@
 				menuButtonInfo: {},
 				ads: [
 					{imgUrl:'https://prod-9gip97mx4bfa32a3-1312104819.tcloudbaseapp.com/ads/main%20page%20ads/2025%E6%98%A5%E6%99%9A%E4%B8%BB%E6%8C%81%E4%BA%BA%E6%8B%9B%E5%8B%9F.png?sign=b9aa28b04686b9cb2dc41e85d3c001a9&t=1731120159',
-					 link: 'https://mp.weixin.qq.com/s/r21LNuaNVVmwSr09VOamcA'},
-					{imgUrl: 'https://prod-9gip97mx4bfa32a3-1312104819.tcloudbaseapp.com/ads/main%20page%20ads/ad%20test%201.png?sign=b6464c3631544f6ba9453ca2856a71b8&t=1731033041',
-					 link: ''},
-					{imgUrl: 'https://prod-9gip97mx4bfa32a3-1312104819.tcloudbaseapp.com/ads/main%20page%20ads/ad%20test%202.png?sign=d1fe262d2972c82f3f1c82c37e21157b&t=1731033076',
-					 link: ''}
+					 link: 'https://mp.weixin.qq.com/s/r21LNuaNVVmwSr09VOamcA',
+					 label: '2025蛇年导演组'},
+					{imgUrl: 'https://prod-9gip97mx4bfa32a3-1312104819.tcloudbaseapp.com/ads/main%20page%20ads/2025%E8%9B%87%E5%B9%B4%E5%AF%BC%E6%BC%94%E7%BB%84%E4%BB%8B%E7%BB%8D.png?sign=870111c1a696971f5c9934e321bd82a2&t=1733284485',
+					 link: 'https://mp.weixin.qq.com/s/Z1j-vIWHaEflqnAPmm1wVA',
+					 label: '2025蛇年春晚主持人招募'},
+					{imgUrl: 'https://prod-9gip97mx4bfa32a3-1312104819.tcloudbaseapp.com/ads/main%20page%20ads/ad%20test%201.png?sign=5b9ffd1789ad991a4c8f5c3bf8f6a805&t=1733284645',
+					 link: '',
+					 label: '测试用汉堡图片'}
 				]
 			}
 		},

@@ -5,9 +5,10 @@
             <swiper-item
                 v-for="(image, index) in imagesToDisplay"
                 :key="index"
-                style="display: flex; align-items: center; justify-content: center;"
+                @click="previewImage(index)"
+                style="display: flex; align-items: center; justify-content: center; height: 200px;"
             >
-                <image mode="aspectFill" :src="image" />
+                <image mode="aspectFit" :src="image" style="width: 100%; height: 100%;" />
             </swiper-item>
         </swiper>
 
@@ -16,16 +17,20 @@
             <view class="tag" v-for="(tag, index) in rideTags" :key="index">{{ tag }}</view>
         </view>
 
+		<!-- 顺风车标题 -->
+		<view class="ride-title">
+            {{ rideInfo.origin }} {{ rideInfo.rideType === 1 ? '↔' : '→' }} {{ rideInfo.destination }}
+        </view>
+
         <!-- 顺风车价格 -->
         <view class="price-box">
             <view class="price">
-                {{ rideInfo.price }} 元/每人每程
+                ${{ rideInfo.price }}/每人每程
             </view>
-        </view>
-
-        <!-- 顺风车标题 -->
-        <view class="ride-title">
-            {{ rideInfo.origin }} → {{ rideInfo.destination }}
+			<text class="divider">|</text>
+            <text class="seats-info">
+                {{ rideInfo.requestType === 0 ? `可出${rideInfo.availableSeats}个座位` : `需要${rideInfo.requestedSeats}个座位` }}
+            </text>
         </view>
 
         <!-- 车辆信息 -->
@@ -84,8 +89,8 @@ export default {
             },
             defaultImage:
                 "https://prod-9gip97mx4bfa32a3-1312104819.tcloudbaseapp.com/ride/%E9%A1%BA%E9%A3%8E%E8%BD%A6%E9%BB%98%E8%AE%A4%E5%9B%BE%E7%89%87.jpg?sign=874f9cb0c12322055162c92ea77fa0f3&t=1732836080", // 默认图片
-            requestTypeConstrainValue: ["未知", "出顺风车", "求顺风车"], // 顺风车标签类型
-            rideTypeConstrainValue: ["未知", "单程", "往返"], // 顺风车类型
+            requestTypeConstrainValue: ["出顺风车", "求顺风车"], // 顺风车标签类型
+            rideTypeConstrainValue: ["单程", "往返"], // 顺风车类型
         };
     },
     computed: {
@@ -165,6 +170,13 @@ export default {
                         "https://prod-9gip97mx4bfa32a3-1312104819.tcloudbaseapp.com/default-avatar.png";
                 });
         },
+		// 图片预览功能
+        previewImage(index) {
+            uni.previewImage({
+                current: this.imagesToDisplay[index],
+                urls: this.imagesToDisplay,
+            });
+        },
         // 复制到剪贴板
         copyToClipboard(data) {
             uni.setClipboardData({
@@ -189,7 +201,6 @@ export default {
 
 <style>
 .ride-detail {
-    padding: 15px;
     background-color: #f9f9f9;
 }
 .swiper {
@@ -211,15 +222,26 @@ export default {
     border-radius: 5px;
 }
 .price-box {
-    font-size: 18px;
+    font-size: 16px;
     color: #9b0000;
     font-weight: bold;
+    display: flex;
+    align-items: center;
     margin-bottom: 10px;
 }
-.ride-title {
+.price-box .divider {
+    margin: 0 8px;
     font-size: 16px;
+    color: black;
+}
+.price-box .seats-info {
+    font-size: 16px;
+    color: black;
+}
+.ride-title {
+    font-size: 20px;
     font-weight: bold;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 }
 .vehicle-info {
     font-size: 14px;

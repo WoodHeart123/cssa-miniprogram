@@ -1,9 +1,11 @@
 <template>
     <view id="ride-main">
         <!-- 顶部筛选按钮 -->
-        <view class="filter-header">
-            <text class="filter-text" @click="openFilterPopup">筛选</text>
-        </view>
+		<view class="row-container filter-box">
+			<view class="setting-icon" @click="openFilterPopup">
+				<uni-icons type="settings-filled" size="30"></uni-icons>
+			</view>
+		</view>
 
         <!-- 顺风车信息列表 -->
         <scroll-view
@@ -37,27 +39,27 @@
 
                 <!-- 筛选项 -->
                 <view class="filter-item">
-                    <text>请求类型：</text>
-                    <uni-segmented-control v-model="filter.requestType" :values="['不限', '出顺风车', '求顺风车']" />
+                    <text class="filter-label">请求类型：</text>
+                    <uni-segmented-control :current="filter.requestTypeCurrent" :values="['不限', '出顺风车', '求顺风车']" active-color="#9b0000" style="text-align: center; justify-content: center; line-height: 40px;" @clickItem="onFilterRequestTypeClick"/>
                 </view>
                 <view class="filter-item">
-                    <text>顺风车类型：</text>
-                    <uni-segmented-control v-model="filter.rideType" :values="['不限', '单程', '往返']" />
+                    <text class="filter-label">顺风车类型：</text>
+                    <uni-segmented-control :current="filter.rideTypeCurrent" :values="['不限', '单程', '往返']" active-color="#9b0000" style="text-align: center; justify-content: center; line-height: 40px;" @clickItem="onFilterRideTypeClick" />
                 </view>
                 <view class="filter-item">
-                    <text>出发日期：</text>
-                    <uni-datetime-picker v-model="filter.departureDate" type="date" :start="startDate" :end="endDate" />
+                    <text class="filter-label">出发日期：</text>
+                    <uni-datetime-picker v-model="filter.departureDate" type="date" :start="startDate" :end="endDate" placeholder="选择出发日期" style="width: 100%;" />
                 </view>
-                <view class="filter-item" v-if="filter.rideType === '往返'">
-                    <text>返回日期：</text>
-                    <uni-datetime-picker v-model="filter.returnDate" type="date" :start="startDate" :end="endDate" />
+                <view class="filter-item" v-if="filter.rideType === 1">
+                    <text class="filter-label">返回日期：</text>
+                    <uni-datetime-picker v-model="filter.returnDate" type="date" :start="startDate" :end="endDate" placeholder="选择返回日期" style="width: 100%;" />
                 </view>
-                <view class="filter-item">
-                    <text>始发地：</text>
+				<view class="filter-item">
+                    <text class="filter-label">始发地：</text>
                     <uni-easyinput v-model="filter.origin" placeholder="输入始发地" />
                 </view>
                 <view class="filter-item">
-                    <text>目的地：</text>
+                    <text class="filter-label">目的地：</text>
                     <uni-easyinput v-model="filter.destination" placeholder="输入目的地" />
                 </view>
 
@@ -81,8 +83,10 @@
         data() {
             return {
                 filter: {
-                    requestType: "不限", // 默认值为“不限”
-                    rideType: "不限", // 默认值为“不限”
+                    requestType: "", // 默认值为“”
+					requestTypeCurrent: 0,
+                    rideType: "", // 默认值为“”
+					rideTypeCurrent: 0,
                     departureDate: "", // 出发日期
                     returnDate: "", // 返回日期
                     origin: "", // 始发地
@@ -110,13 +114,13 @@
                 return this.rideList.filter(ride => {
                     // 修复 requestType 筛选逻辑
                     const requestTypeMatch =
-                        this.filter.requestType === "不限" ||
-                        ride.requestType === (this.filter.requestType === "出顺风车" ? 1 : 2);
+                        this.filter.requestType === "" ||
+                        ride.requestType === this.filter.requestType;
             
                     // 修复 rideType 筛选逻辑
                     const rideTypeMatch =
-                        this.filter.rideType === "不限" ||
-                        ride.rideType === (this.filter.rideType === "单程" ? 1 : 2);
+                        this.filter.rideType === "" ||
+                        ride.rideType === this.filter.rideType;
             
                     const departureDateMatch =
                         !this.filter.departureDate ||
@@ -155,14 +159,36 @@
             openFilterPopup() {
                 this.$refs.filterPopup.open();
             },
+			onFilterRequestTypeClick(e) {
+				if (this.filter.requestTypeCurrent != e.currentIndex) {
+					this.filter.requestTypeCurrent = e.currentIndex;
+					if (e.currentIndex - 1 === 0) {
+						this.filter.requestType = 0;
+					} else if (e.currentIndex - 1 === 1) {
+						this.filter.requestType = 1;
+					}
+				}
+			},
+			onFilterRideTypeClick(e) {
+				if (this.filter.rideTypeCurrent != e.currentIndex) {
+					this.filter.rideTypeCurrent = e.currentIndex;
+					if (e.currentIndex - 1 === 0) {
+						this.filter.rideType = 0;
+					} else if (e.currentIndex - 1 === 1) {
+						this.filter.rideType = 1;
+					}
+				}
+			},
             applyFilters() {
                 this.$refs.filterPopup.close();
 				this.refresh();
             },
             resetFilters() {
                 this.filter = {
-                    requestType: "不限",
-                    rideType: "不限",
+                    requestType: "",
+					requestTypeCurrent: 0,
+                    rideType: "",
+					rideType: 0,
                     departureDate: "",
                     returnDate: "",
                     origin: "",
@@ -231,16 +257,30 @@
         position: relative;
         background-color: white;
     }
-
-    .filter-header {
-        width: 100%;
-        height: 30px;
-        background-color: #f2f0f0;
-        display: flex;
-        align-items: center;
-        padding: 0 10px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
+	
+	.row-container {
+		display: flex;
+		flex-direction: row;
+	}
+	
+	.filter-box {
+		padding-top: 2px;
+		position: relative;
+		height: 42px;
+		width: 100%;
+		overflow-y: scroll;
+		align-items: center;
+		background-color: rgba(255, 255, 255, 0.9);
+		box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 5px;
+		box-sizing: border-box;
+		flex-shrink: 0 !important;
+	}
+	
+	.setting-icon {
+		position: absolute;
+		left: 0;
+		width: 30px;
+	}
 
     .filter-text {
         font-size: 15px;
@@ -258,42 +298,54 @@
     }
 
     .filter-popup {
-        padding: 15px;
+        padding: 30px;
     }
-
+    
     .filter-title {
-        font-size: 18px;
+        font-size: 20px;
         font-weight: bold;
-        margin-bottom: 10px;
+        margin-bottom: 20px;
+        text-align: center;
     }
-
+    
     .filter-item {
-        margin-bottom: 15px;
+        margin-bottom: 20px;
+        font-size: 16px;
+        display: flex;
+        flex-direction: column;
     }
-
+	
+	.filter-label {
+	    margin-bottom: 5px;
+	    font-size: 14px;
+	}
+    
     .filter-buttons {
         display: flex;
         justify-content: space-between;
-        margin-top: 20px;
+        margin-top: 15px;
     }
-
+    
     .confirm-button {
-        background-color: red;
+        background-color: #9b0000;
         color: white;
-        padding: 10px 20px;
+        padding: 6px 15px;
         border: none;
         border-radius: 5px;
         font-size: 14px;
-        cursor: pointer;
+        flex: 1;
+        margin-right: 8px;
+        text-align: center;
     }
-
+    
     .reset-button {
         background-color: white;
-        color: red;
-        padding: 10px 20px;
-        border: 1px solid red;
+        color: #9b0000;
+        padding: 6px 15px;
+        border: 1px solid #9b0000;
         border-radius: 5px;
         font-size: 14px;
-        cursor: pointer;
+        flex: 1;
+        text-align: center;
     }
 </style>

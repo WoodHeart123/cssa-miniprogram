@@ -27,7 +27,7 @@
 			<!--标题-->
 			<view class="ride-title">
 				{{ this.rideInfo.origin }} 
-				<span v-if="this.rideInfo.rideType === 2">⇄</span>
+				<span v-if="this.rideInfo.rideType === 1">⇄</span>
 				<span v-else>→</span>
 				{{ this.rideInfo.destination }}
 			</view>
@@ -35,7 +35,7 @@
 			<!--出发/返回日期时间-->
 			<view class="time-box">
 				<view>{{ formatDepartureTime }}</view>
-				<view v-if="this.rideInfo.rideType === 2">{{ formatReturnTime }}</view>
+				<view v-if="this.rideInfo.rideType === 1">{{ formatReturnTime }}</view>
 			</view>
 			
 			<!--价格，可用/空余座位-->
