@@ -81,8 +81,10 @@
 				defaultAvatarUrl:
 					"https://prod-9gip97mx4bfa32a3-1312104819.tcloudbaseapp.com/default-avatar.png",
 				postUserInfo: {
+					avatar: 0,
 					avatarUrl: "",
-					nickname: "匿名"
+					nickname: "匿名",
+					isStudent: 0
 				}
 			};
 		},
@@ -149,19 +151,20 @@
 				return "";
 			}
 		},
-		methods: {
-			// 获取发布用户头像和昵称
+		methods: {		
+			// 获取发布用户头像，昵称，是否为学生
 			async fetchPostUserInfo() {
+				
 				requestAPI({
 					path: "/user/getUserInfo",
 					type: "GET",
-					header: { "x-wx-openid": this.rideInfo.userId }
+					header: { "x-wx-openid": this.rideInfo.openId }
 				}).then(response => {
 					if (response.data.status === 100) {
 						this.postUserInfo = response.data.data;
 					} else {
 						console.warn("获取发布用户信息失败:", response.data.message);
-						console.log(this.rideInfo.userId);
+						console.log(this.rideInfo.openId);
 					}
 				}).catch(error => {
 					console.error("获取发布用户信息出错:", error);

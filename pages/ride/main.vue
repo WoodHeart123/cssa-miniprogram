@@ -20,12 +20,13 @@
             @scrolltolower="onScrollLower"
         >
             <!-- 顺风车卡片 -->
-            <view class="ride-box-container" v-for="(rideInfo, index) in filteredRideList" :key="index">
+            <view class="ride-box-container" v-for="(rideInfo, index) in rideList" :key="index">
                 <rideBoxVue :rideInfo="rideInfo" @rideClick="toRideDetail"></rideBoxVue>
             </view>
 
             <!-- 加载状态 -->
-            <uni-load-more :content-text="contentText" :status="status"></uni-load-more>
+            <uni-load-more :status="this.status" :content-text="contentText" />
+
             <view style="height: 100px;"></view>
         </scroll-view>
 
@@ -100,59 +101,25 @@
                 triggered: false,
                 status: "loading",
                 contentText: {
-                    contentdown: "上拉显示更多",
-                    contentrefresh: "正在加载...",
-                    contentnomore: "没有更多顺风车信息"
-                },
+					contentdown: '查看更多顺风车',
+					contentrefresh: '加载中......',
+					contentnomore: '没有顺风车了'
+				},
                 fabPattern: {
                     buttonColor: "#9b0000"
                 }
             };
         },
         computed: {
-            filteredRideList() {
-                return this.rideList.filter(ride => {
-                    // 修复 requestType 筛选逻辑
-                    const requestTypeMatch =
-                        this.filter.requestType === "" ||
-                        ride.requestType === this.filter.requestType;
-            
-                    // 修复 rideType 筛选逻辑
-                    const rideTypeMatch =
-                        this.filter.rideType === "" ||
-                        ride.rideType === this.filter.rideType;
-            
-                    const departureDateMatch =
-                        !this.filter.departureDate ||
-                        moment(ride.departureTime).isSame(this.filter.departureDate, "day");
-            
-                    const returnDateMatch =
-                        !this.filter.returnDate ||
-                        moment(ride.returnTime).isSame(this.filter.returnDate, "day");
-            
-                    const originMatch =
-                        !this.filter.origin || ride.origin.includes(this.filter.origin);
-            
-                    const destinationMatch =
-                        !this.filter.destination || ride.destination.includes(this.filter.destination);
-            
-                    return (
-                        requestTypeMatch &&
-                        rideTypeMatch &&
-                        departureDateMatch &&
-                        returnDateMatch &&
-                        originMatch &&
-                        destinationMatch
-                    );
-                });
-            }
-        },
+			// 根据状态动态返回显示内容
+			statusText() {
+				return this.contentText[this.status];
+			}
+		},
         onLoad() {
             this.resetFilters();
-            this.refresh();
         },
         onShow() {
-			this.resetFilters();
             this.refresh();
         },
         methods: {
@@ -182,13 +149,49 @@
             applyFilters() {
                 this.$refs.filterPopup.close();
 				this.refresh();
+				if (this.rideList.length > 0) {
+					return this.rideList.filter(ride => {
+					    // 修复 requestType 筛选逻辑
+					    const requestTypeMatch =
+					        this.filter.requestType === "" ||
+					        ride.requestType === this.filter.requestType;
+					            
+					    // 修复 rideType 筛选逻辑
+					    const rideTypeMatch =
+					        this.filter.rideType === "" ||
+					        ride.rideType === this.filter.rideType;
+					            
+					    const departureDateMatch =
+					        !this.filter.departureDate ||
+					        moment(ride.departureTime).isSame(this.filter.departureDate, "day");
+					            
+					    const returnDateMatch =
+					        !this.filter.returnDate ||
+					        moment(ride.returnTime).isSame(this.filter.returnDate, "day");
+					            
+					    const originMatch =
+					        !this.filter.origin || ride.origin.includes(this.filter.origin);
+					            
+					    const destinationMatch =
+					        !this.filter.destination || ride.destination.includes(this.filter.destination);
+					            
+					    return (
+					        requestTypeMatch &&
+					        rideTypeMatch &&
+					        departureDateMatch &&
+					        returnDateMatch &&
+					        originMatch &&
+					        destinationMatch
+					    );
+					});
+				}
             },
             resetFilters() {
                 this.filter = {
                     requestType: "",
 					requestTypeCurrent: 0,
                     rideType: "",
-					rideType: 0,
+					rideTypeCurrent: 0,
                     departureDate: "",
                     returnDate: "",
                     origin: "",
@@ -202,40 +205,59 @@
 				this.rideList = []; //重置顺风车列表
                 this.getRideList(); // 加载顺风车信息
             },
-            async getRideList() {
-                const opts = {
-                    path: `/ride/getRideList?offset=${this.offset}&limit=${this.limit}`,
-                    type: "GET"
-                };
-                requestAPI(opts)
-                    .then(res => {
-                        if (res.data.status === 100) {
-                            // 如果是刷新操作，覆盖已有列表；否则追加到列表中
-                            this.rideList = this.rideList.concat(res.data.data);
-                            this.offset += res.data.data.length;
-                            this.status = res.data.data.length !== this.limit ? "noMore" : "more";
-                        } else {
-                            uni.showToast({
-                                title: "加载失败，请稍后重试",
-                                icon: "none"
-                            });
-                        }
-                        this.triggered = false; // 结束下拉刷新
-                    })
-                    .catch(error => {
-                        console.error("Failed to fetch ride list:", error);
-                        this.triggered = false;
-                        uni.showToast({
-                            title: "网络错误，请稍后重试",
-                            icon: "none"
-                        });
-                    });
-            },
-            onScrollLower() {
-                if (this.status === "loading" || this.status === "noMore") return;
-                this.status = "loading";
-                this.getRideList();
-            },
+            // 获取顺风车列表
+			async getRideList() {
+				if (this.status == "noMore") {
+					return;
+				}
+				console.log("getRideList() is called.");
+				const opts = {
+					path: `/ride/getRideList?offset=${this.offset}&limit=${this.limit}`,
+					type: "GET"
+				};
+				this.status = "loading"; // 加载中
+				try {
+					const res = await requestAPI(opts);
+					console.log(res);
+					console.log("api 调用完成");
+					if (res.data.status === 100) {
+						console.log("this.offset is: " + this.offset);
+						const newRides = res.data.data || [];
+						this.rideList = this.rideList.concat(newRides);
+						
+						this.offset += newRides.length;
+
+						console.log("加载完成");
+						// 根据加载数据数量更新状态
+						if (this.rideList.length === 0) {
+							this.status = "empty"; // 列表为空
+						} else if (newRides.length < this.limit) {
+							this.status = "noMore"; // 没有更多数据
+						} else {
+							this.status = "loaded"; // 数据加载完成
+						}
+					} else {
+						this.status = "error"; // 数据加载失败
+						uni.showToast({
+							title: "加载失败，请稍后重试",
+							icon: "none"
+						});
+					}
+				} catch (error) {
+					console.error("Failed to fetch ride list:", error);
+					this.status = "error"; // 网络错误
+					uni.showToast({
+						title: "网络错误，请稍后重试",
+						icon: "none"
+					});
+				}
+				
+				this.triggered = false; // 结束下拉刷新
+			},
+			onScrollLower() {
+				this.status = "loading";
+				this.getRideList();
+			},
             toPostRide() {
                 uni.navigateTo({
                     url: "/pages/ride/ridePost"

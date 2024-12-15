@@ -121,7 +121,7 @@
                     <view class="row-view">
                         <view style="flex: 1;">
                             <text class="required">* </text>
-                            {{ ride.requestType === 1 ? "需要座位数：" : "可用座位数：" }}
+                            {{ ride.requestType === 1 ? "需要座位数：" : "可出座位数：" }}
                             <uni-easyinput
                                 type="number"
                                 trim="all"
@@ -261,8 +261,8 @@
 					departureTime: null,
 					estimatedArrivalTime: null,
 					returnTime: null,
-					rideType: "",
-					requestType: "",
+					rideType: -1,
+					requestType: -1,
 					availableSeats: 0,
 					requestedSeats: 0,
 					price: "",
@@ -311,6 +311,19 @@
 			}
 		},
 		watch: {
+			"ride.requestType"(newValue, oldValue) {
+				if (oldValue !== -1 && oldValue !== newValue) {
+					if (newValue === 1) {
+						// 从出顺风车切换到求顺风车，将 availableSeats 的值赋给 requestedSeats
+						this.ride.requestedSeats = this.ride.availableSeats;
+						this.ride.availableSeats = 0; // 清空 availableSeats
+					} else if (newValue === 0) {
+						// 从求顺风车切换到出顺风车，将 requestedSeats 的值赋给 availableSeats
+						this.ride.availableSeats = this.ride.requestedSeats;
+						this.ride.requestedSeats = 0; // 清空 requestedSeats
+					}
+				}
+			},
 		    "ride.rideType"(newValue) {
 		        // Dynamically update the validation rule for returnTime
 		        this.rules.returnTime.required = String(newValue) === "1";
@@ -325,18 +338,20 @@
 		},
 		computed: {
 		    seatsBinding: {
-		        get() {
-		            return this.ride.requestType === 1 ? this.ride.requestedSeats : this.ride.availableSeats;
-		        },
-		        set(value) {
-		            if (this.ride.requestType === 1) {
-		                this.ride.requestedSeats = value;
-		            } else {
-		                this.ride.availableSeats = value;
-		            }
-		        }
-		    },
-			
+				get() {
+					// 根据请求类型绑定座位数
+					return this.ride.requestType === 1 ? this.ride.requestedSeats : this.ride.availableSeats;
+				},
+				set(value) {
+					if (this.ride.requestType === 1) {
+						// 求顺风车时设置 requestedSeats
+						this.ride.requestedSeats = value;
+					} else {
+						// 出顺风车时设置 availableSeats
+						this.ride.availableSeats = value;
+					}
+				},
+			},
 		},
 		methods: {
 			initializeRide() {
@@ -436,6 +451,7 @@
 				// 检查未填写的必填字段
 				const missingFields = [];				
 				for (const key in this.rules) {
+					console.log(this.ride[key]);
 				    if (
 				        this.rules[key].required &&
 				        (!this.ride[key] || (typeof this.ride[key] === "string" && this.ride[key].trim() === ""))

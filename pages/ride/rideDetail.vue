@@ -86,6 +86,7 @@ export default {
             userInfo: {
                 avatarUrl: "", // 发布用户头像
                 nickname: "", // 发布用户昵称
+				isStudent: 0 // 发布用户是否为学生 
             },
             defaultImage:
                 "https://prod-9gip97mx4bfa32a3-1312104819.tcloudbaseapp.com/ride/%E9%A1%BA%E9%A3%8E%E8%BD%A6%E9%BB%98%E8%AE%A4%E5%9B%BE%E7%89%87.jpg?sign=874f9cb0c12322055162c92ea77fa0f3&t=1732836080", // 默认图片
@@ -149,7 +150,7 @@ export default {
                 path: "/user/getUserInfo",
                 type: "GET",
                 header: {
-                    "x-wx-openid": this.rideInfo.userId,
+                    "x-wx-openid": this.rideInfo.openId,
                 },
             };
             requestAPI(opts)
