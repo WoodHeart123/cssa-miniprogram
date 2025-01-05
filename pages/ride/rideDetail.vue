@@ -29,7 +29,7 @@
             </view>
 			<text class="divider">|</text>
             <text class="seats-info">
-                {{ rideInfo.requestType === 0 ? `可出${rideInfo.availableSeats}个座位` : `需要${rideInfo.requestedSeats}个座位` }}
+                {{ rideInfo.requestType === 0 ? `可出${rideInfo.seats}个座位` : `需要${rideInfo.seats}个座位` }}
             </text>
         </view>
 
@@ -98,10 +98,11 @@ export default {
         // 标签内容
         rideTags() {
             const tags = [];
-            if (this.rideInfo.requestType) {
+            if (this.rideInfo.requestType !== undefined && this.rideInfo.requestType !== null) {
                 tags.push(this.requestTypeConstrainValue[this.rideInfo.requestType]);
             }
-            if (this.rideInfo.rideType) {
+			
+            if (this.rideInfo.rideType !== undefined && this.rideInfo.rideType !== null) {
                 tags.push(this.rideTypeConstrainValue[this.rideInfo.rideType]);
             }
             return tags;
@@ -203,6 +204,9 @@ export default {
 <style>
 .ride-detail {
     background-color: #f9f9f9;
+	margin-left: 10px;
+	margin-right: 10px;
+	overflow-x: hidden;
 }
 .swiper {
     height: 200px;
@@ -218,8 +222,8 @@ export default {
     display: inline-block;
     padding: 5px 10px;
     font-size: 14px;
-    background-color: #f8d7da;
-    color: black;
+    background-color: #9b0000;
+    color: white;
     border-radius: 5px;
 }
 .price-box {

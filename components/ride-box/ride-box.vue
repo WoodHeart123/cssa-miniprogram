@@ -56,7 +56,7 @@
 					<image class="avatar" :src="postUserInfo.avatarUrl || defaultAvatarUrl" mode="aspectFill" />
 					<text class="nickname">{{ postUserInfo.nickname || "匿名" }}</text>
 				</view>
-				<view class="publish-time">发布于：{{ ridePublishTime }}</view>
+				<view class="publish-time">发布于：{{ getPublishedTimeText() }}</view>
 			</view>
 		</view>
 	</view>
@@ -74,7 +74,6 @@
 			return {
 				requestTypeConstrainValue: ["出顺风车", "求顺风车"],
 				rideTypeContraintValue: ["单程", "往返"],
-				ridePublishTime: "",
 				showRideTime: true,
 				defaultRideImage:
 					"https://prod-9gip97mx4bfa32a3-1312104819.tcloudbaseapp.com/ride/%E9%A1%BA%E9%A3%8E%E8%BD%A6%E9%BB%98%E8%AE%A4%E5%9B%BE%E7%89%87.jpg?sign=ff829501d8241dc11edbf64ca3850ca8&t=1731883928",
@@ -91,40 +90,6 @@
 		mounted() {
 		    // 获取用户信息
 		    this.fetchPostUserInfo();
-		
-		    // 将 publishedTime 转换为 CST 时间
-		    const publishedCST = moment(this.rideInfo.publishedTime).utcOffset("-0600");
-		    const nowCST = moment().utcOffset("-0600");
-		
-		    // 初始化发布时间显示逻辑
-		    if (publishedCST.isSameOrBefore(moment(0))) {
-		        this.showRideTime = false; // 没有发布时间
-		    } else {
-		        const minutesAgo = nowCST.diff(publishedCST, "minutes");
-		        const hoursAgo = nowCST.diff(publishedCST, "hours");
-		        const daysAgo = nowCST.diff(publishedCST, "days");
-		        const yearsAgo = nowCST.diff(publishedCST, "years");
-		
-		        if (minutesAgo < 1) {
-		            // 不到1分钟
-		            this.ridePublishTime = "刚刚";
-		        } else if (minutesAgo < 60) {
-		            // 1分钟到59分钟
-		            this.ridePublishTime = `${minutesAgo} 分钟前`;
-		        } else if (hoursAgo < 24) {
-		            // 1小时到23小时
-		            this.ridePublishTime = `${hoursAgo} 小时前`;
-		        } else if (daysAgo < 7) {
-		            // 1天到6天
-		            this.ridePublishTime = `${daysAgo} 天前`;
-		        } else if (yearsAgo > 0) {
-		            // 跨年
-		            this.ridePublishTime = publishedCST.format("YYYY-MM-DD");
-		        } else {
-		            // 超过7天但在同一年
-		            this.ridePublishTime = publishedCST.format("MM-DD");
-		        }
-		    }
 		},
 		computed: {
 			formatDepartureTime() {
@@ -142,11 +107,10 @@
 					: this.rideInfo.description;
 			},
 			requestTypeSeatingInfo() {
-				console.log("this.rideInfo.availableSeats is" + this.rideInfo.availableSeats);
 				if (this.rideInfo.requestType === 0) {
-					return `可用座位：${this.rideInfo.availableSeats || 0}个`;
+					return `可用座位：${this.rideInfo.seats || 0}个`;
 				} else if (this.rideInfo.requestType === 1) {
-					return `需要座位：${this.rideInfo.requestedSeats || 0}个`;
+					return `需要座位：${this.rideInfo.seats || 0}个`;
 				}
 				return "";
 			}
@@ -154,6 +118,7 @@
 		methods: {		
 			// 获取发布用户头像，昵称，是否为学生
 			async fetchPostUserInfo() {
+				let responseData = "";
 				
 				requestAPI({
 					path: "/user/getUserInfo",
@@ -169,6 +134,43 @@
 				}).catch(error => {
 					console.error("获取发布用户信息出错:", error);
 				});
+			},
+			getPublishedTimeText() {
+				let publishedTime = this.rideInfo.publishedTime;
+				let removedTime = this.rideInfo.removedTime;
+				
+			    if (!publishedTime) {
+					if (!removedTime) {
+						return "已过期";
+					}
+					return '发布时间未知';	
+				}
+			    //console.log("publishedTime is: " + publishedTime);
+			    
+				// 发布时间戳是以UTC的TimeStamp存储
+			    const publishedDate = new Date(publishedTime).getTime();
+			    const now = new Date().getTime();
+			
+			    const diffInSeconds = Math.floor((now - publishedDate) / 1000);
+			    const diffInMinutes = Math.floor(diffInSeconds / 60);
+			    const diffInHours = Math.floor(diffInMinutes / 60);
+			    const diffInDays = Math.floor(diffInHours / 24);
+			    const diffInMonths = Math.floor(diffInDays / 30);
+			    const diffInYears = Math.floor(diffInDays / 365);
+			
+			    if (diffInMinutes < 5) {
+			        return '刚刚';
+			    } else if (diffInMinutes < 60) {
+			        return `${diffInMinutes} 分钟前`;
+			    } else if (diffInHours < 24) {
+			        return `${diffInHours} 小时前`;
+			    } else if (diffInDays < 30) {
+			        return `${diffInDays} 天前`;
+			    } else if (diffInMonths < 12) {
+			        return `${diffInMonths} 个月前`;
+			    } else {
+			        return `${diffInYears} 年前`;
+			    }
 			},
 			// 跳转到详情页
 			toRideDetail() {

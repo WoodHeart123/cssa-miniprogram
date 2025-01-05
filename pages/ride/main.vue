@@ -41,17 +41,17 @@
                 <!-- 筛选项 -->
                 <view class="filter-item">
                     <text class="filter-label">请求类型：</text>
-                    <uni-segmented-control :current="filter.requestTypeCurrent" :values="['不限', '出顺风车', '求顺风车']" active-color="#9b0000" style="text-align: center; justify-content: center; line-height: 40px;" @clickItem="onFilterRequestTypeClick"/>
+                    <uni-segmented-control :current="filter.requestTypeCurrent" :values="filterRideRequestTabValues" active-color="#9b0000" style="text-align: center; justify-content: center; line-height: 40px;" @clickItem="onFilterRequestTypeClick"/>
                 </view>
                 <view class="filter-item">
                     <text class="filter-label">顺风车类型：</text>
-                    <uni-segmented-control :current="filter.rideTypeCurrent" :values="['不限', '单程', '往返']" active-color="#9b0000" style="text-align: center; justify-content: center; line-height: 40px;" @clickItem="onFilterRideTypeClick" />
+                    <uni-segmented-control :current="filter.rideTypeCurrent" :values="filterRideTypeTabValues" active-color="#9b0000" style="text-align: center; justify-content: center; line-height: 40px;" @clickItem="onFilterRideTypeClick" />
                 </view>
                 <view class="filter-item">
                     <text class="filter-label">出发日期：</text>
                     <uni-datetime-picker v-model="filter.departureDate" type="date" :start="startDate" :end="endDate" placeholder="选择出发日期" style="width: 100%;" />
                 </view>
-                <view class="filter-item" v-if="filter.rideType === 1">
+                <view class="filter-item" v-if="filter.rideTypeCurrent === 2">
                     <text class="filter-label">返回日期：</text>
                     <uni-datetime-picker v-model="filter.returnDate" type="date" :start="startDate" :end="endDate" placeholder="选择返回日期" style="width: 100%;" />
                 </view>
@@ -84,15 +84,15 @@
         data() {
             return {
                 filter: {
-                    requestType: "", // 默认值为“”
-					requestTypeCurrent: 0,
-                    rideType: "", // 默认值为“”
-					rideTypeCurrent: 0,
+					requestTypeCurrent: 0, // 当前筛选条件中的顺风车请求类型
+					rideTypeCurrent: 0, // 当前筛选条件中的顺风车类型
                     departureDate: "", // 出发日期
                     returnDate: "", // 返回日期
                     origin: "", // 始发地
                     destination: "" // 目的地
                 },
+				filterRideRequestTabValues: ["不限", "出顺风车", "求顺风车"],
+				filterRideTypeTabValues: ["不限", "单程", "往返"],
                 startDate: moment().format("YYYY-MM-DD"), // 日期范围开始
                 endDate: moment().add(1, "year").format("YYYY-MM-DD"), // 日期范围结束
                 offset: 0, // 当前数据偏移量
@@ -120,6 +120,7 @@
             this.resetFilters();
         },
         onShow() {
+			this.resetFilters();
             this.refresh();
         },
         methods: {
@@ -129,62 +130,96 @@
 			onFilterRequestTypeClick(e) {
 				if (this.filter.requestTypeCurrent != e.currentIndex) {
 					this.filter.requestTypeCurrent = e.currentIndex;
-					if (e.currentIndex - 1 === 0) {
-						this.filter.requestType = 0;
-					} else if (e.currentIndex - 1 === 1) {
-						this.filter.requestType = 1;
-					}
 				}
 			},
 			onFilterRideTypeClick(e) {
 				if (this.filter.rideTypeCurrent != e.currentIndex) {
 					this.filter.rideTypeCurrent = e.currentIndex;
-					if (e.currentIndex - 1 === 0) {
-						this.filter.rideType = 0;
-					} else if (e.currentIndex - 1 === 1) {
-						this.filter.rideType = 1;
-					}
 				}
 			},
-            applyFilters() {
-                this.$refs.filterPopup.close();
-				this.refresh();
-				if (this.rideList.length > 0) {
-					return this.rideList.filter(ride => {
-					    // 修复 requestType 筛选逻辑
-					    const requestTypeMatch =
-					        this.filter.requestType === "" ||
-					        ride.requestType === this.filter.requestType;
-					            
-					    // 修复 rideType 筛选逻辑
-					    const rideTypeMatch =
-					        this.filter.rideType === "" ||
-					        ride.rideType === this.filter.rideType;
-					            
-					    const departureDateMatch =
-					        !this.filter.departureDate ||
-					        moment(ride.departureTime).isSame(this.filter.departureDate, "day");
-					            
-					    const returnDateMatch =
-					        !this.filter.returnDate ||
-					        moment(ride.returnTime).isSame(this.filter.returnDate, "day");
-					            
-					    const originMatch =
-					        !this.filter.origin || ride.origin.includes(this.filter.origin);
-					            
-					    const destinationMatch =
-					        !this.filter.destination || ride.destination.includes(this.filter.destination);
-					            
-					    return (
-					        requestTypeMatch &&
-					        rideTypeMatch &&
-					        departureDateMatch &&
-					        returnDateMatch &&
-					        originMatch &&
-					        destinationMatch
-					    );
-					});
-				}
+            async applyFilters() {
+                this.$refs.filterPopup.close(); // 关闭筛选弹窗
+            
+                // 重置状态
+                this.offset = 0; // 偏移量重置
+                this.rideList = []; // 清空列表
+                this.status = "loading"; // 设置为加载中
+            
+                let fetchedRides = []; // 临时存储每次获取的数据
+            
+                // 通过循环持续获取数据，直到满足条件或数据耗尽
+                while (true) {
+                    await this.getRideList(); // 调用 getRideList 获取一批数据
+            
+                    // 根据当前已获取的数据进行筛选
+                    const filteredBatch = this.rideList.filter((ride) => {
+                        // 请求类型筛选（0: 不限, 1: 出顺风车, 2: 求顺风车）
+                        if (this.filter.requestTypeCurrent > 0 && ride.requestType !== (this.filter.requestTypeCurrent - 1)) {
+                            return false;
+                        }
+            
+                        // 顺风车类型筛选（0: 不限, 1: 单程, 2: 往返）
+                        if (this.filter.rideTypeCurrent > 0 && ride.rideType !== (this.filter.rideTypeCurrent - 1)) {
+                            return false;
+                        }
+            
+                        // 出发日期筛选
+                        if (this.filter.departureDate && ride.departureTime.split(' ')[0] !== this.filter.departureDate) {
+                            return false;
+                        }
+            
+                        // 返回日期筛选（仅在顺风车类型为往返时有效）
+                        if (
+                            this.filter.rideTypeCurrent === 2 &&
+                            this.filter.returnDate &&
+                            ride.returnTime.split(' ')[0] !== this.filter.returnDate
+                        ) {
+                            return false;
+                        }
+            
+                        // 始发地筛选
+                        if (this.filter.origin && !ride.origin.includes(this.filter.origin)) {
+                            return false;
+                        }
+            
+                        // 目的地筛选
+                        if (this.filter.destination && !ride.destination.includes(this.filter.destination)) {
+                            return false;
+                        }
+            
+                        return true; // 所有条件通过，保留该项
+                    });
+            
+                    // 将筛选后的数据添加到最终列表中
+                    fetchedRides = fetchedRides.concat(filteredBatch);
+            
+                    // 判断是否满足所需的数量
+                    if (fetchedRides.length >= this.limit) {
+                        break; // 达到目标数量，停止加载
+                    }
+            
+                    // 判断 `status` 是否为 `noMore`，如果是，表示没有更多数据了
+                    if (this.status === "noMore") {
+                        break; // 数据已耗尽，停止加载
+                    }
+            
+                    // 增加偏移量，获取下一批数据
+                    this.offset += this.limit;
+                }
+            
+                // 将最终筛选结果赋值给 rideList
+                this.rideList = fetchedRides;
+            
+                // 根据结果设置状态
+                if (this.rideList.length === 0) {
+                    this.status = "empty"; // 没有符合条件的数据
+                } else if (this.rideList.length < this.limit) {
+                    this.status = "noMore"; // 数据未达到 limit，但已没有更多数据
+                } else {
+                    this.status = "loaded"; // 数据加载完成
+                }
+            
+                console.log("筛选后的 rideList:", this.rideList);
             },
             resetFilters() {
                 this.filter = {
@@ -199,11 +234,13 @@
                 };
             },
             refresh() {
-                this.triggered = true; // 开始下拉刷新
-                this.offset = 0; // 重置偏移量
-                this.status = "loading"; // 重置加载状态
-				this.rideList = []; //重置顺风车列表
-                this.getRideList(); // 加载顺风车信息
+				if (!this.triggered) {
+					this.triggered = true; // 开始下拉刷新
+					this.offset = 0; // 重置偏移量
+					this.status = "loading"; // 重置加载状态
+					this.rideList = []; //重置顺风车列表
+					this.getRideList(); // 加载顺风车信息
+				}
             },
             // 获取顺风车列表
 			async getRideList() {
@@ -236,6 +273,7 @@
 						} else {
 							this.status = "loaded"; // 数据加载完成
 						}
+						console.log("this.status is: " + this.status);
 					} else {
 						this.status = "error"; // 数据加载失败
 						uni.showToast({
@@ -250,6 +288,7 @@
 						title: "网络错误，请稍后重试",
 						icon: "none"
 					});
+					
 				}
 				
 				this.triggered = false; // 结束下拉刷新
