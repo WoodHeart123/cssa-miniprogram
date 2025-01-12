@@ -304,7 +304,6 @@
 					const rideData = JSON.parse(decodeURIComponent(options.ride));
 					
 					this.ride = rideData;
-					console.log(this.ride);
 					this.edit = 1;
 				} catch (e) {
 					console.error('数据解析失败', e);
@@ -397,7 +396,6 @@
 				// 转换 images 为纯 URL
 				this.prepareImages();
 
-				console.log(this.ride);
                 try {
 					uni.showLoading({
 						title: "请耐心等待信息上传"
@@ -479,8 +477,6 @@
 			            const uploaded = pendingImages.find((pending) => pending.filepath === img.filepath);
 			            return uploaded?.url ? { ...img, url: uploaded.url } : img;
 			        });
-			
-			        console.log("最终上传成功的图片列表:", this.ride.images);
 			
 			        // 显示成功提示
 			        if (uploadedImageCount === pendingImages.length) {
