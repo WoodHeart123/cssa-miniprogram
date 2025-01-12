@@ -39,7 +39,7 @@
             </view>
             <!-- 超链接 -->
             <view class="hyperlink" @click="toUsageRules">
-                《使用守则+声明》
+                阅读《使用守则+声明》
             </view>
         </view>
 
@@ -122,7 +122,7 @@
             return {
 				// 滚动栏内容
 				noticeTextsList: [
-					{ text: "欢迎使用顺风车功能，请仔细阅读公告" },
+					{ text: "欢迎使用顺风车功能，请仔细阅读《使用守则+声明》" },
 					{ text: "2025蛇年春晚即将举办，详情请关注微信公众号" },
 				],
 				noticeText: "", // 最终显示在滚动栏中的文字
