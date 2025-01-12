@@ -25,7 +25,6 @@
 			<view class="my-ride-box" v-for="(ride, index) in rideList" :key="index">
 				<view class="my-ride-container">
 					<ride-box-vue :rideInfo="ride"></ride-box-vue>
-					<view class="is-takeoff" v-if="ride.removedTime !== null">已下架</view>
 				</view>
 
 				<!-- 操作按钮 -->
@@ -37,7 +36,7 @@
 					</view>
 
 					<!-- 未过期的顺风车显示下架按钮 -->
-					<template v-if="ride.removedTime === null">
+					<template v-if="ride.publishedTime !== null">
 						<view class="button row-container" @click="hideRide(index)">
 							<view class="icon iconfont">&#xe620;</view>
 							<view class="button-text">下架</view>
@@ -65,6 +64,7 @@
 	export default {
 		data() {
 			return {
+				isLoading: false, // 防止重复加载
 				offset: 0,
 				limit: 20,
 				rideList: [],
@@ -98,14 +98,22 @@
 			},
 
 			// 加载已发布的顺风车
-			async loadPublishedRideInfo() {
+			async loadPublishedRideInfo() {				
+				if (this.isLoading) return; // 如果已经在加载，直接返回
+				
+				this.isLoading = true;
 				this.status = "loading";
-				const opts = {
-					path: `/ride/getRideListByUserId?offset=${this.offset}&limit=${this.limit}`,
-					type: 'GET',
-				};
-				const response = await requestAPI(opts);
-				this.handleRideResponse(response);
+				
+				try {
+					const opts = {
+						path: `/ride/getRideListByUserId?offset=${this.offset}&limit=${this.limit}`,
+						type: 'GET',
+					};
+					const response = await requestAPI(opts);
+					this.handleRideResponse(response);
+				} finally {
+					this.isLoading = false;
+				}
 			},
 
 			// 加载已下架的顺风车
@@ -122,11 +130,20 @@
 			// 处理接口响应
 			handleRideResponse(response) {
 				if (response.data && response.data.status === 100) {
-					if (response.data.data.length < this.limit) {
+					const newData = response.data.data;
+
+					// 去重逻辑
+					const existingIds = new Set(this.rideList.map((ride) => ride.rideId));
+					const filteredData = newData.filter((ride) => !existingIds.has(ride.rideId));
+
+					// 合并数据
+					this.rideList = this.rideList.concat(filteredData);
+
+					if (newData.length < this.limit) {
 						this.status = "noMore";
+					} else {
+						this.offset += this.limit;
 					}
-					this.offset += this.limit;
-					this.rideList = this.rideList.concat(response.data.data);
 				} else {
 					this.status = "noMore";
 				}
@@ -212,25 +229,25 @@
 		border-radius: 10px;
 		overflow: hidden;
 		background-color: white;
-		padding-bottom: 10px;
+		display: flex;
+		flex-direction: column;
 	}
 
 	/* 单个 Ride 容器 */
 	.my-ride-container {
-		height: 150px;
-		width: 100%;
-		position: relative;
-		margin-bottom: 10px;
+		flex: 1;
 	}
 
 	/* 操作按钮容器 */
 	.button-box {
-		height: 50px;
-		width: 96vw;
-		align-items: center;
-		background-color: white;
-		justify-content: space-around;
 		display: flex;
+		justify-content: space-around;
+		align-items: center;
+		height: 50px;
+		background-color: white;
+		padding: 10px 0;
+		box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.1);
+		border-top: 1px solid #ddd;
 	}
 
 	/* 操作按钮样式 */
@@ -244,7 +261,6 @@
 	    display: flex;
 	    flex-direction: row;
 	    justify-content: center;
-		margin-top: 20px;
 	}
 
 	.button-text {

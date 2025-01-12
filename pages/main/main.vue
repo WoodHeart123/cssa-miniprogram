@@ -141,7 +141,7 @@
 		},
 		onLoad() {
 			this.menuButtonInfo = wx.getMenuButtonBoundingClientRect();
-			console.log(this.menuButtonInfo)
+//			console.log(this.menuButtonInfo)
 			wx.cloud.init();
 			uni.getStorage({
 				key: "userInfo-2",

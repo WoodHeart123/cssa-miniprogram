@@ -76,6 +76,7 @@
 
 <script>
     import moment from "moment";
+	import uploadOSS from '@/api/upload.js'
     import requestAPI from "@/api/request.js";
     import rideBoxVue from "@/components/ride-box/ride-box.vue";
 
@@ -221,6 +222,8 @@
             
                 console.log("筛选后的 rideList:", this.rideList);
             },
+			
+			// 重置筛选条件
             resetFilters() {
                 this.filter = {
                     requestType: "",
@@ -233,6 +236,7 @@
                     destination: ""
                 };
             },
+			
             refresh() {
 				if (!this.triggered) {
 					this.triggered = true; // 开始下拉刷新
@@ -242,57 +246,57 @@
 					this.getRideList(); // 加载顺风车信息
 				}
             },
+			
             // 获取顺风车列表
-			async getRideList() {
-				if (this.status == "noMore") {
-					return;
-				}
-				console.log("getRideList() is called.");
-				const opts = {
-					path: `/ride/getRideList?offset=${this.offset}&limit=${this.limit}`,
-					type: "GET"
-				};
-				this.status = "loading"; // 加载中
-				try {
-					const res = await requestAPI(opts);
-					console.log(res);
-					console.log("api 调用完成");
-					if (res.data.status === 100) {
-						console.log("this.offset is: " + this.offset);
-						const newRides = res.data.data || [];
-						this.rideList = this.rideList.concat(newRides);
+            async getRideList() {
+                if (this.status === "noMore") return; // 如果没有更多数据，则不再加载
+            
+                const opts = {
+                    path: `/ride/getRideList?offset=${this.offset}&limit=${this.limit}`,
+                    type: "GET",
+                };
+            
+                this.status = "loading"; // 设置加载状态
+            
+                try {
+                    const res = await requestAPI(opts);
+                    if (res.data.status === 100) {
+                        const newRides = res.data.data || []; // 新数据
+            
+                         // 去重逻辑
+						const existingIds = new Set(this.rideList.map((ride) => ride.rideId));
+						let filteredData = newRides.filter((ride) => !existingIds.has(ride.rideId));
 						
-						this.offset += newRides.length;
-
-						console.log("加载完成");
-						// 根据加载数据数量更新状态
-						if (this.rideList.length === 0) {
+						// 合并数据
+						this.rideList = this.rideList.concat(filteredData);
+						
+						// 更新加载状态
+                        if (this.rideList.length === 0) {
 							this.status = "empty"; // 列表为空
-						} else if (newRides.length < this.limit) {
+						} else if (newDataLength < this.limit) {
 							this.status = "noMore"; // 没有更多数据
 						} else {
 							this.status = "loaded"; // 数据加载完成
 						}
-						console.log("this.status is: " + this.status);
-					} else {
-						this.status = "error"; // 数据加载失败
-						uni.showToast({
-							title: "加载失败，请稍后重试",
-							icon: "none"
-						});
-					}
-				} catch (error) {
-					console.error("Failed to fetch ride list:", error);
-					this.status = "error"; // 网络错误
-					uni.showToast({
-						title: "网络错误，请稍后重试",
-						icon: "none"
-					});
-					
-				}
-				
-				this.triggered = false; // 结束下拉刷新
+                    } else {
+                        this.handleError("加载失败，请稍后重试");
+                    }
+                } catch (error) {
+                    this.handleError("网络错误，请稍后重试");
+                } finally {
+                    this.triggered = false; // 结束下拉刷新
+                }
+            },
+			
+			// 错误处理
+			handleError(message) {
+			    this.status = "error";
+			    uni.showToast({
+			        title: message,
+			        icon: "none",
+			    });
 			},
+			
 			onScrollLower() {
 				this.status = "loading";
 				this.getRideList();

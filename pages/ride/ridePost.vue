@@ -3,7 +3,7 @@
         <uni-forms ref="rideForm" :model="this.ride" :rules="rules">
             <!-- 图片上传 -->
             <view class="card uni-form-item uni-column">
-                <uni-forms-item name="imageList">
+                <uni-forms-item name="images">
                     <view class="image_upload">
                         <text>图片上传：</text>
                         <uni-file-picker
@@ -37,7 +37,6 @@
                         v-model="this.ride.rideType"
                         :localdata="rideTypeOptions"
                         selectedColor="#9B0000"
-                        @change="onRideTypeChange"
                     ></uni-data-checkbox>
                 </uni-forms-item>
             </view>
@@ -252,6 +251,7 @@
 </template>
 
 <script>
+	import uploadOSS from '@/api/upload.js'
     import requestAPI from "@/api/request.js";
 
     export default {
@@ -259,14 +259,14 @@
             return {
                 edit: false,
                 ride: {
-                    imageList: [],
+                    images: [],
                     origin: "",
                     destination: "",
                     departureTime: null,
                     returnTime: null,
                     rideType: "", // 默认值为空字符串，确保校验逻辑正常
                     requestType: "", // 默认值为空字符串，确保校验逻辑正常
-                    seats: 0,
+                    seats: "",
                     price: "",
                     make: "",
                     model: "",
@@ -292,6 +292,7 @@
                     origin: "请填写出发地",
                     destination: "请填写目的地",
                     departureTime: "请选择出发时间",
+					seats: "请填写座位数",
                     price: "请填写单人价格",
                     contactInfo: "请至少填写一种联系方式",
                 },
@@ -300,7 +301,9 @@
 		onLoad(options) {
 			if (options.ride) {
 				try {
-					this.ride = JSON.parse(decodeURIComponent(options.ride));
+					const rideData = JSON.parse(decodeURIComponent(options.ride));
+					
+					this.ride = rideData;
 					console.log(this.ride);
 					this.edit = 1;
 				} catch (e) {
@@ -311,6 +314,7 @@
         computed: {
         },
         methods: {
+			// 检测必填项目
             validateFields() {
                 const missingFields = [];
 
@@ -334,6 +338,8 @@
 
                 return true;
             },
+			
+			// （发布）更新顺风车
 			async submitUpdate(ifToPublish) {
 			    if (!this.validateFields()) return;
 			
@@ -343,14 +349,17 @@
 			        });
 			
 			        // 检查未上传的图片
-					if (this.ride.imageList && this.ride.imageList.length > 0) {
-						const pendingImages = this.ride.imageList.filter(image => !image.url);
+					if (this.ride.images && this.ride.images.length > 0) {
+						const pendingImages = this.ride.images.filter(image => !image.url);
 									
 						if (pendingImages.length > 0) {
 						    // 仅上传未上传的图片
 						    await this.uploadImages(pendingImages);
 						}
 					}
+					
+					// 转换 images 为纯 URL
+					this.prepareImages();
 			
 			        // 调用后端接口进行更新
 			        const response = await requestAPI({
@@ -375,14 +384,20 @@
 			        uni.hideLoading();
 			    }
 			},
+			
+			// 发布顺风车
             async submit() {
                 if (!this.validateFields()) return;
 				this.images = [];
 				
-				if (this.ride.imageList && this.ride.imageList.length > 0) {
-					await this.uploadImages(this.ride.imageList);
+				if (this.ride.images && this.ride.images.length > 0) {
+					await this.uploadImages(this.ride.images);
 				}
+				
+				// 转换 images 为纯 URL
+				this.prepareImages();
 
+				console.log(this.ride);
                 try {
 					uni.showLoading({
 						title: "请耐心等待信息上传"
@@ -404,71 +419,140 @@
                     uni.showToast({ title: "提交失败，请稍后重试", icon: "error" });
                 }
             },
-			async uploadImages(pendingImages) {
-				if (!Array.isArray(pendingImages) || pendingImages.length === 0) {
-				    return;
+			
+			// 处理选择图片
+			onSelectImage(e) {
+				for (let i = 0; i < e.tempFilePaths.length && i < e.tempFiles.length; i++) {
+					this.ride.images.push({
+						filename: e.tempFiles[i].name,
+						filepath: e.tempFilePaths[i]
+					});
 				}
-
-			    uni.showLoading({
-			        title: `上传图片,0/${pendingImages.length}`,
-			        mask: true
-			    });
-			    let uploadedImageCount = 0;
+			},
 			
-			    const uploadPromises = pendingImages.map(async (image) => {
-			        try {
-			            let uploadedImage;
-			            await new Promise((resolve, reject) => {
-			                wx.compressImage({
-			                    src: image.filepath,
-			                    quality: 30,
-			                    success(res) {
-			                        uploadOSS({
-			                            filename: image.filename,
-			                            filepath: res.tempFilePath
-			                        }).then((result) => {
-			                            uploadedImage = result;
-			                            resolve();
-			                        }).catch(reject);
-			                    },
-			                    fail(err) {
-			                        console.warn("图片压缩失败，直接上传原图:", err);
-			                        uploadOSS(image).then((result) => {
-			                            uploadedImage = result;
-			                            resolve();
-			                        }).catch(reject);
-			                    }
-			                });
-			            });
+			// 处理删除图片
+			onDeleteImage(e) {
+				for (let i = 0; i < this.ride.images.length; i++) {
+					if (this.ride.images[i].filename == e.tempFile.name) {
+						this.ride.images.splice(i, 1);
+						return;
+					}
+				}
+			},
 			
-			            uploadedImageCount++;
-			            uni.showLoading({
-			                title: `上传图片,${uploadedImageCount}/${pendingImages.length}`,
-			                mask: true
-			            });
-			
-			            // 替换上传成功后的图片 URL
-			            image.url = uploadedImage;
-			        } catch (error) {
-			            console.error("上传图片失败:", error);
-			            throw new Error(`上传图片失败`);
-			        }
-			    });
+			// 上传图片
+			async uploadImages(pendingImages) {
+			    if (!Array.isArray(pendingImages) || pendingImages.length === 0) {
+			        console.warn("没有待上传的图片");
+			        return;
+			    }
 			
 			    try {
-			        await Promise.all(uploadPromises);
-			        // 更新 ride 的 imageList，将上传成功的图片保存
-			        this.ride.imageList = this.ride.imageList.map(img => img.url ? img : pendingImages.shift());
+			        // 显示加载提示
+			        uni.showLoading({
+			            title: `上传图片, 0/${pendingImages.length}`,
+			            mask: true,
+			        });
+			
+			        let uploadedImageCount = 0;
+			
+			        // 构建上传任务
+			        const uploadPromises = pendingImages.map((image) => this.compressAndUpload(image));
+			
+			        // 并行执行上传任务
+			        const results = await Promise.allSettled(uploadPromises);
+			
+			        // 处理上传结果
+			        results.forEach((result, index) => {
+			            const image = pendingImages[index];
+			            if (result.status === "fulfilled") {
+			                console.log(`图片 ${image.filename} 上传成功: ${result.value}`);
+			                image.url = result.value; // 更新 URL
+			                uploadedImageCount++;
+			            } else {
+			                console.error(`图片 ${image.filename} 上传失败`, result.reason);
+			            }
+			        });
+			
+			        // 更新 ride.images，将上传成功的图片替换
+			        this.ride.images = this.ride.images.map((img) => {
+			            const uploaded = pendingImages.find((pending) => pending.filepath === img.filepath);
+			            return uploaded?.url ? { ...img, url: uploaded.url } : img;
+			        });
+			
+			        console.log("最终上传成功的图片列表:", this.ride.images);
+			
+			        // 显示成功提示
+			        if (uploadedImageCount === pendingImages.length) {
+			            uni.showToast({
+			                title: "所有图片上传成功",
+			                icon: "success",
+			            });
+			        } else {
+			            uni.showToast({
+			                title: `部分图片上传失败 (${uploadedImageCount}/${pendingImages.length})`,
+			                icon: "none",
+			            });
+			        }
 			    } catch (error) {
-			        console.error("图片上传失败:", error);
-			        uni.hideLoading();
+			        console.error("图片上传出现异常:", error);
 			        uni.showToast({
 			            title: "图片上传失败",
-			            icon: "error"
+			            icon: "error",
 			        });
-			        throw error;
+			    } finally {
+			        uni.hideLoading(); // 隐藏加载提示
 			    }
 			},
+			
+			// 压缩并上传单张图片的方法
+			compressAndUpload(image) {
+			    return new Promise((resolve, reject) => {
+			        wx.compressImage({
+			            src: image.filepath,
+			            quality: 30, // 压缩质量
+			            success(res) {
+			                console.log(`图片压缩成功: ${res.tempFilePath}`);
+			                // 上传压缩后的图片
+			                uploadOSS({
+			                    filename: image.filename,
+			                    filepath: res.tempFilePath,
+			                })
+			                    .then((url) => {
+			                        console.log(`图片上传成功，URL: ${url}`);
+			                        resolve(url);
+			                    })
+			                    .catch((err) => {
+			                        console.error(`图片上传失败:`, err);
+			                        reject(err);
+			                    });
+			            },
+			            fail(err) {
+			                console.warn("图片压缩失败，直接上传原图:", err);
+			                // 压缩失败时直接上传原图
+			                uploadOSS(image)
+			                    .then((url) => {
+			                        console.log(`图片上传成功，URL: ${url}`);
+			                        resolve(url);
+			                    })
+			                    .catch((err) => {
+			                        console.error(`图片上传失败:`, err);
+			                        reject(err);
+			                    });
+			            },
+			        });
+			    });
+			},
+			
+			// 提交数据前处理 images
+			prepareImages() {
+				this.ride.images = this.ride.images.map((img) => {
+					// 如果是对象，取 URL；如果是字符串（已是 URL），直接返回
+					return typeof img === "object" ? img.url : img;
+				});
+			},
+			
+			// 显示必填字段错误信息
             showErrorPopup() {
                 if (this.$refs.errorPopup) {
                     this.$refs.errorPopup.open();

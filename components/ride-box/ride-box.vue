@@ -4,7 +4,7 @@
 		<view class="image-box">
 			<u--image 
 				:src="this.rideInfo.images && this.rideInfo.images.length > 0 
-					? this.rideInfo.images[0] 
+					? this.rideInfo.images[0]
 					: defaultRideImage" 
 				mode="widthFix" 
 				height="80%" 
@@ -78,7 +78,7 @@
 				defaultRideImage:
 					"https://prod-9gip97mx4bfa32a3-1312104819.tcloudbaseapp.com/ride/%E9%A1%BA%E9%A3%8E%E8%BD%A6%E9%BB%98%E8%AE%A4%E5%9B%BE%E7%89%87.jpg?sign=ff829501d8241dc11edbf64ca3850ca8&t=1731883928",
 				defaultAvatarUrl:
-					"https://prod-9gip97mx4bfa32a3-1312104819.tcloudbaseapp.com/default-avatar.png",
+					"https://thirdwx.qlogo.cn/mmopen/vi_32/POgEwh4mIHO4nibH0KlMECNjjGxQUq24ZEaGT4poC6icRiccVGKSyXwibcPq4BWmiaIGuG1icwxaQX6grC9VemZoJ8rg/132",
 				postUserInfo: {
 					avatar: 0,
 					avatarUrl: "",
