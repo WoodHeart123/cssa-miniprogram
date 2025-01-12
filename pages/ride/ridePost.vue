@@ -199,7 +199,7 @@
                 <template v-if="this.edit && this.ride.publishedTime !== null">
                     <button
                         type="default"
-                        style="background-color: #4CAF50; color: #ffffff;"
+                        style="background-color: #9B0000; color: #ffffff;"
                         plain="true"
                         @click="submitUpdate(true)"
                     >
@@ -219,7 +219,7 @@
                     </button>
                     <button
                         type="default"
-                        style="background-color: #4CAF50; color: #ffffff;"
+                        style="background-color: #9B0000; color: #ffffff;"
                         plain="true"
                         @click="submitUpdate(true)"
                     >

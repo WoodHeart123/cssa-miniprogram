@@ -293,7 +293,7 @@
 			openAdLink(link) {
 			    if (link) {
 			        uni.navigateTo({
-						url: `/pages/adsAndActivityWebPage/webView?link=${encodeURIComponent(link)}`
+						url: `/pages/webView/webView?link=${encodeURIComponent(link)}`
 			        });
 			    }
 			}

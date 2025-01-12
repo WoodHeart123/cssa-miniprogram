@@ -202,10 +202,10 @@
 			}
 		},
 		{
-			"path" : "pages/adsAndActivityWebPage/webView",
+			"path" : "pages/webView/webView",
 			"style" : 
 			{
-				"navigationBarTitleText" : "活动详情",
+				"navigationBarTitleText" : "详情",
 				"enablePullDownRefresh": true
 			}
 		},

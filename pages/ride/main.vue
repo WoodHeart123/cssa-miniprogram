@@ -1,11 +1,47 @@
 <template>
     <view id="ride-main">
-        <!-- 顶部筛选按钮 -->
-		<view class="row-container filter-box">
-			<view class="setting-icon" @click="openFilterPopup">
-				<uni-icons type="settings-filled" size="30"></uni-icons>
-			</view>
-		</view>
+		<!-- 文字滚动栏 -->
+        <view>
+            <uni-notice-bar
+                show-icon
+                scrollable
+                show-close
+                single
+                :text="noticeText"
+                @click="handleLinkClick"
+            />
+        </view>       
+        <!-- <view class="row-container">
+            <uni-notice-bar show-icon scrollable show-close single>
+                <template v-slot:text>
+                    <view v-for="(item, index) in noticeTextsList" :key="index" class="scroll-item">
+
+                        <text v-if="item.text">{{ item.text.text }}</text>
+              
+                        <uni-link
+                            v-if="item.link"
+                            :href="item.link.url"
+                            text-decoration="underline"
+                            color="#007aff"
+                        >
+                            {{ item.link.displayedText }}
+                        </uni-link>
+                    </view>
+                </template>
+            </uni-notice-bar>
+        </view>-->
+		
+         <!-- 筛选和超链接行 -->
+        <view class="row-container filter-hyperlink-container">
+            <!-- 筛选按钮 -->
+            <view class="filter-box setting-icon" @click="openFilterPopup">
+                <uni-icons type="settings-filled" size="30"></uni-icons>
+            </view>
+            <!-- 超链接 -->
+            <view class="hyperlink" @click="toUsageRules">
+                《使用守则+声明》
+            </view>
+        </view>
 
         <!-- 顺风车信息列表 -->
         <scroll-view
@@ -84,6 +120,13 @@
         components: { rideBoxVue },
         data() {
             return {
+				// 滚动栏内容
+				noticeTextsList: [
+					{ text: "欢迎使用顺风车功能，请仔细阅读公告" },
+					{ text: "2025蛇年春晚即将举办，详情请关注微信公众号" },
+				],
+				noticeText: "", // 最终显示在滚动栏中的文字
+				noticeText: "", // 最终显示在滚动栏中的文字
                 filter: {
 					requestTypeCurrent: 0, // 当前筛选条件中的顺风车请求类型
 					rideTypeCurrent: 0, // 当前筛选条件中的顺风车类型
@@ -111,6 +154,9 @@
                 }
             };
         },
+		created() {
+			this.generateNoticeText();
+		},
         computed: {
 			// 根据状态动态返回显示内容
 			statusText() {
@@ -125,6 +171,23 @@
             this.refresh();
         },
         methods: {
+			// 生成滚动栏文字内容
+			generateNoticeText() {
+				// 定义长间隔字符串
+				const longSpace = "\u00A0".repeat(50); // 50 个不间断空格
+				// 使用空格连接每段文字
+				this.noticeText = this.noticeTextsList
+					.map((item) => item.text)
+					.join(longSpace); // 使用长间隔连接文字
+			},		
+			// 跳转到《使用准则+声明》
+			toUsageRules() {
+				uni.navigateTo({
+					url: `/pages/webView/webView?link=${encodeURIComponent(
+						"https://prod-9gip97mx4bfa32a3-1312104819.tcloudbaseapp.com/disclaimer/%E9%A1%BA%E9%A3%8E%E8%BD%A6%E4%BD%BF%E7%94%A8%E5%87%86%E5%88%99%2B%E5%85%8D%E8%B4%A3.pdf?sign=f4dc80835420ba9cf5e052657d800bb0&t=1736722864"
+					)}`,
+				});
+			},
             openFilterPopup() {
                 this.$refs.filterPopup.open();
             },
@@ -328,17 +391,40 @@
 		flex-direction: row;
 	}
 	
+	.scroll-item {
+	    display: inline;
+	    margin-right: 16px;
+	}
+	
+	.filter-hyperlink-container {
+	    display: flex;
+	    justify-content: space-between; /* 左右两端对齐 */
+	    align-items: center; /* 垂直居中 */
+	    padding: 10px 15px; /* 内边距 */
+	    background-color: rgba(255, 255, 255, 0.9); /* 背景色 */
+	    box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 5px; /* 阴影效果 */
+	    box-sizing: border-box; /* 包括内边距 */
+	    width: 100%; /* 确保宽度占满容器 */
+	}
+	
+	.setting-icon {
+	    cursor: pointer; /* 鼠标悬停显示手型 */
+	}
+	
 	.filter-box {
-		padding-top: 2px;
-		position: relative;
-		height: 42px;
-		width: 100%;
-		overflow-y: scroll;
-		align-items: center;
-		background-color: rgba(255, 255, 255, 0.9);
-		box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 5px;
-		box-sizing: border-box;
-		flex-shrink: 0 !important;
+	    display: flex;
+	    align-items: center; /* 垂直居中 */
+	    justify-content: flex-start; /* 左对齐 */
+	    cursor: pointer; /* 鼠标悬停显示手型 */
+	}
+	
+	.hyperlink {
+	    color: #007aff; /* 蓝色字体 */
+	    text-decoration: underline; /* 下划线 */
+	    font-size: 14px; /* 字体大小 */
+	    cursor: pointer; /* 鼠标悬停显示手型 */
+	    white-space: nowrap; /* 防止换行 */
+	    margin-left: auto; /* 将超链接推到右侧 */
 	}
 	
 	.setting-icon {
