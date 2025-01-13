@@ -16,7 +16,26 @@
         <view class="row-container tag-box">
             <view class="tag" v-for="(tag, index) in rideTags" :key="index">{{ tag }}</view>
         </view>
-
+		
+		<view class="row-container time-info">
+		    <view v-if="rideInfo.rideType === 0"> <!-- 单程 -->
+		        <view>
+		            {{ formatDepartureTime }}
+		        </view>
+		        <view v-if="rideInfo.estimatedArrivalTime">
+		            <view>{{ formatEstimatedArrivalTime }}</view>
+		        </view>
+		    </view>
+		    <view v-else-if="rideInfo.rideType === 1"> <!-- 往返 -->
+		        <view>
+		            {{ formatDepartureTime }}
+		        </view>
+		        <view v-if="rideInfo.returnTime">
+		            <view>{{ formatReturnTime }}</view>
+		        </view>
+		    </view>
+		</view>
+		
 		<!-- 顺风车标题 -->
 		<view class="ride-title">
             {{ rideInfo.origin }} {{ rideInfo.rideType === 1 ? '↔' : '→' }} {{ rideInfo.destination }}
@@ -77,7 +96,9 @@
 </template>
 
 <script>
-import requestAPI from "@/api/request.js";
+	import moment from "moment/min/moment-with-locales";
+	import "moment/locale/zh-cn";
+	import requestAPI from "@/api/request.js";
 
 export default {
     data() {
@@ -113,12 +134,78 @@ export default {
                 ? this.rideInfo.images
                 : [this.defaultImage];
         },
+		// 出发时间格式化
+		formatDepartureTime() {
+			return "出发: " + moment(this.rideInfo.departureTime).format("YYYY-MM-DD HH:mm");
+		},
+		// 预计到达时间格式化
+		formatEstimatedArrivalTime() {
+			return "预计到达: " + moment(this.rideInfo.estimatedArrivalTime).format("YYYY-MM-DD HH:mm");
+		},
+		// 返回时间格式化
+		formatReturnTime() {
+			return this.rideInfo.returnTime
+				? "返回: " + moment(this.rideInfo.returnTime).format("YYYY-MM-DD HH:mm")
+				: "返回时间未设置";
+		}
     },
     onLoad(options) {
         const rideId = options.rideId; // 从 URL 参数获取 rideId
         this.fetchRideInfo(rideId);
         this.fetchPostUserInfo();
     },
+	onShareTimeline() {
+		// 根据 rideInfo.requestType 和 rideInfo.rideType 动态生成标题
+		const rideTypeText = this.rideInfo.rideType === 0 ? '至' : '往返';
+		const requestTypeText = this.rideInfo.requestType === 0 ? '出顺风车' : '求顺风车';
+			
+		// 格式化出发和返回日期
+		const formattedDepartureTime = moment(this.rideInfo.departureTime).format("YYYY-MM-DD");
+		const formattedReturnTime = this.rideInfo.rideType === 1 && this.rideInfo.returnTime
+		    ? `，${moment(this.rideInfo.returnTime).format("YYYY-MM-DD")} 返回`
+		    : '';
+			
+		// 动态生成标题
+		const displayedTitle = `【${requestTypeText}】从 ${this.rideInfo.origin} ${rideTypeText} ${this.rideInfo.destination}  ${formattedDepartureTime} 出发${formattedReturnTime}`;
+			
+		// 判断图片来源：有图片用第一张，否则用默认图片
+		const displayedImageUrl = this.rideInfo.images && this.rideInfo.images.length > 0
+		    ? this.rideInfo.images[0]
+		    : this.defaultImage;
+			
+		return {
+			title: displayedTitle,
+			imageUrl: displayedImageUrl,
+			path: `/pages/ride/rideDetail?rideId=${this.rideInfo.rideId}`
+		}
+	},
+	onShareAppMessage(res) {
+	    // 根据 rideInfo.requestType 和 rideInfo.rideType 动态生成标题
+	    const rideTypeText = this.rideInfo.rideType === 0 ? '至' : '往返';
+	    const requestTypeText = this.rideInfo.requestType === 0 ? '出顺风车' : '求顺风车';
+	
+	    // 格式化出发和返回日期
+	    const formattedDepartureTime = moment(this.rideInfo.departureTime).format("YYYY-MM-DD");
+	    const formattedReturnTime = this.rideInfo.rideType === 1 && this.rideInfo.returnTime
+	        ? `，${moment(this.rideInfo.returnTime).format("YYYY-MM-DD")} 返回`
+	        : '';
+	
+	    // 动态生成标题
+	    const displayedTitle = `【${requestTypeText}】从 ${this.rideInfo.origin} ${rideTypeText} ${this.rideInfo.destination}  ${formattedDepartureTime} 出发${formattedReturnTime}`;
+	
+	    // 判断图片来源：有图片用第一张，否则用默认图片
+	    const displayedImageUrl = this.rideInfo.images && this.rideInfo.images.length > 0
+	        ? this.rideInfo.images[0]
+	        : this.defaultImage;
+	
+	    return {
+	        title: displayedTitle,
+	        desc: "CSSA顺风车分享平台",
+	        content: this.rideInfo.description,
+	        imageUrl: displayedImageUrl,
+	        path: `/pages/ride/rideDetail?rideId=${this.rideInfo.rideId}`
+	    };
+	},
     methods: {
         // 获取顺风车详情
         fetchRideInfo(rideId) {
@@ -196,112 +283,118 @@ export default {
                     });
                 },
             });
-        },
+        }
     },
 };
 </script>
 
 <style>
-.ride-detail {
-    background-color: #f9f9f9;
-	margin-left: 10px;
-	margin-right: 10px;
-	overflow-x: hidden;
-}
-.swiper {
-    height: 200px;
-    margin-bottom: 20px;
-}
-.tag-box {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 10px;
-}
-.tag {
-    display: inline-block;
-    padding: 5px 10px;
-    font-size: 14px;
-    background-color: #9b0000;
-    color: white;
-    border-radius: 5px;
-}
-.price-box {
-    font-size: 16px;
-    color: #9b0000;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-}
-.price-box .divider {
-    margin: 0 8px;
-    font-size: 16px;
-    color: black;
-}
-.price-box .seats-info {
-    font-size: 16px;
-    color: black;
-}
-.ride-title {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 8px;
-}
-.vehicle-info {
-    font-size: 14px;
-    color: gray;
-    margin-bottom: 10px;
-}
-.contact {
-    position: relative;
-    box-shadow: 0 0px 6px 1px rgba(165, 165, 165, 0.2);
-    border-radius: 5px;
-    padding: 10px 0;
-}
-.contact-box {
-    display: flex;
-    align-items: center;
-}
-.avatar {
-    height: 50px;
-    width: 50px;
-    border-radius: 50%;
-    margin-right: 15px;
-}
-.nickname {
-    flex: 1;
-    font-size: 16px;
-    font-weight: 500;
-}
-.contact-details {
-    margin-top: 10px;
-	margin-left: 2px;
-    font-size: 14px;
-    color: dimgray;
-}
-.contact-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
-}
-.copy-box {
-    display: flex;
-    align-items: center;
-    font-size: 12px;
-	margin-right: 2px;
-    color: #999;
-}
-.copy-img {
-    width: 20px;
-    height: 20px;
-    margin-left: 5px;
-}
-.description {
-    margin-top: 20px;
-    font-size: 14px;
-    line-height: 1.5;
-    color: #333;
-}
+	.ride-detail {
+		background-color: #f9f9f9;
+		margin-left: 10px;
+		margin-right: 10px;
+		overflow-x: hidden;
+	}
+	.swiper {
+		height: 200px;
+		margin-bottom: 20px;
+	}
+	.tag-box {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+		margin-bottom: 10px;
+	}
+	.tag {
+		display: inline-block;
+		padding: 5px 10px;
+		font-size: 14px;
+		background-color: #9b0000;
+		color: white;
+		border-radius: 5px;
+	}
+	.time-info {
+	    margin: 10px 0;
+	    font-size: 15px;
+	    color: #666;
+	    line-height: 1.5;
+	}
+	.price-box {
+		font-size: 16px;
+		color: #9b0000;
+		font-weight: bold;
+		display: flex;
+		align-items: center;
+		margin-bottom: 10px;
+	}
+	.price-box .divider {
+		margin: 0 8px;
+		font-size: 16px;
+		color: black;
+	}
+	.price-box .seats-info {
+		font-size: 16px;
+		color: black;
+	}
+	.ride-title {
+		font-size: 20px;
+		font-weight: bold;
+		margin-bottom: 8px;
+	}
+	.vehicle-info {
+		font-size: 14px;
+		color: gray;
+		margin-bottom: 10px;
+	}
+	.contact {
+		position: relative;
+		box-shadow: 0 0px 6px 1px rgba(165, 165, 165, 0.2);
+		border-radius: 5px;
+		padding: 10px 0;
+	}
+	.contact-box {
+		display: flex;
+		align-items: center;
+	}
+	.avatar {
+		height: 50px;
+		width: 50px;
+		border-radius: 50%;
+		margin-right: 15px;
+	}
+	.nickname {
+		flex: 1;
+		font-size: 16px;
+		font-weight: 500;
+	}
+	.contact-details {
+		margin-top: 10px;
+		margin-left: 2px;
+		font-size: 14px;
+		color: dimgray;
+	}
+	.contact-row {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 8px;
+	}
+	.copy-box {
+		display: flex;
+		align-items: center;
+		font-size: 12px;
+		margin-right: 2px;
+		color: #999;
+	}
+	.copy-img {
+		width: 20px;
+		height: 20px;
+		margin-left: 5px;
+	}
+	.description {
+		margin-top: 20px;
+		font-size: 14px;
+		line-height: 1.5;
+		color: #333;
+	}
 </style>
