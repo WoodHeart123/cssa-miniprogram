@@ -1,5 +1,15 @@
 <template>
 	<view id="second-main">
+		<!-- 文字滚动栏 -->
+		<view>
+		    <uni-notice-bar
+		        show-icon
+		        scrollable
+		        show-close
+		        single
+		        :text="noticeText"
+		    />
+		</view>
 		<scroll-view scroll-y="true" show-scrollbar="true" refresher-enabled="true"
 			class="column-container secondhand-container" refresher-background="white" @refresherrefresh="refresh"
 			enable-back-to-top="true" :refresher-triggered="triggered" @scrolltolower="onScrollLower">
@@ -22,6 +32,12 @@
 		},
 		data() {
 			return {
+				// 滚动栏内容
+				noticeTextsList: [
+					{ text: "欢迎使用顺风车功能，请仔细阅读《使用守则+声明》" },
+					{ text: "2025蛇年春晚即将举办，详情请关注微信公众号" },
+				],
+				noticeText: "", // 最终显示在滚动栏中的文字
 				offset:0,
 				limit: 20,
 				currentIndex: 0,
@@ -52,7 +68,19 @@
 				}
 			});
 		},
+		created() {
+			this.generateNoticeText();
+		},
 		methods: {
+			// 生成滚动栏文字内容
+			generateNoticeText() {
+				// 定义长间隔字符串
+				const longSpace = "\u00A0".repeat(50); // 50 个不间断空格
+				// 使用空格连接每段文字
+				this.noticeText = this.noticeTextsList
+					.map((item) => item.text)
+					.join(longSpace); // 使用长间隔连接文字
+			},
 			uploadSuccess:function(){
 				this.refresh();
 				uni.showToast({

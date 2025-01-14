@@ -8,28 +8,8 @@
                 show-close
                 single
                 :text="noticeText"
-                @click="handleLinkClick"
             />
         </view>       
-        <!-- <view class="row-container">
-            <uni-notice-bar show-icon scrollable show-close single>
-                <template v-slot:text>
-                    <view v-for="(item, index) in noticeTextsList" :key="index" class="scroll-item">
-
-                        <text v-if="item.text">{{ item.text.text }}</text>
-              
-                        <uni-link
-                            v-if="item.link"
-                            :href="item.link.url"
-                            text-decoration="underline"
-                            color="#007aff"
-                        >
-                            {{ item.link.displayedText }}
-                        </uni-link>
-                    </view>
-                </template>
-            </uni-notice-bar>
-        </view>-->
 		
          <!-- 筛选和超链接行 -->
         <view class="row-container filter-hyperlink-container">
@@ -125,7 +105,6 @@
 					{ text: "欢迎使用顺风车功能，请仔细阅读《使用守则+声明》" },
 					{ text: "2025蛇年春晚即将举办，详情请关注微信公众号" },
 				],
-				noticeText: "", // 最终显示在滚动栏中的文字
 				noticeText: "", // 最终显示在滚动栏中的文字
                 filter: {
 					requestTypeCurrent: 0, // 当前筛选条件中的顺风车请求类型
