@@ -26,33 +26,32 @@
 		</view>
 		
 		<!-- 功能部分 -->
-		<view class="row-container function-box" style="margin-top: 3vh">
+		<view class="row-container function-box-button" style="margin-top: 3vh">
 			<view class="column-container function-button" @click="toCourse">
-				<img style="width: 29px;height: 26px; margin-bottom:10px;" src="@/static/main/course-rate.svg" />
+				<img style="width: 29px;height: 26px; margin-bottom:2px;" src="@/static/main/course-rate.svg" />
 				<text class="paragraph-1">Course Rate</text>
 				<text class="heading-3">课程吐槽</text>
 			</view>
 			<view class="column-container function-button" @click="toSecond">
-				<img style="width: 32px;height: 30px; margin-bottom:10px;" src="@/static/main/second-hand.svg" />
+				<img style="width: 32px;height: 30px; margin-bottom:2px;" src="@/static/main/second-hand.svg" />
 				<text class="paragraph-1">Second Hand</text>
 				<text class="heading-3">二手市场</text>
 			</view>
-
-		</view>
-		
-		<view class="row-container function-box">
 			<view class="column-container function-button" @click="toRental">
-				<img style="width: 30px;height: 32px; margin-bottom:10px;" src="@/static/main/subleasing.svg" />
+				<img style="width: 30px;height: 32px; margin-bottom:2px;" src="@/static/main/subleasing.svg" />
 				<text class="paragraph-1">Subleasing</text>
 				<text class="heading-3">公寓转租</text>
 			</view>
 			
 			<!-- 主页显示是Carpool，但实际数据等都用Ride-->
 			<view class="column-container function-button" @click="toRide">
-				<img style="width: 35px;height: 35px; margin-bottom:10px;" src="@/static/main/ride.svg" />
+				<img style="width: 35px;height: 35px; margin-bottom:2px;" src="@/static/main/ride.svg" />
 				<text class="paragraph-1">Carpool</text> 
 				<text class="heading-3">顺风车</text>
 			</view>
+		</view>
+		
+		<view class="row-container function-box-button">
 
 			<!-- <view class="column-container function-button" @click="toEvent">
 				<img style="width: 32px;height: 30px; margin-bottom:10px;" src="@/static/main/second-hand.svg" />
@@ -310,13 +309,6 @@
 		width: 100vw;
 		overflow-x: hidden;
 	}
-	
-	.background-image{
-		background-image: url("https://7072-prod-9gip97mx4bfa32a3-1312104819.tcb.qcloud.la/asset/main/background.jpg");
-		min-height: 40vh;min-width: 100vw;position: fixed;top:0;
-		background-size: 100% 100%;
-		z-index: 0;
-	}
 
 	.top-bar {
 		position: relative;
@@ -338,9 +330,12 @@
 	}
 	
 	.background-image{
-		background-image: url("https://7072-prod-9gip97mx4bfa32a3-1312104819.tcb.qcloud.la/asset/main/background.jpg");
-		min-height: 40vh;min-width: 100vw;position: fixed;top:0;
-		background-size: 100% 100%;
+		background-image: url("https://7072-prod-9gip97mx4bfa32a3-1312104819.tcb.qcloud.la/asset/main/%E8%9B%87%E5%B9%B4%E6%98%A5%E8%8A%82%E8%83%8C%E6%99%AF%E5%9B%BE%E7%89%87.png?sign=bb2c4e8a6081cd93a7aa10c0821877c0&t=1736819140");
+		width: 100vw;
+		height: 100vh;
+		position: fixed;
+		top:0;
+		background-size: cover;
 		z-index: 0;
 	}
 	
@@ -408,6 +403,23 @@
 		flex-direction: row;
 	}
 
+	.function-box {
+		flex-shrink: 0;
+		height: 160px;
+		width: 86vw;
+		margin: 50vw 7vw 10px 7vw;
+		justify-content: space-between;
+		z-index: 10;
+
+		.function-button {
+			min-width: 47%;
+			border-radius: 5px;
+			background-color: $main-background-color-2;
+			align-items: center;
+			justify-content: center;
+		}
+	}
+
 	.function-box.whole {
 		justify-content: space-around;
 		align-items: center;
@@ -453,24 +465,47 @@
 			}
 		}
 	}
-
-	.function-box {
-		flex-shrink: 0;
-		height: 160px;
-		width: 86vw;
-		margin: 0 7vw 17px 7vw;
-		justify-content: space-between;
-		z-index: 10;
-
-		.function-button {
-			min-width: 47%;
-			border-radius: 5px;
-			background-color: $main-background-color-2;
-			align-items: center;
-			justify-content: center;
-		}
+	
+	.function-box-button {
+	    display: flex;
+	    justify-content: space-evenly;
+	    align-items: center;
+	    width: 100%;
+	    margin: 0 auto 10px;
+	    padding: 5px 0;
+	    z-index: 10;
 	}
-
+	
+	.function-button {
+	    display: flex;
+	    flex-direction: column;
+	    align-items: center;
+	    justify-content: center;
+	    width: 18%;
+		height: 100px;
+	    text-align: center;
+	    padding: 8px;
+	    border-radius: 8px;
+	    background-color: rgba(255, 255, 255);
+	    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	    transition: background-color 0.3s ease;
+	}
+	
+	.function-button:hover {
+	    background-color: rgba(255, 255, 255, 0.9);
+	}
+	
+	.paragraph-1 {
+	    font-size: 10px; /* 英文描述文字字体大小 */
+	    color: #636668; /* 英文描述文字颜色 */
+	}
+	
+	.heading-3 {
+	    font-size: 12px; /* 中文标题字体大小 */
+	    font-weight: bold; /* 加粗中文标题 */
+	    color: #333; /* 标题颜色 */
+	}
+	
 	.function-text {
 		font-size: 16px;
 		justify-content: center;
@@ -479,7 +514,7 @@
 		margin-bottom: 10px;
 		color: #636668;
 	}
-
+	
 	.act-box {
 		width: 94vw;
 		height: 25vh;
@@ -501,6 +536,7 @@
 	    width: 95vw;
 	    height: 50vw;
 	    margin-left: 2.5vw;
+		margin-bottom: 0;
 	    border-radius: 8px;
 	    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 	    overflow: hidden;
