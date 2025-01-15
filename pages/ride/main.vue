@@ -132,9 +132,6 @@
                 }
             };
         },
-		created() {
-			//this.generateNoticeText();
-		},
         computed: {
 			// 根据状态动态返回显示内容
 			statusText() {

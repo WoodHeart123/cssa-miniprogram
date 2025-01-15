@@ -70,9 +70,6 @@
 				}
 			});
 		},
-		created() {
-			this.generateNoticeText();
-		},
 		methods: {
 			// 生成滚动栏文字内容
 			generateNoticeText() {
