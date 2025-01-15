@@ -13,12 +13,11 @@
 			</view>
 		</view>
 
-		<view class="background-image">
-		</view>
+		<image src="../../static/background-img/蛇年春节背景图片.png" mode="widthFix" class="background-image"/>
 
 		<!-- 广告轮播部分 -->
 		<view class="ads-swiper-container" style="margin-top: 8vh">
-		    <swiper autoplay="true" interval="3000" circular="true" indicator-dots="true" class="swiper">
+		    <swiper autoplay="true" interval="2500" circular="true" indicator-dots="true" class="swiper">
 		        <swiper-item v-for="(ad, index) in ads" :key="index" @click="openAdLink(ad.link)">
 		            <image :src="ad.imgUrl" mode="scaleToFill" class="ad-image" />
 		        </swiper-item>
@@ -135,7 +134,11 @@
 					{imgUrl: 'https://prod-9gip97mx4bfa32a3-1312104819.tcloudbaseapp.com/ads/main%20page%20ads/ad%20test%201.png?sign=5b9ffd1789ad991a4c8f5c3bf8f6a805&t=1733284645',
 					 link: '',
 					 label: '测试用汉堡图片'}
-				]
+				],
+				// 每个功能主页滚动栏的通用内容
+				noticeBarTextsList: [
+					{ text: "2025蛇年春晚即将举办，详情请关注微信公众号" },
+				],
 			}
 		},
 		onLoad() {
@@ -176,6 +179,14 @@
 			}
 		},
 		methods: {
+			// 生成每个主页滚动栏都有的文字内容
+			generateNoticeBarText() {
+				// 定义长间隔字符串
+				const longSpace = "\u00A0".repeat(45);
+				return this.noticeBarTextsList
+					.map((item) => item.text)
+					.join(longSpace); // 使用长间隔连接文字
+			},
 			popMask: function(e) {
 				this.$refs.ad.open()
 			},
@@ -209,7 +220,7 @@
 					return;
 				}
 				uni.navigateTo({
-					url: "/pages/second/secondMain",
+					url: `/pages/second/secondMain?noticeBarText=${this.generateNoticeBarText()}`,
 				})
 			},
 			toRental: function() {
@@ -232,7 +243,7 @@
 					return;
 				}
 				uni.navigateTo({
-					url: "/pages/ride/main",
+					url: `/pages/ride/main?noticeBarText=${this.generateNoticeBarText()}`,
 				})
 			},
 			showBadgerBook: function(){
@@ -330,13 +341,14 @@
 	}
 	
 	.background-image{
-		background-image: url("https://7072-prod-9gip97mx4bfa32a3-1312104819.tcb.qcloud.la/asset/main/%E8%9B%87%E5%B9%B4%E6%98%A5%E8%8A%82%E8%83%8C%E6%99%AF%E5%9B%BE%E7%89%87.png?sign=bb2c4e8a6081cd93a7aa10c0821877c0&t=1736819140");
 		width: 100vw;
 		height: 100vh;
 		position: fixed;
-		top:0;
-		background-size: cover;
+		top: 0;
 		z-index: 0;
+		background-size: contain;
+		background-position: center center;
+		background-repeat: no-repeat;
 	}
 	
 	.badger-button-box{
@@ -486,7 +498,7 @@
 	    text-align: center;
 	    padding: 8px;
 	    border-radius: 8px;
-	    background-color: rgba(255, 255, 255);
+	    background-color: rgba(255, 255, 255,0.9);
 	    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 	    transition: background-color 0.3s ease;
 	}
@@ -536,7 +548,6 @@
 	    width: 95vw;
 	    height: 50vw;
 	    margin-left: 2.5vw;
-		margin-bottom: 0;
 	    border-radius: 8px;
 	    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 	    overflow: hidden;
