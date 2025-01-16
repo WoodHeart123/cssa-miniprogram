@@ -10,6 +10,7 @@
                             limit="5"
                             fileMediatype="image"
                             :auto-upload="false"
+							:model-value="this.imagesToDisplay"
                             @select="onSelectImage"
                             @delete="onDeleteImage"
                         ></uni-file-picker>
@@ -276,7 +277,7 @@
                     },
                     description: "",
                 },
-				images: [],
+				imagesToDisplay: [], // 仅用于前端展示图片，为一个包含图片url为对象的数组。E.g ["url1","url2"]
                 errorMessage: "", // 错误提示信息
                 requestTypeOptions: [
                     { text: "出顺风车", value: 0 },
@@ -302,8 +303,8 @@
 			if (options.ride) {
 				try {
 					const rideData = JSON.parse(decodeURIComponent(options.ride));
-					
 					this.ride = rideData;
+					this.imagesToDisplay = this.ride.images.map(url => ({ url }));
 					this.edit = 1;
 				} catch (e) {
 					console.error('数据解析失败', e);
@@ -349,7 +350,8 @@
 			
 			        // 检查未上传的图片
 					if (this.ride.images && this.ride.images.length > 0) {
-						const pendingImages = this.ride.images.filter(image => !image.url);
+						// 只上传没上传的图片。如果图片已经上传，那该元素应该是一个字符串；反之则是一个对象
+						const pendingImages = this.ride.images.filter(image => typeof image !== 'string');
 									
 						if (pendingImages.length > 0) {
 						    // 仅上传未上传的图片
@@ -387,7 +389,6 @@
 			// 发布顺风车
             async submit() {
                 if (!this.validateFields()) return;
-				this.images = [];
 				
 				if (this.ride.images && this.ride.images.length > 0) {
 					await this.uploadImages(this.ride.images);
@@ -426,13 +427,17 @@
 						filepath: e.tempFilePaths[i]
 					});
 				}
+				
+				const lastImageFilePath = this.ride.images[this.ride.images.length - 1].filepath;
+				this.imagesToDisplay.push({ lastImageFilePath });
 			},
 			
 			// 处理删除图片
 			onDeleteImage(e) {
 				for (let i = 0; i < this.ride.images.length; i++) {
-					if (this.ride.images[i].filename == e.tempFile.name) {
+					if (i === e.index) {
 						this.ride.images.splice(i, 1);
+						this.imagesToDisplay.splice(i,  1);
 						return;
 					}
 				}
@@ -474,9 +479,19 @@
 			
 			        // 更新 ride.images，将上传成功的图片替换
 			        this.ride.images = this.ride.images.map((img) => {
-			            const uploaded = pendingImages.find((pending) => pending.filepath === img.filepath);
-			            return uploaded?.url ? { ...img, url: uploaded.url } : img;
-			        });
+			            // 判断 img 是对象还是字符串
+			            if (typeof img === "object" && img.filepath) {
+			                // 查找匹配的 pendingImages 项
+			                const uploaded = pendingImages.find((pending) => pending.filepath === img.filepath);
+			                // 如果找到匹配项，返回其 URL；否则忽略该项
+			                return uploaded?.url || null;
+			            } else if (typeof img === "string") {
+			                // 如果 img 已经是字符串 URL，直接返回
+			                return img;
+			            }
+			            // 如果都不满足，返回 null
+			            return null;
+			        }).filter((url) => url !== null); // 过滤掉 null 值
 			
 			        // 显示成功提示
 			        if (uploadedImageCount === pendingImages.length) {
