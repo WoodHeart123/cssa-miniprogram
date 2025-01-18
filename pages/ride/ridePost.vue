@@ -528,7 +528,7 @@
 			                uploadOSS({
 			                    filename: image.filename,
 			                    filepath: res.tempFilePath,
-			                })
+			                }, "cssa-ride")
 			                    .then((url) => {
 			                        console.log(`图片上传成功，URL: ${url}`);
 			                        resolve(url);

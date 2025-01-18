@@ -53,7 +53,7 @@
 			<!-- 发布信息 -->
 			<view class="row-container publish-info-box">
 				<view class="row-container user-info">
-					<image class="avatar" :src="postUserInfo.avatarUrl || defaultAvatarUrl" mode="aspectFill" />
+					<image class="avatar" :src="posterUserAvatarToDisplay" mode="aspectFill" />
 					<text class="nickname">{{ postUserInfo.nickname || "匿名" }}</text>
 				</view>
 				<view class="publish-time">发布于：{{ getPublishedTimeText() }}</view>
@@ -84,7 +84,8 @@
 					avatarUrl: "",
 					nickname: "匿名",
 					isStudent: 0
-				}
+				},
+				posterUserAvatarToDisplay: ""
 			};
 		},
 		mounted() {
@@ -127,9 +128,18 @@
 				}).then(response => {
 					if (response.data.status === 100) {
 						this.postUserInfo = response.data.data;
+						// console.log(this.postUserInfo);
+						
+						if (this.postUserInfo.avatarUrl) {
+							this.posterUserAvatarToDisplay = this.postUserInfo.avatarUrl
+						} else if (this.postUserInfo.avatar !== undefined && this.postUserInfo.avatar !== "") {
+							this.posterUserAvatarToDisplay = "https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/"+this.postUserInfo.avatar+".jpg"
+						} else{
+							this.posterUserAvatarToDisplay = defaultAvatarUrl
+						}
+						
 					} else {
 						console.warn("获取发布用户信息失败:", response.data.message);
-						console.log(this.rideInfo.openId);
 					}
 				}).catch(error => {
 					console.error("获取发布用户信息出错:", error);

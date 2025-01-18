@@ -187,10 +187,12 @@
             async applyFilters() {
                 this.$refs.filterPopup.close(); // 关闭筛选弹窗
             
-                // 重置状态
-                this.offset = 0; // 偏移量重置
-                this.rideList = []; // 清空列表
-                this.status = "loading"; // 设置为加载中
+                // 如果非刷新，需要重置状态
+				if (this.status !== "loading") {
+					this.offset = 0; // 偏移量重置
+					this.rideList = []; // 清空列表
+					this.status = "loading"; // 设置为加载中
+				} 
             
                 let fetchedRides = []; // 临时存储每次获取的数据
             
@@ -200,6 +202,7 @@
             
                     // 根据当前已获取的数据进行筛选
                     const filteredBatch = this.rideList.filter((ride) => {
+						
                         // 请求类型筛选（0: 不限, 1: 出顺风车, 2: 求顺风车）
                         if (this.filter.requestTypeCurrent > 0 && ride.requestType !== (this.filter.requestTypeCurrent - 1)) {
                             return false;
@@ -239,15 +242,15 @@
             
                     // 将筛选后的数据添加到最终列表中
                     fetchedRides = fetchedRides.concat(filteredBatch);
-            
+					
+					// 判断 `status` 是否为 `noMore`，如果是，表示没有更多数据了
+					if (this.status === "noMore") {
+					    break; // 数据已耗尽，停止加载
+					}
+					
                     // 判断是否满足所需的数量
                     if (fetchedRides.length >= this.limit) {
-                        break; // 达到目标数量，停止加载
-                    }
-            
-                    // 判断 `status` 是否为 `noMore`，如果是，表示没有更多数据了
-                    if (this.status === "noMore") {
-                        break; // 数据已耗尽，停止加载
+                        break; // 满足所需的数量，停止加载
                     }
             
                     // 增加偏移量，获取下一批数据
@@ -266,15 +269,13 @@
                     this.status = "loaded"; // 数据加载完成
                 }
             
-                console.log("筛选后的 rideList:", this.rideList);
+                //console.log("筛选后的 rideList:", this.rideList);
             },
 			
 			// 重置筛选条件
             resetFilters() {
                 this.filter = {
-                    requestType: "",
 					requestTypeCurrent: 0,
-                    rideType: "",
 					rideTypeCurrent: 0,
                     departureDate: "",
                     returnDate: "",
@@ -283,13 +284,28 @@
                 };
             },
 			
+			// 检查有无筛选条件
+			areFiltersDefault() {
+				if (this.filter.requestTypeCurrent !== 0) return false;
+				if (this.filter.rideTypeCurrent !== 0) return false;
+				if (this.filter.departureDate !== "") return false;
+				if (this.filter.returnDate !== "") return false;
+				if (this.filter.origin !== "") return false;
+				if (this.filter.destination !== "") return false;
+				return true;
+			},
+			
             refresh() {
 				if (!this.triggered) {
 					this.triggered = true; // 开始下拉刷新
 					this.offset = 0; // 重置偏移量
 					this.status = "loading"; // 重置加载状态
 					this.rideList = []; //重置顺风车列表
-					this.getRideList(); // 加载顺风车信息
+					if (this.areFiltersDefault()) {
+						this.getRideList(); // 加载顺风车信息
+					} else {
+						this.applyFilters(); // 需要加载符合条件顺风车
+					}
 				}
             },
 			
@@ -319,7 +335,7 @@
 						// 更新加载状态
                         if (this.rideList.length === 0) {
 							this.status = "empty"; // 列表为空
-						} else if (newDataLength < this.limit) {
+						} else if (newRides.length < this.limit) {
 							this.status = "noMore"; // 没有更多数据
 						} else {
 							this.status = "loaded"; // 数据加载完成
@@ -345,7 +361,11 @@
 			
 			onScrollLower() {
 				this.status = "loading";
-				this.getRideList();
+				if (this.areFiltersDefault()) {
+					this.getRideList();
+				} else {
+					this.applyFilters();
+				}				
 			},
             toPostRide() {
                 uni.navigateTo({

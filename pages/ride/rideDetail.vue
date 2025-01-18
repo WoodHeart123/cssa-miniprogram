@@ -60,7 +60,7 @@
         <!-- 联系信息 -->
         <view class="contact">
             <view class="contact-box">
-                <img class="avatar" :src="userInfo.avatarUrl" />
+                <img class="avatar" :src="avatarUrlToDisplay" />
                 <text class="nickname">{{ userInfo.nickname }}</text>
             </view>
             <view class="contact-details">
@@ -109,9 +109,12 @@ export default {
                 nickname: "", // 发布用户昵称
 				isStudent: 0 // 发布用户是否为学生 
             },
+			avatarUrlToDisplay: "", // 发布用户用于展示的头像url
             defaultImage:
                 "https://prod-9gip97mx4bfa32a3-1312104819.tcloudbaseapp.com/ride/%E9%A1%BA%E9%A3%8E%E8%BD%A6%E9%BB%98%E8%AE%A4%E5%9B%BE%E7%89%87.jpg?sign=874f9cb0c12322055162c92ea77fa0f3&t=1732836080", // 默认图片
-            requestTypeConstrainValue: ["出顺风车", "求顺风车"], // 顺风车标签类型
+            defaultAvatarUrl:
+            	"https://thirdwx.qlogo.cn/mmopen/vi_32/POgEwh4mIHO4nibH0KlMECNjjGxQUq24ZEaGT4poC6icRiccVGKSyXwibcPq4BWmiaIGuG1icwxaQX6grC9VemZoJ8rg/132",
+			requestTypeConstrainValue: ["出顺风车", "求顺风车"], // 顺风车标签类型
             rideTypeConstrainValue: ["单程", "往返"], // 顺风车类型
         };
     },
@@ -245,6 +248,15 @@ export default {
                 .then((res) => {
                     if (res.data.status === 100) {
                         this.userInfo = res.data.data;
+						
+						if (this.userInfo.avatarUrl) {
+							this.avatarUrlToDisplay = this.userInfo.avatarUrl
+						} else if (this.userInfo.avatar !== undefined && this.userInfo.avatar !== "") {
+							this.avatarUrlToDisplay = "https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/"+this.userInfo.avatar+".jpg"
+						} else{
+							this.avatarUrlToDisplay = defaultAvatarUrl
+						}
+						
                     } else {
                         console.warn("获取用户信息失败：", res.data.message);
                         this.userInfo.nickname = "匿名";
