@@ -151,6 +151,23 @@
             this.refresh();
         },
         methods: {
+			// 刷新
+			refresh() {
+				if (!this.triggered) {
+					this.triggered = true; // 开始下拉刷新
+					this.offset = 0; // 重置偏移量
+					this.status = "loading"; // 重置加载状态
+					this.rideList = []; //重置顺风车列表
+					if (this.areFiltersDefault()) {
+						this.getRideList(); // 加载顺风车信息
+						// 增加偏移量，获取下一批数据
+						this.offset += this.limit;
+					} else {
+						this.applyFilters(); // 需要加载符合条件顺风车
+					}
+				}
+			},
+			
 			// 生成滚动栏文字内容
 			generateNoticeText() {
 				// 定义长间隔字符串
@@ -163,6 +180,7 @@
 				this.noticeText = this.noticeText ? this.noticeText + longSpace + baseText : baseText;
 				
 			},		
+			
 			// 跳转到《使用准则+声明》
 			toUsageRules() {
 				uni.navigateTo({
@@ -171,19 +189,24 @@
 					)}`,
 				});
 			},
+			
             openFilterPopup() {
                 this.$refs.filterPopup.open();
             },
+			
 			onFilterRequestTypeClick(e) {
 				if (this.filter.requestTypeCurrent != e.currentIndex) {
 					this.filter.requestTypeCurrent = e.currentIndex;
 				}
 			},
+			
 			onFilterRideTypeClick(e) {
 				if (this.filter.rideTypeCurrent != e.currentIndex) {
 					this.filter.rideTypeCurrent = e.currentIndex;
 				}
 			},
+			
+			// 加载符合筛选条件的顺风车信息
             async applyFilters() {
                 this.$refs.filterPopup.close(); // 关闭筛选弹窗
             
@@ -295,20 +318,6 @@
 				return true;
 			},
 			
-            refresh() {
-				if (!this.triggered) {
-					this.triggered = true; // 开始下拉刷新
-					this.offset = 0; // 重置偏移量
-					this.status = "loading"; // 重置加载状态
-					this.rideList = []; //重置顺风车列表
-					if (this.areFiltersDefault()) {
-						this.getRideList(); // 加载顺风车信息
-					} else {
-						this.applyFilters(); // 需要加载符合条件顺风车
-					}
-				}
-            },
-			
             // 获取顺风车列表
             async getRideList() {
                 if (this.status === "noMore") return; // 如果没有更多数据，则不再加载
@@ -359,19 +368,26 @@
 			    });
 			},
 			
+			// 下拉加载数据
 			onScrollLower() {
 				this.status = "loading";
 				if (this.areFiltersDefault()) {
 					this.getRideList();
+					// 增加偏移量，获取下一批数据
+					this.offset += this.limit;
 				} else {
 					this.applyFilters();
 				}				
 			},
+			
+			// 发布顺风车页面
             toPostRide() {
                 uni.navigateTo({
                     url: "/pages/ride/ridePost"
                 });
             },
+			
+			// 顺风车细节内容页面
             toRideDetail(rideId) {
                 uni.navigateTo({
                     url: `/pages/ride/rideDetail?rideId=${rideId}`

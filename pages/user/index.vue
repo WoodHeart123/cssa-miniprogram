@@ -209,7 +209,7 @@
 					path: "/user/login?nickname=" + encodeURI(nickname),
 					type: "GET",
 				};
-				requestAPI(opts)
+				await requestAPI(opts)
 					.then(response => {
 						this.userInfo = response.data.data;
 						uni.setNavigationBarTitle({

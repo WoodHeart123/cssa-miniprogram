@@ -54,6 +54,8 @@
 			<view class="row-container publish-info-box">
 				<view class="row-container user-info">
 					<image class="avatar" :src="posterUserAvatarToDisplay" mode="aspectFill" />
+					<img class="avatar-tag" v-if="postUserInfo.isStudent"
+						src="https://prod-9gip97mx4bfa32a3-1312104819.tcloudbaseapp.com/Member/%E5%AD%A6%E7%94%9F%E8%AE%A4%E8%AF%81tag.png?sign=b0d927e7bf08e282b9096cf1cccb0aae&t=1737229263">
 					<text class="nickname">{{ postUserInfo.nickname || "匿名" }}</text>
 				</view>
 				<view class="publish-time">发布于：{{ getPublishedTimeText() }}</view>
@@ -145,6 +147,8 @@
 					console.error("获取发布用户信息出错:", error);
 				});
 			},
+			
+			// 生成发布时间文字
 			getPublishedTimeText() {
 				let publishedTime = this.rideInfo.publishedTime;
 				let removedTime = this.rideInfo.removedTime;
@@ -182,6 +186,7 @@
 			        return `${diffInYears} 年前`;
 			    }
 			},
+			
 			// 跳转到详情页
 			toRideDetail() {
 				uni.navigateTo({
@@ -299,6 +304,14 @@
 		height: 30px;
 		border-radius: 50%;
 		margin-right: 10px;
+		position: relative;
+	}
+	.avatar-tag {
+	    position: absolute;
+		margin-top: 20px;
+	    left: -1px;
+	    width: 15%;
+	    height: 10%;
 	}
 	.nickname {
 		font-size: 12px;
@@ -309,4 +322,5 @@
 		color: #555;
 		text-align: right;
 	}
+	
 </style>

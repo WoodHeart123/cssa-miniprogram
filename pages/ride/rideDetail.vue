@@ -61,6 +61,8 @@
         <view class="contact">
             <view class="contact-box">
                 <img class="avatar" :src="avatarUrlToDisplay" />
+				<img class="avatar-tag" v-if="userInfo.isStudent"
+					src="https://prod-9gip97mx4bfa32a3-1312104819.tcloudbaseapp.com/Member/%E5%AD%A6%E7%94%9F%E8%AE%A4%E8%AF%81tag.png?sign=b0d927e7bf08e282b9096cf1cccb0aae&t=1737229263">
                 <text class="nickname">{{ userInfo.nickname }}</text>
             </view>
             <view class="contact-details">
@@ -373,6 +375,14 @@ export default {
 		width: 50px;
 		border-radius: 50%;
 		margin-right: 15px;
+		position: relative;
+	}
+	.avatar-tag {
+	    position: absolute;
+		margin-top: 35px;
+	    left: -1px;
+	    width: 16%;
+	    height: 15%;
 	}
 	.nickname {
 		flex: 1;
