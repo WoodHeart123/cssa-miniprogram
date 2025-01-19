@@ -85,6 +85,20 @@
                     ></uni-datetime-picker>
                 </uni-forms-item>
             </view>
+			
+			<!-- 预计到达时间 -->
+			<view class="card" v-if="ride.rideType === 0">
+			    <uni-forms-item name="estimatedArrivalTime">
+			        <text>预计到达时间：</text>
+			        <uni-datetime-picker
+			            v-model="this.ride.estimatedArrivalTime"
+			            type="datetime"
+			            returnType="string"
+			            format="yyyy-MM-dd HH:mm:ss"
+			            placeholder="请选择预计到达时间(默认CST)"
+			        ></uni-datetime-picker>
+			    </uni-forms-item>
+			</view>
 
             <!-- 返回时间（动态,只有顺风车类型为往返时必填） -->
             <view class="card" v-if="ride.rideType === 1">

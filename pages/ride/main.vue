@@ -222,6 +222,8 @@
                 // 通过循环持续获取数据，直到满足条件或数据耗尽
                 while (true) {
                     await this.getRideList(); // 调用 getRideList 获取一批数据
+					// 增加偏移量，获取下一批数据
+					this.offset += this.limit;
             
                     // 根据当前已获取的数据进行筛选
                     const filteredBatch = this.rideList.filter((ride) => {
@@ -266,18 +268,15 @@
                     // 将筛选后的数据添加到最终列表中
                     fetchedRides = fetchedRides.concat(filteredBatch);
 					
-					// 判断 `status` 是否为 `noMore`，如果是，表示没有更多数据了
-					if (this.status === "noMore") {
-					    break; // 数据已耗尽，停止加载
+					// 判断 `status` 是否为 `noMore`或者`loaded`，如果是，表示数据加载完成
+					if (this.status === "noMore" || this.status === "loaded") {
+					    break; // 停止加载
 					}
 					
                     // 判断是否满足所需的数量
                     if (fetchedRides.length >= this.limit) {
                         break; // 满足所需的数量，停止加载
                     }
-            
-                    // 增加偏移量，获取下一批数据
-                    this.offset += this.limit;
                 }
             
                 // 将最终筛选结果赋值给 rideList

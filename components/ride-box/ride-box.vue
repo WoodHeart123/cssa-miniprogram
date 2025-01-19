@@ -35,6 +35,7 @@
 			<!--出发/返回日期时间-->
 			<view class="time-box">
 				<view>{{ formatDepartureTime }}</view>
+				<view v-if="this.rideInfo.rideType === 0 && this.rideInfo.estimatedArrivalTime">{{ formatEstimatedArrivalTime }}</view>
 				<view v-if="this.rideInfo.rideType === 1">{{ formatReturnTime }}</view>
 			</view>
 			
@@ -97,6 +98,9 @@
 		computed: {
 			formatDepartureTime() {
 				return "出发: " + moment(this.rideInfo.departureTime).format("YYYY-MM-DD HH:mm");
+			},
+			formatEstimatedArrivalTime() {
+				return "到达: " + moment(this.rideInfo.estimatedArrivalTime).format("YYYY-MM-DD HH:mm");
 			},
 			formatReturnTime() {
 				return this.rideInfo.returnTime
