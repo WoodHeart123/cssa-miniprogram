@@ -32,7 +32,7 @@
 				{{ this.rideInfo.destination }}
 			</view>
 			
-			<!--出发/返回日期时间-->
+			<!--出发和到达/返回日期时间-->
 			<view class="time-box">
 				<view>{{ formatDepartureTime }}</view>
 				<view v-if="this.rideInfo.rideType === 0 && this.rideInfo.estimatedArrivalTime">{{ formatEstimatedArrivalTime }}</view>

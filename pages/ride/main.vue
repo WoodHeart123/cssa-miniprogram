@@ -350,6 +350,7 @@
 						}
                     } else {
                         this.handleError("加载失败，请稍后重试");
+						this.status = "loaded";
                     }
                 } catch (error) {
                     this.handleError("网络错误，请稍后重试");
