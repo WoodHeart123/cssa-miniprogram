@@ -131,9 +131,6 @@
 					{imgUrl: 'https://prod-9gip97mx4bfa32a3-1312104819.tcloudbaseapp.com/ads/main%20page%20ads/2025%E8%9B%87%E5%B9%B4%E5%AF%BC%E6%BC%94%E7%BB%84%E4%BB%8B%E7%BB%8D.png?sign=870111c1a696971f5c9934e321bd82a2&t=1733284485',
 					 link: 'https://mp.weixin.qq.com/s/Z1j-vIWHaEflqnAPmm1wVA',
 					 label: '2025蛇年春晚主持人招募'},
-					{imgUrl: 'https://prod-9gip97mx4bfa32a3-1312104819.tcloudbaseapp.com/ads/main%20page%20ads/ad%20test%201.png?sign=5b9ffd1789ad991a4c8f5c3bf8f6a805&t=1733284645',
-					 link: '',
-					 label: '测试用汉堡图片'}
 				],
 				// 每个功能主页滚动栏的通用内容
 				noticeBarTextsList: [
