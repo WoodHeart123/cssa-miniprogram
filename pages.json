@@ -192,6 +192,51 @@
 				"navigationBarTitleText": "我的转租",
 				"enablePullDownRefresh": true
 			}
+		},
+		{
+			"path" : "pages/user/subscribe",
+			"style" : 
+			{
+				"navigationBarTitleText" : "邮件订阅",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path" : "pages/webView/webView",
+			"style" : 
+			{
+				"navigationBarTitleText" : "详情",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path" : "pages/ride/main",
+			"style" : 
+			{
+				"navigationBarTitleText" : "顺风车",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path" : "pages/ride/rideDetail",
+			"style" : 
+			{
+				"navigationBarTitleText" : "顺风车详情"
+			}
+		},
+		{
+			"path" : "pages/ride/ridePost",
+			"style" : 
+			{
+				"navigationBarTitleText" : "发布顺风车"
+			}
+		},
+		{
+			"path" : "pages/my/myRide",
+			"style" : 
+			{
+				"navigationBarTitleText" : "我的顺风车"
+			}
 		}
 	],
 	"condition": {

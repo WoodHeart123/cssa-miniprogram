@@ -1,9 +1,9 @@
 <template>
 	<view class="top-bar" :style="{
 				marginTop:menuButtonInfo.top + 'px',
-				 marginLeft:  '12px',
-				 height: menuButtonInfo.height + 'px',
-				 position: position}">
+				marginLeft:  '12px',
+				height: menuButtonInfo.height + 'px',
+				position: position}">
 		<view class="top-icon" v-if="navigateBack" :style="{
 				width: menuButtonInfo.height + 'px', 
 				height: menuButtonInfo.height + 'px'}" @click="onClickNavigateBack">

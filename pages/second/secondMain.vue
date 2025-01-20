@@ -1,5 +1,15 @@
 <template>
 	<view id="second-main">
+		<!-- 文字滚动栏 -->
+		<view>
+		    <uni-notice-bar
+		        show-icon
+		        scrollable
+		        show-close
+		        single
+		        :text="noticeText"
+		    />
+		</view>
 		<scroll-view scroll-y="true" show-scrollbar="true" refresher-enabled="true"
 			class="column-container secondhand-container" refresher-background="white" @refresherrefresh="refresh"
 			enable-back-to-top="true" :refresher-triggered="triggered" @scrolltolower="onScrollLower">
@@ -22,6 +32,10 @@
 		},
 		data() {
 			return {
+				// 二手主页滚动栏自己的内容
+				noticeTextsList: [
+				],
+				noticeText: "", // 最终显示在滚动栏中的文字
 				offset:0,
 				limit: 20,
 				currentIndex: 0,
@@ -39,9 +53,13 @@
 				isLogin: false,
 			}
 		},
-		onLoad(){
+		onLoad(options){
 			wx.cloud.init();
 			this.refresh();
+			if (options.noticeBarText) {
+				this.noticeText = options.noticeBarText;
+				this.generateNoticeText();
+			}
 		},
 		onShow() {
 			uni.$on("uploadSuccess",this.uploadSuccess);
@@ -53,6 +71,18 @@
 			});
 		},
 		methods: {
+			// 生成滚动栏文字内容
+			generateNoticeText() {
+				// 定义长间隔字符串
+				const longSpace = "\u00A0".repeat(45);
+			
+				// 生成基础 noticeText
+				const baseText = this.noticeTextsList.map((item) => item.text).join(longSpace);
+			
+				// 将生成的 baseText 追加到现有的 noticeText
+				this.noticeText = this.noticeText ? this.noticeText + longSpace + baseText : baseText;
+				
+			},
 			uploadSuccess:function(){
 				this.refresh();
 				uni.showToast({

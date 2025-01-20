@@ -220,6 +220,7 @@
 	}
 
 	.button-box {
+		margin-top: 10px;
 		height: 50px;
 		width: 96vw;
 		align-items: center;

@@ -352,7 +352,7 @@
 									uploadOSS({
 										filename: image.filename,
 										filepath: res.tempFilePath
-									}).then((result) => {
+									},"cssa-secondHand").then((result) => {
 										uploadedImage = result;
 										resolve(); 
 									}).catch(reject); 

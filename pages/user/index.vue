@@ -50,6 +50,10 @@
 					<img class="image" src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/index/myRental.svg" />
 					<text class="text-box">我的转租</text>
 				</view>
+				<view class="button-box" @click="jump(6)">
+					<img class="image" src="@/static/svg-icons/index/myRide.svg" />
+					<text class="text-box">我的顺风车</text>
+				</view>
 			</view>
 			<view class="function-box">
 				<view class="button-box" @click="jump(4)">
@@ -171,6 +175,9 @@
 				if (index == 5) {
 					directURL = "/pages/aboutCSSA/contact";
 				}
+				if (index == 6) {
+					directURL = "/pages/my/myRide";
+				}
 				uni.navigateTo({
 					url: directURL
 				})
@@ -202,7 +209,7 @@
 					path: "/user/login?nickname=" + encodeURI(nickname),
 					type: "GET",
 				};
-				requestAPI(opts)
+				await requestAPI(opts)
 					.then(response => {
 						this.userInfo = response.data.data;
 						uni.setNavigationBarTitle({

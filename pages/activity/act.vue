@@ -130,7 +130,6 @@
 		margin-top: 20px;
 	}
 	
-
 	.scroll {
 		display: flex;
 		flex-direction: column;
