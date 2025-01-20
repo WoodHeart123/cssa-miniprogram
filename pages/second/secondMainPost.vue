@@ -38,7 +38,7 @@
 
 			<view class="card uni-list">
 				<uni-forms-item name="productType">
-					<uni-data-picker placeholder="请选择商品类型" popup-title="请选择商品类型" :localdata="item_types"
+					<uni-data-picker placeholder="请选择商品类型" popup-title="请选择商品类型" :localdata="itemTypes"
 						v-model="product.productType">
 					</uni-data-picker>
 				</uni-forms-item>
@@ -420,6 +420,7 @@
 	}
 	import uploadOSS from '@/api/upload.js'
 	import requestAPI from '@/api/request.js'
+	import itemTypes from './second.js'
 </script>
 
 <style>

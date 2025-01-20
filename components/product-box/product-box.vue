@@ -17,9 +17,9 @@
 			</view>
 		</view>
 		<view class='row-container'
-			style='justify-content: space-between;height: 10%;align-items: center;margin-top: 3px;'>
+			style='justify-content: space-between;height: 10%;align-items: center;margin-top: 10px;'>
 			<text class='price'>{{'$' + product.price}}</text>
-			<view class='condition'><text>{{this.condition[product.productCondition]}}</text></view>
+			<view class='condition'><text style="color:#7F0019">{{this.condition[product.productCondition]}}</text></view>
 		</view>
 		<view class='seller row-container'>
 			<image class='avatar'
@@ -105,7 +105,7 @@
 	}
 
 	.product-name-box {
-		height: 40px;
+		height: 48px;
 		width: 100%;
 		flex-shrink: 0;
 		overflow: hidden;
@@ -113,9 +113,9 @@
 	}
 
 	.product-name {
-		height: 40px;
+		height: 48px;
 		font-size: 12px;
-		line-height: 20px;
+		line-height: 24px;
 		white-space: normal;
 		overflow: hidden;
 		text-overflow: ellipsis;
@@ -125,22 +125,25 @@
 	}
 
 	.product-name::before {
-		margin-left: 45px;
+		margin-left: 60px;
 		content: '';
 	}
 
 	.price {
-		font-weight: 600;
+		font-weight: 500;
 		height: 10%;
-		color: #9b0000;
+		color: $main-primary-color;
 	}
 
 	.time {
 		font-size: 10px;
 		text-align: right;
 		margin-left: auto;
-		color: darkgrey;
 		height: 12px;
+		
+		text{
+			color: $shade-darker-gray;
+		}
 	}
 	
 	.tag-text{
@@ -148,25 +151,21 @@
 	}
 
 	.condition {
-		margin-top: 2%;
 		height: 20px;
 		line-height: 20px;
-		padding-left: 3%;
-		padding-right: 3%;
+		padding: 1px 25px;
 		text-align: center;
 		font-size: 10px;
-		color: #9b0000;
-		border-radius: 5px;
-		border-color: #9b0000;
-		border-style: solid;
-		border-width: 1pt;
+		color: $main-primary-color;
+		background-color: $main-background-color;
+		border-radius: 20px;
 	}
 
 	.seller {
 		height: 24px;
 		font-size: 20px;
 		align-items: center;
-		margin-top: 3px;
+		margin-top: 10px;
 	}
 
 	.avatar {
@@ -182,20 +181,25 @@
 		white-space: nowrap;
 		width: 40px;
 		font-size: 10px;
-		color: darkgrey;
 		height: 12px;
+		
+		text{
+			color: $shade-darker-gray;
+		}
 	}
 
 	.delivery {
 		position: absolute;
 		justify-content: center;
 		align-items: center;
-		background-color: #9b0000;
+		background-color: $main-primary-color;
 		color: white;
-		border-radius: 5px;
+		border-radius: 18px;
 		font-size: 12px;
-		height: 20px;
+		line-height: 12px;
+		height: 18px;
 		width: 40px;
 		margin-right: 5px;
+		padding: 2px 5px;
 	}
 </style>

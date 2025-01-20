@@ -96,7 +96,7 @@
 		{
 			"path": "pages/second/secondMain",
 			"style": {
-				"navigationBarTitleText": "二手市场",
+				"navigationStyle": "custom",
 				"enablePullDownRefresh": false
 			}
 		},

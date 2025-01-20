@@ -1,5 +1,44 @@
 <template>
 	<view id="second-main">
+		<view class="top-bar">
+			<view class="top-icon" @click="navigateBack">
+				<uni-icons type="arrowleft" size="25"></uni-icons>
+			</view>
+			<view class="heading-3 top-text">
+				<text>二手市场</text>
+			</view>
+		</view>
+		<view class="search-bar">
+			<uni-icons type="search" size="20"></uni-icons>
+			<input placeholder-class="search-placeholder" placeholder="搜索二手商品" :value="productTitleFilter" @blur="refresh" @confirm="refresh"/>
+		</view>
+		<view style="display: flex;" class="dropdown-bar">
+			<u-dropdown active-color="#7F0019" ref="dropdown">
+				<u-dropdown-item :title="this.conditionFilter.label" height="80">
+					<view class="slot-content">
+						<view @click="onClickConditionOptions(-1)" >
+							<text class="paragraph-1 dropdown-label" :class="{ active: this.conditionFilter.value == 'all' }">成色不限</text>
+						</view>
+						<view v-for="(condition, index) in this.conditionOptions"
+							@click="onClickConditionOptions(index)" >
+							<text class="paragraph-1 dropdown-label" :class="{ active: this.conditionFilter.value  == condition.value }">{{condition.label}}</text>
+						</view>
+					</view>
+				</u-dropdown-item>
+				<u-dropdown-item :title="this.deliveryFilter.label" height="80">
+					<view class="slot-content">
+						<view @click="onClickDeliveryOptions(-1)" >
+							<text class="paragraph-1 dropdown-label" :class="{ active: this.deliveryFilter.value == 'all' }">取货方式不限</text>
+						</view>
+						<view v-for="(delivery, index) in this.deliveryOptions"
+							@click="onClickDeliveryOptions(index)" >
+							<text class="paragraph-1 dropdown-label" :class="{ active: this.deliveryFilter.value == delivery.value }">{{delivery.label}}</text>
+						</view>
+					</view>
+				</u-dropdown-item>
+			</u-dropdown>
+		</view>
+
 		<scroll-view scroll-y="true" show-scrollbar="true" refresher-enabled="true"
 			class="column-container secondhand-container" refresher-background="white" @refresherrefresh="refresh"
 			enable-back-to-top="true" :refresher-triggered="triggered" @scrolltolower="onScrollLower">
@@ -22,42 +61,84 @@
 		},
 		data() {
 			return {
-				offset:0,
+				offset: 0,
 				limit: 20,
 				currentIndex: 0,
 				pattern: {
-					buttonColor: "#9b0000"
+					buttonColor: "#7F0019"
+				},
+				conditionOptions: conditionOptions,
+				deliveryOptions: deliveryOptions,
+				deliveryFilter: {
+					label: "取货方式不限",
+					value: "all"
+				},
+				conditionFilter: {
+					label: '成色不限',
+					value: 'all'
 				},
 				triggered: false,
 				status: "loading",
-				productList:[],
-				contentText:{
-					contentdown:"上拉显示更多",
-					contentrefresh:"正在加载...",
-					contentnomore:"没有更多商品了"
+				productList: [],
+				productTitleFilter: '',
+				contentText: {
+					contentdown: "上拉显示更多",
+					contentrefresh: "正在加载...",
+					contentnomore: "没有更多商品了"
 				},
+
 				isLogin: false,
 			}
 		},
-		onLoad(){
+		onLoad() {
 			wx.cloud.init();
 			this.refresh();
 		},
 		onShow() {
-			uni.$on("uploadSuccess",this.uploadSuccess);
+			uni.$on("uploadSuccess", this.uploadSuccess);
 			uni.getStorage({
 				key: "userInfo-2",
-				success:() => {
+				success: () => {
 					this.isLogin = true;
 				}
 			});
 		},
 		methods: {
-			uploadSuccess:function(){
+			uploadSuccess: function() {
 				this.refresh();
 				uni.showToast({
 					title: "上传成功",
 				});
+			},
+			onClickConditionOptions(index) {
+				if(index == -1){
+					conditionFilter = {
+						label: '成色不限',
+						value: 'all'
+					};
+					return;
+				}
+				if(this.conditionFilter.value != this.conditionOptions[index].value){
+					this.conditionFilter.label = this.conditionOptions[index].label;
+					this.conditionFilter.value = this.conditionOptions[index].value;
+					this.refresh()
+				}
+				this.$refs.dropdown.close();
+			},
+			onClickDeliveryOptions(index){
+				if(index == -1){
+					deliveryFilter = {
+						label: "取货方式不限",
+						value: "all"
+					};
+					return;
+				}
+				if(this.deliveryFilter.value != this.deliveryOptions[index].value){
+					this.deliveryFilter.label = this.deliveryOptions[index].label;
+					this.deliveryFilter.value = this.deliveryOptions[index].value;
+					this.refresh()
+				}
+				this.$refs.dropdown.close();
 			},
 			onClickMenu: function(index) {
 				if (this.currentIndex != index) {
@@ -65,7 +146,7 @@
 					this.refresh();
 				}
 			},
-			refresh:function(){
+			refresh: function() {
 				if (!this.triggered) {
 					this.triggered = true;
 					this.limit = 20;
@@ -77,7 +158,7 @@
 			},
 			async login(name) {
 				uni.showLoading({
-					mask:true
+					mask: true
 				});
 				const res = await wx.cloud.callContainer({
 					config: {
@@ -97,34 +178,32 @@
 				uni.hideLoading();
 				this.toPostProduct();
 			},
-			getProductList:async function(){
-				if(this.status == "noMore"){
+			getProductList: async function() {
+				if (this.status == "noMore") {
 					return;
 				}
 				const opts = {
-				    path: `/secondhand/getProductList?productType=all&limit=${this.limit}&offset=${this.offset}`,
-				    type: 'GET',
+					path: `/secondhand/searchProduct?limit=${this.limit}&offset=${this.offset}&conditionFilter=${this.conditionFilter.value}&deliveryFilter=${this.deliveryFilter.value}`,
+					type: 'GET',
 				};
-				
+
 				requestAPI(opts).then(response => {
-				    if (response.data.status == 100) {
-				        this.productList = this.productList.concat(response.data.data);
-				        this.offset += response.data.data.length;
-						console.log(response.data.data.length)
-				        this.status = response.data.data.length != this.limit ? "noMore" : "more";
-				    }
-					console.log(this.status)
-				    this.triggered = false;
+					if (response.data.status == 100) {
+						this.productList = this.productList.concat(response.data.data);
+						this.offset += response.data.data.length;
+						this.status = response.data.data.length != this.limit ? "noMore" : "more";
+					}
+					this.triggered = false;
 				}).catch(error => {
-				    console.error("Fetch product list failed:", error);
-				    this.triggered = false; 
+					console.error("Fetch product list failed:", error);
+					this.triggered = false;
 				});
 			},
 			toPostProduct: function() {
 				if (!this.isLogin) {
 					uni.showToast({
-						title:"请先登录",
-						icon:"none"
+						title: "请先登录",
+						icon: "none"
 					});
 					uni.getUserProfile({
 						desc: "获取用户信息",
@@ -157,11 +236,20 @@
 
 		}
 	}
+	import {
+		itemTypes,
+		conditionOptions,
+		deliveryOptions
+	} from './second.js'
 	import productBoxVue from '@/components/product-box/product-box.vue';
 	import requestAPI from '@/api/request.js'
 </script>
 
-<style>
+<style lang="scss">
+	.u-flex {
+		display: flex;
+	}
+
 	#second-main {
 		position: absolute;
 		width: 100vw;
@@ -247,5 +335,98 @@
 		flex-direction: row;
 		flex-wrap: wrap;
 		margin-left: 1vw;
+	}
+
+	.top-bar {
+		background-color: transparent;
+		position: relative;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		z-index: 10;
+		margin-top: 7vh;
+		width: 100vw;
+
+		.top-icon {
+			position: absolute;
+			left: 5%;
+			width: 40px;
+			height: 40px;
+			border-radius: 15px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.top-text {
+			margin-left: 70px;
+			height: 100%;
+			color: $main-primary-font-color;
+			display: flex;
+		}
+
+	}
+
+	.search-bar {
+		display: flex;
+		align-items: center;
+		height: 55px;
+		width: 90vw;
+		margin: 20px 5vw 0 5vw;
+		background-color: $main-background-color-2;
+		border-radius: 10000px;
+
+		uni-icons {
+			margin: 0 3%;
+
+			text {
+				color: $main-secondary-color !important;
+			}
+		}
+
+		.search-placeholder {
+			color: $main-secondary-color !important;
+			font-size: 14px;
+		}
+
+		input {
+			flex: 1;
+		}
+
+		image {
+			width: 30px;
+			height: 30px;
+			margin: 0 3%;
+		}
+
+	}
+
+	.dropdown-bar {
+		.u-dropdown__menu__item {
+			margin: 20px 5vw;
+		}
+
+		.u-dropdown__menu__item__arrow {
+			margin-left: 10px !important;
+		}
+	}
+
+	.slot-content {
+		width: calc(100vw - 40px);
+		background-color: $main-background-color;
+		border-radius: 0 0px 20px 20px;
+		padding: 5px 20px 20px 20px;
+
+		.dropdown-label {
+			color: $main-secondary-color;
+			transition: all 0.5s;
+			margin: 7px 0;
+		}
+		
+		.dropdown-label.active{
+			font-weight: 700;
+			color: $main-primary-font-color;
+		}
+
 	}
 </style>

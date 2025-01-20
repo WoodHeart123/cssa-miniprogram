@@ -21,64 +21,70 @@
 	@import '@/uni_modules/uni-scss/index.scss';
 	@import './static/iconfont/iconfont.css';
 	@import '@/static/customicons.css';
-	
-	.heading-1{
+
+	.heading-1 {
 		line-height: 50px;
 		font-size: 34px;
 		font-weight: 600;
 	}
-	.heading-2{
+
+	.heading-2 {
 		line-height: 38px;
 		font-size: 28px;
 		font-weight: 600;
 	}
-	.heading-3{
+
+	.heading-3 {
 		line-height: 22px;
 		font-size: 18px;
 		font-weight: 600;
 	}
-	.paragraph-1{
+
+	.paragraph-1 {
 		line-height: 24px;
 		font-size: 14px;
 		font-weight: 400;
 	}
-	.paragraph-2{
+
+	.paragraph-2 {
 		line-height: 10px;
 		font-size: 8px;
 		font-weight: 400;
 	}
-	
-	.button{
+
+	.button {
 		background-color: $main-primary-color;
 		display: flex;
 		justify-content: center;
 		align-items: center;
 		border-radius: 100vh;
-		text{
+
+		text {
 			line-height: 24px;
 			font-size: 14px;
 			color: $main-background-color-2;
 		}
 	}
-	
-	.button:hover{
+
+	.button:hover {
 		background-color: $shade-badger-red;
 	}
-	
-	.button.disabled{
+
+	.button.disabled {
 		background-color: $main-secondary-color;
 	}
-	
 
-	@font-face{
+
+	@font-face {
 		font-family: Roboto;
-		src:"@/static/font/roboto.ttf"
+		src: "@/static/font/roboto.ttf"
 	}
+
 	page {
 		background-color: $main-background-color !important;
 	}
 
-	text{
+	text {
 		font-family: Roboto;
 		color: $main-primary-font-color;
 	}

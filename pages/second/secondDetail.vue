@@ -4,7 +4,7 @@
 		<swiper class="swiper" indicator-dots>
 			<swiper-item style="display:flex;align-items: center;justify-content: center;"
 				v-for="(image, index) in product.images" @click="previewImage">
-				<u--image mode="widthFix" :src="image">
+				<u--image mode="aspectFill" :src="image">
 					<template v-slot:loading>
 						<u-loading-icon color="red"></u-loading-icon>
 					</template>
@@ -12,36 +12,45 @@
 			</swiper-item>
 		</swiper>
 		<view class="basic">
+			<view class='time-box'><text class="paragraph-1 time-text">{{this.productPublishTime}}</text></view>
+			<view class="title-box"><text class="heading-1">{{product.productTitle}}</text></view>
 			<view class="price-box">
-				<view class="row-container" style="align-items: center;">
-					<view class="price"><text>{{"$" + product.price}}</text></view>
-					<view class="row-container tag"><text>{{this.condition[product.productCondition]}}</text></view>
-					<view class="row-container tag"><text>{{this.delivery[product.delivery]}}</text></view>
-				</view>
+				<text class="heading-3 price-text">{{"$" + product.price}}</text>
 			</view>
-			<view class="second-name"><text>{{product.productTitle}}</text></view>
-		</view>
-		<view class="contact">
+			<view class="tag-box">
+				<view class="tag delivery-tag"><text style="color:white">{{this.delivery[product.delivery]}}</text></view>
+				<view class='tag condition-tag'><text style="color:#7F0019">{{this.condition[product.productCondition]}}</text></view>
+			</view>
 			<view class="contact-box">
-				<img class="avatar"
-					:src="'https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/' + product.sellerAvatar + '.jpg'">
-				<text class="nickname">{{product.sellerNickname}}</text>
-				<view class="copy-box"  @click="setClipboardData">
-					<text>复制</text>
-					<img class="copy-img" src="/static/fuzhi.png">
+				<view class="avatar-box">
+					<img class="avatar"
+						:src="'https://cssa-mini-na.oss-us-west-1.aliyuncs.com/cssa-mini-avatar/' + product.sellerAvatar + '.jpg'">
+				</view>
+					<view class="info-box">
+						<view class="nickname-box"><text class="heading-3">{{product.sellerNickname}}</text></view>
+						<view class="copy-box"  @click="setClipboardData">
+							<view class="wechat-tag" v-show="this.isLogin">
+								<uni-icons type="weixin" color="#FFFFFF"></uni-icons>
+								<text style="margin-left: 5px;" class="paragraph-1">微信号</text>
+								<text style="margin-left: 5px;" class="paragraph-1">{{product.contact}}</text>
+							</view>
+							<img style="margin-left: 5px;" class="copy-img" src="/static/fuzhi.svg">
+						</view>
+					</view>
+				<view class="contact-overlay" v-show="!this.isLogin">
+					<button class="login-button" plain="true"
+						@click="getUserProfile">点击登录可查看联系方式</button>
 				</view>
 			</view>
-			<view class="weixin" v-show="this.isLogin">微信号：{{product.contact}}</view>
-			<view class="contact-overlay" v-show="!this.isLogin">
-				<button class="login-button" plain="true"
-					@click="getUserProfile">点击登录可查看联系方式</button>
-			</view>
-		</view>
-		<view class="description">
-			<view class="scroll-page">
-				<rich-text>
-					{{product.productDescription}}
-				</rich-text>
+			<view class="description">
+				<view class="description-title">
+					<text class="heading-3">物品描述</text>
+				</view>
+				<view class="scroll-page">
+					<rich-text class="paragraph-1">
+						{{product.productDescription}}
+					</rich-text>
+				</view>
 			</view>
 		</view>
 	</view>
@@ -65,7 +74,7 @@
 				},
 				collectProductList: [],
 				isLogin: false,
-
+				productPublishTime: ''
 			}
 		},
 		onLoad(options) {
@@ -87,6 +96,13 @@
 						console.error("failed to get new product info", error);
 					});
 				uni.hideLoading()
+			}
+			if (moment().year() - moment(this.product.time).year() > 0) {
+				this.productPublishTime = moment(this.product.time).format("YYYY-MM-DD");
+			} else if (Date.now() - moment(this.product.time).valueOf() > 86400000 * 7) {
+				this.productPublishTime = moment(this.product.time).format("MM-DD");
+			} else {
+				this.productPublishTime = moment(this.product.time).locale('zh-cn').fromNow();
 			}
 		},
 
@@ -143,7 +159,7 @@
 					success: (res) => {
 						uni.showToast({
 							icon:'none',
-							title:'联系方式复制成功'
+							title:'复制成功'
 						})
 					}
 				});
@@ -181,7 +197,9 @@
 			}
 		}
 	}
-	import requestAPI from '@/api/request.js'
+	import requestAPI from '@/api/request.js';
+	import moment from "moment/min/moment-with-locales";
+	import 'moment/locale/zh-cn';
 </script>
 
 <style lang="scss">
@@ -189,20 +207,6 @@
 		width: 100vw;
 		height: 100vh;
 		overflow-x: hidden;
-	}
-
-	#dollar-icon {
-		font-size: 28px;
-		color: #9B0000;
-	}
-
-	.save-icon {
-		font-size: 25px;
-		transition: all 0.5s;
-	}
-
-	.save-icon-selected {
-		color: #FFDE03;
 	}
 
 	.weixin {
@@ -215,17 +219,47 @@
 		display: flex;
 		flex-direction: row;
 	}
-
-	.tag {
-		padding: 2px 10px 2px 10px;
-		font-size: 13px;
-		margin-left: 10px;
-		background-color: #9B0000;
-		height: 25px;
-		border-radius: 5px;
-		color: #f5f5f5;
-		align-items: center;
+	
+	.tag-box{
+		display: flex;
+		flex-direction: row;
+		
+		.tag {
+			height: 30px;
+			line-height: 30px;
+			padding: 1px 30px;
+			text-align: center;
+			font-size: 15px;
+			border-radius: 20px;
+			margin-right: 20px;
+		}
+		
+		.tag.condition-tag{
+			color: $main-primary-color;
+			background-color: $main-background-color-2;
+		}
+		
+		.tag.delivery-tag{
+			background-color: $main-primary-color;
+			color: $main-background-color-2;
+		}
+		
 	}
+	
+	.time-box {
+		
+		.time-text{
+			color: $shade-darker-gray;
+		}
+	}
+
+
+	.title-box{
+		margin-top: 5px;
+	}
+
+	
+
 
 	.type {
 		display: inline;
@@ -236,23 +270,7 @@
 	}
 
 	.price {
-		font-size: 24px;
-		line-height: 30px;
-		font-weight: bold;
-		color: #9B0000;
-		margin-left: 5px;
-	}
-
-	.shoucang-box {
-		display: flex;
-		flex-direction: column;
-		height: 100%;
-		width: 50px;
-		font-size: 11px;
-		color: #999999;
-		align-items: center;
-		justify-content: center;
-		margin-right: 10px;
+		color: $main-primary-color!important;
 	}
 
 	.price-box {
@@ -261,27 +279,38 @@
 		align-items: center;
 		justify-content: space-between;
 		height: 40px;
-	}
-
-	.second-name {
-		padding: 10px;
-		font-size: 18px;
-		font-weight: 700;
+		
+		.price-text{
+			color: $main-primary-color;
+		}
 	}
 
 	.basic {
+		padding: 20px;
 		margin-bottom: 2vh;
 		margin-top: 1vh;
 		user-select: text;
 	}
 
-	.contact {
+	.contact-box{
+		display: flex;
 		position: relative;
-		width: 90vw;
-		height: 110px;
-		margin-left: 5vw;
+		margin-top: 20px;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		width: calc(100vw - 40px);
+		height: 120px;
 		box-shadow: 0 0px 6px 1px rgba(165, 165, 165, 0.2);
-		border-radius: 5px;
+		border-radius: 15px;
+		background-color: $main-background-color-2;
+		
+		.avatar {
+			height: 22vw;
+			width: 22vw;
+			border-radius: 50%;
+			margin: 3vw;
+		}
 	}
 
 	.contact-overlay {
@@ -307,37 +336,39 @@
 		line-height: 100px;
 	}
 	
-	.contact-box {
-		padding-top: 10px;
+
+
+	.nickname-box {
 		display: flex;
-		flex-direction: row;
 		align-items: center;
-		height: 50px;
-		width: 100vw;
 	}
-
-	.avatar {
-		height: 50px;
-		width: 58.5px;
-		border-radius: 50%;
-		margin-left: 10px;
-	}
-
-	.nickname {
-		margin-left: 15px;
-		width: calc(100vw - 120px);
+	
+	.info-box{
+		height: 100%;
+		display:flex;
+		flex-direction: column;
+		justify-content: center;
+		padding-bottom: 10px;
 	}
 
 	.copy-box {
 		display: flex;
-		flex-direction: column;
-		height: 100%;
-		width: 50px;
+		flex-direction: row;
 		font-size: 11px;
-		color: #999999;
 		align-items: center;
 		justify-content: center;
-		margin-right: 50px;
+		margin-top: 15px;
+		
+		.wechat-tag{
+			padding: 7px 10px;
+			background-color: #9EC785;
+			border-radius: 20px;
+			
+			text{
+				color: $main-background-color-2 !important;
+			}
+
+		}
 	}
 
 	.copy-img {
@@ -356,13 +387,18 @@
 	}
 
 	.description {
-		margin-top: 10px;
+		margin-top: 20px;
+		
+		.description-title{
+			border-bottom: 3px solid  $main-primary-color;
+			width: fit-content;
+			padding-bottom: 5px;
+			border-radius: 2px;
+		}
 	}
 
 	.scroll-page {
-		padding: 15px;
-		width: calc(100% - 30px);
-		line-height: 30px;
-		font-size: 15px;
+		margin-top: 20px;
+		color: $shade-darker-gray;
 	}
 </style>
