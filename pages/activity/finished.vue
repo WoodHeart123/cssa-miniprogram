@@ -1,7 +1,5 @@
 <template>
     <view>
-
-
         <!-- a BIG title indicating YOU FINISHED -->
         <view class="finished-title">
             <text>您已完成活动报名</text>
@@ -11,30 +9,25 @@
         <view class="finished-button">
             <button @click="jumpToHomePage">返回活动首页</button>
         </view>
-
-
-
-
     </view>
 </template>
 
 <script>
-    export default {
-		data(){
-			return{
-				actDetail: {}
-			}
-		},
-        methods: {
-            jumpToHomePage() {
-				uni.$emit("refreshAct")
-                wx.switchTab({
-                    url: '/pages/activity/act'
-                });
-            }
-        }
-    }
-                
+export default {
+    data() {
+        return {
+            actDetail: {},
+        };
+    },
+    methods: {
+        jumpToHomePage() {
+            uni.$emit('refreshAct');
+            wx.switchTab({
+                url: '/pages/activity/act',
+            });
+        },
+    },
+};
 </script>
 
 <style>
