@@ -89,7 +89,7 @@ export default {
                 mask: true,
             });
             const opts = {
-                path: `/user/deleteMyItem?itemID=${this.product.productID}&service=secondhand`,
+                path: `/secondhand/deleteSecondhand?itemID=${this.product.productID}&service=secondhand`,
                 type: 'DELETE',
             };
 
@@ -122,7 +122,7 @@ export default {
                 mask: true,
             });
             const opts = {
-                path: `/user/setProductTime?UTCtime=${moment.utc().format()}&productID=${this.product.productID}&service=product`,
+                path: `/user/setTime?UTCtime=${moment.utc().format()}&itemID=${this.product.productID}&service=product`,
                 type: 'GET',
             };
 
@@ -158,7 +158,7 @@ export default {
                 mask: true,
             });
             const opts = {
-                path: `/user/setProductTime?UTCtime=1970-01-01T00:00:00Z&productID=${this.product.productID}`,
+                path: `/user/setTime?UTCtime=1970-01-01T00:00:00Z&itemID=${this.product.productID}&service=product`,
                 type: 'GET',
             };
             requestAPI(opts)

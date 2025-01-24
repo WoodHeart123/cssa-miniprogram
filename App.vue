@@ -58,6 +58,9 @@
 		justify-content: center;
 		align-items: center;
 		border-radius: 100vh;
+		color: $main-background-color-2;
+		line-height: 24px;
+		font-size: 14px;
 
 		text {
 			line-height: 24px;

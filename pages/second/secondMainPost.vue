@@ -51,17 +51,6 @@
                 </uni-forms-item>
             </view>
 
-            <view class="card uni-list">
-                <uni-forms-item name="productType">
-                    <uni-data-picker
-                        placeholder="请选择商品类型"
-                        popup-title="请选择商品类型"
-                        :localdata="itemTypes"
-                        v-model="product.productType"
-                    >
-                    </uni-data-picker>
-                </uni-forms-item>
-            </view>
 
             <view class="card label_group">
                 <uni-forms-item name="productCondition">
@@ -142,44 +131,6 @@ export default {
                 productTitle: '',
             },
             images: [],
-            item_types: [
-                {
-                    text: '电子产品',
-                    value: 'ELECTRONIC',
-                },
-                {
-                    text: '交通工具',
-                    value: 'TRANSPORT',
-                },
-                {
-                    text: '家具家电',
-                    value: 'FURNITURE',
-                },
-                {
-                    text: '虚拟卡券',
-                    value: 'DIGITAL',
-                },
-                {
-                    text: '日常用品',
-                    value: 'DAILY',
-                },
-                {
-                    text: '美妆服饰',
-                    value: 'MAKEUP',
-                },
-                {
-                    text: '书籍教具',
-                    value: 'EDU',
-                },
-                {
-                    text: '宠物用品',
-                    value: 'PET',
-                },
-                {
-                    text: '其他',
-                    value: 'OTHERS',
-                },
-            ],
             deliveryOption: [
                 {
                     text: '自取',
@@ -252,14 +203,6 @@ export default {
                         },
                     ],
                 },
-                productType: {
-                    rules: [
-                        {
-                            required: true,
-                            errorMessage: '请选择商品类型',
-                        },
-                    ],
-                },
                 delivery: {
                     rules: [
                         {
@@ -301,7 +244,6 @@ export default {
             this.edit = true;
             this.product = JSON.parse(decodeURIComponent(options.product));
             this.product.productCondition = this.conditionOption[this.product.productCondition].value;
-            this.product.productType = this.item_types[this.product.productType].value;
         }
     },
     onShow() {
@@ -448,7 +390,8 @@ export default {
             try {
                 const uploadedImages = await Promise.all(uploadPromises);
                 this.images = uploadedImages;
-                (this.product.images = uploadedImages), this.postProduct();
+                this.product.images = uploadedImages;
+				this.postProduct();
             } catch (error) {
                 uni.hideLoading();
                 uni.showToast({
@@ -473,7 +416,9 @@ export default {
                     uni.hideLoading();
                     if (response.data.status == 100) {
                         uni.$emit('uploadSuccess');
-                        uni.navigateBack();
+                        uni.redirectTo({
+                        	url: '/pages/second/secondDetail?product=' + encodeURIComponent(JSON.stringify(response.data.data)),
+                        });
                     } else {
                         uni.showToast({
                             title: '上传信息失败',

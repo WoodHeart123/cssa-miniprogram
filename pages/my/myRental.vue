@@ -111,7 +111,7 @@ export default {
                 mask: true,
             });
             const opts = {
-                path: `/user/deleteMyItem?itemID=${encodeURI(this.myRental[index].rentalID)}&service=rental`,
+                path: `/rental/deleteRental?itemID=${encodeURI(this.myRental[index].rentalID)}&service=rental`,
                 type: 'DELETE',
             };
             requestAPI(opts)
@@ -153,7 +153,7 @@ export default {
             }
             this.status = 'loading';
             const opts = {
-                path: `/user/getMyList?limit=${encodeURI(this.limit)}&offset=${encodeURI(this.offset)}&service=rental`,
+                path: `/rental/getUserRentalList?limit=${encodeURI(this.limit)}&offset=${encodeURI(this.offset)}&service=rental`,
                 type: 'GET',
             };
             requestAPI(opts)

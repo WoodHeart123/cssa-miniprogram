@@ -1,13 +1,6 @@
 <template>
     <view id="second-main">
-        <view class="top-bar">
-            <view class="top-icon" @click="navigateBack">
-                <uni-icons type="arrowleft" size="25"></uni-icons>
-            </view>
-            <view class="heading-3 top-text">
-                <text>二手市场</text>
-            </view>
-        </view>
+		<top-bar text="二手市场" navigate-back position="fixed"></top-bar>
         <view class="search-bar">
             <uni-icons type="search" size="20"></uni-icons>
             <input
@@ -68,7 +61,7 @@
         >
             <view class="box">
                 <view v-for="(product, index) in productList" :key="index">
-                    <productBoxVue :product="product"></productBoxVue>
+                    <productBoxVue :product="product" :key="product.productID"></productBoxVue>
                 </view>
             </view>
             <uni-load-more :contentText="contentText" :status="status"></uni-load-more>
@@ -136,32 +129,30 @@ export default {
         },
         onClickConditionOptions(index) {
             if (index == -1) {
-                conditionFilter = {
+                this.conditionFilter = {
                     label: '成色不限',
                     value: 'all',
                 };
-                return;
             }
-            if (this.conditionFilter.value != this.conditionOptions[index].value) {
+            else if (this.conditionFilter.value != this.conditionOptions[index].value) {
                 this.conditionFilter.label = this.conditionOptions[index].label;
                 this.conditionFilter.value = this.conditionOptions[index].value;
-                this.refresh();
             }
+			this.refresh();
             this.$refs.dropdown.close();
         },
         onClickDeliveryOptions(index) {
             if (index == -1) {
-                deliveryFilter = {
+                this.deliveryFilter = {
                     label: '取货方式不限',
                     value: 'all',
                 };
-                return;
             }
-            if (this.deliveryFilter.value != this.deliveryOptions[index].value) {
+            else if (this.deliveryFilter.value != this.deliveryOptions[index].value) {
                 this.deliveryFilter.label = this.deliveryOptions[index].label;
                 this.deliveryFilter.value = this.deliveryOptions[index].value;
-                this.refresh();
             }
+			this.refresh();
             this.$refs.dropdown.close();
         },
         onClickMenu: function (index) {
@@ -259,6 +250,9 @@ export default {
             this.status = 'loading';
             this.getProductList();
         },
+		navigateBack: function(){
+			uni.navigateBack();
+		},
     },
 };
 import { itemTypes, conditionOptions, deliveryOptions } from './second.js';
@@ -357,35 +351,6 @@ import requestAPI from '@/api/request.js';
     margin-left: 1vw;
 }
 
-.top-bar {
-    background-color: transparent;
-    position: relative;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    z-index: 10;
-    margin-top: 7vh;
-    width: 100vw;
-
-    .top-icon {
-        position: absolute;
-        left: 5%;
-        width: 40px;
-        height: 40px;
-        border-radius: 15px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .top-text {
-        margin-left: 70px;
-        height: 100%;
-        color: $main-primary-font-color;
-        display: flex;
-    }
-}
-
 .search-bar {
     display: flex;
     align-items: center;
@@ -393,7 +358,8 @@ import requestAPI from '@/api/request.js';
     width: 90vw;
     margin: 20px 5vw 0 5vw;
     background-color: $main-background-color-2;
-    border-radius: 10000px;
+    border-radius: 100vh;
+	margin-top: 10vh;
 
     uni-icons {
         margin: 0 3%;
