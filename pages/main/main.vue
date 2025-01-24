@@ -155,7 +155,7 @@ export default {
                 },
                 {
                     imgUrl: 'https://prod-9gip97mx4bfa32a3-1312104819.tcloudbaseapp.com/ads/main%20page%20ads/2025%E8%9B%87%E5%B9%B4%E5%AF%BC%E6%BC%94%E7%BB%84%E4%BB%8B%E7%BB%8D.png?sign=2bacdcec5814c520ec0dbdf1c684f0d9&t=1737687799',
-                    link: 'https://mp.weixin.qq.com/s/r21LNuaNVVmwSr09VOamcA',
+                    link: 'https://mp.weixin.qq.com/s/Z1j-vIWHaEflqnAPmm1wVA',
                     label: '2025蛇年导演组',
                 },
             ],
