@@ -14,7 +14,7 @@
                 </u--image>
             </swiper-item>
         </swiper>
-        <view class="basic">
+        <view class="product-detail-box">
             <view class="time-box"
                 ><text class="paragraph-1 time-text">{{ this.productPublishTime }}</text></view
             >
@@ -26,8 +26,8 @@
             </view>
             <view class="tag-box">
                 <view class="tag delivery-tag"
-                    ><text style="color: white">{{ this.delivery[product.delivery] }}</text></view
-                >
+                    ><text style="color: white">{{ this.delivery[product.delivery] }}</text>
+                </view>
                 <view class="tag condition-tag"
                     ><text style="color: #7f0019">{{ this.condition[product.productCondition] }}</text></view
                 >
@@ -69,6 +69,12 @@
                 </view>
             </view>
         </view>
+        <view class="bottom-bar" v-show="this.isLogin">
+            <button class="bottom-bar-icon" @click="toShare" open-type="share">
+                <uni-icons color="#9ec785" type="weixin"></uni-icons>
+                <text class="paragraph-2">分享</text>
+            </button>
+        </view>
     </view>
 </template>
 
@@ -82,7 +88,12 @@ export default {
                 nickname: '小红豆',
                 avatar: 1,
             },
-            condition: { NEW: '全新', ALMOST_NEW: '几乎全新', USED: '明显使用痕迹', IMPAIRED: '部分损毁' },
+            condition: {
+                NEW: '全新',
+                ALMOST_NEW: '几乎全新',
+                USED: '明显使用痕迹',
+                IMPAIRED: '部分损毁',
+            },
             delivery: {
                 pickup: '自取',
                 deliver: '送货',
@@ -91,6 +102,23 @@ export default {
             collectProductList: [],
             isLogin: false,
             productPublishTime: '',
+            options: [
+                {
+                    icon: 'weixin',
+                    text: '分享',
+                },
+                {
+                    icon: 'chat-filled',
+                    text: '留言',
+                },
+            ],
+            buttonGroup: [
+                {
+                    text: '分享至微信',
+                    backgroundColor: '#9ec785',
+                    color: '#fff',
+                },
+            ],
         };
     },
     onLoad(options) {
@@ -212,6 +240,10 @@ export default {
                 urls: this.product.images,
             });
         },
+        toShare: function () {
+            console.log(1);
+            wx.showShareMenu();
+        },
     },
 };
 import requestAPI from '@/api/request.js';
@@ -223,7 +255,7 @@ import 'moment/locale/zh-cn';
 .second-detail {
     width: 100vw;
     height: 100vh;
-    overflow-x: hidden;
+    overflow: scroll;
 }
 
 .weixin {
@@ -296,9 +328,9 @@ import 'moment/locale/zh-cn';
     }
 }
 
-.basic {
+.product-detail-box {
     padding: 20px;
-    margin-bottom: 2vh;
+    margin-bottom: 10vh;
     margin-top: 1vh;
     user-select: text;
 }
@@ -408,5 +440,44 @@ import 'moment/locale/zh-cn';
 .scroll-page {
     margin-top: 20px;
     color: $shade-darker-gray;
+}
+
+.bottom-bar {
+    display: flex;
+    flex-direction: row;
+    position: fixed;
+    align-items: center;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding-bottom: env(safe-area-inset-bottom);
+    background-color: white;
+    z-index: 1000;
+    padding-top: 10px;
+
+    button {
+        all: unset;
+    }
+
+    .bottom-bar-icon {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 40px;
+        margin: 0 10px;
+
+        text {
+            color: #9ec785;
+        }
+    }
+
+    .button {
+        width: 100%;
+        padding: 10px;
+
+        text {
+            color: $main-background-color-2;
+        }
+    }
 }
 </style>

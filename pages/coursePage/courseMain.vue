@@ -281,7 +281,7 @@ export default {
         },
         async getCourseList() {
             const res = await requestAPI({
-                path: `/course/courselist?departmentID=${this.departmentID}&limit=20&offset=${this.courseCount}&orderType=${this.sort[this.sortIndex]}&isGrad=${this.isGrad}`,
+                path: `/course/getCourseList?departmentID=${this.departmentID}&limit=20&offset=${this.courseCount}&orderType=${this.sort[this.sortIndex]}&isGrad=${this.isGrad}`,
                 type: 'GET',
             });
             if (res.data.status == 100) {
@@ -299,7 +299,7 @@ export default {
         },
         async getDepartmentList() {
             const res = await requestAPI({
-                path: '/course/departmentlist',
+                path: '/course/getDepartmentList',
                 type: 'GET',
             });
             let tempList = res.data.data;

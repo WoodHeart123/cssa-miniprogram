@@ -61,7 +61,7 @@ export default {
             }
             this.status = 'loading';
             const opts = {
-                path: `/user/getMySecondhand?limit=${this.limit}&offset=${this.offset}`,
+                path: `/secondhand/getUserSecondhandList?limit=${this.limit}&offset=${this.offset}`,
                 type: 'GET',
             };
             requestAPI(opts)
