@@ -149,8 +149,13 @@ export default {
             menuButtonInfo: {},
             ads: [
                 {
-                    imgUrl: 'https://prod-9gip97mx4bfa32a3-1312104819.tcloudbaseapp.com/ads/main%20page%20ads/2025%E8%9B%87%E5%B9%B4%E5%AF%BC%E6%BC%94%E7%BB%84%E4%BB%8B%E7%BB%8D.png?sign=870111c1a696971f5c9934e321bd82a2&t=1733284485',
-                    link: 'https://mp.weixin.qq.com/s/Z1j-vIWHaEflqnAPmm1wVA',
+                    imgUrl: 'https://prod-9gip97mx4bfa32a3-1312104819.tcloudbaseapp.com/ads/main%20page%20ads/2025%E8%9B%87%E5%B9%B4%E6%98%A5%E6%99%9A%E6%97%B6%E9%97%B4%E5%9C%B0%E7%82%B9%E5%AE%98%E5%AE%A3.png?sign=b5f0583e5ad957c8c737eee90bf2d44a&t=1737426849',
+                    link: 'https://mp.weixin.qq.com/s/_GUT3WcbRnnSFtI4wn0-Dw',
+                    label: '2025蛇年春晚时间地点官宣',
+                },
+                {
+                    imgUrl: 'https://prod-9gip97mx4bfa32a3-1312104819.tcloudbaseapp.com/ads/main%20page%20ads/2025%E6%98%A5%E6%99%9A%E4%B8%BB%E6%8C%81%E4%BA%BA%E6%8B%9B%E5%8B%9F.png?sign=b9aa28b04686b9cb2dc41e85d3c001a9&t=1731120159',
+                    link: 'https://mp.weixin.qq.com/s/r21LNuaNVVmwSr09VOamcA',
                     label: '2025蛇年导演组',
                 },
             ],
@@ -333,9 +338,9 @@ import mainAdvertisementVue from '@/components/main-advertisement/main-advertise
 
 #main {
     width: 100vw;
-	height: 100vh;
+    height: 100vh;
     overflow-x: hidden;
-	position: relative;
+    position: relative;
 }
 
 .top-bar {
@@ -442,15 +447,15 @@ import mainAdvertisementVue from '@/components/main-advertisement/main-advertise
 }
 
 .function-box {
-	display: flex;
-	flex-direction: row;
-	position: absolute;
+    display: flex;
+    flex-direction: row;
+    position: absolute;
     flex-shrink: 0;
     height: 160px;
-	border-radius: 15px;
+    border-radius: 15px;
     width: 86vw;
     bottom: 10px;
-	right: 7vw;
+    right: 7vw;
     justify-content: space-between;
     z-index: 10;
 
@@ -480,10 +485,10 @@ import mainAdvertisementVue from '@/components/main-advertisement/main-advertise
         justify-content: center;
         width: 35%;
         height: 80%;
-		
-		.button{
-			padding: 5px 10px;
-		}
+
+        .button {
+            padding: 5px 10px;
+        }
 
         .gradient-border {
             border-bottom: 1px solid transparent;

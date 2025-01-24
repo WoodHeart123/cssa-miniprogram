@@ -1,6 +1,6 @@
 <template>
     <view id="second-main">
-		<top-bar text="二手市场" navigate-back position="fixed"></top-bar>
+        <top-bar text="二手市场" navigate-back position="fixed"></top-bar>
         <view class="search-bar">
             <uni-icons type="search" size="20"></uni-icons>
             <input
@@ -133,12 +133,11 @@ export default {
                     label: '成色不限',
                     value: 'all',
                 };
-            }
-            else if (this.conditionFilter.value != this.conditionOptions[index].value) {
+            } else if (this.conditionFilter.value != this.conditionOptions[index].value) {
                 this.conditionFilter.label = this.conditionOptions[index].label;
                 this.conditionFilter.value = this.conditionOptions[index].value;
             }
-			this.refresh();
+            this.refresh();
             this.$refs.dropdown.close();
         },
         onClickDeliveryOptions(index) {
@@ -147,12 +146,11 @@ export default {
                     label: '取货方式不限',
                     value: 'all',
                 };
-            }
-            else if (this.deliveryFilter.value != this.deliveryOptions[index].value) {
+            } else if (this.deliveryFilter.value != this.deliveryOptions[index].value) {
                 this.deliveryFilter.label = this.deliveryOptions[index].label;
                 this.deliveryFilter.value = this.deliveryOptions[index].value;
             }
-			this.refresh();
+            this.refresh();
             this.$refs.dropdown.close();
         },
         onClickMenu: function (index) {
@@ -250,9 +248,9 @@ export default {
             this.status = 'loading';
             this.getProductList();
         },
-		navigateBack: function(){
-			uni.navigateBack();
-		},
+        navigateBack: function () {
+            uni.navigateBack();
+        },
     },
 };
 import { itemTypes, conditionOptions, deliveryOptions } from './second.js';
@@ -359,7 +357,7 @@ import requestAPI from '@/api/request.js';
     margin: 20px 5vw 0 5vw;
     background-color: $main-background-color-2;
     border-radius: 100vh;
-	margin-top: 10vh;
+    margin-top: 10vh;
 
     uni-icons {
         margin: 0 3%;

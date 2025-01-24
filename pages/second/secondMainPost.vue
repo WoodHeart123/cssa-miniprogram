@@ -51,7 +51,6 @@
                 </uni-forms-item>
             </view>
 
-
             <view class="card label_group">
                 <uni-forms-item name="productCondition">
                     <uni-data-checkbox
@@ -391,7 +390,7 @@ export default {
                 const uploadedImages = await Promise.all(uploadPromises);
                 this.images = uploadedImages;
                 this.product.images = uploadedImages;
-				this.postProduct();
+                this.postProduct();
             } catch (error) {
                 uni.hideLoading();
                 uni.showToast({
@@ -417,7 +416,7 @@ export default {
                     if (response.data.status == 100) {
                         uni.$emit('uploadSuccess');
                         uni.redirectTo({
-                        	url: '/pages/second/secondDetail?product=' + encodeURIComponent(JSON.stringify(response.data.data)),
+                            url: '/pages/second/secondDetail?product=' + encodeURIComponent(JSON.stringify(response.data.data)),
                         });
                     } else {
                         uni.showToast({
