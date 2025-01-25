@@ -1,169 +1,201 @@
 <template>
-    <view id="subscribe" class="container">
-        <view class="title">订阅邮件</view>
+    <view class="my-ride">
+        <!-- 分段控制器 -->
+        <uni-segmented-control
+            :current="displayedType"
+            :values="tabValues"
+            active-color="#9b0000"
+            inactive-color="#333"
+            style="text-align: center; justify-content: center; line-height: 40px"
+            @clickItem="onDisplayedTypeClick"
+        />
 
-        <uni-forms ref="subscribeForm" :model="formData" :rules="rules" class="form-container">
-            <view class="card">
-                <uni-forms-item name="email">
-                    <view class="input-group">
-                        <text class="label">邮箱：</text>
-                        <input class="uni-input" v-model="formData.email" placeholder="请输入您的电子邮箱" />
+        <!-- Ride 列表区域 -->
+        <scroll-view
+            scroll-y="true"
+            show-scrollbar="true"
+            refresher-enabled="true"
+            class="column-container ride-scroll"
+            refresher-background="white"
+            @refresherrefresh="refresh"
+            enable-back-to-top="true"
+            :refresher-triggered="triggered"
+            @scrolltolower="onScrollLower"
+        >
+            <view class="my-ride-box" v-for="(ride, index) in rideList" :key="index">
+                <view class="my-ride-container">
+                    <ride-box-vue :rideInfo="ride"></ride-box-vue>
+                </view>
+
+                <!-- 操作按钮 -->
+                <view class="row-container button-box">
+                    <!-- 编辑按钮（所有顺风车都有） -->
+                    <view class="button row-container" @click="editRide(index)">
+                        <view class="icon iconfont">&#xe646;</view>
+                        <view class="button-text">编辑</view>
                     </view>
-                </uni-forms-item>
-            </view>
 
-            <view class="card checkbox-container">
-                <checkbox-group @change="onCheckBoxChange">
-                    <label class="checkbox-label">
-                        <checkbox value="agreed" :checked="formData.agreed" color="#9b0000" />
-                        <text
-                            >我同意向CSSAatUWMadison分享该邮箱并订阅邮件服务。CSSA学联保证该邮箱不会被用于第三方用途，仅用于CSSA活动通知。</text
-                        >
-                    </label>
-                </checkbox-group>
-            </view>
+                    <!-- 未过期的顺风车显示下架按钮 -->
+                    <template v-if="ride.publishedTime !== null">
+                        <view class="button row-container" @click="hideRide(index)">
+                            <view class="icon iconfont">&#xe620;</view>
+                            <view class="button-text">下架</view>
+                        </view>
+                    </template>
 
-            <view class="button-container">
-                <button class="confirm-button" :disabled="!canSubmit" @click="submit('subscribeForm')">提交</button>
+                    <!-- 删除按钮（所有顺风车都有） -->
+                    <view class="button row-container" @click="deleteRide(index)">
+                        <view class="icon iconfont">&#xe74b;</view>
+                        <view class="button-text">删除</view>
+                    </view>
+                </view>
             </view>
-        </uni-forms>
-
-        <view v-if="showPopup" class="popup">
-            <text>{{ popupMessage }}</text>
-            <text>{{ countdown }}秒后自动跳转</text>
-        </view>
+            <uni-load-more :status="status" :contentText="contentText"></uni-load-more>
+        </scroll-view>
     </view>
 </template>
 
 <script>
+import moment from 'moment/min/moment-with-locales';
+import 'moment/locale/zh-cn';
+import requestAPI from '@/api/request.js';
+import rideBoxVue from '@/components/ride-box/ride-box.vue';
+
 export default {
     data() {
         return {
-            formData: {
-                email: '',
-                agreed: false,
-            },
-            showPopup: false,
-            popupMessage: '',
-            countdown: 3,
-            userInfo: {},
-            rules: {
-                email: {
-                    rules: [
-                        {
-                            required: true,
-                            errorMessage: '请输入您的电子邮箱',
-                        },
-                        {
-                            format: 'email',
-                            errorMessage: '电子邮箱格式不正确',
-                        },
-                    ],
-                },
-                agreement: {
-                    rules: [
-                        {
-                            required: true,
-                            errorMessage: '您必须同意此条款',
-                        },
-                    ],
-                },
+            isLoading: false, // 防止重复加载
+            offset: 0,
+            limit: 20,
+            rideList: [],
+            tabValues: ['已发布', '已过期'],
+            displayedType: 0, // 0: 已发布, 1: 已过期
+            status: 'more',
+            triggered: false,
+            contentText: {
+                contentdown: '上拉显示更多',
+                contentrefresh: '正在加载...',
+                contentnomore: '没有更多了',
             },
         };
     },
-    onLoad() {
-        this.userInfo = uni.getStorageSync('userInfo-2');
-        if (this.userInfo && this.userInfo.email && this.userInfo.email !== '') {
-            this.formData.email = this.userInfo.email;
-        }
+    onShow() {
+        this.refresh();
+    },
+    components: {
+        rideBoxVue,
     },
     methods: {
-        onCheckBoxChange(event) {
-            this.formData.agreed = event.detail.value.includes('agreed');
+        // 切换分段控制器
+        onDisplayedTypeClick(e) {
+            if (this.displayedType !== e.currentIndex) {
+                this.displayedType = e.currentIndex;
+                this.offset = 0;
+                this.rideList = [];
+                this.status = 'more';
+                this.refresh();
+            }
         },
-        async submit(ref) {
-            this.$refs[ref]
-                .validate()
-                .then(async () => {
-                    if (this.canSubmit) {
-                        uni.showLoading({
-                            title: '正在订阅...',
-                            mask: true,
-                        });
-                        try {
-                            const res = await wx.cloud.callContainer({
-                                config: {
-                                    env: 'prod-9gip97mx4bfa32a3',
-                                },
-                                path: '/user/subscribe',
-                                method: 'POST',
-                                header: {
-                                    'X-WX-SERVICE': 'springboot-cssa-test', // change this to real server.
-                                },
-                                data: {
-                                    email: this.formData.email,
-                                },
-                            });
-                            console.log(res.data);
-                            if (res.data.status === true) {
-                                this.showPopup = true;
-                                this.popupMessage = '您已成功订阅邮件服务';
-                                this.updateLocalStorage();
-                                this.startCountdown();
-                            } else {
-                                uni.showToast({
-                                    title: '订阅失败，请重试',
-                                    icon: 'none',
-                                    duration: 2000,
-                                });
-                            }
-                        } catch (error) {
-                            uni.showToast({
-                                title: '订阅失败，请重试',
-                                icon: 'none',
-                                duration: 2000,
-                            });
-                        } finally {
-                            uni.hideLoading();
-                        }
-                    }
-                })
-                .catch((err) => {
-                    uni.showToast({
-                        title: err[0].errorMessage,
-                        icon: 'error',
-                    });
-                });
+
+        // 加载已发布的顺风车
+        async loadPublishedRideInfo() {
+            if (this.isLoading) return; // 如果已经在加载，直接返回
+
+            this.isLoading = true;
+            this.status = 'loading';
+
+            try {
+                const opts = {
+                    path: `/ride/getRideListByUserId?offset=${this.offset}&limit=${this.limit}`,
+                    type: 'GET',
+                };
+                const response = await requestAPI(opts);
+                this.handleRideResponse(response);
+            } finally {
+                this.isLoading = false;
+            }
         },
-        updateLocalStorage() {
-            this.userInfo.email = this.formData.email;
-            this.userInfo.subscribed = true;
-            uni.setStorage({
-                key: 'userInfo-2',
-                data: this.userInfo,
-                success: function () {
-                    console.log('userInfo-2 更新成功');
-                },
-                fail: function () {
-                    console.log('userInfo-2 更新失败');
-                },
+
+        // 加载已下架的顺风车
+        async loadRemovedRideInfo() {
+            this.status = 'loading';
+            const opts = {
+                path: `/ride/getHiddenRideList?offset=${this.offset}&limit=${this.limit}`,
+                type: 'GET',
+            };
+            const response = await requestAPI(opts);
+            this.handleRideResponse(response);
+        },
+
+        // 处理接口响应
+        handleRideResponse(response) {
+            if (response.data && response.data.status === 100) {
+                const newData = response.data.data;
+
+                // 去重逻辑
+                const existingIds = new Set(this.rideList.map((ride) => ride.rideId));
+                const filteredData = newData.filter((ride) => !existingIds.has(ride.rideId));
+
+                // 合并数据
+                this.rideList = this.rideList.concat(filteredData);
+
+                if (newData.length < this.limit) {
+                    this.status = 'noMore';
+                } else {
+                    this.offset += this.limit;
+                }
+            } else {
+                this.status = 'noMore';
+            }
+            this.triggered = false;
+        },
+
+        // 上拉加载更多
+        onScrollLower() {
+            if (this.status === 'noMore') return;
+            this.displayedType === 0 ? this.loadPublishedRideInfo() : this.loadRemovedRideInfo();
+        },
+
+        // 刷新数据
+        refresh() {
+            this.offset = 0;
+            this.rideList = [];
+            this.status = 'more';
+            this.triggered = true;
+            this.displayedType === 0 ? this.loadPublishedRideInfo() : this.loadRemovedRideInfo();
+        },
+
+        // 编辑 Ride
+        async editRide(index) {
+            uni.navigateTo({
+                url: `../ride/ridePost?ride=` + encodeURIComponent(JSON.stringify(this.rideList[index])),
             });
         },
-        startCountdown() {
-            const timer = setInterval(() => {
-                this.countdown--;
-                if (this.countdown === 0) {
-                    clearInterval(timer);
-                    uni.navigateBack({
-                        delta: 1,
-                    });
-                }
-            }, 1000);
+
+        // 移除 Ride
+        async hideRide(index) {
+            await requestAPI({
+                path: `/ride/hideRide?rideId=${this.rideList[index].rideId}`,
+                type: 'POST',
+            });
+            this.refresh();
         },
-    },
-    computed: {
-        canSubmit() {
-            return this.formData.email && this.formData.agreed;
+
+        // 删除 Ride
+        deleteRide(index) {
+            uni.showModal({
+                title: '提示',
+                content: '确定要删除吗？删除后不可恢复！',
+                success: async (res) => {
+                    if (res.confirm) {
+                        await requestAPI({
+                            path: `/ride/removeRide?rideId=${this.rideList[index].rideId}`,
+                            type: 'POST',
+                        });
+                        this.rideList.splice(index, 1);
+                    }
+                },
+            });
         },
     },
 };
@@ -171,89 +203,140 @@ export default {
 
 <style>
 	@import '@/static/iconfont/iconfont.css';
-	.container {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: flex-start;
+
+	/* 页面整体样式 */
+	.my-ride {
 		width: 100vw;
 		height: 100vh;
-		padding: 40px 20px;
-		box-sizing: border-box;
-		overflow-y: auto;
+		overflow-y: scroll;
+		background-color: #e4e4e4;
 	}
 
-	.title {
-		margin-bottom: 20px;
-		font-size: 20px;
-		font-weight: bold;
-		text-align: center;
+	/* 滚动区域样式 */
+	.ride-scroll {
+		width: 100vw;
+		height: calc(100vh - 50px);
+		background-color: #f9f9f9;
 	}
 
-	.card {
-		width: 100%;
-		max-width: 360px;
-		padding: 10px;
-		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-		border-radius: 8px;
-		margin-bottom: 10px;
-	}
-
-	.input-group {
+	/* 列表项容器 */
+	.my-ride-box {
+		border: 1px solid white;
+		box-shadow: 0 3px 3px 0 #cbcbcb;
+		width: 96vw;
+		margin: 10px 2vw;
+		border-radius: 10px;
+		overflow: hidden;
+		background-color: white;
 		display: flex;
+		flex-direction: column;
+	}
+
+	/* 单个 Ride 容器 */
+	.my-ride-container {
+		flex: 1;
+	}
+
+	/* 操作按钮容器 */
+	.button-box {
+		display: flex;
+		justify-content: space-around;
 		align-items: center;
-		width: 100%;
+		height: 50px;
+		background-color: white;
+		padding: 10px 0;
+		box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.1);
+		border-top: 1px solid #ddd;
 	}
 
-	.label {
-		width: 60px;
-	}
-
-	.uni-input {
-		flex-grow: 1;
-		border: 1px solid #ccc;
-		padding: 8px 10px;
-		border-radius: 4px;
-		margin-left: 10px;
-	}
-
-	.checkbox-container {
-		width: 100%;
-		max-width: 360px;
-	}
-
-	.checkbox-label {
-		display: flex;
+	/* 操作按钮样式 */
+	.button {
+		height: 50%;
+		width: 20%;
+		border-radius: 10px;
+		border: 2px solid #9b0000;
+		box-shadow: 0 2px 2px 0 #9b0000;
 		align-items: center;
-		font-size: 14px;
-		margin-left: 10px;
-	}
-
-	.button-container {
-		width: 100%;
 		display: flex;
+		flex-direction: row;
 		justify-content: center;
 	}
 
-	.confirm-button {
-		max-width: 200px;
-		height: 36px;
-		border-radius: 18px;
-		background-color: #1684fc;
-		color: white;
-		font-size: 14px;
-		cursor: pointer;
+	.button-text {
+		text-align: center;
+		color: #505050;
+		font-weight: 550;
+		height: 55%;
+		font-size: 100%;
+		width: 100%;
+		height: 100%;
 	}
 
-	.popup {
+	.icon {
+		margin: 2px;
+		font-size: 16px;
+	}
+
+	/* 下架状态覆盖层 */
+	.is-takeoff {
 		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-		background-color: rgba(0, 0, 0, 0.8);
-		color: white;
-		padding: 20px;
-		border-radius: 10px;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(34, 34, 34, 0.7);
 		text-align: center;
+		line-height: 120px;
+		font-size: 20px;
+		color: rgba(255, 255, 255, 0.8);
+		border-radius: 10px 10px 0 0;
+		z-index: 10;
+	}
+
+	/* 分段控制器样式 */
+	.uni-segmented-control {
+		margin: 10px 0;
+		background-color: #fff;
+		border-radius: 5px;
+		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	}
+
+	/* 上拉加载更多样式 */
+	.uni-load-more {
+		margin: 20px 0;
+		text-align: center;
+		font-size: 14px;
+		color: #9b0000;
+	}
+
+	/* 分段控制器容器 */
+	.segmented-container {
+		margin: 10px 2vw;
+		background-color: #fff;
+		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+		border-radius: 10px;
+	}
+
+	/* 加载中提示样式 */
+	.loading-text {
+		text-align: center;
+		margin-top: 20px;
+		color: #9b0000;
+		font-size: 14px;
+	}
+
+	/* 提示信息 */
+	.empty-message {
+		text-align: center;
+		color: #999;
+		font-size: 14px;
+		margin-top: 20px;
+	}
+
+	/* 刷新动画样式 */
+	.refresher {
+		text-align: center;
+		padding: 10px 0;
+		color: #9b0000;
+		font-size: 14px;
 	}
 </style>
