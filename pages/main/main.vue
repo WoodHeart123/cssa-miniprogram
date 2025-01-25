@@ -128,7 +128,7 @@
 					{imgUrl: 'https://prod-9gip97mx4bfa32a3-1312104819.tcloudbaseapp.com/ads/main%20page%20ads/2025%E8%9B%87%E5%B9%B4%E6%98%A5%E6%99%9A%E6%97%B6%E9%97%B4%E5%9C%B0%E7%82%B9%E5%AE%98%E5%AE%A3.png?sign=b5f0583e5ad957c8c737eee90bf2d44a&t=1737426849',
 					 link: 'https://mp.weixin.qq.com/s/_GUT3WcbRnnSFtI4wn0-Dw',
 					 label: '2025蛇年春晚时间地点官宣'},
-					{imgUrl:'https://prod-9gip97mx4bfa32a3-1312104819.tcloudbaseapp.com/ads/main%20page%20ads/2025%E6%98%A5%E6%99%9A%E4%B8%BB%E6%8C%81%E4%BA%BA%E6%8B%9B%E5%8B%9F.png?sign=b9aa28b04686b9cb2dc41e85d3c001a9&t=1731120159',
+					{imgUrl:'https://prod-9gip97mx4bfa32a3-1312104819.tcloudbaseapp.com/ads/main%20page%20ads/2025%E8%9B%87%E5%B9%B4%E5%AF%BC%E6%BC%94%E7%BB%84%E4%BB%8B%E7%BB%8D.png?sign=2bacdcec5814c520ec0dbdf1c684f0d9&t=1737687799',
 					 link: 'https://mp.weixin.qq.com/s/r21LNuaNVVmwSr09VOamcA',
 					 label: '2025蛇年导演组'}
 				],
