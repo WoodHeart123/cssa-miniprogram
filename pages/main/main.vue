@@ -26,8 +26,8 @@
         <!-- 广告轮播部分 -->
         <view class="ads-swiper-container" style="margin-top: 8vh">
             <swiper autoplay="true" interval="2500" circular="true" indicator-dots="true" class="swiper">
-                <swiper-item v-for="(ad, index) in ads" :key="index" @click="openAdLink(ad.link)">
-                    <image :src="ad.imgUrl" mode="scaleToFill" class="ad-image" />
+                <swiper-item v-for="(ad, index) in promotionList" :key="index" @click="openAdLink(ad.targetUrl)">
+                    <image :src="ad.imageUrl" mode="scaleToFill" class="ad-image" />
                 </swiper-item>
             </swiper>
         </view>
@@ -147,7 +147,7 @@ export default {
             isDownloaded: false,
             abortTask: false,
             menuButtonInfo: {},
-            ads: [],
+            promotionList: [], // 主页推广列表
             // 每个功能主页滚动栏的通用内容
             noticeBarTextsList: [{ text: '2025蛇年春晚即将举办，详情请关注微信公众号' }],
         };
@@ -168,6 +168,7 @@ export default {
                 this.isLogin = true;
             },
         });
+		this.getOngoingPomotions();
     },
     onShow() {
         uni.getStorage({
@@ -196,7 +197,22 @@ export default {
             const longSpace = '\u00A0'.repeat(45);
             return this.noticeBarTextsList.map((item) => item.text).join(longSpace); // 使用长间隔连接文字
         },
-		getOngoingPomotions
+		
+		// 获取主页的正在进行的推广信息
+		async getOngoingPomotions() {
+			const opts = {
+			    path: `/promotion/getOngoingPromotions`,
+			    type: 'GET',
+			};
+			
+			const res = await requestAPI(opts);
+			if (res.data.status === 100) {
+				this.promotionList = res.data.data; // 新数据
+			} else {
+				console.warn('获取推广信息失败:', res.data.message);
+			}
+		},
+		
         popMask: function (e) {
             this.$refs.ad.open();
         },
@@ -321,6 +337,7 @@ export default {
 };
 import actBoxVue from '@/components/act-box/act-box.vue';
 import mainAdvertisementVue from '@/components/main-advertisement/main-advertisement.vue';
+import requestAPI from '@/api/request.js';
 </script>
 
 <style lang="scss">
