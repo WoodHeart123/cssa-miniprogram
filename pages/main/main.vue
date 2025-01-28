@@ -209,7 +209,7 @@ export default {
 			if (res.data.status === 100) {
 				this.promotionList = res.data.data; // 新数据
 			} else {
-				console.warn('获取推广信息失败:', res.data.message);
+				console.warn('获取推广信息失败:', response.data.message);
 			}
 		},
 		

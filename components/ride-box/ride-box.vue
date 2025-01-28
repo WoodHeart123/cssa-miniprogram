@@ -128,8 +128,6 @@ export default {
     methods: {
         // 获取发布用户头像，昵称，是否为学生
         async fetchPostUserInfo() {
-            let responseData = '';
-
             requestAPI({
                 path: '/user/getUserInfo',
                 type: 'GET',
