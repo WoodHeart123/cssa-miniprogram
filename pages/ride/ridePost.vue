@@ -337,6 +337,23 @@ export default {
                     missingFields.push(errorMessage);
                 }
             }
+			
+			// 检查时间格式
+			const timeFields = [
+				{ key: 'departureTime', label: '出发时间' },
+				{ key: 'returnTime', label: '返回时间' },
+				{ key: 'estimatedArrivalTime', label: '预计到达时间' }
+			];
+			// 正确的时间格式应为：yyyy-MM-dd HH:mm:ss
+			const timePattern = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/;
+			timeFields.forEach(({ key, label }) => {
+				if (this.ride[key]) {
+					const value = this.ride[key];
+					if (!timePattern.test(value)) {
+						missingFields.push(`请选择${label}的具体时间`);
+					}
+				}
+			});
 
             if (missingFields.length > 0) {
                 this.errorMessage = `以下字段未填写：\n${missingFields.join('\n')}`;
@@ -351,6 +368,7 @@ export default {
         async submitUpdate(ifToPublish) {
             if (!this.validateFields()) return;
 
+			//console.log(this.ride);
             try {
                 uni.showLoading({
                     title: ifToPublish ? '正在更新并发布' : '正在更新',
