@@ -244,7 +244,7 @@ export default {
                 path: '/user/getUserInfo',
                 type: 'GET',
                 header: {
-                    'x-wx-openid': this.rideInfo.openId,
+                    'user-wx-openid': this.rideInfo.openId,
                 },
             };
             requestAPI(opts)

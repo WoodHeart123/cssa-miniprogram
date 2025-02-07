@@ -131,12 +131,11 @@ export default {
             requestAPI({
                 path: '/user/getUserInfo',
                 type: 'GET',
-                header: { 'x-wx-openid': this.rideInfo.openId },
+                header: { 'user-wx-openid': this.rideInfo.openId },
             })
                 .then((response) => {
                     if (response.data.status === 100) {
                         this.postUserInfo = response.data.data;
-                        // console.log(this.postUserInfo);
 
                         if (this.postUserInfo.avatarUrl) {
                             this.posterUserAvatarToDisplay = this.postUserInfo.avatarUrl;
