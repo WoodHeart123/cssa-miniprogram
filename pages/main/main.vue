@@ -21,7 +21,7 @@
             </view>
         </view>
 
-        <image src="../../static/background-img/蛇年春节背景图片.png" mode="widthFix" class="background-image" />
+        <image src='https://prod-9gip97mx4bfa32a3-1312104819.tcloudbaseapp.com/background-img/%E8%9B%87%E5%B9%B4%E6%98%A5%E8%8A%82%E8%83%8C%E6%99%AF%E5%9B%BE%E7%89%87.png?sign=dee021020fccb2fbf64b22a3eb5c81a5&t=1738903930' mode="widthFix" class="background-image" />
 
         <!-- 广告轮播部分 -->
         <view class="ads-swiper-container" style="margin-top: 8vh">
