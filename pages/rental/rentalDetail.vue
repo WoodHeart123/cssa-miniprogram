@@ -76,7 +76,7 @@ export default {
     },
 
     onLoad(options) {
-        console.log(options);
+        //console.log(options);
         wx.cloud.init();
         let launchOptions = wx.getLaunchOptionsSync();
         this.houseInfo = JSON.parse(decodeURIComponent(options.rentalInfo));
