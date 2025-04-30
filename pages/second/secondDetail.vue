@@ -241,7 +241,6 @@ export default {
             });
         },
         toShare: function () {
-            console.log(1);
             wx.showShareMenu();
         },
     },

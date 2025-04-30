@@ -1,5 +1,5 @@
 <template>
-    <view id="main" class="column-container">
+    <view class="main column-container">
         <view
             class="top-bar"
             :style="{
@@ -164,41 +164,28 @@ export default {
         };
     },
     onLoad() {
-        this.menuButtonInfo = wx.getMenuButtonBoundingClientRect();
-        //			console.log(this.menuButtonInfo)
         wx.cloud.init();
         uni.getStorage({
             key: 'userInfo-2',
-            fail: () => {
-                this.isLogin = false;
-                uni.switchTab({
-                    url: '/pages/user/index',
-                });
-            },
+
             success: (res) => {
                 this.isLogin = true;
             },
         });
     },
-    onShow() {
+    mounted() {
+		this.menuButtonInfo = wx.getMenuButtonBoundingClientRect();
+		console.log(this.menuButtonInfo)
         uni.getStorage({
             key: 'userInfo-2',
             success: (res) => {
                 this.isLogin = true;
             },
+			fail: () => {
+			    this.isLogin = false;
+			    this.$emit("switch-tab", 4)
+			},
         });
-    },
-    onShareAppMessage(res) {
-        return {
-            title: '麦屯小助手',
-            path: '/pages/main/main',
-        };
-    },
-    onShareTimeline(res) {
-        return {
-            title: '麦屯小助手',
-            path: '/pages/activity/act',
-        };
     },
     methods: {
         // 生成每个主页滚动栏都有的文字内容
@@ -336,9 +323,9 @@ import mainAdvertisementVue from '@/components/main-advertisement/main-advertise
 <style lang="scss">
 @import '@/static/iconfont/iconfont.css';
 
-#main {
+.main {
     width: 100vw;
-    height: 100vh;
+    height: calc(100vh - 75px);
     overflow-x: hidden;
     position: relative;
 }
@@ -454,7 +441,7 @@ import mainAdvertisementVue from '@/components/main-advertisement/main-advertise
     height: 160px;
     border-radius: 15px;
     width: 86vw;
-    bottom: 10px;
+    bottom: 30px;
     right: 7vw;
     justify-content: space-between;
     z-index: 10;

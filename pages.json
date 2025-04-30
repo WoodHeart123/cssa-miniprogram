@@ -1,16 +1,11 @@
 {
-	"pages": [{
-			"path": "pages/main/main",
-			"style": {
-				"navigationStyle": "custom",
-				"enablePullDownRefresh": false
-			}
-		},
+	"pages": [
 		{
-			"path": "pages/user/index",
-			"style": {
-				"navigationBarTitleText": "用户主页",
-				"backgroundColor": "#F5F5F5"
+			"path" : "pages/main/main-tab",
+			"style" : 
+			{
+				"enablePullDownRefresh" : false,
+				"navigationStyle": "custom"
 			}
 		},
 		{
@@ -18,13 +13,6 @@
 			"style": {
 				"navigationBarTitleText": "个人信息",
 				"backgroundColor": "#f5f5f5"
-			}
-		},
-		{
-			"path": "pages/activity/act",
-			"style": {
-				"navigationStyle": "custom",
-				"disableScroll": true
 			}
 		},
 		{
@@ -103,7 +91,7 @@
 		{
 			"path": "pages/second/secondMainPost",
 			"style": {
-				"navigationBarTitleText": "发布二手",
+				"navigationStyle": "custom",
 				"enablePullDownRefresh": false,
 				"disableScroll": true
 			}
@@ -246,100 +234,8 @@
 				"path": "pages/changeAvatar/changeAvatar"
 			},
 			{
-				"name": "second",
-				"path": "pages/second/secondMain"
-			},
-			{
-				"name": "secondDetail",
-				"path": "pages/detail/secondDetail"
-			},
-			{
-				"name": "myComment",
-				"path": "pages/myComment/myComment"
-			},
-			{
-				"name": "secondPost",
-				"path": "pages/second/secondMainPost"
-			},
-			{
-				"name": "secondSearch",
-				"path": "pages/second/secondMainSearch"
-			},
-			{
-				"name": "houseDetail",
-				"path": "pages/detail/houseDetail"
-			},
-			{
-				"name": "rental",
-				"path": "pages/rental/rentalPost"
-			},
-			{
-				"name": "rentalMain",
-				"path": "pages/rentalMain/rentalMain"
-			},
-			{
-				"name": "ride",
-				"path": "pages/ride/ridePost"
-			},
-			{
-				"name": "rideMain",
-				"path": "pages/rideMain/rideMain"
-			},
-			{
-				"name": "aboutCSSA",
-				"path": "pages/aboutCSSA/aboutCSSA"
-			},
-			{
-				"name": "aboutCSSA",
-				"path": "pages/aboutCSSA/ContactUs"
-			},
-			{
-				"name": "aboutCSSA",
-				"path": "pages/aboutCSSA/Guanyu"
-			},
-			{
-				"name": "restDetail",
-				"path": "pages/detail/restDetail"
-			},
-			{
-				"name": "myRestComment",
-				"path": "pages/postRestComment/postRestComment"
-			},
-			{
-				"name": "RestMap",
-				"path": "pages/map/map"
-			},
-			{
-				"name": "findFriend",
-				"path": "pages/findFriend/findFriend"
-			},
-			{
-				"name": "findClassmate",
-				"path": "pages/findFriend/findClassmate"
-			},
-			{
-				"name": "findClassmateTech",
-				"path": "pages/findFriend/findClassmateTech"
-			},
-			{
-				"name": "findClassmateArt",
-				"path": "pages/findFriend/findClassmateArt"
-			},
-			{
-				"name": "findClassmateLitSoc",
-				"path": "pages/findFriend/findClassmateLitSoc"
-			},
-			{
-				"name": "singlePostDetail",
-				"path": "pages/findFriend/singlePostDetail"
-			},
-			{
-				"path": "pages/coursePage/courseStat",
-				"name": "courseStat"
-			},
-			{
-				"path": "pages/event/main",
-				"name": "event hub"
+				"name": "main",
+				"path": "pages/main/main-tab"
 			}
 		]
 	},
@@ -347,39 +243,6 @@
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
 		"navigationBarBackgroundColor": "#ffffff"
-	},
-	"tabBar": {
-		"color": "#666666",
-		"selectedColor": "#9b0000",
-		"borderStyle": "black",
-		"backgroundColor": "#ffffff",
-		"fontSize": "14px",
-		"spacing": "3px",
-		"list": [{
-				"pagePath": "pages/main/main",
-				"text": "主页",
-				"iconPath": "./static/home.png",
-				"selectedIconPath": "./static/home-selected.png"
-			},
-			/* 			{
-							"pagePath": "pages/findFriend/findFriend",
-							"text": "麦屯圈",
-							"iconPath": "./static/community.png",
-							"selectedIconPath": "./static/community-selected.png"
-						}, */
-			{
-				"pagePath": "pages/activity/act",
-				"text": "活动",
-				"iconPath": "./static/act.png",
-				"selectedIconPath": "./static/act-selected.png"
-			},
-			{
-				"pagePath": "pages/user/index",
-				"text": "用户",
-				"iconPath": "./static/user.png",
-				"selectedIconPath": "./static/user-selected.png"
-			}
-		]
 	},
 	"easycom": {
 		"autoscan": true

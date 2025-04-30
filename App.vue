@@ -89,6 +89,5 @@
 
 	text {
 		font-family: Roboto;
-		color: $main-primary-font-color;
 	}
 </style>

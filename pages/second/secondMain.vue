@@ -1,6 +1,6 @@
 <template>
     <view id="second-main">
-        <top-bar text="二手市场" navigate-back position="fixed"></top-bar>
+        <top-bar text="二手市场" navigate-back></top-bar>
         <view class="search-bar">
             <uni-icons type="search" size="20"></uni-icons>
             <input
@@ -357,7 +357,6 @@ import requestAPI from '@/api/request.js';
     margin: 20px 5vw 0 5vw;
     background-color: $main-background-color-2;
     border-radius: 100vh;
-    margin-top: 10vh;
 
     uni-icons {
         margin: 0 3%;

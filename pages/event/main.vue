@@ -117,7 +117,7 @@ export default {
     },
 };
 import eventBoxVue from '@/components/event-box/event-box.vue';
-import eventTabBarVue from '@/components/event-tab-bar/event-tab-bar.vue';
+import eventTabBarVue from '@/components/tab-bar/tab-bar.vue';
 import list from './event.js';
 </script>
 

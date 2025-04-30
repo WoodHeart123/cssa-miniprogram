@@ -1,5 +1,6 @@
 <template>
     <view id="second-post">
+		<top-bar text="二手发布" @clickNavigateBack="navigateBack" navigate-back custom-navigate-back></top-bar>
         <uni-forms ref="productForm" :model="product" :rules="rules">
             <view class="card uni-form-item uni-column" v-if="!edit">
                 <uni-forms-item name="imageList">
@@ -21,7 +22,7 @@
                         class="uni-input"
                         v-model="product.productTitle"
                         maxlength="22"
-                        placeholder="请填写商品名称"
+                        placeholder="填写商品名称"
                         placeholder-style="font-size:14px;color:gray"
                     />
                 </uni-forms-item>
@@ -32,7 +33,7 @@
                     <uni-easyinput
                         type="textarea"
                         v-model="product.productDescription"
-                        placeholder="请输入商品描述信息"
+                        placeholder="填写商品描述信息"
                         maxlength="400"
                         placeholderStyle="font-size:14px;color:gray"
                         :clearable="clearable"
@@ -68,7 +69,7 @@
                         <uni-easyinput
                             type="digit"
                             v-model="product.price"
-                            placeholder="请填写价格"
+                            placeholder="填写价格"
                             placeholder-style="font-size:14px;color:gray"
                             :clearable="clearable"
                         />
@@ -238,12 +239,14 @@ export default {
         };
     },
     onLoad(options) {
-        console.log(options);
+		const draft = uni.getStorageSync("product-draft");
         if (options.product != null) {
-            this.edit = true;
+			this.edit = true;
             this.product = JSON.parse(decodeURIComponent(options.product));
             this.product.productCondition = this.conditionOption[this.product.productCondition].value;
-        }
+        }else if(draft){
+			this.product = JSON.parse(uni.getStorageSync("product-draft"));
+		}
     },
     onShow() {
         wx.cloud.init();
@@ -269,6 +272,29 @@ export default {
                 }
             }
         },
+		navigateBack:function (){
+			uni.showModal({
+				showCancel: true,
+				content: "将此次编辑保留?",
+				cancelText: "不保留",
+				confirmText: "保留",
+				success: (res) => {
+					if(res.confirm){
+						uni.setStorage({
+							key: "product-draft",
+							data: JSON.stringify(this.product),
+						});
+					}else{
+						uni.removeStorage({
+							key: "product-draft"
+						})
+					}
+				},
+				complete: function(){
+					uni.navigateBack();
+				}
+			})
+		},
         checkBoxChange: function (e) {
             if (e.detail.length == 0) {
                 this.save = false;
@@ -415,6 +441,7 @@ export default {
                     uni.hideLoading();
                     if (response.data.status == 100) {
                         uni.$emit('uploadSuccess');
+						uni.removeStorage("product-draft");
                         uni.redirectTo({
                             url: '/pages/second/secondDetail?product=' + encodeURIComponent(JSON.stringify(response.data.data)),
                         });
@@ -517,7 +544,7 @@ input {
 .card {
     box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.08);
     border-radius: 5px;
-    padding: 12px 12px 18px 12px;
+    padding: 10px;
     margin-bottom: 5px;
     height: auto;
 }
@@ -538,5 +565,10 @@ input {
 .uni-easyinput__content-textarea {
     padding: 0 !important;
     height: 150px !important;
+}
+
+.uni-forms{
+	padding: 0 3vw;
+	margin-top: 20px;
 }
 </style>

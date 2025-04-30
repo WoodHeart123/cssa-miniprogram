@@ -49,6 +49,10 @@ export default {
             type: String,
             default: 'relative',
         },
+		customNavigateBack: {
+			type: Boolean,
+			default: false,
+		}
     },
     data() {
         return {
@@ -61,9 +65,14 @@ export default {
     },
     methods: {
         onClickNavigateBack: function () {
-            uni.navigateBack({
-                delta: 1,
-            });
+			if(!this.customNavigateBack){
+				uni.navigateBack({
+				    delta: 1,
+				});
+			}else{
+				this.$emit("clickNavigateBack")
+			}
+
         },
     },
 };

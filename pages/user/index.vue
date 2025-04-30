@@ -1,5 +1,6 @@
 <template>
     <view id="index">
+		<top-bar text="我的主页"></top-bar>
         <script src="@/static/iconfont/iconfont.js"></script>
         <view class="privacy" v-show="showPrivacy">
             <view class="content">
@@ -84,9 +85,6 @@
                     <img class="image" src="https://cssa-mini-na.oss-us-west-1.aliyuncs.com/index/response.svg" />
                     <text class="text-box">我要反馈</text>
                 </button>
-            </view>
-            <view class="swiper-container">
-                <main-advertisement-vue height="200px" width="95vw"></main-advertisement-vue>
             </view>
         </view>
     </view>
