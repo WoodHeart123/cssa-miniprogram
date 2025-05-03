@@ -416,7 +416,7 @@ export default {
                     if (response.data.status == 100) {
                         uni.$emit('uploadSuccess');
                         uni.redirectTo({
-                            url: '/pages/second/secondDetail?product=' + encodeURIComponent(JSON.stringify(response.data.data)),
+                            url: '/pages/second/secondDetail?product=' + encodeURIComponent(JSON.stringify(this.product)),
                         });
                     } else {
                         uni.showToast({
