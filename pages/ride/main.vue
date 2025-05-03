@@ -267,13 +267,45 @@ export default {
                     }
 
                     // 始发地筛选
-                    if (this.filter.origin && !ride.origin.includes(this.filter.origin)) {
-                        return false;
+                    if (this.filter.origin) {
+                        const searchOrigin = this.filter.origin.trim();
+                        const rideOrigin = ride.origin;
+                        
+                        // 检查是否包含中文字符
+                        const hasChinese = /[\u4e00-\u9fa5]/.test(searchOrigin);
+                        
+                        if (hasChinese) {
+                            // 中文搜索保持原样
+                            if (!rideOrigin.includes(searchOrigin)) {
+                                return false;
+                            }
+                        } else {
+                            // 英文搜索不区分大小写
+                            if (!rideOrigin.toLowerCase().includes(searchOrigin.toLowerCase())) {
+                                return false;
+                            }
+                        }
                     }
 
                     // 目的地筛选
-                    if (this.filter.destination && !ride.destination.includes(this.filter.destination)) {
-                        return false;
+                    if (this.filter.destination) {
+                        const searchDestination = this.filter.destination.trim();
+                        const rideDestination = ride.destination;
+                        
+                        // 检查是否包含中文字符
+                        const hasChinese = /[\u4e00-\u9fa5]/.test(searchDestination);
+                        
+                        if (hasChinese) {
+                            // 中文搜索保持原样
+                            if (!rideDestination.includes(searchDestination)) {
+                                return false;
+                            }
+                        } else {
+                            // 英文搜索不区分大小写
+                            if (!rideDestination.toLowerCase().includes(searchDestination.toLowerCase())) {
+                                return false;
+                            }
+                        }
                     }
 
                     return true; // 所有条件通过，保留该项
@@ -282,7 +314,7 @@ export default {
                 // 将筛选后的数据添加到最终列表中
                 fetchedRides = fetchedRides.concat(filteredBatch);
 
-                // 判断 `status` 是否为 `noMore`或者`loaded`，如果是，表示数据加载完成
+                // 判断 status 是否为 noMore或者loaded，如果是，表示数据加载完成
                 if (this.status === 'noMore' || this.status === 'loaded') {
                     break; // 停止加载
                 }
@@ -479,6 +511,9 @@ export default {
 
 	.ride-box-container {
 		margin-bottom: 10px;
+        display: flex;
+        justify-content: center;
+        width: 100%;
 	}
 
 	.filter-popup {
