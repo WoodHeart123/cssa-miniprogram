@@ -267,13 +267,45 @@ export default {
                     }
 
                     // 始发地筛选
-                    if (this.filter.origin && !ride.origin.includes(this.filter.origin)) {
-                        return false;
+                    if (this.filter.origin) {
+                        const searchOrigin = this.filter.origin.trim();
+                        const rideOrigin = ride.origin;
+                        
+                        // 检查是否包含中文字符
+                        const hasChinese = /[\u4e00-\u9fa5]/.test(searchOrigin);
+                        
+                        if (hasChinese) {
+                            // 中文搜索保持原样
+                            if (!rideOrigin.includes(searchOrigin)) {
+                                return false;
+                            }
+                        } else {
+                            // 英文搜索不区分大小写
+                            if (!rideOrigin.toLowerCase().includes(searchOrigin.toLowerCase())) {
+                                return false;
+                            }
+                        }
                     }
 
                     // 目的地筛选
-                    if (this.filter.destination && !ride.destination.includes(this.filter.destination)) {
-                        return false;
+                    if (this.filter.destination) {
+                        const searchDestination = this.filter.destination.trim();
+                        const rideDestination = ride.destination;
+                        
+                        // 检查是否包含中文字符
+                        const hasChinese = /[\u4e00-\u9fa5]/.test(searchDestination);
+                        
+                        if (hasChinese) {
+                            // 中文搜索保持原样
+                            if (!rideDestination.includes(searchDestination)) {
+                                return false;
+                            }
+                        } else {
+                            // 英文搜索不区分大小写
+                            if (!rideDestination.toLowerCase().includes(searchDestination.toLowerCase())) {
+                                return false;
+                            }
+                        }
                     }
 
                     return true; // 所有条件通过，保留该项
@@ -282,7 +314,7 @@ export default {
                 // 将筛选后的数据添加到最终列表中
                 fetchedRides = fetchedRides.concat(filteredBatch);
 
-                // 判断 `status` 是否为 `noMore`或者`loaded`，如果是，表示数据加载完成
+                // 判断 status 是否为 noMore或者loaded，如果是，表示数据加载完成
                 if (this.status === 'noMore' || this.status === 'loaded') {
                     break; // 停止加载
                 }
@@ -412,124 +444,127 @@ export default {
 </script>
 
 <style>
-#ride-main {
-    width: 100vw;
-    height: 100vh;
-    position: relative;
-    background-color: white;
-}
+	#ride-main {
+		width: 100vw;
+		height: 100vh;
+		position: relative;
+		background-color: white;
+	}
 
-.row-container {
-    display: flex;
-    flex-direction: row;
-}
+	.row-container {
+		display: flex;
+		flex-direction: row;
+	}
 
-.scroll-item {
-    display: inline;
-    margin-right: 16px;
-}
+	.scroll-item {
+		display: inline;
+		margin-right: 16px;
+	}
 
-.filter-hyperlink-container {
-    display: flex;
-    justify-content: space-between; /* 左右两端对齐 */
-    align-items: center; /* 垂直居中 */
-    padding: 10px 15px; /* 内边距 */
-    background-color: rgba(255, 255, 255, 0.9); /* 背景色 */
-    box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 5px; /* 阴影效果 */
-    box-sizing: border-box; /* 包括内边距 */
-    width: 100%; /* 确保宽度占满容器 */
-}
+	.filter-hyperlink-container {
+		display: flex;
+		justify-content: space-between; /* 左右两端对齐 */
+		align-items: center; /* 垂直居中 */
+		padding: 10px 15px; /* 内边距 */
+		background-color: rgba(255, 255, 255, 0.9); /* 背景色 */
+		box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 5px; /* 阴影效果 */
+		box-sizing: border-box; /* 包括内边距 */
+		width: 100%; /* 确保宽度占满容器 */
+	}
 
-.setting-icon {
-    cursor: pointer; /* 鼠标悬停显示手型 */
-}
+	.setting-icon {
+		cursor: pointer; /* 鼠标悬停显示手型 */
+	}
 
-.filter-box {
-    display: flex;
-    align-items: center; /* 垂直居中 */
-    justify-content: flex-start; /* 左对齐 */
-    cursor: pointer; /* 鼠标悬停显示手型 */
-}
+	.filter-box {
+		display: flex;
+		align-items: center; /* 垂直居中 */
+		justify-content: flex-start; /* 左对齐 */
+		cursor: pointer; /* 鼠标悬停显示手型 */
+	}
 
-.hyperlink {
-    color: #007aff; /* 蓝色字体 */
-    text-decoration: underline; /* 下划线 */
-    font-size: 14px; /* 字体大小 */
-    cursor: pointer; /* 鼠标悬停显示手型 */
-    white-space: nowrap; /* 防止换行 */
-    margin-left: auto; /* 将超链接推到右侧 */
-}
+	.hyperlink {
+		color: #007aff; /* 蓝色字体 */
+		text-decoration: underline; /* 下划线 */
+		font-size: 14px; /* 字体大小 */
+		cursor: pointer; /* 鼠标悬停显示手型 */
+		white-space: nowrap; /* 防止换行 */
+		margin-left: auto; /* 将超链接推到右侧 */
+	}
 
-.setting-icon {
-    position: absolute;
-    left: 0;
-    width: 30px;
-}
+	.setting-icon {
+		position: absolute;
+		left: 0;
+		width: 30px;
+	}
 
-.filter-text {
-    font-size: 15px;
-    color: #fa6969;
-    cursor: pointer;
-}
+	.filter-text {
+		font-size: 15px;
+		color: #fa6969;
+		cursor: pointer;
+	}
 
-.ride-scroll {
-    height: calc(100vh - 50px);
-    overflow-y: scroll;
-}
+	.ride-scroll {
+		height: calc(100vh - 50px);
+		overflow-y: scroll;
+	}
 
-.ride-box-container {
-    margin-bottom: 10px;
-}
+	.ride-box-container {
+		margin-bottom: 10px;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+	}
 
-.filter-popup {
-    padding: 30px;
-}
+	.filter-popup {
+		padding: 30px;
+	}
 
-.filter-title {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 20px;
-    text-align: center;
-}
+	.filter-title {
+		font-size: 20px;
+		font-weight: bold;
+		margin-bottom: 20px;
+		text-align: center;
+	}
 
-.filter-item {
-    margin-bottom: 20px;
-    font-size: 16px;
-    display: flex;
-    flex-direction: column;
-}
+	.filter-item {
+		margin-bottom: 20px;
+		font-size: 16px;
+		display: flex;
+		flex-direction: column;
+	}
 
-.filter-label {
-    margin-bottom: 5px;
-    font-size: 14px;
-}
+	.filter-label {
+		margin-bottom: 5px;
+		font-size: 14px;
+	}
 
-.filter-buttons {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 15px;
-}
+	.filter-buttons {
+		display: flex;
+		justify-content: space-between;
+		margin-top: 15px;
+	}
 
-.confirm-button {
-    background-color: #9b0000;
-    color: white;
-    padding: 6px 15px;
-    border: none;
-    border-radius: 5px;
-    font-size: 14px;
-    flex: 1;
-    margin-right: 8px;
-    text-align: center;
-}
+	.confirm-button {
+		background-color: #9b0000;
+		color: white;
+		padding: 6px 15px;
+		border: none;
+		border-radius: 5px;
+		font-size: 14px;
+		flex: 1;
+		margin-right: 8px;
+		text-align: center;
+	}
 
-.reset-button {
-    background-color: white;
-    color: #9b0000;
-    padding: 6px 15px;
-    border: 1px solid #9b0000;
-    border-radius: 5px;
-    font-size: 14px;
-    flex: 1;
-    text-align: center;
-}
+	.reset-button {
+		background-color: white;
+		color: #9b0000;
+		padding: 6px 15px;
+		border: 1px solid #9b0000;
+		border-radius: 5px;
+		font-size: 14px;
+		flex: 1;
+		text-align: center;
+	}
 </style>

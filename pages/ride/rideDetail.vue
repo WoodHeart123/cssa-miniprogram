@@ -17,23 +17,23 @@
             <view class="tag" v-for="(tag, index) in rideTags" :key="index">{{ tag }}</view>
         </view>
 
-        <view class="row-container time-info">
+        <view class="time-info">
             <view v-if="rideInfo.rideType === 0">
                 <!-- 单程 -->
-                <view>
+                <view class="time-row">
                     {{ formatDepartureTime }}
                 </view>
-                <view v-if="rideInfo.estimatedArrivalTime">
-                    <view>{{ formatEstimatedArrivalTime }}</view>
+                <view v-if="rideInfo.estimatedArrivalTime" class="time-row">
+                    {{ formatEstimatedArrivalTime }}
                 </view>
             </view>
             <view v-else-if="rideInfo.rideType === 1">
                 <!-- 往返 -->
-                <view>
+                <view class="time-row">
                     {{ formatDepartureTime }}
                 </view>
-                <view v-if="rideInfo.returnTime">
-                    <view>{{ formatReturnTime }}</view>
+                <view v-if="rideInfo.returnTime" class="time-row">
+                    {{ formatReturnTime }}
                 </view>
             </view>
         </view>
@@ -142,7 +142,7 @@ export default {
         },
         // 出发时间格式化
         formatDepartureTime() {
-            return '出发: ' + moment(this.rideInfo.departureTime).format('YYYY-MM-DD HH:mm');
+            return '预计出发: ' + moment(this.rideInfo.departureTime).format('YYYY-MM-DD HH:mm');
         },
         // 预计到达时间格式化
         formatEstimatedArrivalTime() {
@@ -155,9 +155,9 @@ export default {
                 : '返回时间未设置';
         },
     },
-    onLoad(options) {
+    async onLoad(options) {
         const rideId = options.rideId; // 从 URL 参数获取 rideId
-        this.fetchRideInfo(rideId);
+        await this.fetchRideInfo(rideId);
         this.fetchPostUserInfo();
     },
     onShareTimeline() {
@@ -169,7 +169,7 @@ export default {
         const formattedDepartureTime = moment(this.rideInfo.departureTime).format('YYYY-MM-DD');
         const formattedReturnTime =
             this.rideInfo.rideType === 1 && this.rideInfo.returnTime
-                ? `，${moment(this.rideInfo.returnTime).format('YYYY-MM-DD')} 返回`
+                ? `${moment(this.rideInfo.returnTime).format('YYYY-MM-DD')} 返回`
                 : '';
 
         // 动态生成标题
@@ -194,7 +194,7 @@ export default {
         const formattedDepartureTime = moment(this.rideInfo.departureTime).format('YYYY-MM-DD');
         const formattedReturnTime =
             this.rideInfo.rideType === 1 && this.rideInfo.returnTime
-                ? `，${moment(this.rideInfo.returnTime).format('YYYY-MM-DD')} 返回`
+                ? `${moment(this.rideInfo.returnTime).format('YYYY-MM-DD')} 返回`
                 : '';
 
         // 动态生成标题
@@ -214,12 +214,12 @@ export default {
     },
     methods: {
         // 获取顺风车详情
-        fetchRideInfo(rideId) {
+        async fetchRideInfo(rideId) {
             const opts = {
                 path: `/ride/getRide?rideId=${rideId}`,
                 type: 'GET',
             };
-            requestAPI(opts)
+            await requestAPI(opts)
                 .then((res) => {
                     if (res.data.status === 100) {
                         this.rideInfo = res.data.data;
@@ -239,18 +239,15 @@ export default {
                 });
         },
         // 获取发布用户信息
-        fetchPostUserInfo() {
-            const opts = {
+        async fetchPostUserInfo() {
+            await requestAPI({
                 path: '/user/getUserInfo',
                 type: 'GET',
-                header: {
-                    'x-wx-openid': this.rideInfo.openId,
-                },
-            };
-            requestAPI(opts)
-                .then((res) => {
-                    if (res.data.status === 100) {
-                        this.userInfo = res.data.data;
+                header: { 'user-wx-openid': this.rideInfo.openId },
+            })
+                .then((response) => {
+                    if (response.data.status === 100) {
+                        this.userInfo = response.data.data;
 
                         if (this.userInfo.avatarUrl) {
                             this.avatarUrlToDisplay = this.userInfo.avatarUrl;
@@ -260,19 +257,18 @@ export default {
                                 this.userInfo.avatar +
                                 '.jpg';
                         } else {
-                            this.avatarUrlToDisplay = defaultAvatarUrl;
+                            this.avatarUrlToDisplay = this.defaultAvatarUrl;
                         }
                     } else {
-                        console.warn('获取用户信息失败：', res.data.message);
+                        console.warn('获取发布用户信息失败:', response.data.message);
                         this.userInfo.nickname = '匿名';
-                        this.userInfo.avatarUrl =
-                            'https://prod-9gip97mx4bfa32a3-1312104819.tcloudbaseapp.com/default-avatar.png';
+                        this.avatarUrlToDisplay = this.defaultAvatarUrl;
                     }
                 })
                 .catch((error) => {
-                    console.error('获取用户信息失败：', error);
+                    console.error('获取发布用户信息出错:', error);
                     this.userInfo.nickname = '匿名';
-                    this.userInfo.avatarUrl = 'https://prod-9gip97mx4bfa32a3-1312104819.tcloudbaseapp.com/default-avatar.png';
+                    this.avatarUrlToDisplay = this.defaultAvatarUrl;
                 });
         },
         // 图片预览功能
@@ -305,120 +301,159 @@ export default {
 </script>
 
 <style>
-.ride-detail {
-    background-color: #f9f9f9;
-    margin-left: 10px;
-    margin-right: 10px;
-    overflow-x: hidden;
-}
-.swiper {
-    height: 200px;
-    margin-bottom: 20px;
-}
-.tag-box {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 10px;
-}
-.tag {
-    display: inline-block;
-    padding: 5px 10px;
-    font-size: 14px;
-    background-color: #9b0000;
-    color: white;
-    border-radius: 5px;
-}
-.time-info {
-    margin: 10px 0;
-    font-size: 15px;
-    color: #666;
-    line-height: 1.5;
-}
-.price-box {
-    font-size: 16px;
-    color: #9b0000;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-}
-.price-box .divider {
-    margin: 0 8px;
-    font-size: 16px;
-    color: black;
-}
-.price-box .seats-info {
-    font-size: 16px;
-    color: black;
-}
-.ride-title {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 8px;
-}
-.vehicle-info {
-    font-size: 14px;
-    color: gray;
-    margin-bottom: 10px;
-}
-.contact {
-    position: relative;
-    box-shadow: 0 0px 6px 1px rgba(165, 165, 165, 0.2);
-    border-radius: 5px;
-    padding: 10px 0;
-}
-.contact-box {
-    display: flex;
-    align-items: center;
-}
-.avatar {
-    height: 50px;
-    width: 50px;
-    border-radius: 50%;
-    margin-right: 15px;
-    position: relative;
-}
-.avatar-tag {
-    position: absolute;
-    margin-top: 35px;
-    left: -1px;
-    width: 16%;
-    height: 15%;
-}
-.nickname {
-    flex: 1;
-    font-size: 16px;
-    font-weight: 500;
-}
-.contact-details {
-    margin-top: 10px;
-    margin-left: 2px;
-    font-size: 14px;
-    color: dimgray;
-}
-.contact-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
-}
-.copy-box {
-    display: flex;
-    align-items: center;
-    font-size: 12px;
-    margin-right: 2px;
-    color: #999;
-}
-.copy-img {
-    width: 20px;
-    height: 20px;
-    margin-left: 5px;
-}
-.description {
-    margin-top: 20px;
-    font-size: 14px;
-    line-height: 1.5;
-    color: #333;
-}
+	.ride-detail {
+		background-color: #f9f9f9;
+		padding: 20px;
+		overflow-x: hidden;
+	}
+
+	.swiper {
+		height: 200px;
+		margin-bottom: 20px;
+		border-radius: 12px;
+		overflow: hidden;
+	}
+
+	.tag-box {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+		margin-bottom: 15px;
+	}
+
+	.tag {
+		display: inline-block;
+		padding: 4px 12px;
+		font-size: 14px;
+		background-color: #9b0000;
+		color: white;
+		border-radius: 6px;
+	}
+
+	.time-info {
+		background-color: #f8f8f8;
+		padding: 12px 15px;
+		border-radius: 8px;
+		margin-bottom: 15px;
+	}
+
+	.time-row {
+		font-size: 15px;
+		color: #666;
+		line-height: 1.5;
+	}
+
+	.ride-title {
+		font-size: 18px;
+		font-weight: bold;
+		margin-bottom: 15px;
+		color: #333;
+	}
+
+	.price-box {
+		background-color: #fff5f5;
+		padding: 12px 15px;
+		border-radius: 8px;
+		margin-bottom: 15px;
+		display: flex;
+		align-items: center;
+	}
+
+	.price {
+		font-size: 16px;
+		color: #9b0000;
+		font-weight: 500;
+	}
+
+	.divider {
+		margin: 0 10px;
+		color: #ddd;
+	}
+
+	.seats-info {
+		font-size: 15px;
+		color: #333;
+	}
+
+	.vehicle-info {
+		background-color: #f8f8f8;
+		padding: 12px 15px;
+		border-radius: 8px;
+		margin-bottom: 15px;
+		font-size: 14px;
+		color: #666;
+	}
+
+	.contact {
+		background-color: white;
+		padding: 15px;
+		border-radius: 8px;
+		margin-bottom: 15px;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+	}
+
+	.contact-box {
+		display: flex;
+		align-items: center;
+		margin-bottom: 15px;
+	}
+
+	.avatar {
+		width: 50px;
+		height: 50px;
+		border-radius: 50%;
+		margin-right: 12px;
+		border: 1px solid #eee;
+	}
+
+	.avatar-tag {
+		position: absolute;
+		width: 16px;
+		height: 16px;
+		margin-top: 35px;
+		margin-left: -12px;
+	}
+
+	.nickname {
+		font-size: 16px;
+		font-weight: 500;
+		color: #333;
+	}
+
+	.contact-details {
+		padding-top: 10px;
+		border-top: 1px solid #eee;
+	}
+
+	.contact-row {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 10px;
+		font-size: 14px;
+		color: #666;
+	}
+
+	.copy-box {
+		display: flex;
+		align-items: center;
+		gap: 5px;
+		color: #999;
+		font-size: 12px;
+	}
+
+	.copy-img {
+		width: 16px;
+		height: 16px;
+	}
+
+	.description {
+		background-color: #f8f8f8;
+		padding: 15px;
+		border-radius: 8px;
+		font-size: 14px;
+		line-height: 1.6;
+		color: #333;
+		white-space: pre-wrap;
+	}
 </style>

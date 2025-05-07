@@ -65,7 +65,7 @@ export default {
         };
     },
     mounted() {
-        console.log(this.product);
+        // console.log(this.product);
         if (moment().year() - moment(this.product.time).year() > 0) {
             this.productPublishTime = moment(this.product.time).format('YYYY-MM-DD');
         } else if (Date.now() - moment(this.product.time).valueOf() > 86400000 * 7) {

@@ -21,13 +21,13 @@
             </view>
         </view>
 
-        <image src="../../static/background-img/蛇年春节背景图片.png" mode="widthFix" class="background-image" />
+        <image src='https://prod-9gip97mx4bfa32a3-1312104819.tcloudbaseapp.com/background-img/%E8%9B%87%E5%B9%B4%E6%98%A5%E8%8A%82%E8%83%8C%E6%99%AF%E5%9B%BE%E7%89%87.png?sign=dee021020fccb2fbf64b22a3eb5c81a5&t=1738903930' mode="widthFix" class="background-image" />
 
         <!-- 广告轮播部分 -->
         <view class="ads-swiper-container" style="margin-top: 8vh">
             <swiper autoplay="true" interval="2500" circular="true" indicator-dots="true" class="swiper">
-                <swiper-item v-for="(ad, index) in ads" :key="index" @click="openAdLink(ad.link)">
-                    <image :src="ad.imgUrl" mode="scaleToFill" class="ad-image" />
+                <swiper-item v-for="(ad, index) in promotionList" :key="index" @click="openAdLink(ad.targetUrl)">
+                    <image :src="ad.imageUrl" mode="scaleToFill" class="ad-image" />
                 </swiper-item>
             </swiper>
         </view>
@@ -147,18 +147,7 @@ export default {
             isDownloaded: false,
             abortTask: false,
             menuButtonInfo: {},
-            ads: [
-                {
-                    imgUrl: 'https://prod-9gip97mx4bfa32a3-1312104819.tcloudbaseapp.com/ads/main%20page%20ads/2025%E8%9B%87%E5%B9%B4%E6%98%A5%E6%99%9A%E6%97%B6%E9%97%B4%E5%9C%B0%E7%82%B9%E5%AE%98%E5%AE%A3.png?sign=b5f0583e5ad957c8c737eee90bf2d44a&t=1737426849',
-                    link: 'https://mp.weixin.qq.com/s/_GUT3WcbRnnSFtI4wn0-Dw',
-                    label: '2025蛇年春晚时间地点官宣',
-                },
-                {
-                    imgUrl: 'https://prod-9gip97mx4bfa32a3-1312104819.tcloudbaseapp.com/ads/main%20page%20ads/2025%E8%9B%87%E5%B9%B4%E5%AF%BC%E6%BC%94%E7%BB%84%E4%BB%8B%E7%BB%8D.png?sign=2bacdcec5814c520ec0dbdf1c684f0d9&t=1737687799',
-                    link: 'https://mp.weixin.qq.com/s/r21LNuaNVVmwSr09VOamcA',
-                    label: '2025蛇年导演组',
-                },
-            ],
+            promotionList: [], // 主页推广列表
             // 每个功能主页滚动栏的通用内容
             noticeBarTextsList: [{ text: '2025蛇年春晚即将举办，详情请关注微信公众号' }],
         };
@@ -179,6 +168,7 @@ export default {
                 this.isLogin = true;
             },
         });
+		this.getOngoingPomotions();
     },
     onShow() {
         uni.getStorage({
@@ -207,6 +197,22 @@ export default {
             const longSpace = '\u00A0'.repeat(45);
             return this.noticeBarTextsList.map((item) => item.text).join(longSpace); // 使用长间隔连接文字
         },
+		
+		// 获取主页的正在进行的推广信息
+		async getOngoingPomotions() {
+			const opts = {
+			    path: `/promotion/getOngoingPromotions`,
+			    type: 'GET',
+			};
+			
+			const res = await requestAPI(opts);
+			if (res.data.status === 100) {
+				this.promotionList = res.data.data; // 新数据
+			} else {
+				console.warn('获取推广信息失败:', response.data.message);
+			}
+		},
+		
         popMask: function (e) {
             this.$refs.ad.open();
         },
@@ -331,266 +337,267 @@ export default {
 };
 import actBoxVue from '@/components/act-box/act-box.vue';
 import mainAdvertisementVue from '@/components/main-advertisement/main-advertisement.vue';
+import requestAPI from '@/api/request.js';
 </script>
 
 <style lang="scss">
-@import '@/static/iconfont/iconfont.css';
+	@import '@/static/iconfont/iconfont.css';
 
-#main {
-    width: 100vw;
-    height: 100vh;
-    overflow-x: hidden;
-    position: relative;
-}
+	#main {
+		width: 100vw;
+		height: 100vh;
+		overflow-x: hidden;
+		position: relative;
+	}
 
-.top-bar {
-    position: relative;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    z-index: 12;
+	.top-bar {
+		position: relative;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		z-index: 12;
 
-    .top-icon {
-        image {
-            width: 100%;
-            height: 100%;
-        }
-    }
+		.top-icon {
+			image {
+				width: 100%;
+				height: 100%;
+			}
+		}
 
-    .top-text {
-        margin-left: 5px;
-    }
-}
+		.top-text {
+			margin-left: 5px;
+		}
+	}
 
-.background-image {
-    width: 100vw;
-    height: 100vh;
-    position: fixed;
-    top: 0;
-    z-index: 0;
-    background-size: contain;
-    background-position: center center;
-    background-repeat: no-repeat;
-}
+	.background-image {
+		width: 100vw;
+		height: 100vh;
+		position: fixed;
+		top: 0;
+		z-index: 0;
+		background-size: contain;
+		background-position: center center;
+		background-repeat: no-repeat;
+	}
 
-.badger-button-box {
-    width: 25vw;
-    height: 20vw;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-around;
+	.badger-button-box {
+		width: 25vw;
+		height: 20vw;
+		padding: 20px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: space-around;
 
-    image {
-        width: 10vw;
-        height: 10vw;
-    }
-}
+		image {
+			width: 10vw;
+			height: 10vw;
+		}
+	}
 
-.background-image {
-    background-image: url('https://7072-prod-9gip97mx4bfa32a3-1312104819.tcb.qcloud.la/asset/main/background.jpg');
-    min-height: 40vh;
-    min-width: 100vw;
-    position: fixed;
-    top: 0;
-    background-size: 100% 100%;
-    z-index: 0;
-}
+	.background-image {
+		background-image: url('https://7072-prod-9gip97mx4bfa32a3-1312104819.tcb.qcloud.la/asset/main/background.jpg');
+		min-height: 40vh;
+		min-width: 100vw;
+		position: fixed;
+		top: 0;
+		background-size: 100% 100%;
+		z-index: 0;
+	}
 
-.badger-button-box {
-    width: 25vw;
-    height: 20vw;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-around;
+	.badger-button-box {
+		width: 25vw;
+		height: 20vw;
+		padding: 20px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: space-around;
 
-    image {
-        width: 10vw;
-        height: 10vw;
-    }
-}
+		image {
+			width: 10vw;
+			height: 10vw;
+		}
+	}
 
-.intro-box {
-    position: absolute;
-    margin-left: 10px;
-    margin-right: 10px;
-    margin-top: 30px;
-    width: 130px;
-}
+	.intro-box {
+		position: absolute;
+		margin-left: 10px;
+		margin-right: 10px;
+		margin-top: 30px;
+		width: 130px;
+	}
 
-.intro-box {
-    position: absolute;
-    margin-left: 10px;
-    margin-right: 10px;
-    margin-top: 30px;
-    width: 130px;
-}
+	.intro-box {
+		position: absolute;
+		margin-left: 10px;
+		margin-right: 10px;
+		margin-top: 30px;
+		width: 130px;
+	}
 
-.introduction {
-    height: 100rpx;
-}
+	.introduction {
+		height: 100rpx;
+	}
 
-.cssa-intro-text {
-    margin-left: 20rpx;
-    width: 50%;
-    justify-content: center;
-    font-weight: 700;
-    align-items: center;
-}
+	.cssa-intro-text {
+		margin-left: 20rpx;
+		width: 50%;
+		justify-content: center;
+		font-weight: 700;
+		align-items: center;
+	}
 
-.column-container {
-    display: flex;
-    flex-direction: column;
-}
+	.column-container {
+		display: flex;
+		flex-direction: column;
+	}
 
-.function-box {
-    display: flex;
-    flex-direction: row;
-    position: absolute;
-    flex-shrink: 0;
-    height: 160px;
-    border-radius: 15px;
-    width: 86vw;
-    bottom: 10px;
-    right: 7vw;
-    justify-content: space-between;
-    z-index: 10;
+	.function-box {
+		display: flex;
+		flex-direction: row;
+		position: absolute;
+		flex-shrink: 0;
+		height: 160px;
+		border-radius: 15px;
+		width: 86vw;
+		bottom: 10px;
+		right: 7vw;
+		justify-content: space-between;
+		z-index: 10;
 
-    .function-button {
-        min-width: 47%;
-        border-radius: 5px;
-        background-color: $main-background-color-2;
-        align-items: center;
-        justify-content: center;
-    }
-}
+		.function-button {
+			min-width: 47%;
+			border-radius: 5px;
+			background-color: $main-background-color-2;
+			align-items: center;
+			justify-content: center;
+		}
+	}
 
-.function-box.whole {
-    justify-content: space-around;
-    align-items: center;
-    background-color: $main-background-color-2;
-    z-index: 10;
+	.function-box.whole {
+		justify-content: space-around;
+		align-items: center;
+		background-color: $main-background-color-2;
+		z-index: 10;
 
-    .image-box {
-        width: 40%;
-        height: 65%;
-    }
-    .right-function-box {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        width: 35%;
-        height: 80%;
+		.image-box {
+			width: 40%;
+			height: 65%;
+		}
+		.right-function-box {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			width: 35%;
+			height: 80%;
 
-        .button {
-            padding: 5px 10px;
-        }
+			.button {
+				padding: 5px 10px;
+			}
 
-        .gradient-border {
-            border-bottom: 1px solid transparent;
-            border-image-slice: 1;
-            border-image-source: linear-gradient(90deg, #ffffff 0%, #7f0019 49.25%, #ffffff 100%);
-            width: 80%;
-            margin-bottom: 10%;
-        }
+			.gradient-border {
+				border-bottom: 1px solid transparent;
+				border-image-slice: 1;
+				border-image-source: linear-gradient(90deg, #ffffff 0%, #7f0019 49.25%, #ffffff 100%);
+				width: 80%;
+				margin-bottom: 10%;
+			}
 
-        .badger-book-text {
-            font-size: 10px;
-            line-height: 24px;
-            font-weight: 600;
-        }
-    }
-}
+			.badger-book-text {
+				font-size: 10px;
+				line-height: 24px;
+				font-weight: 600;
+			}
+		}
+	}
 
-.function-box-button {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    width: 100%;
-    margin: 0 auto 10px;
-    padding: 5px 0;
-    z-index: 10;
-}
+	.function-box-button {
+		display: flex;
+		justify-content: space-evenly;
+		align-items: center;
+		width: 100%;
+		margin: 0 auto 10px;
+		padding: 5px 0;
+		z-index: 10;
+	}
 
-.function-button {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 18%;
-    height: 100px;
-    text-align: center;
-    padding: 8px;
-    border-radius: 8px;
-    background-color: rgba(255, 255, 255, 0.9);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease;
-}
+	.function-button {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		width: 18%;
+		height: 100px;
+		text-align: center;
+		padding: 8px;
+		border-radius: 8px;
+		background-color: rgba(255, 255, 255, 0.9);
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+		transition: background-color 0.3s ease;
+	}
 
-.function-button:hover {
-    background-color: rgba(255, 255, 255, 0.9);
-}
+	.function-button:hover {
+		background-color: rgba(255, 255, 255, 0.9);
+	}
 
-.paragraph-1 {
-    font-size: 10px; /* 英文描述文字字体大小 */
-    color: #636668; /* 英文描述文字颜色 */
-}
+	.paragraph-1 {
+		font-size: 10px; /* 英文描述文字字体大小 */
+		color: #636668; /* 英文描述文字颜色 */
+	}
 
-.heading-3 {
-    font-size: 12px; /* 中文标题字体大小 */
-    font-weight: bold; /* 加粗中文标题 */
-    color: #333; /* 标题颜色 */
-}
+	.heading-3 {
+		font-size: 12px; /* 中文标题字体大小 */
+		font-weight: bold; /* 加粗中文标题 */
+		color: #333; /* 标题颜色 */
+	}
 
-.function-text {
-    font-size: 16px;
-    justify-content: center;
-    font-weight: 700;
-    align-items: center;
-    margin-bottom: 10px;
-    color: #636668;
-}
+	.function-text {
+		font-size: 16px;
+		justify-content: center;
+		font-weight: 700;
+		align-items: center;
+		margin-bottom: 10px;
+		color: #636668;
+	}
 
-.act-box {
-    width: 94vw;
-    height: 25vh;
-}
+	.act-box {
+		width: 94vw;
+		height: 25vh;
+	}
 
-.disabled {
-    color: #ccc !important;
-}
+	.disabled {
+		color: #ccc !important;
+	}
 
-.wx-progress-inner-bar {
-    border-radius: 5px;
-}
+	.wx-progress-inner-bar {
+		border-radius: 5px;
+	}
 
-progress {
-    flex: 1;
-}
+	progress {
+		flex: 1;
+	}
 
-.ads-swiper-container {
-    width: 95vw;
-    height: 50vw;
-    margin-left: 2.5vw;
-    border-radius: 8px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    position: relative;
-}
+	.ads-swiper-container {
+		width: 95vw;
+		height: 50vw;
+		margin-left: 2.5vw;
+		border-radius: 8px;
+		box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+		overflow: hidden;
+		position: relative;
+	}
 
-.swiper {
-    width: 100%;
-    height: 100%;
-}
+	.swiper {
+		width: 100%;
+		height: 100%;
+	}
 
-.ad-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* 确保图片按比例填满容器 */
-    border-radius: 8px;
-}
+	.ad-image {
+		width: 100%;
+		height: 100%;
+		object-fit: cover; /* 确保图片按比例填满容器 */
+		border-radius: 8px;
+	}
 </style>

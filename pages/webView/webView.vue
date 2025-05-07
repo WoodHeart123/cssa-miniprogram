@@ -41,14 +41,14 @@ export default {
 </script>
 
 <style>
-/* 加载状态样式 */
-.loading-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f5f5f5;
-    color: #666;
-    font-size: 16px;
-}
+	/* 加载状态样式 */
+	.loading-container {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: 100vh;
+		background-color: #f5f5f5;
+		color: #666;
+		font-size: 16px;
+	}
 </style>
